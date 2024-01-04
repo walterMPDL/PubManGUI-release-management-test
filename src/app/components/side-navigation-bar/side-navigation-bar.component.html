@@ -1,0 +1,15 @@
+<nav id="sidenav" #sidenav class="navbar-primary" (mouseenter)="expand()" (mouseleave)="collapse()">
+    <a class="btn-expand-collapse" (click)="expand_collapse()"><i class="bi bi-arrow-left-right"></i></a>
+    <ul class="navbar-primary-menu">
+        <li>
+            <a><i class="bi bi-file-earmark-plus"></i><small class="nav-label">Eingabe</small></a>
+            <a><i class="bi bi-folder-check"></i><small class="nav-label">Meine Datensätze</small></a>
+            <a><i class="bi bi-award"></i><small class="nav-label">QA-Bereich</small></a>
+            <a><i class="bi bi-download"></i><small class="nav-label">Import</small></a>
+            <a><i class="bi bi-clipboard-data"></i><small class="nav-label">Batch-Verarbeitung</small></a>
+            <a><i class="bi bi-box2"></i><small class="nav-label">Ablage</small></a>
+            <a [routerLink]="['ou_tree']"><i class="bi bi-diagram-3"></i><small class="nav-label">Organisationsstruktur</small></a>
+            <a><i class="bi bi-geo-alt"></i><small class="nav-label"></small></a>
+        </li>
+    </ul>
+</nav>
