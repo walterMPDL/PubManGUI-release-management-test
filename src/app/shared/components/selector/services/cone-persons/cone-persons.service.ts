@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { SelectedValue } from '../selector-datasource.service';
-import { environment } from 'src/environments/environment';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, catchError, map, throwError } from 'rxjs';
+import * as props from 'src/assets/properties.json';
 
 export interface ConePerson extends SelectedValue {
   id: string,
@@ -31,7 +31,7 @@ export interface PersonResource {
 })
 export class ConePersonsService {
 
-  rest_uri = environment.dowm_url.concat('/isis/cone');
+  rest_uri = props.cone_instamce_uri;
 
   constructor(
     private http: HttpClient

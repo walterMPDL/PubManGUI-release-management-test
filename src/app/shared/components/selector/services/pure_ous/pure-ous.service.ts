@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs';
-import { ElseService } from 'src/app/shared/services/else.service';
 import { ou_suggest } from 'src/app/model/pure_queries';
 import { SelectedValue } from '../selector-datasource.service';
+import { IngeCrudService } from 'src/app/services/inge-crud.service';
 
 export interface OU extends SelectedValue {
   id: string
@@ -14,18 +14,17 @@ export interface OU extends SelectedValue {
 export class PureOusService {
 
   constructor(
-    private elastic: ElseService,
+    private service: IngeCrudService,
   ) { }
 
   getOUs(val: string) {
-    return this.elastic.post('/find', ou_suggest(val), undefined).pipe(
+    return this.service.elastic('/ous', ou_suggest(val)).pipe(
       map(response => {
         const hits = response.hits.hits;
         const fields = hits.map((hit: any) => hit.fields);
         const ous: OU[] = fields.map((f: any) => {
           const ou: OU = { selected: '', id: '' };
           ou.id = f.objectId[0];
-          //let text: string;
           if (f?.mother && f.mother[0]['parentAffiliation.name']) {
             ou.selected = f?.ou_chain[0].concat(' - ').concat(f.mother[0]['parentAffiliation.name'][0])
           } else {
