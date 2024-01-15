@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs';
-import { ElseService } from 'src/app/shared/services/else.service';
 import { ctxs_suggest } from 'src/app/model/pure_queries';
 import { SelectedValue } from '../selector-datasource.service';
+import { IngeCrudService } from 'src/app/services/inge-crud.service';
 
 export interface Ctx extends SelectedValue {
   id: string
@@ -14,18 +14,18 @@ export interface Ctx extends SelectedValue {
 export class PureCtxsService {
 
   constructor(
-    private elastic: ElseService,
+    private service: IngeCrudService,
   ) { }
 
-  getOUs(val: string) {
-    return this.elastic.post('/find', ctxs_suggest(val), undefined).pipe(
+  getCtxs(val: string) {
+    return this.service.search('/contexts', ctxs_suggest(val)).pipe(
       map(response => {
-        const hits = response.hits.hits;
-        const fields = hits.map((hit: any) => hit.fields);
+        const hits = response.records;
+        const fields = hits.map((hit: any) => hit.data);
         const ctxs: Ctx[] = fields.map((f: any) => {
           const ctx: Ctx = { selected: '', id: '' };
-          ctx.id = f.objectId[0];
-          ctx.selected = f.name[0];
+          ctx.id = f.objectId;
+          ctx.selected = f.name;
           return ctx;
         });
         return ctxs;

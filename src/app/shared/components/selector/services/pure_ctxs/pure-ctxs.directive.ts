@@ -19,7 +19,7 @@ export class PureCtxsDirective implements SelectorDatasource<Ctx> {
 
   getOptions(searchValue$: Observable<string>) {
     return searchValue$.pipe(
-      switchMap((searchValue) => this.service.getOUs(searchValue)
+      switchMap((searchValue) => this.service.getCtxs(searchValue)
       ),
     );
   }

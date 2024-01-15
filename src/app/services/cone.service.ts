@@ -1,14 +1,14 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError, map, throwError } from 'rxjs';
-import { environment } from 'src/environments/environment';
+import * as props from 'src/assets/properties.json';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ConeService {
 
-  rest_uri = environment.dowm_url.concat('/isis/cone');
+  rest_uri = props.cone_instamce_uri;
 
   constructor(
     private http: HttpClient

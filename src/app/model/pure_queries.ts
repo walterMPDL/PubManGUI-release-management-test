@@ -114,7 +114,6 @@ export const ou_name_query = (val: string) => ({
 });
 
 export const ou_suggest = (val: string) => ({
-    index: 'ous',
     fields: ['objectId', 'name', 'parentAffiliation.name', 'ou_chain', 'mother'],
     runtime_mappings: {
         ou_chain: {
@@ -145,36 +144,10 @@ export const ou_suggest = (val: string) => ({
 });
 
 export const ctxs_suggest = (val: string) => ({
-    index: 'contexts',
-    fields: ['objectId', 'name'],
     query: {
         match: {
             'name.auto': val
         }
-    },
-    size: 12
-});
-
-export const all_ous_suggest = () => ({
-    index: 'ous',
-    fields: ['objectId', 'name', 'parentAffiliation.name', 'ou_chain', 'mother'],
-    runtime_mappings: {
-        ou_chain: {
-            type: 'keyword',
-            script: {
-                source: 'emit(doc["name.keyword"].value + " - " + doc["parentAffiliation.name.keyword"].value)'
-            }
-        },
-        mother: {
-            type: 'lookup',
-            target_index: 'ous',
-            input_field: 'parentAffiliation.objectId',
-            target_field: 'objectId',
-            fetch_fields: ['parentAffiliation.name']
-        }
-    },
-    query: {
-        match_all: {}
     }
 });
 

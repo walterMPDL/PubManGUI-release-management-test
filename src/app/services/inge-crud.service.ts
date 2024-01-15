@@ -21,7 +21,7 @@ export interface TaskParamVO {
 })
 export class IngeCrudService {
 
-  restUri = 'https://pure.mpg.de/rest';
+  restUri = 'https://gui.inge.mpdl.mpg.de/rest';
 
   constructor(
     protected httpClient: HttpClient
@@ -35,6 +35,20 @@ export class IngeCrudService {
       params
     }).pipe(
       map((searchResult: SearchResult) => searchResult),
+      catchError((error) => {
+        return throwError(() => new Error(JSON.stringify(error) || 'UNKNOWN ERROR!'));
+      })
+    );
+  }
+
+  private getElasticSearchResults(method: string, path: string, body?: any, headers?: HttpHeaders, params?: HttpParams): Observable<SearchResult> {
+    const requestUrl = this.restUri + path;
+    return this.httpClient.request<any>(method, requestUrl, {
+      body,
+      headers,
+      params
+    }).pipe(
+      map((searchResult: any) => searchResult),
       catchError((error) => {
         return throwError(() => new Error(JSON.stringify(error) || 'UNKNOWN ERROR!'));
       })
@@ -106,11 +120,11 @@ export class IngeCrudService {
     return this.getSearchResults('POST', path.concat('/search'), body, this.addContentTypeHeader(), params);
   }
 
-  elastic(path: string, body: any, token?: string, params?: HttpParams): Observable<SearchResult> {
+  elastic(path: string, body: any, token?: string, params?: HttpParams): Observable<any> {
     if (token) {
-      return this.getSearchResults('POST', path.concat('/elasticsearch'), body, this.addAuthAndContentType(token), params);
+      return this.getElasticSearchResults('POST', path.concat('/elasticsearch'), body, this.addAuthAndContentType(token), params);
     }
-    return this.getSearchResults('POST', path.concat('/elasticsearch'), body, this.addContentTypeHeader(), params);
+    return this.getElasticSearchResults('POST', path.concat('/elasticsearch'), body, this.addContentTypeHeader(), params);
   }
 
   get(path: string, token?: string, params?: HttpParams): Observable<any> {
