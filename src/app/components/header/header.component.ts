@@ -80,7 +80,13 @@ export class HeaderComponent {
   }
 
   switch_lang() {
-    alert('select lasagne')
+    const loc = localStorage.getItem('locale');
+    if (loc?.localeCompare('de') === 0) {
+      localStorage.setItem('locale', 'en');
+    } else {
+      localStorage.setItem('locale', 'de');
+    }
+    location.reload();
   }
 
 }

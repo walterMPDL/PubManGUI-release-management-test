@@ -16,7 +16,7 @@ class I18nService {
   async setLocale() {
     const userLocale = localStorage.getItem('locale');
     const browserLocale = navigator.language;
-    console.log('browser lang', browserLocale)
+    // console.log('browser lang', browserLocale)
 
     // If the user has a preferred language stored in localStorage, use it.
     if (userLocale) {
@@ -39,12 +39,13 @@ class I18nService {
 
     // Load messages file
     const msgs = await import(
-      `../../../src/assets/i18n/messages.${this.locale}.json`
+      `../../assets/i18n/messages.${this.locale}.json`
     );
      // Load labels file
      const lbls = await import(
-      `../../../src/assets/i18n/labels.${this.locale}.json`
+      `../../assets/i18n/labels.${this.locale}.json`
     );
+    console.log('labels', lbls)
     const translation = Object.assign(lbls.default.translations, msgs.default.translations);
     // Load translations for the current locale at run-time
     loadTranslations(translation);
