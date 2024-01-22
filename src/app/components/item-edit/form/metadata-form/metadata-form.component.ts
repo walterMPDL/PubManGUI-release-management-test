@@ -139,7 +139,7 @@ export class MetadataFormComponent {
   }
 
   removeLanguage(index: number) {
-    this.identifiers.removeAt(index);
+    this.languages.removeAt(index);
   }
 
   genre_change(event: any) {
