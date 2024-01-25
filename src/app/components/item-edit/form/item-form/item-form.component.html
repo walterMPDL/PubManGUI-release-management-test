@@ -1,5 +1,4 @@
 <div class="container-fluid">
-    <div class="col-lg-10 col-sm-12">
         <form [formGroup]="form" (ngSubmit)="submit()">
             <!--<div class="row g-1 mb-1">-->
             <pure-metadata-form [meta_form]="metadata_form" (notice)="handleNotification($event)">
@@ -80,7 +79,6 @@
         </form>
     </div>
     <pre>valid? {{form.valid}}</pre>
-</div>
 <div class="container-fluid d-sm-flex flex-sm-row mb-1">
     <pre class="col-sm">{{form.value | json}}</pre>
     <pre class="col-sm">{{form_2_submit | json}}</pre>
