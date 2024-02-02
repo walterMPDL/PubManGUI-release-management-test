@@ -1,1 +1,38 @@
-<p>actions-context works!</p>
+
+<div class="form-control mb-1">
+  <h2 class="m-0">Change context</h2>
+  <div class="description">
+    The items will be connected with a new context, if their genre is admitted there, too
+  </div>
+
+  <form [formGroup]="changeContextForm" (ngSubmit)="onSubmit()" autocomplete="off">
+    <div class="mb-3 row">
+      <label class="col-sm-3 col-form-label" for="contextFrom">Previous context</label>
+      <div class="col-sm-9">
+        <pure-selector id="contextFrom" [form]="changeContextForm" [control_name]="'contextFrom'"
+          (notice)="updateContextFrom($event)" purePureCtxs placeholder="search contexts ...">
+          <ng-container *pureOption="let item">{{ item.text }}</ng-container>
+        </pure-selector>
+      </div>
+    </div>
+
+    <div class="mb-3 row">
+      <label class="col-sm-3 col-form-label" for="contextTo">New context</label>
+      <div class="col-sm-9">
+        <pure-selector id="contextTo" [form]="changeContextForm" [control_name]="'contextTo'"
+          (notice)="updateContextTo($event)" purePureCtxs placeholder="search contexts ...">
+          <ng-container *pureOption="let item">{{ item.text }}</ng-container>
+        </pure-selector>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-12">
+        <button type="submit" [disabled]="!changeContextForm.valid" class="btn-secondary  col-2 float-end">
+          Change
+        </button>
+      </div>
+    </div>
+  </form>
+
+</div>
