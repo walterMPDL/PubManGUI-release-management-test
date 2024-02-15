@@ -1,6 +1,7 @@
 import {SearchCriterion} from "../SearchCriterion";
 import {FormControl, FormGroup} from "@angular/forms";
 import {DisplayType} from "../search_config";
+import {Observable, of} from "rxjs";
 
 export class LogicalOperator extends SearchCriterion {
 
@@ -20,8 +21,8 @@ export class LogicalOperator extends SearchCriterion {
     return false;
   }
 
-  toElasticSearchQuery(): Object | undefined {
-    return undefined;
+  toElasticSearchQuery(): Observable<Object | undefined> {
+    return of(undefined);
   }
 
 

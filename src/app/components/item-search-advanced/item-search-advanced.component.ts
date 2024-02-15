@@ -14,6 +14,8 @@ import {CreatorRole, IdType, MdsPublicationGenre} from "../../model/inge";
 import {KeywordSearchCriterion, TitleSearchCriterion} from "./criterions/StandardSearchCriterion";
 import {OrganizationSearchCriterion, PersonSearchCriterion} from "./criterions/StringOrHiddenIdSearchCriterion";
 import {DATE_SEARCH_TYPES, DateSearchCriterion} from "./criterions/DateSearchCriterion";
+import {OrganizationsService} from "../../services/organizations.service";
+import {forkJoin, map, tap} from "rxjs";
 
 
 @Component({
@@ -41,10 +43,10 @@ export class ItemSearchAdvancedComponent {
   possibleCriterionsForClosingParenthesisMap: SearchCriterion[] = []
   protected readonly DisplayType = DisplayType;
 
-
   constructor(
     private router: Router,
     private fb: FormBuilder,
+    private ouService: OrganizationsService
   ) {
 
 
@@ -210,7 +212,7 @@ addClosingParenthesis(index:number) {
 
   show_query() {
     const searchCriterions = this.fields.controls.map(fc => fc as SearchCriterion)
-    this.query = this.scListToElasticSearchQuery(searchCriterions);
+    this.scListToElasticSearchQuery(searchCriterions);
     console.log(this.query);
   }
 
@@ -326,7 +328,7 @@ addClosingParenthesis(index:number) {
 
 
 
-scListToElasticSearchQuery(scList: SearchCriterion[]): Object | undefined {
+scListToElasticSearchQuery(scList: SearchCriterion[]) {
   const cleanedScList = this.removeEmptyFields(scList);
 
   console.log("Cleaned List " + cleanedScList);
@@ -346,11 +348,18 @@ scListToElasticSearchQuery(scList: SearchCriterion[]): Object | undefined {
   openingParenthesis!.partnerParenthesis = closingParenthesis;
 }
 }
+  forkJoin(cleanedScList.map(sc => sc.toElasticSearchQuery()))
+    //Set query in every search criterion object
+    .pipe(tap(queries => cleanedScList.forEach((sc, i) => {sc.query = queries[i]})))
+    .subscribe(data => {
+    this.query = this.cleanedScListToElasticSearchQuery(cleanedScList, data, undefined)
+  }
+  )
 
-return this.cleanedScListToElasticSearchQuery(cleanedScList, undefined);
+//return this.cleanedScListToElasticSearchQuery(cleanedScList, undefined);
 }
 
-cleanedScListToElasticSearchQuery(scList: SearchCriterion[],  parentNestedPath: string | undefined):Object | undefined {
+cleanedScListToElasticSearchQuery(scList: SearchCriterion[], queries: (Object | undefined)[], parentNestedPath: string | undefined):Object | undefined {
 
   //SearchCriterionBase.logger.debug("Call with list: " + scList);
 
@@ -426,7 +435,7 @@ cleanedScListToElasticSearchQuery(scList: SearchCriterion[],  parentNestedPath: 
   }
 
   if (criterionList.length == 1) {
-    resultedQueryBuilder = criterionList[0].toElasticSearchQuery();
+    resultedQueryBuilder = criterionList[0].query;
 
   } else if (mainOperators.length > 0) {
 
@@ -456,11 +465,11 @@ cleanedScListToElasticSearchQuery(scList: SearchCriterion[],  parentNestedPath: 
         const leftList = criterionList.slice(0, indexOfOperator);
 
         if ("or" === (op.type)) {
-          should.push(this.cleanedScListToElasticSearchQuery(leftList, sharedNestedField));
+          should.push(this.cleanedScListToElasticSearchQuery(leftList, queries, sharedNestedField));
         } else if ("and" === (op.type)) {
-          must.push(this.cleanedScListToElasticSearchQuery(leftList, sharedNestedField));
+          must.push(this.cleanedScListToElasticSearchQuery(leftList, queries, sharedNestedField));
         } else if ("not" === (op.type)) {
-          must.push(this.cleanedScListToElasticSearchQuery(leftList, sharedNestedField));
+          must.push(this.cleanedScListToElasticSearchQuery(leftList, queries, sharedNestedField));
           //TODO Check if "must" is correct here
         }
       }
@@ -468,11 +477,11 @@ cleanedScListToElasticSearchQuery(scList: SearchCriterion[],  parentNestedPath: 
       const rightList = criterionList.slice(indexOfOperator + 1, nextIndexOfOperator);
 
       if ("or" === (op.type)) {
-        should.push(this.cleanedScListToElasticSearchQuery(rightList, sharedNestedField));
+        should.push(this.cleanedScListToElasticSearchQuery(rightList, queries, sharedNestedField));
       } else if ("and" === (op.type)) {
-        must.push(this.cleanedScListToElasticSearchQuery(rightList, sharedNestedField));
+        must.push(this.cleanedScListToElasticSearchQuery(rightList, queries, sharedNestedField));
       } else if ("not" === (op.type)) {
-        mustNot.push(this.cleanedScListToElasticSearchQuery(rightList, sharedNestedField));
+        mustNot.push(this.cleanedScListToElasticSearchQuery(rightList, queries, sharedNestedField));
       }
     }
 

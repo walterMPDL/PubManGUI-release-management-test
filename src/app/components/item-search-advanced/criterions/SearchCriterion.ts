@@ -1,5 +1,6 @@
 import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
 import {searchTypes} from "./search_config";
+import {Observable} from "rxjs";
 
 export abstract class SearchCriterion extends FormGroup<any> {
   //type! : Type;
@@ -8,6 +9,7 @@ export abstract class SearchCriterion extends FormGroup<any> {
   level: number = 0;
   type: any;
   content!: FormGroup;
+  query: Object | undefined;
   //formGroup!: FormGroup;
   //properties!: any
 
@@ -28,7 +30,7 @@ export abstract class SearchCriterion extends FormGroup<any> {
 
   //public abstract parseQueryStringContent(content: string): void;
 
-  public abstract toElasticSearchQuery(): Object | undefined;
+  public abstract toElasticSearchQuery(): Observable<Object | undefined>;
 
   //public abstract getNewInstance(): SearchCriterion;
 

@@ -1,6 +1,7 @@
 import {SearchCriterion} from "./SearchCriterion";
 import {FormControl} from "@angular/forms";
 import {baseElasticSearchQueryBuilder} from "../../../shared/services/search-utils";
+import {Observable, of} from "rxjs";
 
 
 export abstract class StandardSearchCriterion extends SearchCriterion {
@@ -23,8 +24,8 @@ export abstract class StandardSearchCriterion extends SearchCriterion {
     return searchString == null || searchString.trim().length===0;
   }
 
-  override toElasticSearchQuery(): Object | undefined {
-    return baseElasticSearchQueryBuilder(this.getElasticIndexes(), this.content.get('text')?.value);
+  override toElasticSearchQuery(): Observable<Object | undefined> {
+    return of(baseElasticSearchQueryBuilder(this.getElasticIndexes(), this.content.get('text')?.value));
   }
 
   getFormContent(): string {
@@ -71,8 +72,8 @@ export class ClassificationSearchCriterion extends StandardSearchCriterion {
     return "metadata.subjects";
   }
 
-  override toElasticSearchQuery(): Object | undefined {
-    return {
+  override toElasticSearchQuery(): Observable<Object | undefined> {
+    return of({
       nested: {
         path: this.getElasticSearchNestedPath(),
         query: {
@@ -84,7 +85,7 @@ export class ClassificationSearchCriterion extends StandardSearchCriterion {
           }
         }
       }
-    }
+    })
 
   }
 
@@ -103,14 +104,14 @@ export class IdentifierSearchCriterion extends StandardSearchCriterion {
   }
 
 
-  override toElasticSearchQuery(): Object | undefined {
+  override toElasticSearchQuery(): Observable<Object | undefined> {
     if(!this.content.get("identifierType")?.value) {
       return super.toElasticSearchQuery();
     }
     else
     {
 
-      return {
+      return of({
         bool: {
           should: [{
             nested: {
@@ -140,7 +141,7 @@ export class IdentifierSearchCriterion extends StandardSearchCriterion {
             }
           ]
         }
-      }
+      })
     }
 
   }
@@ -169,8 +170,8 @@ export class AnyFieldSearchCriterion extends StandardSearchCriterion {
     return ["_all"];
   }
 
-  override toElasticSearchQuery(): Object | undefined {
-    return {simple_query_string: {query: this.getFormContent(), default_operator: "and", analyze_wildcard: true}}
+  override toElasticSearchQuery(): Observable<Object | undefined> {
+    return of({simple_query_string: {query: this.getFormContent(), default_operator: "and", analyze_wildcard: true}})
     //return baseElasticSearchQueryBuilder(this.getElasticIndexes(), this.content.get('text')?.value);
   }
 }
@@ -181,9 +182,9 @@ export class FulltextSearchCriterion extends StandardSearchCriterion {
     super(type ? type : "fulltext");
   }
 
-  override toElasticSearchQuery(): Object | undefined {
+  override toElasticSearchQuery(): Observable<Object | undefined> {
 
-    return {
+    return of({
       has_child : {
         type : "file",
         query: baseElasticSearchQueryBuilder("fileData.attachment.content", this.getFormContent()),
@@ -199,7 +200,7 @@ export class FulltextSearchCriterion extends StandardSearchCriterion {
           }
         },
       }
-    }
+    })
 
 
     //return {simple_query_string: {query: this.content.get('text')?.value, default_operator: "and", analyze_wildcard: true}}
@@ -213,8 +214,8 @@ export class AnyFieldAndFulltextSearchCriterion extends FulltextSearchCriterion 
     super("anyFieldAndFulltext");
   }
 
-  override toElasticSearchQuery(): Object | undefined {
-    return {
+  override toElasticSearchQuery(): Observable<Object | undefined> {
+    return of({
       bool: {
         should : [
           {simple_query_string: {query: this.getFormContent(), default_operator: "and", analyze_wildcard: true}},
@@ -223,7 +224,7 @@ export class AnyFieldAndFulltextSearchCriterion extends FulltextSearchCriterion 
         ]
 
       }
-    }
+    })
     //return baseElasticSearchQueryBuilder(this.getElasticIndexes(), this.content.get('text')?.value);
   }
 }

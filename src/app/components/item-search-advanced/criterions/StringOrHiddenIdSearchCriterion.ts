@@ -1,9 +1,12 @@
 import {SearchCriterion} from "./SearchCriterion";
 import {FormControl, Validators} from "@angular/forms";
 import {baseElasticSearchQueryBuilder, buildDateRangeQuery} from "../../../shared/services/search-utils";
-import {IngeCrudService} from "../../../services/inge-crud.service";
+import {IngeCrudService, SearchResult} from "../../../services/inge-crud.service";
 import {inject} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
+import {OrganizationsService} from "../../../services/organizations.service";
+import {AffiliationDbVO} from "../../../model/inge";
+import {catchError, firstValueFrom, forkJoin, lastValueFrom, map, Observable, of, tap} from "rxjs";
 
 
 export abstract class StringOrHiddenIdSearchCriterion extends SearchCriterion {
@@ -27,13 +30,13 @@ export abstract class StringOrHiddenIdSearchCriterion extends SearchCriterion {
   }
 
 
-  override toElasticSearchQuery(): Object | undefined {
+  override toElasticSearchQuery(): Observable<Object | undefined> {
     const text: string = this.content.get('text')?.value;
     const hidden: string = this.content.get('hidden')?.value;
     if (hidden && hidden.trim()!=="") {
-      return baseElasticSearchQueryBuilder(this.getElasticSearchFieldForHiddenId(), hidden);
+      return of(baseElasticSearchQueryBuilder(this.getElasticSearchFieldForHiddenId(), hidden));
     } else {
-      return baseElasticSearchQueryBuilder(this.getElasticSearchFieldForSearchString(), text);
+      return of(baseElasticSearchQueryBuilder(this.getElasticSearchFieldForSearchString(), text));
     }
   }
 
@@ -63,7 +66,7 @@ export class PersonSearchCriterion extends StringOrHiddenIdSearchCriterion {
   }
 
 
-  override toElasticSearchQuery(): Object | undefined {
+  override toElasticSearchQuery(): Observable<Object | undefined> {
     const text: string = this.content.get('text')?.value;
     const hidden: string = this.content.get('hidden')?.value;
     const role: string = this.content.get('role')?.value;
@@ -80,16 +83,16 @@ export class PersonSearchCriterion extends StringOrHiddenIdSearchCriterion {
 
     if (!role) {
       if (hidden && hidden.trim()) {
-        return baseElasticSearchQueryBuilder(this.getElasticSearchFieldForHiddenId(), hidden);
+        return of(baseElasticSearchQueryBuilder(this.getElasticSearchFieldForHiddenId(), hidden));
       } else {
-        return multiMatchForSearchString;
+        return of(multiMatchForSearchString);
         //return MultiMatchQuery.of(m -> m.query(this.getSearchString()).fields(Arrays.asList(this.getElasticSearchFieldForSearchString()))
           //.type(TextQueryType.CrossFields).operator(Operator.And))._toQuery();
       }
 
     } else {
 
-      return {
+      return of({
         nested: {
           path:"metadata.creators",
           query: {
@@ -102,7 +105,7 @@ export class PersonSearchCriterion extends StringOrHiddenIdSearchCriterion {
             }
           }
         }
-      }
+      })
     }
   }
 
@@ -114,14 +117,10 @@ export class PersonSearchCriterion extends StringOrHiddenIdSearchCriterion {
 export class OrganizationSearchCriterion extends StringOrHiddenIdSearchCriterion {
 
   includeSource : boolean = false;
-  //includeSuccessorsAndPredecessors = false;
-
-  //httpClient = inject(HttpClient);
-
 
   constructor() {
     super("organization");
-    this.content.addControl("includePredecessorsAndSuccessors", new FormControl());
+    this.content.addControl("includePredecessorsAndSuccessors", new FormControl(false));
   }
 
   protected getElasticSearchFieldForHiddenId(): string[] {
@@ -137,20 +136,29 @@ export class OrganizationSearchCriterion extends StringOrHiddenIdSearchCriterion
   }
 
 
-  override toElasticSearchQuery(): Object | undefined {
+  override toElasticSearchQuery(): Observable<Object | undefined> {
+    const hidden: string = this.content.get('hidden')?.value;
+    //let preAndSuccs$  = of([hidden])
+    const query = {};
+    let idSources: Observable<string | string[]>[] = [of(hidden)];
+
+
+    if (this.content.get("includePredecessorsAndSuccessors")?.value && hidden && hidden.trim()) {
+
+      idSources.push(OrganizationsService.instance.getOrganization(hidden).pipe(map(ou => ou.predecessorAffiliations?.map(pa => pa.objectId))).pipe(tap(obj => console.log(obj))));
+      idSources.push(OrganizationsService.instance.getSuccessors(hidden).pipe(map(sr => sr.records?.map(rec => rec.data.objectId))));
+    }
+
+    return forkJoin(idSources)
+      .pipe(map(data => data.flat().filter(val => val)))
+      .pipe(map(ouIds => this.toElasticSearchQueryInt(ouIds)));
+  }
+
+  private toElasticSearchQueryInt(ids: string[]) : Object | undefined  {
+
     const text: string = this.content.get('text')?.value;
     const hidden: string = this.content.get('hidden')?.value;
     const role: string = this.content.get('role')?.value;
-
-    const hiddenIds = [hidden];
-
-    if (this.content.get("includePredecessorsAndSuccessors")?.value && hidden && hidden.trim())
-    {
-      //TODO Add logic
-
-      //hiddenIds.push((ou['predecessorAffiliations'] as Array<Object>).map(pa => pa['id']));
-    }
-
 
     const multiMatchForSearchString = {
       multi_match: {
@@ -164,7 +172,7 @@ export class OrganizationSearchCriterion extends StringOrHiddenIdSearchCriterion
 
     if (!role) {
       if (hidden && hidden.trim()) {
-        return baseElasticSearchQueryBuilder(this.getElasticSearchFieldForHiddenId(), hiddenIds);
+        return baseElasticSearchQueryBuilder(this.getElasticSearchFieldForHiddenId(), ids);
       } else {
         return multiMatchForSearchString;
         //return MultiMatchQuery.of(m -> m.query(this.getSearchString()).fields(Arrays.asList(this.getElasticSearchFieldForSearchString()))
@@ -180,7 +188,7 @@ export class OrganizationSearchCriterion extends StringOrHiddenIdSearchCriterion
             bool: {
               must: [
                 baseElasticSearchQueryBuilder("metadata.creators.role", role),
-                (hidden && hidden.trim()) ? [baseElasticSearchQueryBuilder(this.getElasticSearchFieldForHiddenId(), hiddenIds)] : multiMatchForSearchString,
+                (hidden && hidden.trim()) ? [baseElasticSearchQueryBuilder(this.getElasticSearchFieldForHiddenId(), ids)] : multiMatchForSearchString,
 
               ]
             }
@@ -188,5 +196,35 @@ export class OrganizationSearchCriterion extends StringOrHiddenIdSearchCriterion
         }
       }
     }
+
   }
+}
+
+
+export class CreatedBySearchCriterion extends StringOrHiddenIdSearchCriterion {
+  constructor() {
+    super("createdBy");
+  }
+  protected getElasticSearchFieldForHiddenId(): string[] {
+    return ["createdByRO.objectId"];
+  }
+
+  protected getElasticSearchFieldForSearchString(): string[] {
+    return ["createdByRO.title"];
+  }
+
+}
+
+export class ModifiedBySearchCriterion extends StringOrHiddenIdSearchCriterion {
+  constructor() {
+    super("modifiedBy");
+  }
+  protected getElasticSearchFieldForHiddenId(): string[] {
+    return ["version.modifiedByRO.objectId"];
+  }
+
+  protected getElasticSearchFieldForSearchString(): string[] {
+    return ["version.modifiedByRO.title"];
+  }
+
 }

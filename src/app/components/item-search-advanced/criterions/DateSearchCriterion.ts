@@ -1,6 +1,7 @@
 import {SearchCriterion} from "./SearchCriterion";
 import {FormControl, Validators} from "@angular/forms";
 import {buildDateRangeQuery} from "../../../shared/services/search-utils";
+import {Observable, of} from "rxjs";
 
 export enum DATE_SEARCH_TYPES {
   ANYDATE = "anyDate",
@@ -42,8 +43,8 @@ export class DateSearchCriterion extends SearchCriterion {
   }
 
 
-  override toElasticSearchQuery(): Object | undefined {
-    return this.toElasticSearchQueryInt(this.content.get("from")?.value, this.content.get("to")?.value)
+  override toElasticSearchQuery(): Observable<Object | undefined> {
+    return of(this.toElasticSearchQueryInt(this.content.get("from")?.value, this.content.get("to")?.value));
   }
 
 

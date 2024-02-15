@@ -11,7 +11,13 @@ import {
   SourceSearchCriterion, TitleSearchCriterion
 } from "./StandardSearchCriterion";
 import {DATE_SEARCH_TYPES, DateSearchCriterion} from "./DateSearchCriterion";
-import {OrganizationSearchCriterion, PersonSearchCriterion} from "./StringOrHiddenIdSearchCriterion";
+import {
+  CreatedBySearchCriterion,
+  ModifiedBySearchCriterion,
+  OrganizationSearchCriterion,
+  PersonSearchCriterion
+} from "./StringOrHiddenIdSearchCriterion";
+
 
 export enum DisplayType {
   STANDARD,
@@ -142,6 +148,14 @@ export const searchTypes : searchTypesI = {
   [DATE_SEARCH_TYPES.COMPONENT_EMBARGO_DATE]: {
     displayType: DisplayType.DATE,
     handlerClass: DateSearchCriterion
+  },
+  modifiedBy: {
+    displayType: DisplayType.OPERATOR,
+    handlerClass: ModifiedBySearchCriterion
+  },
+  createdBy: {
+    displayType: DisplayType.OPERATOR,
+    handlerClass: CreatedBySearchCriterion
   },
   and: {
     displayType: DisplayType.OPERATOR,

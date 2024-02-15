@@ -123,7 +123,6 @@ export const baseElasticSearchSortBuilder = (indexField: string, order: string):
 
 
 export const buildDateRangeQuery = (index: string, from: string, to: string) => {
-
   return {
     range: {
       [index]: {
@@ -150,3 +149,5 @@ const roundDateString = (toQuery: string) => {
 
 
 }
+
+
