@@ -1372,6 +1372,7 @@ export interface ElasticSearchIndexField {
 export const createIndexMapFromElasticsearch = () => {
   let  result: ElasticSearchIndexFields = {};
   fillMap(item_mapping["mappings"]["properties"], result, "", []);
+  console.log(result);
   return result;
 }
 
@@ -1398,7 +1399,7 @@ const fillMap = (currentObject : Object, resultObject: ElasticSearchIndexFields,
 
     if (!value["properties"] && value["type"] !== "nested") {
       let  indexField: ElasticSearchIndexField =
-        createIndexFieldObject(newCurrentPath, newCurrentNestedPaths, key);
+        createIndexFieldObject(newCurrentPath, newCurrentNestedPaths, value["type"]);
       resultObject[newCurrentPath] = indexField;
       //indexMap.put(newCurrentPath.toString(), indexField);
       //System.out.println(newCurrentPath.toString() + " -- " + newCurrentNestedPaths + " -- " + entry.getValue()._kind().jsonValue());

@@ -111,12 +111,9 @@ export class PersonSearchCriterion extends StringOrHiddenIdSearchCriterion {
 
 }
 
-
-
-
 export class OrganizationSearchCriterion extends StringOrHiddenIdSearchCriterion {
 
-  includeSource : boolean = false;
+  includeSource: boolean = false;
 
   constructor() {
     super("organization");
@@ -130,7 +127,7 @@ export class OrganizationSearchCriterion extends StringOrHiddenIdSearchCriterion
   }
 
   protected getElasticSearchFieldForSearchString(): string[] {
-    return ["metadata.creators.person.organizations.name", "metadata.creators.organization.name", ];
+    return ["metadata.creators.person.organizations.name", "metadata.creators.organization.name",];
   }
 
   override getElasticSearchNestedPath(): string | undefined {
@@ -140,66 +137,22 @@ export class OrganizationSearchCriterion extends StringOrHiddenIdSearchCriterion
 
   override toElasticSearchQuery(): Observable<Object | undefined> {
     const hidden: string = this.content.get('hidden')?.value;
-    //let preAndSuccs$  = of([hidden])
-    const query = {};
-    let idSources: Observable<string | string[]>[] = [of(hidden)];
 
-
-    if (this.content.get("includePredecessorsAndSuccessors")?.value && hidden && hidden.trim()) {
+    if (hidden && hidden.trim() && this.content.get("includePredecessorsAndSuccessors")?.value) {
+      let idSources: Observable<string | string[]>[] = [of(hidden)];
 
       idSources.push(OrganizationsService.instance.getOrganization(hidden).pipe(map(ou => ou.predecessorAffiliations?.map(pa => pa.objectId))).pipe(tap(obj => console.log(obj))));
       idSources.push(OrganizationsService.instance.getSuccessors(hidden).pipe(map(sr => sr.records?.map(rec => rec.data.objectId))));
-    }
 
-    return forkJoin(idSources)
-      .pipe(map(data => data.flat().filter(val => val)))
-      .pipe(map(ouIds => this.toElasticSearchQueryInt(ouIds)));
-  }
-
-  private toElasticSearchQueryInt(ids: string[]) : Object | undefined  {
-
-    const text: string = this.content.get('text')?.value;
-    const hidden: string = this.content.get('hidden')?.value;
-    const role: string = this.content.get('role')?.value;
-
-    const multiMatchForSearchString = {
-      multi_match: {
-        query: text,
-        fields: this.getElasticSearchFieldForSearchString(),
-        operator: "and",
-        type: "cross_fields"
-
-      }
-    };
-
-    if (!role) {
-      if (hidden && hidden.trim()) {
-        return baseElasticSearchQueryBuilder(this.getElasticSearchFieldForHiddenId(), ids);
-      } else {
-        return multiMatchForSearchString;
-        //return MultiMatchQuery.of(m -> m.query(this.getSearchString()).fields(Arrays.asList(this.getElasticSearchFieldForSearchString()))
-        //.type(TextQueryType.CrossFields).operator(Operator.And))._toQuery();
-      }
+      return forkJoin(idSources)
+        .pipe(map(data => data.flat().filter(val => val)))
+        .pipe(map(ouIds => baseElasticSearchQueryBuilder(this.getElasticSearchFieldForHiddenId(), ouIds)));
 
     } else {
-
-      return {
-        nested: {
-          path: "metadata.creators",
-          query: {
-            bool: {
-              must: [
-                baseElasticSearchQueryBuilder("metadata.creators.role", role),
-                (hidden && hidden.trim()) ? [baseElasticSearchQueryBuilder(this.getElasticSearchFieldForHiddenId(), ids)] : multiMatchForSearchString,
-
-              ]
-            }
-          }
-        }
-      }
+      return super.toElasticSearchQuery();
     }
-
   }
+
 }
 
 
