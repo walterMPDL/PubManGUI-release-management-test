@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ItemListElementComponent } from './item-list-element.component';
+import { AbstractFormComponent } from './abstract-form.component';
 
-describe('ListItemNextComponent', () => {
-  let component: ItemListElementComponent;
-  let fixture: ComponentFixture<ItemListElementComponent>;
+describe('AbstractFormComponent', () => {
+  let component: AbstractFormComponent;
+  let fixture: ComponentFixture<AbstractFormComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ItemListElementComponent]
+      imports: [AbstractFormComponent]
     })
     .compileComponents();
-
-    fixture = TestBed.createComponent(ItemListElementComponent);
+    
+    fixture = TestBed.createComponent(AbstractFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

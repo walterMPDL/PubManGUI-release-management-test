@@ -1,5 +1,9 @@
 <div [formGroup]="source_form" class=""><div class="d-sm-flex flex-sm-row gap-1 mb-1">
-    <label for="alt_titles" class="col-sm-2 col-form-label col-form-label-sm">Source 1</label>
+    <label for="alt_titles" class="col-sm-2 col-form-label col-form-label-sm">{{index + 1}}. Source</label>
+    <div class="col-sm"></div>
+    <div class="col-sm-1">
+        <pure-add-remove-buttons [index]="index" (notice)="add_remove_source($event)"></pure-add-remove-buttons>
+    </div>
 </div>
     <div class="d-sm-flex flex-sm-row gap-1 mb-1">
         <label for="alt_titles" class="col-sm-2 col-form-label col-form-label-sm">alternative titles</label>
@@ -17,8 +21,7 @@
                 }
             </ng-container>
         </div>
-        <div class="col-sm-1">
-            <pure-add-remove-buttons [index]="index" (notice)="add_remove_source($event)"></pure-add-remove-buttons>
+        <div class="col-sm-1"><!--NEEDED to keep the layout including one last collumn for add-remove buttons-->
         </div>
     </div>
     <div class="d-sm-flex flex-sm-row gap-1 mb-1">
