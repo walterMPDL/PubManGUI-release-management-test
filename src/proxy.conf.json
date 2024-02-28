@@ -1,11 +1,7 @@
 {
   "/cone": {
-    "target": "https://gui.inge.mpdl.mpg.de/cone",
+    "target": "https://gui.inge.mpdl.mpg.de",
     "secure": false,
-    "logLevel": "debug",
-    "changeOrigin": true,
-    "pathRewrite": {
-      "^/cone": ""
-    }
+    "logLevel": "debug"
   }
 }

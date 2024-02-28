@@ -1,5 +1,15 @@
 import {Component, Input} from '@angular/core';
-import {catchError, debounceTime, distinctUntilChanged, map, Observable, of, OperatorFunction, switchMap} from "rxjs";
+import {
+  catchError,
+  debounceTime,
+  distinctUntilChanged,
+  map,
+  Observable,
+  of,
+  OperatorFunction,
+  switchMap,
+  tap
+} from "rxjs";
 import {OrganizationsService} from "../../../services/organizations.service";
 import {FormControl, ReactiveFormsModule} from "@angular/forms";
 import {NgbTypeahead} from "@ng-bootstrap/ng-bootstrap";
@@ -16,6 +26,8 @@ export class OuAutosuggestComponent {
   @Input() formForOuName! : FormControl;
   @Input() formForOuId! : FormControl;
 
+  searching: boolean = false;
+
   constructor(private organizationsService: OrganizationsService) {
   }
 
@@ -23,7 +35,7 @@ export class OuAutosuggestComponent {
     text$.pipe(
       debounceTime(100),
       distinctUntilChanged(),
-      //tap(() => (this.searching = true)),
+      tap(() => (this.searching = true)),
       switchMap((term) =>
         this.organizationsService.elastic('/ous', this.ouAutoSuggestElasticQuery(term)).pipe(
           map(response => {
@@ -37,7 +49,7 @@ export class OuAutosuggestComponent {
           }),
         ),
       ),
-      //tap(() => (this.searching = false)),
+      tap(() => (this.searching = false)),
     );
 
   suggestOusFormatter= (ou: any) => {
@@ -70,11 +82,19 @@ export class OuAutosuggestComponent {
                 [
                   "metadata.name.autosuggest",
                   "metadata.name.autosuggest._2gram",
-                  "metadata.name.autosuggest._3gram"
+                  "metadata.name.autosuggest._3gram",
+                  "metadata.alternativeNames.autosuggest",
+                  "metadata.alternativeNames.autosuggest._2gram",
+                  "metadata.alternativeNames.autosuggest._3gram"
                 ]
             }
         }
     }
+  }
+
+  deleteFields() {
+    this.formForOuName.setValue('');
+    this.formForOuId?.setValue('');
   }
 
 }

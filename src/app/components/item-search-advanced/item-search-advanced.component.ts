@@ -80,7 +80,6 @@ export class ItemSearchAdvancedComponent {
     this.fields.push(new DateSearchCriterion(DATE_SEARCH_TYPES.ANYDATE));
 
 
-
   }
 
   changeType(index: number, newType: string) {
@@ -110,15 +109,10 @@ export class ItemSearchAdvancedComponent {
   }
 
 
-
-  get searchTypes() : searchTypesI {
+  get searchTypes(): searchTypesI {
     return searchTypes;
   }
 
-
-  search() {
-    console.log("Search clicked!");
-  }
 
   addSearchCriterion(index: number, searchCriterion: SearchCriterion) {
 
@@ -145,9 +139,8 @@ export class ItemSearchAdvancedComponent {
   }
 
 
-
   appendSearchCriterion(searchCriterion: SearchCriterion) {
-    this.addSearchCriterion(this.fields.length-1, searchCriterion);
+    this.addSearchCriterion(this.fields.length - 1, searchCriterion);
   }
 
 
@@ -169,72 +162,62 @@ export class ItemSearchAdvancedComponent {
     console.log(this.possibleCriterionsForClosingParenthesisMap);
   }
 
-addClosingParenthesis(index:number) {
-  const closingParenthesis = new Parenthesis(PARENTHESIS_TYPE.CLOSING_PARENTHESIS);
-  this.currentlyOpenedParenthesis!.partnerParenthesis = closingParenthesis;
-  closingParenthesis.partnerParenthesis = this.currentlyOpenedParenthesis;
-  this.currentlyOpenedParenthesis = undefined;
-  this.fields.insert(index + 1, closingParenthesis);
-  this.updateListForClosingParenthesis(undefined);
-}
+  addClosingParenthesis(index: number) {
+    const closingParenthesis = new Parenthesis(PARENTHESIS_TYPE.CLOSING_PARENTHESIS);
+    this.currentlyOpenedParenthesis!.partnerParenthesis = closingParenthesis;
+    closingParenthesis.partnerParenthesis = this.currentlyOpenedParenthesis;
+    this.currentlyOpenedParenthesis = undefined;
+    this.fields.insert(index + 1, closingParenthesis);
+    this.updateListForClosingParenthesis(undefined);
+  }
 
   private updateListForClosingParenthesis(startParenthesis: Parenthesis | undefined) {
-      this.possibleCriterionsForClosingParenthesisMap = [];
-      let balanceCounter = 0;
-      let lookForClosingParenthesis = false;
-      let startParenthesisBalance = 0;
+    this.possibleCriterionsForClosingParenthesisMap = [];
+    let balanceCounter = 0;
+    let lookForClosingParenthesis = false;
+    let startParenthesisBalance = 0;
 
-      let numberOfSearchCriterions = 0;
+    let numberOfSearchCriterions = 0;
 
-      for (let sc of this.fields.controls as SearchCriterion[]) {
+    for (let sc of this.fields.controls as SearchCriterion[]) {
 
-        if (PARENTHESIS_TYPE.CLOSING_PARENTHESIS === sc.type) {
-          balanceCounter--;
-          if (lookForClosingParenthesis && balanceCounter <= startParenthesisBalance) {
-            lookForClosingParenthesis = false;
-          }
-        }
-
-        sc.level = balanceCounter;
-
-        if (PARENTHESIS_TYPE.OPENING_PARENTHESIS === sc.type) {
-          balanceCounter++;
-        }
-
-        if (sc === startParenthesis) {
-          lookForClosingParenthesis = true;
-          startParenthesisBalance = sc.level;
-        }
-
-        if (lookForClosingParenthesis && DisplayType.OPERATOR !== searchTypes[sc.type].displayType
-          && balanceCounter === startParenthesisBalance + 1 && sc!==startParenthesis) {
-          this.possibleCriterionsForClosingParenthesisMap.push(sc);
-        }
-
-
-        if (DisplayType.OPERATOR !== searchTypes[sc.type].displayType
-          && DisplayType.PARENTHESIS !== searchTypes[sc.type].displayType) {
-          numberOfSearchCriterions++;
+      if (PARENTHESIS_TYPE.CLOSING_PARENTHESIS === sc.type) {
+        balanceCounter--;
+        if (lookForClosingParenthesis && balanceCounter <= startParenthesisBalance) {
+          lookForClosingParenthesis = false;
         }
       }
 
+      sc.level = balanceCounter;
+
+      if (PARENTHESIS_TYPE.OPENING_PARENTHESIS === sc.type) {
+        balanceCounter++;
+      }
+
+      if (sc === startParenthesis) {
+        lookForClosingParenthesis = true;
+        startParenthesisBalance = sc.level;
+      }
+
+      if (lookForClosingParenthesis && DisplayType.OPERATOR !== searchTypes[sc.type].displayType
+        && balanceCounter === startParenthesisBalance + 1 && sc !== startParenthesis) {
+        this.possibleCriterionsForClosingParenthesisMap.push(sc);
+      }
+
+
+      if (DisplayType.OPERATOR !== searchTypes[sc.type].displayType
+        && DisplayType.PARENTHESIS !== searchTypes[sc.type].displayType) {
+        numberOfSearchCriterions++;
+      }
+    }
+
   }
 
-  show_form() {
-    this.result = this.searchForm.value;
-  }
-
-  show_query() {
-    const searchCriterions = this.fields.controls.map(fc => fc as SearchCriterion)
-    this.scListToElasticSearchQuery(searchCriterions);
-    console.log(this.query);
-  }
 
   select_ou(ou: any, currentFormGroup: AbstractControl<any>) {
     currentFormGroup.get("content")?.get("hidden")?.setValue(ou.id);
     //this.isc_form.patchValue({ hidden_id: ou.id }, { emitEvent: false });
   }
-
 
 
   removeSearchCriterionWithOperator(criterionList: SearchCriterion[], criterion: SearchCriterion) {
@@ -255,7 +238,6 @@ addClosingParenthesis(index:number) {
         deleteBefore = scAfter.type === (PARENTHESIS_TYPE.CLOSING_PARENTHESIS);
       }
     }
-
 
 
     if (deleteBefore) {
@@ -282,11 +264,11 @@ addClosingParenthesis(index:number) {
     }
 
     // if none was found, just remove the criteria itself
-    if(criterionList.includes(criterion))
+    if (criterionList.includes(criterion))
       criterionList.splice(criterionList.indexOf(criterion), 1);
 
 
-    let parenthesisToRemove : SearchCriterion[] = [];
+    let parenthesisToRemove: SearchCriterion[] = [];
     // now remove empty parenthesis
     for (let i = 0; i < criterionList.length; i++) {
       let sc = criterionList[i];
@@ -303,224 +285,245 @@ addClosingParenthesis(index:number) {
     }
 
     parenthesisToRemove.forEach(parenthesis => {
-      if(criterionList.includes(parenthesis)) criterionList.splice(criterionList.indexOf(parenthesis), 1);
+      if (criterionList.includes(parenthesis)) criterionList.splice(criterionList.indexOf(parenthesis), 1);
     });
 
     // if first criterion is an operand, remove it
     if (criterionList != null && criterionList.length > 0
       && DisplayType.OPERATOR == (searchTypes[criterionList[0].type].displayType)) {
-      criterionList.splice(0,1);
+      criterionList.splice(0, 1);
     }
 
 
   }
 
 
+  removeEmptyFields(criterionList: SearchCriterion[]): SearchCriterion[] {
+    if (!criterionList) {
+      return [];
 
-
-  removeEmptyFields(criterionList: SearchCriterion[]) : SearchCriterion[] {
-  if (!criterionList) {
-  return [];
-
-
-} else {
-
-
-  let copyForRemoval = [...criterionList];
-  let copyForIteration = [...criterionList];
-  // Collections.copy(copy, criterionList);
-
-  for (let sc of copyForIteration) {
-    if (sc.isEmpty()) {
-      this.removeSearchCriterionWithOperator(copyForRemoval, sc);
-      console.log("Removing " + sc.type);
-    }
-  }
-
-  // if first in list is an operator except "NOT", remove it
-  if (copyForRemoval.length > 0 && (copyForRemoval[0].type === "and" ||copyForRemoval[0].type === "or")) {
-    copyForRemoval.splice(0,1);
-  }
-  return copyForRemoval;
-}
-}
-
-
-
-scListToElasticSearchQuery(scList: SearchCriterion[]) {
-  const cleanedScList = this.removeEmptyFields(scList);
-
-  console.log("Cleaned List " + cleanedScList);
-
-  // Set partner parenthesis for every parenthesis
-  let parenthesisStack : Parenthesis[] = [];
-  for (let sc of cleanedScList) {
-  if (PARENTHESIS_TYPE.OPENING_PARENTHESIS === (sc.type)) {
-  parenthesisStack.push(sc as Parenthesis);
-
-} else if (PARENTHESIS_TYPE.CLOSING_PARENTHESIS === (sc.type)) {
-
-  const closingParenthesis = sc as Parenthesis;
-  const openingParenthesis = parenthesisStack.pop();
-
-  closingParenthesis.partnerParenthesis = openingParenthesis;
-  openingParenthesis!.partnerParenthesis = closingParenthesis;
-}
-}
-  //Join all subquery-creations
-  forkJoin(cleanedScList.map(sc => sc.toElasticSearchQuery()))
-    //Set query in every search criterion object
-    .pipe(tap(queries => cleanedScList.forEach((sc, i) => {sc.query = queries[i]})))
-
-    //when everything is ready, create complete query
-    .subscribe(data => {
-    this.query = this.cleanedScListToElasticSearchQuery(cleanedScList, data, undefined)
-  }
-  )
-
-}
-
-cleanedScListToElasticSearchQuery(scList: SearchCriterion[], queries: (Object | undefined)[], parentNestedPath: string | undefined):Object | undefined {
-
-  //SearchCriterionBase.logger.debug("Call with list: " + scList);
-
-  if (scList.length == 0) {
-    return {match_all: {}};
-  }
-
-  let resultedQueryBuilder: Object | undefined = {};
-
-  let parenthesisOpened = 0;
-
-  let mainOperators: LogicalOperator[] = [];
-  let lastOperator: LogicalOperator | undefined;
-  let mixedOrAndAnd: boolean = false;
-  let sharedNestedField: string | undefined = "";
-  let criterionList = [...scList];
-
-  //SearchCriterionBase.logger.debug("List: " + criterionList);
-
-  // Remove unnecessary parenthesis
-  while (PARENTHESIS_TYPE.OPENING_PARENTHESIS === (criterionList[0].type)
-  && PARENTHESIS_TYPE.CLOSING_PARENTHESIS === (criterionList[criterionList.length - 1].type)
-  && (criterionList[0] as Parenthesis).partnerParenthesis === (criterionList[criterionList.length - 1] as Parenthesis)) {
-
-    criterionList.splice(0, 1);
-    criterionList.splice(criterionList.length - 1, 1);
-  }
-
-  //SearchCriterionBase.logger.debug("List after removal: " + criterionList);
-
-  for (let sc of criterionList) {
-
-    if (DisplayType.OPERATOR === (searchTypes[sc.type].displayType)) {
-
-      if (parenthesisOpened == 0) {
-
-        const op: LogicalOperator = sc as LogicalOperator;
-        mainOperators.push(op);
-        //Check if this operator changes from last
-        if (lastOperator && ((lastOperator.type === "or" && op.type !== "or")
-          || (lastOperator.type !== "or" && op.type === "or")
-
-        )) {
-          mixedOrAndAnd = true;
-        }
-        lastOperator = op;
-      }
-
-    } else if (PARENTHESIS_TYPE.OPENING_PARENTHESIS === sc.type) {
-      parenthesisOpened++;
-
-    } else if (PARENTHESIS_TYPE.CLOSING_PARENTHESIS === sc.type) {
-      parenthesisOpened--;
 
     } else {
 
-      // if all criterias have the same nested field and if it's different from the parent
-      // nested
-      // criteria, set a new nested query
-      if ((sharedNestedField && sharedNestedField.length === 0
-          && !(parentNestedPath && sc.getElasticSearchNestedPath() === parentNestedPath))
-        || (!sc.getElasticSearchNestedPath() && sc.getElasticSearchNestedPath() === sharedNestedField
-          && sc.getElasticSearchNestedPath() !== parentNestedPath)) {
-        sharedNestedField = sc.getElasticSearchNestedPath();
-      } else {
-        sharedNestedField = undefined;
+
+      let copyForRemoval = [...criterionList];
+      let copyForIteration = [...criterionList];
+      // Collections.copy(copy, criterionList);
+
+      for (let sc of copyForIteration) {
+        if (sc.isEmpty()) {
+          this.removeSearchCriterionWithOperator(copyForRemoval, sc);
+          console.log("Removing " + sc.type);
+        }
+      }
+
+      // if first in list is an operator except "NOT", remove it
+      if (copyForRemoval.length > 0 && (copyForRemoval[0].type === "and" || copyForRemoval[0].type === "or")) {
+        copyForRemoval.splice(0, 1);
+      }
+      return copyForRemoval;
+    }
+  }
+
+
+  scListToElasticSearchQuery(scList: SearchCriterion[]) {
+    const cleanedScList = this.removeEmptyFields(scList);
+
+    console.log("Cleaned List " + cleanedScList);
+
+    // Set partner parenthesis for every parenthesis
+    let parenthesisStack: Parenthesis[] = [];
+    for (let sc of cleanedScList) {
+      if (PARENTHESIS_TYPE.OPENING_PARENTHESIS === (sc.type)) {
+        parenthesisStack.push(sc as Parenthesis);
+
+      } else if (PARENTHESIS_TYPE.CLOSING_PARENTHESIS === (sc.type)) {
+
+        const closingParenthesis = sc as Parenthesis;
+        const openingParenthesis = parenthesisStack.pop();
+
+        closingParenthesis.partnerParenthesis = openingParenthesis;
+        openingParenthesis!.partnerParenthesis = closingParenthesis;
       }
     }
+    //Join all subquery-creations
+    return forkJoin(cleanedScList.map(sc => sc.toElasticSearchQuery()))
+      //Set query in every search criterion object
+      .pipe(tap(queries => cleanedScList.forEach((sc, i) => {
+        sc.query = queries[i]
+      })))
+
+      //when everything is ready, create complete query
+      .pipe(map(data => {
+            return this.cleanedScListToElasticSearchQuery(cleanedScList, data, undefined)
+          }
+        )
+      )
+
   }
 
-  if (sharedNestedField) {
-    //SearchCriterionBase.logger.debug("Found common nested field: " + sharedNestedField);
-  }
+  cleanedScListToElasticSearchQuery(scList: SearchCriterion[], queries: (Object | undefined)[], parentNestedPath: string | undefined): Object | undefined {
 
-  if (criterionList.length == 1) {
-    resultedQueryBuilder = criterionList[0].query;
+    //SearchCriterionBase.logger.debug("Call with list: " + scList);
 
-  } else if (mainOperators.length > 0) {
-
-    //SearchCriterionBase.logger.debug("found main operators: " + mainOperators);
-
-    console.log("found main operators: " + mainOperators);
-    let should = [];
-    let must = [];
-    let mustNot = [];
-
-    //final BoolQuery.Builder bq = new BoolQuery.Builder();
-
-    // If there are AND/NOTAND operators mixed with OR operators, divide by OR operators ->
-    // Remove all AND / NOTAND operators
-    if (mixedOrAndAnd) {
-      mainOperators = mainOperators.filter(op => op.type === "or");
-      //mainOperators.removeIf(item -> !SearchCriterion.OR_OPERATOR.equals(item.getSearchCriterion()));
+    if (scList.length == 0) {
+      return {match_all: {}};
     }
 
-    for (let i = 0; i < mainOperators.length; i++) {
-      const op: LogicalOperator = mainOperators[i];
-      const indexOfOperator = criterionList.indexOf(op);
-      const nextIndexOfOperator =
-        (mainOperators.length > i + 1) ? criterionList.indexOf(mainOperators[i + 1]) : criterionList.length;
+    let resultedQueryBuilder: Object | undefined = {};
 
-      if (i == 0) {
-        const leftList = criterionList.slice(0, indexOfOperator);
+    let parenthesisOpened = 0;
+
+    let mainOperators: LogicalOperator[] = [];
+    let lastOperator: LogicalOperator | undefined;
+    let mixedOrAndAnd: boolean = false;
+    let sharedNestedField: string | undefined = "";
+    let criterionList = [...scList];
+
+    //SearchCriterionBase.logger.debug("List: " + criterionList);
+
+    // Remove unnecessary parenthesis
+    while (PARENTHESIS_TYPE.OPENING_PARENTHESIS === (criterionList[0].type)
+    && PARENTHESIS_TYPE.CLOSING_PARENTHESIS === (criterionList[criterionList.length - 1].type)
+    && (criterionList[0] as Parenthesis).partnerParenthesis === (criterionList[criterionList.length - 1] as Parenthesis)) {
+
+      criterionList.splice(0, 1);
+      criterionList.splice(criterionList.length - 1, 1);
+    }
+
+    //SearchCriterionBase.logger.debug("List after removal: " + criterionList);
+
+    for (let sc of criterionList) {
+
+      if (DisplayType.OPERATOR === (searchTypes[sc.type].displayType)) {
+
+        if (parenthesisOpened == 0) {
+
+          const op: LogicalOperator = sc as LogicalOperator;
+          mainOperators.push(op);
+          //Check if this operator changes from last
+          if (lastOperator && ((lastOperator.type === "or" && op.type !== "or")
+            || (lastOperator.type !== "or" && op.type === "or")
+
+          )) {
+            mixedOrAndAnd = true;
+          }
+          lastOperator = op;
+        }
+
+      } else if (PARENTHESIS_TYPE.OPENING_PARENTHESIS === sc.type) {
+        parenthesisOpened++;
+
+      } else if (PARENTHESIS_TYPE.CLOSING_PARENTHESIS === sc.type) {
+        parenthesisOpened--;
+
+      } else {
+
+        // if all criterias have the same nested field and if it's different from the parent
+        // nested
+        // criteria, set a new nested query
+        if ((sharedNestedField && sharedNestedField.length === 0
+            && !(parentNestedPath && sc.getElasticSearchNestedPath() === parentNestedPath))
+          || (!sc.getElasticSearchNestedPath() && sc.getElasticSearchNestedPath() === sharedNestedField
+            && sc.getElasticSearchNestedPath() !== parentNestedPath)) {
+          sharedNestedField = sc.getElasticSearchNestedPath();
+        } else {
+          sharedNestedField = undefined;
+        }
+      }
+    }
+
+    if (sharedNestedField) {
+      //SearchCriterionBase.logger.debug("Found common nested field: " + sharedNestedField);
+    }
+
+    if (criterionList.length == 1) {
+      resultedQueryBuilder = criterionList[0].query;
+
+    } else if (mainOperators.length > 0) {
+
+      //SearchCriterionBase.logger.debug("found main operators: " + mainOperators);
+
+      console.log("found main operators: " + mainOperators);
+      let should = [];
+      let must = [];
+      let mustNot = [];
+
+      //final BoolQuery.Builder bq = new BoolQuery.Builder();
+
+      // If there are AND/NOTAND operators mixed with OR operators, divide by OR operators ->
+      // Remove all AND / NOTAND operators
+      if (mixedOrAndAnd) {
+        mainOperators = mainOperators.filter(op => op.type === "or");
+        //mainOperators.removeIf(item -> !SearchCriterion.OR_OPERATOR.equals(item.getSearchCriterion()));
+      }
+
+      for (let i = 0; i < mainOperators.length; i++) {
+        const op: LogicalOperator = mainOperators[i];
+        const indexOfOperator = criterionList.indexOf(op);
+        const nextIndexOfOperator =
+          (mainOperators.length > i + 1) ? criterionList.indexOf(mainOperators[i + 1]) : criterionList.length;
+
+        if (i == 0) {
+          const leftList = criterionList.slice(0, indexOfOperator);
+
+          if ("or" === (op.type)) {
+            should.push(this.cleanedScListToElasticSearchQuery(leftList, queries, sharedNestedField));
+          } else if ("and" === (op.type)) {
+            must.push(this.cleanedScListToElasticSearchQuery(leftList, queries, sharedNestedField));
+          } else if ("not" === (op.type)) {
+            must.push(this.cleanedScListToElasticSearchQuery(leftList, queries, sharedNestedField));
+            //TODO Check if "must" is correct here
+          }
+        }
+
+        const rightList = criterionList.slice(indexOfOperator + 1, nextIndexOfOperator);
 
         if ("or" === (op.type)) {
-          should.push(this.cleanedScListToElasticSearchQuery(leftList, queries, sharedNestedField));
+          should.push(this.cleanedScListToElasticSearchQuery(rightList, queries, sharedNestedField));
         } else if ("and" === (op.type)) {
-          must.push(this.cleanedScListToElasticSearchQuery(leftList, queries, sharedNestedField));
+          must.push(this.cleanedScListToElasticSearchQuery(rightList, queries, sharedNestedField));
         } else if ("not" === (op.type)) {
-          must.push(this.cleanedScListToElasticSearchQuery(leftList, queries, sharedNestedField));
-          //TODO Check if "must" is correct here
+          mustNot.push(this.cleanedScListToElasticSearchQuery(rightList, queries, sharedNestedField));
         }
       }
 
-      const rightList = criterionList.slice(indexOfOperator + 1, nextIndexOfOperator);
-
-      if ("or" === (op.type)) {
-        should.push(this.cleanedScListToElasticSearchQuery(rightList, queries, sharedNestedField));
-      } else if ("and" === (op.type)) {
-        must.push(this.cleanedScListToElasticSearchQuery(rightList, queries, sharedNestedField));
-      } else if ("not" === (op.type)) {
-        mustNot.push(this.cleanedScListToElasticSearchQuery(rightList, queries, sharedNestedField));
-      }
+      resultedQueryBuilder =
+        {
+          bool: {
+            ...should.length > 0 && {should: should},
+            ...must.length > 0 && {must: must},
+            ...mustNot.length > 0 && {mustNot: mustNot},
+          }
+        }
     }
 
-    resultedQueryBuilder =
-      {
-        bool: {
-          ...should.length>0 && {should: should},
-          ...must.length>0 && {must: must},
-          ...mustNot.length>0 && {mustNot: mustNot},
-        }
-      }
+    return resultedQueryBuilder;
+
   }
 
-  return resultedQueryBuilder;
+  search() {
+    const searchCriterions = this.fields.controls.map(fc => fc as SearchCriterion)
+    this.scListToElasticSearchQuery(searchCriterions).pipe(
+      /*
+      map(query => {
+        const wholeQuery = {query: query};
+        return wholeQuery;
+      })
+      */
 
-}
+    ).subscribe(query =>
+      this.router.navigateByUrl('/list', {onSameUrlNavigation: 'reload', state: {query}})
+    );
 
+  }
 
+  show_form() {
+    this.result = this.searchForm.value;
+  }
 
-
+  show_query() {
+    const searchCriterions = this.fields.controls.map(fc => fc as SearchCriterion)
+    this.scListToElasticSearchQuery(searchCriterions).subscribe(query => this.query = query);
+  }
 }
