@@ -1,6 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 
+import { BatchService } from 'src/app/components/batch/services/batch.service';
+import { DeletePubItemsParams } from 'src/app/components/batch/interfaces/actions-params';
+
 @Component({
   selector: 'pure-delete-pub-items-form',
   standalone: true,
@@ -9,4 +12,18 @@ import { Component } from '@angular/core';
   ],
   templateUrl: './delete-pub-items-form.component.html'
 })
-export class DeletePubItemsFormComponent { }
+export class DeletePubItemsFormComponent { 
+
+  constructor(private bs: BatchService) { }
+
+  get deletePubItemsParams(): DeletePubItemsParams {
+    const actionParams: DeletePubItemsParams = {
+      itemIds: []
+    }
+    return actionParams;
+  }
+
+  onSubmit(): void {
+    this.bs.deletePubItems(this.deletePubItemsParams).subscribe(actionResponse => console.log(actionResponse));
+  }
+}

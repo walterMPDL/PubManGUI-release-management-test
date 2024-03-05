@@ -1,29 +1,49 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { catchError, map, tap, Observable, of, throwError } from 'rxjs';
+import { inge_rest_uri } from 'src/assets/properties.json';
 
-import * as ifs from '../interfaces/actions-params';
+import * as params from '../interfaces/actions-params';
+import * as resps from '../interfaces/actions-responses';
+
+import { ignoredStatuses } from 'src/app/services/interceptors/http-error.interceptor';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BatchService {
 
-  constructor() {}
+  private readonly baseUrl: string = inge_rest_uri;
+
+  private ouList: resps.ipList[] = [];
+
+  constructor(private http: HttpClient) { }
 
   get items(): any {
-    const item_list = sessionStorage.getItem('item_list');
-    if (item_list) { 
-      return JSON.parse(item_list); 
+    const itemList = sessionStorage.getItem('item_list');
+    if (itemList) { 
+      return JSON.parse(itemList); 
     } else throw new Error('Please, select items to be processed!');
   }
 
   get token(): string | null {
-    return sessionStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
+    if (token) {
+      return token; 
+    } else throw new Error('Please, log in!');
   }
 
   get user(): any {
     const user_string = sessionStorage.getItem('user');
-    if (user_string) return JSON.parse(user_string);
+    if (user_string) {
+      return JSON.parse(user_string);
+    } else throw new Error('Please, log in!');
+  }
+
+  getIpList():Observable<resps.ipList[]> {
+    const headers = new HttpHeaders().set('Authorization', this.token!);
+    const url  = `${ this.baseUrl }/miscellaneous/getIpList`;
+    return this.http.get<resps.ipList[]>(url, { headers });
   }
 
   // TO-DO
@@ -32,144 +52,160 @@ export class BatchService {
   // TO-DO
   // public updateContext(event: any) {}
 
-  get isProcessing(): boolean {
-    return false;
+  getBatchProcessUserLock():Observable<resps.getBatchProcessUserLockResponse> {
+    const url  = `${ this.baseUrl }/batchProcess/getBatchProcessUserLock`;
+    const headers = new HttpHeaders()
+      .set('Authorization', this.token!);
+      return this.http.get<resps.getBatchProcessUserLockResponse>(url, { headers, context: ignoredStatuses([404]) });
   }
 
-  deletePubItems(actionParams: ifs.DeletePubItemsParams): Observable<ifs.DeletePubItemsParams> {
+  deletePubItems(actionParams: params.DeletePubItemsParams): Observable<params.DeletePubItemsParams> {
     actionParams.itemIds = this.items;
-    const actionResponse: Observable<ifs.DeletePubItemsParams> = of(actionParams);
+    const actionResponse: Observable<params.DeletePubItemsParams> = of(actionParams);
     return actionResponse;
   }
 
-  submitPubItems(actionParams: ifs.SubmitPubItemsParams): Observable<ifs.SubmitPubItemsParams> {
+  submitPubItems(actionParams: params.SubmitPubItemsParams): Observable<params.SubmitPubItemsParams> {
     actionParams.itemIds = this.items;
-    const actionResponse: Observable<ifs.SubmitPubItemsParams> = of(actionParams);
+    const actionResponse: Observable<params.SubmitPubItemsParams> = of(actionParams);
     return actionResponse;
   }
   
-  revisePubItems(actionParams: ifs.RevisePubItemsParams): Observable<ifs.RevisePubItemsParams> {
+  revisePubItems(actionParams: params.RevisePubItemsParams): Observable<params.RevisePubItemsParams> {
     actionParams.itemIds = this.items;
-    const actionResponse: Observable<ifs.RevisePubItemsParams> = of(actionParams);
+    const actionResponse: Observable<params.RevisePubItemsParams> = of(actionParams);
     return actionResponse;
   }
 
-  releasePubItems(actionParams: ifs.ReleasePubItemsParams): Observable<ifs.ReleasePubItemsParams> {
+  releasePubItems(actionParams: params.ReleasePubItemsParams): Observable<params.ReleasePubItemsParams> {
     actionParams.itemIds = this.items;
-    const actionResponse: Observable<ifs.ReleasePubItemsParams> = of(actionParams);
+    const actionResponse: Observable<params.ReleasePubItemsParams> = of(actionParams);
     return actionResponse;
   }
 
-  withdrawPubItems(actionParams: ifs.WithdrawPubItemsParams): Observable<ifs.WithdrawPubItemsParams> {
+  withdrawPubItems(actionParams: params.WithdrawPubItemsParams): Observable<resps.actionGenericResponse> {
     actionParams.itemIds = this.items;
-    const actionResponse: Observable<ifs.WithdrawPubItemsParams> = of(actionParams);
+
+    const headers = new HttpHeaders().set('Authorization', this.token!);
+    console.log('headers.Authorization: \n' + headers.get('Authorization'));
+    const url  = `${ this.baseUrl }/batchProcess/withdrawPubItems`;
+    const body = actionParams;
+    //console.log('actionParams: \n' + JSON.stringify(actionParams));
+
+    const actionResponse: Observable<resps.actionGenericResponse> = this.http.put<resps.actionGenericResponse>( url, body, { headers })
+      .pipe(
+        tap( (value: resps.actionGenericResponse) => console.log('Success: \n' + JSON.stringify(value)) ),
+        catchError( err => throwError( () => err )),
+      );
+    console.log('actionResponse: \n' + JSON.stringify(actionResponse));
     return actionResponse;
   }
 
-  changeContext(actionParams: ifs.ChangeContextParams): Observable<ifs.ChangeContextParams> {
+  changeContext(actionParams: params.ChangeContextParams): Observable<params.ChangeContextParams> {
     actionParams.itemIds = this.items;
-    const actionResponse: Observable<ifs.ChangeContextParams> = of(actionParams);
+    const actionResponse: Observable<params.ChangeContextParams> = of(actionParams);
     return actionResponse;
   }
   
-  addLocalTags(actionParams: ifs.AddLocalTagsParams): Observable<ifs.AddLocalTagsParams> {
+  addLocalTags(actionParams: params.AddLocalTagsParams): Observable<params.AddLocalTagsParams> {
     //console.log(`{\"localTags\": ${JSON.stringify(actionParams.localTags)}}`);
     actionParams.itemIds = this.items;
-    const actionResponse: Observable<ifs.AddLocalTagsParams> = of(actionParams);
+    const actionResponse: Observable<params.AddLocalTagsParams> = of(actionParams);
     return actionResponse;
   } 
 
-  changeLocalTags(actionParams: ifs.ChangeLocalTagParams): Observable<ifs.ChangeLocalTagParams> {
+  changeLocalTags(actionParams: params.ChangeLocalTagParams): Observable<params.ChangeLocalTagParams> {
     actionParams.itemIds = this.items;
-    const actionResponse: Observable<ifs.ChangeLocalTagParams> = of(actionParams);
+    const actionResponse: Observable<params.ChangeLocalTagParams> = of(actionParams);
     return actionResponse;
   } 
 
-  changeGenre(actionParams: ifs.ChangeGenreParams): Observable<ifs.ChangeGenreParams> {
+  changeGenre(actionParams: params.ChangeGenreParams): Observable<params.ChangeGenreParams> {
     actionParams.itemIds = this.items;
-    const actionResponse: Observable<ifs.ChangeGenreParams> = of(actionParams);
+    const actionResponse: Observable<params.ChangeGenreParams> = of(actionParams);
     return actionResponse;
   }
 
-  changeFileVisibility(actionParams: ifs.ChangeFileVisibilityParams): Observable<ifs.ChangeFileVisibilityParams> {  
+  changeFileVisibility(actionParams: params.ChangeFileVisibilityParams): Observable<params.ChangeFileVisibilityParams> {  
     //console.log(`{\"userAccountIpRange\": ${JSON.stringify(actionParams.localTags)}}`);
     actionParams.itemIds = this.items;
-    const actionResponse: Observable<ifs.ChangeFileVisibilityParams> = of(actionParams);
+    const actionResponse: Observable<params.ChangeFileVisibilityParams> = of(actionParams);
     return actionResponse;
   }
 
-  changeFileContentCategory(actionParams: ifs.ChangeFileContentCategoryParams): Observable<ifs.ChangeFileContentCategoryParams> {
+  changeFileContentCategory(actionParams: params.ChangeFileContentCategoryParams): Observable<params.ChangeFileContentCategoryParams> {
     actionParams.itemIds = this.items;
-    const actionResponse: Observable<ifs.ChangeFileContentCategoryParams> = of(actionParams);
+    const actionResponse: Observable<params.ChangeFileContentCategoryParams> = of(actionParams);
     return actionResponse;
   }
 
-  replaceFileAudience(actionParams: ifs.ReplaceFileAudienceParams): Observable<ifs.ReplaceFileAudienceParams> {
+  replaceFileAudience(actionParams: params.ReplaceFileAudienceParams): Observable<params.ReplaceFileAudienceParams> {
     //console.log(`{\"audiences\": ${JSON.stringify(this.audiences)}}`);
     actionParams.itemIds = this.items;
-    const actionResponse: Observable<ifs.ReplaceFileAudienceParams> = of(actionParams);
+    const actionResponse: Observable<params.ReplaceFileAudienceParams> = of(actionParams);
     return actionResponse;
   }
 
-  changeExternalReferenceContentCategory(actionParams: ifs.ChangeExternalReferenceContentCategoryParams): Observable<ifs.ChangeExternalReferenceContentCategoryParams> {
+  changeExternalReferenceContentCategory(actionParams: params.ChangeExternalReferenceContentCategoryParams): Observable<params.ChangeExternalReferenceContentCategoryParams> {
     actionParams.itemIds = this.items;
-    const actionResponse: Observable<ifs.ChangeExternalReferenceContentCategoryParams> = of(actionParams);
+    const actionResponse: Observable<params.ChangeExternalReferenceContentCategoryParams> = of(actionParams);
     return actionResponse;
   }
 
-  replaceOrcid(actionParams: ifs.ReplaceOrcidParams): Observable<ifs.ReplaceOrcidParams> {
+  replaceOrcid(actionParams: params.ReplaceOrcidParams): Observable<params.ReplaceOrcidParams> {
     console.log(`Authorization: ${this.token}`);
     //console.log(`{\"itemIds\": ${JSON.stringify(this.items)}}`);
     actionParams.itemIds = this.items;
-    const actionResponse: Observable<ifs.ReplaceOrcidParams> = of(actionParams);
+    const actionResponse: Observable<params.ReplaceOrcidParams> = of(actionParams);
     return actionResponse;
   } 
 
-  changeReviewMethod(actionParams: ifs.ChangeReviewMethodParams): Observable<ifs.ChangeReviewMethodParams> {
+  changeReviewMethod(actionParams: params.ChangeReviewMethodParams): Observable<params.ChangeReviewMethodParams> {
     actionParams.itemIds = this.items;
-    const actionResponse: Observable<ifs.ChangeReviewMethodParams> = of(actionParams);
+    const actionResponse: Observable<params.ChangeReviewMethodParams> = of(actionParams);
     return actionResponse;
   }
 
-  addKeywords(actionParams: ifs.AddKeywordsParams): Observable<ifs.AddKeywordsParams> {
+  addKeywords(actionParams: params.AddKeywordsParams): Observable<params.AddKeywordsParams> {
     actionParams.itemIds = this.items;
-    const actionResponse: Observable<ifs.AddKeywordsParams> = of(actionParams);
+    const actionResponse: Observable<params.AddKeywordsParams> = of(actionParams);
     return actionResponse;
   }
 
-  replaceKeywords(actionParams: ifs.ReplaceKeywordsParams): Observable<ifs.ReplaceKeywordsParams> {
+  replaceKeywords(actionParams: params.ReplaceKeywordsParams): Observable<params.ReplaceKeywordsParams> {
     actionParams.itemIds = this.items;
-    const actionResponse: Observable<ifs.ReplaceKeywordsParams> = of(actionParams);
+    const actionResponse: Observable<params.ReplaceKeywordsParams> = of(actionParams);
     return actionResponse;
   }
 
-  changeKeywords(actionParams: ifs.ChangeKeywordsParams): Observable<ifs.ChangeKeywordsParams> {
+  changeKeywords(actionParams: params.ChangeKeywordsParams): Observable<params.ChangeKeywordsParams> {
     actionParams.itemIds = this.items;
-    const actionResponse: Observable<ifs.ChangeKeywordsParams> = of(actionParams);
+    const actionResponse: Observable<params.ChangeKeywordsParams> = of(actionParams);
     return actionResponse;
   }
 
-  changeSourceGenre(actionParams: ifs.ChangeSourceGenreParams): Observable<ifs.ChangeSourceGenreParams> {
+  changeSourceGenre(actionParams: params.ChangeSourceGenreParams): Observable<params.ChangeSourceGenreParams> {
     actionParams.itemIds = this.items;
-    const actionResponse: Observable<ifs.ChangeSourceGenreParams> = of(actionParams);
+    const actionResponse: Observable<params.ChangeSourceGenreParams> = of(actionParams);
     return actionResponse;
   }
 
-  replaceSourceEdition(actionParams: ifs.ReplaceSourceEditionParams): Observable<ifs.ReplaceSourceEditionParams> {
+  replaceSourceEdition(actionParams: params.ReplaceSourceEditionParams): Observable<params.ReplaceSourceEditionParams> {
     actionParams.itemIds = this.items;
-    const actionResponse: Observable<ifs.ReplaceSourceEditionParams> = of(actionParams);
+    const actionResponse: Observable<params.ReplaceSourceEditionParams> = of(actionParams);
     return actionResponse;
   }
 
-  addSourceIdentifer(actionParams: ifs.AddSourceIdentiferParams): Observable<ifs.AddSourceIdentiferParams> {
+  addSourceIdentifer(actionParams: params.AddSourceIdentiferParams): Observable<params.AddSourceIdentiferParams> {
     actionParams.itemIds = this.items;
-    const actionResponse: Observable<ifs.AddSourceIdentiferParams> = of(actionParams);
+    const actionResponse: Observable<params.AddSourceIdentiferParams> = of(actionParams);
     return actionResponse;
   }
   
-  changeSourceIdentifier(actionParams: ifs.ChangeSourceIdentifierParams): Observable<ifs.ChangeSourceIdentifierParams> {
+  changeSourceIdentifier(actionParams: params.ChangeSourceIdentifierParams): Observable<params.ChangeSourceIdentifierParams> {
     actionParams.itemIds = this.items;
-    const actionResponse: Observable<ifs.ChangeSourceIdentifierParams> = of(actionParams);
+    const actionResponse: Observable<params.ChangeSourceIdentifierParams> = of(actionParams);
     return actionResponse;
   }
+
 }

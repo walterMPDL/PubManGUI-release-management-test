@@ -38,7 +38,8 @@
         background-color: $mpdl-iseo4;
     }
 
-    --main-title-text-color: #{$mpg-blue};  
+    --main-title-text-color: #{$mpg-blue};
+    --main-content-background-color: white;
     --accent-color-1: #{$mpg-slate-gray-0};
     --accent-color-2: #{lighten($mpg-slate-gray-0, 10% )};     
     --accent-color-3: #{lighten($mpg-slate-gray-0, 20% )}; 
@@ -90,7 +91,8 @@
         background-color: $body-tertiary-bg-dark;
     }
 
-    --main-title-text-color: #{$mpdl-light};
+    --main-title-text-color: var(--accent-color-3);
+    --main-content-background-color: #{$mpdl-dark};
     --accent-color-1: #{$mpg-slate-gray-1};
     --accent-color-2: #{lighten($mpg-slate-gray-1, 10% )};     
     --accent-color-3: #{lighten($mpg-slate-gray-1, 20% )}; 

@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { FormArray, FormBuilder, FormGroup, Validators, ValidatorFn, FormControl, ReactiveFormsModule } from '@angular/forms';
 
 import { BatchService } from 'src/app/components/batch/services/batch.service';
 import { ReplaceFileAudienceParams } from 'src/app/components/batch/interfaces/actions-params';
+import { ipList }  from 'src/app/components/batch/interfaces/actions-responses';
 
 @Component({
   selector: 'pure-replace-file-audience-form',
@@ -15,21 +16,26 @@ import { ReplaceFileAudienceParams } from 'src/app/components/batch/interfaces/a
   ],
   templateUrl: './replace-file-audience-form.component.html',
 })
-export class ReplaceFileAudienceFormComponent {
+export class ReplaceFileAudienceFormComponent implements OnInit {
 
-  ous = Ous;
+  ous: ipList[] = [];
 
   constructor(private fb: FormBuilder, private bs: BatchService) { }
 
+  ngOnInit(): void {
+    this.bs.getIpList()
+      .subscribe( ous => this.ous = ous );
+  }
+
   public replaceFileAudienceForm: FormGroup = this.fb.group({
-    ipRanges: this.fb.array([])
+    allowedAudienceIds: this.fb.array([])
   });
 
-  public ipRange: FormControl = new FormControl('', [Validators.required] );
+  public audienceId: FormControl = new FormControl('', [Validators.required] );
 
   get replaceFileAudienceParams(): ReplaceFileAudienceParams {
     const actionParams: ReplaceFileAudienceParams = {
-      audiences: this.getIDsOfIPRange(),
+      allowedAudienceIds: this.getIDsOfAudience(),
       itemIds: []
     }
     return actionParams;
@@ -46,404 +52,39 @@ export class ReplaceFileAudienceFormComponent {
       return;
     }
 
-    this.bs.replaceFileAudience(this.replaceFileAudienceParams).subscribe( actionResponse => console.log(actionResponse));
+    this.bs.replaceFileAudience(this.replaceFileAudienceParams).subscribe( actionResponse => console.log(actionResponse) );
   }
 
-  // IP ranges
-  get ipRangesToAdd() {
-    return this.replaceFileAudienceForm.get('ipRanges') as FormArray;
+  get AudiencesToAdd() {
+    return this.replaceFileAudienceForm.get('allowedAudienceIds') as FormArray;
   }
 
-  onAddToNewIPRanges(): void {
-    const range = this.ipRange.value;
-    const added = this.ipRangesToAdd.controls.map(control => control.value);
+  onAddToNewAudiences(): void {
+    const range = this.audienceId.value;
+    const added = this.AudiencesToAdd.controls.map(control => control.value);
     const hasDuplicate = added.indexOf(range) != -1;
-    this.ipRange.setErrors( hasDuplicate ? { 'duplicated': true } : null);
-    if (this.ipRange.errors) return;
+    this.audienceId.setErrors( hasDuplicate ? { 'duplicated': true } : null);
+    if (this.audienceId.errors) return;
 
-    this.ipRangesToAdd.push(
+    this.AudiencesToAdd.push(
       this.fb.control(range, Validators.required)
     );
 
-    this.ipRange.reset();
+    this.audienceId.reset();
   }
 
-  onDeleteIPRange(index: number): void {
-    this.ipRangesToAdd.removeAt(index);
+  onDeleteAudience(index: number): void {
+    this.AudiencesToAdd.removeAt(index);
   }
 
-  getIDsOfIPRange(): string[] {
-    let ipRanges = [];
+  getIDsOfAudience(): string[] {
+    let Audiences = [];
 
-    for (let range of this.ipRangesToAdd.controls) {
-      ipRanges.push(this.ous.find(x => x.label === range.value)!.id);
+    for (let range of this.AudiencesToAdd.controls) {
+      Audiences.push(this.ous.find(x => x.name === range.value)!.id);
     }
 
-    return ipRanges;
+    return Audiences;
   }
 
 }
-
-// TO-DO
-export const Ous = [
-  {
-    id: "mpg",
-    label: "Max Planck Society (every institute)"
-  },
-  {
-    id: "100",
-    label: "Administrative Headquarters of the Max Planck Society, MPGV"
-  },
-  {
-    id: "375",
-    label: "Art History Institute in Florence - Max-Planck-Institute, MFKH"
-  },
-  {
-    id: "366",
-    label: "Bibliotheca Hertziana - Max Planck Institute for Art History, MRBH"
-  },
-  {
-    id: "830",
-    label: "Ernst Strüngmann Institute for Neuroscience in Cooperation with Max Planck Society (ESI), MFES"
-  },
-  {
-    id: "307",
-    label: "Friedrich Miescher Laboratory of the Max Planck Society, MTFM"
-  },
-  {
-    id: "339",
-    label: "Fritz Haber Institute of the Max Planck Society, MBFH"
-  },
-  {
-    id: "806",
-    label: "German Climate Computation Center (DKRZ), MHKR"
-  },
-  {
-    id: "200",
-    label: "Max Planck Digital Library, MPDL"
-  },
-  {
-    id: "389",
-    label: "Max Planck Florida Institute for Neuroscience, MJNS"
-  },
-  {
-    id: "251",
-    label: "Max Planck Innovation, MMGI"
-  },
-  {
-    id: "330",
-    label: "Max Planck Institute for Astronomy, MHAS"
-  },
-  {
-    id: "331",
-    label: "Max Planck Institute for Astrophysics, MGAS"
-  },
-  {
-    id: "332",
-    label: "Max Planck Institute for Biogeochemistry, MJBK"
-  },
-  {
-    id: "313",
-    label: "Max Planck Institute for Biological Cybernetics, MTBK"
-  },
-  {
-    id: "329",
-    label: "Max Planck Institute for Biological Intelligence, MMBI"
-  },
-  {
-    id: "305",
-    label: "Max Planck Institute for Biology Tübingen, MTEB"
-  },
-  {
-    id: "458",
-    label: "Max Planck Institute for Brain Research and Max Planck Reseach Unit for Neurogenetics, MFHR"
-  },
-  {
-    id: "322",
-    label: "Max Planck Institute for Chemical Ecology, MJCO"
-  },
-  {
-    id: "394",
-    label: "Max Planck Institute for Chemical Energy Conversion, MPSC"
-  },
-  {
-    id: "351",
-    label: "Max Planck Institute for Chemical Physics of Solids, MPCP"
-  },
-  {
-    id: "333",
-    label: "Max Planck Institute for Chemistry (Otto Hahn Institute), MPCH"
-  },
-  {
-    id: "343",
-    label: "Max Planck Institute for Coal Research, MPKH"
-  },
-  {
-    id: "382",
-    label: "Max Planck Institute for Comparative Public Law and International Law, MHAV"
-  },
-  {
-    id: "377",
-    label: "Max Planck Institute for Comparative and International Private Law, MHAP"
-  },
-  {
-    id: "368",
-    label: "Max Planck Institute for Demographic Research, MRDF"
-  },
-  {
-    id: "336",
-    label: "Max Planck Institute for Dynamics and Self-Organization, MPSF"
-  },
-  {
-    id: "335",
-    label: "Max Planck Institute for Dynamics of Complex Technical Systems, MMDT"
-  },
-  {
-    id: "398",
-    label: "Max Planck Institute for Empirical Aesthetics, MFAE"
-  },
-  {
-    id: "365",
-    label: "Max Planck Institute for Evolutionary Anthropology, MLEA"
-  },
-  {
-    id: "314",
-    label: "Max Planck Institute for Evolutionary Biology, MPLM"
-  },
-  {
-    id: "353",
-    label: "Max Planck Institute for Extraterrestrial Physics, MGEP"
-  },
-  {
-    id: "376",
-    label: "Max Planck Institute for Geoanthropology, MJWS"
-  },
-  {
-    id: "340",
-    label: "Max Planck Institute for Gravitational Physics (Albert Einstein Institute), MPGR"
-  },
-  {
-    id: "309",
-    label: "Max Planck Institute for Heart and Lung Research (W. G. Kerckhoff Institute), MNPK"
-  },
-  {
-    id: "374",
-    label: "Max Planck Institute for Human Cognitive and Brain Sciences, MLNP"
-  },
-  {
-    id: "367",
-    label: "Max Planck Institute for Human Development, MBBF"
-  },
-  {
-    id: "312",
-    label: "Max Planck Institute for Infection Biology, MBIB"
-  },
-  {
-    id: "341",
-    label: "Max Planck Institute for Informatics, MSIN"
-  },
-  {
-    id: "456",
-    label: "Max Planck Institute for Intellectual Property Rights and Max Planck Institute for Tax Law, MMAP"
-  },
-  {
-    id: "360",
-    label: "Max Planck Institute for Intelligent Systems, MSMT"
-  },
-  {
-    id: "337",
-    label: "Max Planck Institute for Iron Research, MDES"
-  },
-  {
-    id: "379",
-    label: "Max Planck Institute for Legal History and Legal Theory, MFER"
-  },
-  {
-    id: "317",
-    label: "Max Planck Institute for Marine Microbiology, MBMM"
-  },
-  {
-    id: "346",
-    label: "Max Planck Institute for Mathematics in the Sciences, MLMN"
-  },
-  {
-    id: "345",
-    label: "Max Planck Institute for Mathematics, MBMT"
-  },
-  {
-    id: "316",
-    label: "Max Planck Institute for Medical Research, MHMF"
-  },
-  {
-    id: "321",
-    label: "Max Planck Institute for Metabolism Research, MKNF"
-  },
-  {
-    id: "348",
-    label: "Max Planck Institute for Meteorology, MHMT"
-  },
-  {
-    id: "301",
-    label: "Max Planck Institute for Molecular Biomedicine, MMVB"
-  },
-  {
-    id: "308",
-    label: "Max Planck Institute for Molecular Genetics, MBMG"
-  },
-  {
-    id: "445",
-    label: "Max Planck Institute for Multidisciplinary Sciences, MGMN"
-  },
-  {
-    id: "444",
-    label: "Max Planck Institute for Neurobiology of Behavior – caesar, ZBCS"
-  },
-  {
-    id: "342",
-    label: "Max Planck Institute for Nuclear Physics, MHKP"
-  },
-  {
-    id: "350",
-    label: "Max Planck Institute for Physics (Werner Heisenberg Institute), MMPH"
-  },
-  {
-    id: "328",
-    label: "Max Planck Institute for Plant Breeding Research, MKZF"
-  },
-  {
-    id: "354",
-    label: "Max Planck Institute for Plasma Physics, MPPL"
-  },
-  {
-    id: "355",
-    label: "Max Planck Institute for Polymer Research, MMPL"
-  },
-  {
-    id: "378",
-    label: "Max Planck Institute for Psycholinguistics, MNPL"
-  },
-  {
-    id: "357",
-    label: "Max Planck Institute for Radio Astronomy, MBRA"
-  },
-  {
-    id: "371",
-    label: "Max Planck Institute for Research on Collective Goods, MBRG"
-  },
-  {
-    id: "9351",
-    label: "Max Planck Institute for Security and Privacy, MBCY"
-  },
-  {
-    id: "369",
-    label: "Max Planck Institute for Social Anthropology, MHET"
-  },
-  {
-    id: "380",
-    label: "Max Planck Institute for Social Law and Social Policy, MMAS"
-  },
-  {
-    id: "358",
-    label: "Max Planck Institute for Software Systems, MSSO"
-  },
-  {
-    id: "359",
-    label: "Max Planck Institute for Solar System Research, MPAE"
-  },
-  {
-    id: "338",
-    label: "Max Planck Institute for Solid State Research, MSFK"
-  },
-  {
-    id: "318",
-    label: "Max Planck Institute for Terrestrial Microbiology, MMTM"
-  },
-  {
-    id: "388",
-    label: "Max Planck Institute for the Biology of Ageing, MKBA"
-  },
-  {
-    id: "383",
-    label: "Max Planck Institute for the History of Science, MBWG"
-  },
-  {
-    id: "352",
-    label: "Max Planck Institute for the Physics of Complex Systems, MDPK"
-  },
-  {
-    id: "387",
-    label: "Max Planck Institute for the Science of Light, MELI"
-  },
-  {
-    id: "399",
-    label: "Max Planck Institute for the Structure and Dynamics of Matter, MHSD"
-  },
-  {
-    id: "381",
-    label: "Max Planck Institute for the Study of Crime, Security and Law, MFAS"
-  },
-  {
-    id: "384",
-    label: "Max Planck Institute for the Study of Religious and Ethnic Diversity, MPGS"
-  },
-  {
-    id: "373",
-    label: "Max Planck Institute for the Study of Societies, MKGS"
-  },
-  {
-    id: "319",
-    label: "Max Planck Institute of Animal Behavior, MKAB"
-  },
-  {
-    id: "386",
-    label: "Max Planck Institute of Biochemistry, MMBC"
-  },
-  {
-    id: "302",
-    label: "Max Planck Institute of Biophysics, MFBP"
-  },
-  {
-    id: "344",
-    label: "Max Planck Institute of Colloids and Interfaces, MTKG"
-  },
-  {
-    id: "311",
-    label: "Max Planck Institute of Immunobiology and Epigenetics, MFIB"
-  },
-  {
-    id: "349",
-    label: "Max Planck Institute of Microstructure Physics, MHMP"
-  },
-  {
-    id: "327",
-    label: "Max Planck Institute of Molecular Cell Biology and Genetics, MDMZ"
-  },
-  {
-    id: "325",
-    label: "Max Planck Institute of Molecular Physiology, MDMP"
-  },
-  {
-    id: "324",
-    label: "Max Planck Institute of Molecular Plant Physiology, MBMP"
-  },
-  {
-    id: "326",
-    label: "Max Planck Institute of Psychiatry, MMPS"
-  },
-  {
-    id: "356",
-    label: "Max Planck Institute of Quantum Optics, MGQO"
-  },
-  {
-    id: "430",
-    label: "Max Planck Institute&nbsp;Luxembourg for International, European and Regulatory Procedural Law, MLRP"
-  },
-  {
-    id: "403",
-    label: "Max Planck Unit for the Science of Pathogens, MBSP"
-  },
-  {
-    id: "220",
-    label: "Society for Scientific Data Processing Göttingen, GWDG"
-  }
-]

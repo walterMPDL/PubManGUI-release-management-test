@@ -29,14 +29,29 @@ import { BatchService } from '../services/batch.service';
 })
 export class ActionsComponent {
 
-  constructor(private bs: BatchService) {}
+  private isProcessing: boolean = false;
+
+  constructor(private bs: BatchService) { }
 
   ngAfterViewInit() {
-    // TO-DO 
     // check if there are actions in process:
+    this.bs.getBatchProcessUserLock().subscribe({
+      next: () => this.isProcessing = true,
+      error: () => this.isProcessing = false
+    })
     //  if true launch modal with actions lock
-    //  if false:
-    //    check if there are items selected:
-    //      if false launch modal with actions lock
+    if (!this.isProcessing) {
+
+    };
+
+    if (!this.bs.items) {
+      console.log('Please wait, a process is runnig!');
+    }
+
+    // check if there are items selected:
+    //  if false launch modal with actions lock
+    if (!this.bs.items) {
+      console.log('Please, select items to be processed!');
+    }
   }
 }

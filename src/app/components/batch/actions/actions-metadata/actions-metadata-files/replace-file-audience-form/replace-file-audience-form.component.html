@@ -1,20 +1,20 @@
-<div class="form-control box-grey">
+<div class="form-control border-0 p-4 mb-2">
 
-    <div class="description">
+    <div class="mt-2 mb-5">
       All files with the visibility "restricted" will be assigned to the following IP
       range(s)
     </div>
 
     <form [formGroup]="replaceFileAudienceForm" (ngSubmit)="onSubmit()" autocomplete="off">
       <div class="mb-3 row">
-        <label class="col-sm-2 col-form-label" for="ipRange">Assign IP range</label>
+        <label class="col-sm-2 col-form-label" for="audienceId">Assign IP range</label>
         <div class="col-sm-10">
           <div class="input-group">
-            <select class="form-control form-select" [formControl]="ipRange">
-              <option *ngFor="let ou of ous" [ngValue]="ou.label">{{ou.label}}
+            <select class="form-control form-select" [formControl]="audienceId">
+              <option *ngFor="let ou of ous" [ngValue]="ou.name">{{ou.name}}
               </option>
             </select>
-            <button (click)="onAddToNewIPRanges()" class="input-group-text" type="button">
+            <button (click)="onAddToNewAudiences()" class="input-group-text" type="button">
                 <i class="bi bi-plus-lg"></i>
             </button>
           </div>
@@ -22,17 +22,17 @@
       </div>
 
       <div class="mb-3 row">
-        <label *ngIf="ipRangesToAdd.length" class="col-sm-2 col-form-label">Selected IP
+        <label *ngIf="AudiencesToAdd.length" class="col-sm-2 col-form-label">Selected IP
           range(s)</label>
-        <div class="col-sm-10" formArrayName="ipRanges">
-          <div class="mb-1" *ngFor="let range of ipRangesToAdd.controls; let i = index;">
+        <div class="col-sm-10" formArrayName="allowedAudienceIds">
+          <div class="mb-1" *ngFor="let range of AudiencesToAdd.controls; let i = index;">
             <div class="input-group">
               <input [formControlName]="i" class="form-control" readonly>
-              <button (click)="onDeleteIPRange( i )" class="input-group-text" type="button">
+              <button (click)="onDeleteAudience( i )" class="input-group-text" type="button">
                 <i class="bi bi-dash-lg"></i>
               </button>
             </div>
-            <span *ngIf="isValidFieldInArray(ipRangesToAdd, i)" class="form-text text-danger">
+            <span *ngIf="isValidFieldInArray(AudiencesToAdd, i)" class="form-text text-danger">
               this field is required
             </span>
           </div>
@@ -41,7 +41,7 @@
 
       <div class="row">
         <div class="offset-sm-3 col-sm-6">
-					<div *ngIf="ipRange.hasError('duplicated')" class="form-text text-danger">
+					<div *ngIf="audienceId.hasError('duplicated')" class="form-text text-danger">
 						Field can't be duplicated.
 					</div>
       </div>

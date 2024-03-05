@@ -1,6 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 
+import { BatchService } from 'src/app/components/batch/services/batch.service';
+import { WithdrawPubItemsParams } from 'src/app/components/batch/interfaces/actions-params';
+
 @Component({
   selector: 'pure-withdraw-pub-items-form',
   standalone: true,
@@ -9,4 +12,21 @@ import { Component } from '@angular/core';
   ],
   templateUrl: './withdraw-pub-items-form.component.html',
 })
-export class WithdrawPubItemsFormComponent { }
+export class WithdrawPubItemsFormComponent {
+
+  constructor(private bs: BatchService) { }
+
+  get withdrawPubItemsParams(): WithdrawPubItemsParams {
+    const actionParams: WithdrawPubItemsParams = {
+      itemIds: []
+    }
+    return actionParams;
+  }
+
+  onSubmit(): void {
+    this.bs.withdrawPubItems(this.withdrawPubItemsParams).subscribe({
+      next: (actionResponse) => console.log('Next: \n' + JSON.stringify(actionResponse)),
+      error: (err) =>  console.log('Error: \n' + err)
+    })
+  }
+ }

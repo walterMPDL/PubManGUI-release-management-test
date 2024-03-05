@@ -62,7 +62,7 @@ export interface ChangeFileContentCategoryParams {
 
 export interface ReplaceFileAudienceParams {
         itemIds: string[],
-        audiences: string[],
+        allowedAudienceIds: string[],
 }
 
 // External References
