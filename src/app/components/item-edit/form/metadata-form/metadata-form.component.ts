@@ -15,6 +15,7 @@ import { SourceFormComponent } from '../source-form/source-form.component';
 import { SubjectFormComponent } from '../subject-form/subject-form.component';
 import { AbstractFormComponent } from '../abstract-form/abstract-form.component';
 import { ProjectInfoFormComponent } from '../project-info-form/project-info-form.component';
+import { CdkDragDrop, CdkDropList, CdkDrag, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'pure-metadata-form',
@@ -35,11 +36,13 @@ import { ProjectInfoFormComponent } from '../project-info-form/project-info-form
     SourceFormComponent,
     SubjectFormComponent,
     ProjectInfoFormComponent,
+    CdkDropList,
+    CdkDrag,
   ],
   templateUrl: './metadata-form.component.html',
   styleUrls: ['./metadata-form.component.scss']
 })
-export class MetadataFormComponent {
+export class MetadataFormComponent{
 
   constructor(
     private fb: FormBuilder,
@@ -51,6 +54,7 @@ export class MetadataFormComponent {
   fbs = inject(FormBuilderService);
 
   genre_types = Object.keys(MdsPublicationGenre);
+  hoverDragList:any;
 
   get alternativeTitles() {
     return this.meta_form.get('alternativeTitles') as FormArray<FormGroup<ControlType<AlternativeTitleVO>>>;
@@ -257,4 +261,15 @@ export class MetadataFormComponent {
     this.projectInfo.removeAt(index);
   }
   
+  dropCreator(event: CdkDragDrop<string[]>) {
+    this.moveItemInArray(this.creators, event.previousIndex, event.currentIndex);
+  }
+
+  /** Copied from Angular CDK to make our FormArrays work with drag and drop */
+  moveItemInArray<T = any>(array: FormArray<FormGroup<ControlType<T>>>, fromIndex: number, toIndex: number): void {
+    let object:any = array.at(fromIndex);
+    array.removeAt(fromIndex);
+    array.insert(toIndex, object);
+  }
+
 }
