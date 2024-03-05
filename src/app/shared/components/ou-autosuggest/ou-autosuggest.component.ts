@@ -24,7 +24,7 @@ import {NgbTypeahead} from "@ng-bootstrap/ng-bootstrap";
 export class OuAutosuggestComponent {
 
   @Input() formForOuName! : FormControl;
-  @Input() formForOuId! : FormControl;
+  @Input() formForOuId! : FormControl | undefined;
 
   searching: boolean = false;
 

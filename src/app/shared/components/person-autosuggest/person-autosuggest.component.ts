@@ -31,7 +31,7 @@ export class PersonAutosuggestComponent {
 
 
   @Input() formForPersonsName! : FormControl;
-  @Input() formForPersonsId! : FormControl;
+  @Input() formForPersonsId! : FormControl | undefined;
   searching: boolean = false;
 
   constructor(private coneService: ConeService) {
