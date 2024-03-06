@@ -92,7 +92,7 @@
         background-color: $body-tertiary-bg-dark;
     }
 
-    --main-title-text-color: var(--accent-color-3);
+    --main-title-text-color: #{$mpg-slate-gray-2}; 
     --main-content-bg-color: #{body-tertiary-bg-dark};
     --main-content-text-color: white;
     --secondary-content-bg-color: #{$mpg-light-gray};
