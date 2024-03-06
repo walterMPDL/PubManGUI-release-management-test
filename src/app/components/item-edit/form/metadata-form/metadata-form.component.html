@@ -36,17 +36,12 @@
                         <label class="col-sm-2 col-form-label col-form-label-sm">TODO: File Upload for Thumbnail</label>
                     </div>
                     <div class="d-sm-flex flex-sm-row gap-1 mb-1">
-                        <label class="col-sm-2 col-form-label col-form-label-sm">Thesis</label>
+                        <label class="col-sm-2 col-form-label col-form-label-sm">Degree</label>
                         <div class="col-sm">
-                            <div class="d-sm-flex flex-sm-row gap-1 mb-1 align-items-center">
-                                <div class="col-sm-2">
-                                    <label class="col-form-label col-form-label-sm">Degree</label>
-                                    <input type="text" class="form-control form-control-sm" formControlName="degree">
-                                </div>
-                            </div>
-                            <div class="col-sm-1">
-                                <!--NEEDED to keep the layout including one last collumn for add-remove buttons-->
-                            </div>
+                            <input type="text" class="form-control form-control-sm" formControlName="degree">
+                        </div>
+                        <div class="col-sm-1">
+                            <!--NEEDED to keep the layout including one last collumn for add-remove buttons-->
                         </div>
                     </div>
                     <div class="d-sm-flex flex-sm-row gap-1 mb-1 align-items-center">
@@ -98,7 +93,7 @@
             <div id="accordionBodyCreatorGroup" class="accordion-collapse collapse show">
                 <div class="accordion-body border rounded mt-3 mb-3">
                     <div class="d-sm-flex flex-sm-row gap-1 mb-1">
-                        <label for="creatures" class="col-sm-2 col-form-label col-form-label-sm">creators</label>
+                        <label for="creatures" class="col-sm-2 col-form-label col-form-label-sm">Creators</label>
                         <div class="col-sm">
                             <!-- TODO Add many -->
                             <div class="d-sm-flex flex-sm-row gap-1 mb-1">
@@ -144,38 +139,38 @@
                     <div class="d-sm-flex flex-sm-row gap-1 mb-1">
                         <label class="col-sm-2 col-form-label col-form-label-sm">Dates</label>
                         <div class="col-sm">
-                            <div class="d-sm-flex flex-sm-row gap-1 mb-1 align-items-center">
+                            <div class="d-sm-flex flex-sm-row gap-1 mb-1 align-items-end">
                                 <div class="col-sm-2">
                                     <label class="col-form-label col-form-label-sm">Date Published in Print</label>
                                     <input type="text" class="form-control form-control-sm"
-                                        formControlName="datePublishedInPrint">
+                                        formControlName="datePublishedInPrint" placeholder="YYYY-MM-DD">
                                 </div>
                                 <div class="col-sm-2">
                                     <label class="col-form-label col-form-label-sm">Date Published Online</label>
                                     <input type="text" class="form-control form-control-sm"
-                                        formControlName="datePublishedOnline">
+                                        formControlName="datePublishedOnline" placeholder="YYYY-MM-DD">
                                 </div>
                                 <div class="col-sm-2">
                                     <label class="col-form-label col-form-label-sm">Date Accepted</label>
                                     <input type="text" class="form-control form-control-sm"
-                                        formControlName="dateAccepted">
+                                        formControlName="dateAccepted" placeholder="YYYY-MM-DD">
                                 </div>
                                 <div class="col-sm-2">
                                     <label class="col-form-label col-form-label-sm">Date Submitted</label>
                                     <input type="text" class="form-control form-control-sm"
-                                        formControlName="dateSubmitted">
+                                        formControlName="dateSubmitted" placeholder="YYYY-MM-DD">
                                 </div>
                             </div>
-                            <div class="d-sm-flex flex-sm-row gap-1 mb-1 align-items-center">
+                            <div class="d-sm-flex flex-sm-row gap-1 mb-1 align-items-end">
                                 <div class="col-sm-2">
                                     <label class="col-form-label col-form-label-sm">Date Created</label>
                                     <input type="text" class="form-control form-control-sm"
-                                        formControlName="dateCreated">
+                                        formControlName="dateCreated" placeholder="YYYY-MM-DD">
                                 </div>
                                 <div class="col-sm-2">
                                     <label class="col-form-label col-form-label-sm">Date Modified</label>
                                     <input type="text" class="form-control form-control-sm"
-                                        formControlName="dateModified">
+                                        formControlName="dateModified" placeholder="YYYY-MM-DD">
                                 </div>
                             </div>
                             <div class="col-sm-1">
@@ -245,7 +240,14 @@
                             </div>
                         </div>
                     </div>
-                    <pure-publishing-info-form [publishing_info_form]="publishingInfo"></pure-publishing-info-form>
+                    <div class="d-sm-flex flex-sm-row gap-1 mb-1">
+                        <label for="reviewMethod" class="col-sm-2 col-form-label col-form-label-sm">Publishing
+                            Info</label>
+                        <div class="col-sm">
+                            <pure-publishing-info-form
+                                [publishing_info_form]="publishingInfo"></pure-publishing-info-form>
+                        </div>
+                    </div>
                     <!--
     <div class="d-sm-flex flex-sm-row gap-1 mb-1 align-items-center">
         <label for="location" class="col-sm-2 col-form-label col-form-label-sm">Location</label>
@@ -301,14 +303,14 @@
                             </ng-container>
                         </div>
                     </div>
-                    <div class="d-sm-flex flex-sm-row gap-1 mb-1 align-items-center">
+                    <div class="d-sm-flex flex-sm-row gap-1 mb-1">
                         <label for="freeKeywords" class="col-sm-2 col-form-label col-form-label-sm">Free
                             Keywords</label>
                         <div class="col-sm">
                             <div class="d-sm-flex flex-sm-row gap-1 mb-1 align-items-center">
                                 <div class="col-sm">
-                                    <input type="text" class="form-control form-control-sm" id="freeKeywords"
-                                        name="freeKeywords" formControlName="freeKeywords">
+                                    <textarea class="form-control form-control-sm" id="freeKeywords" name="freeKeywords"
+                                        formControlName="freeKeywords"></textarea>
                                 </div>
                                 <div class="col-sm-1">
                                     <!--NEEDED to keep the layout including one last collumn for add-remove buttons-->
@@ -422,7 +424,7 @@
         </div>
 
         <!--GROUP Sources-->
-        <div class="accordion-item border border-0">
+        <div class="accordion-item border border-0 mb-3">
             <h2 class="accordion-header">
                 <button class="accordion-button" type="button" data-bs-toggle="collapse"
                     data-bs-target="#accordionBodySourcesGroup" aria-expanded="true"
@@ -431,30 +433,27 @@
                 </button>
             </h2>
             <div id="accordionBodySourcesGroup" class="accordion-collapse collapse">
-                <div class="accordion-body border rounded mt-3 mb-3">
-                    <div class="d-sm-flex flex-sm-row gap-1 mb-1">
-                        <label for="sources" class="col-sm-2 col-form-label col-form-label-sm">Sources</label>
-                        <div class="col-sm">
-                            <ng-container formArrayName="sources">
-                                @for (source of sources.controls; track source; let sourcesIndex = $index) {
+                <ng-container formArrayName="sources">
+                    @for (source of sources.controls; track source; let sourcesIndex = $index) {
+                    <div class="accordion-body border rounded mt-3 mb-3">
+                        <div class="d-sm-flex flex-sm-row gap-1 mb-1">
+                            <label for="sources" class="col-sm-2 col-form-label col-form-label-sm">{{sourcesIndex + 1}}.
+                                Source</label>
+                            <div class="col-sm">
                                 <ng-container [formGroupName]="sourcesIndex">
                                     <pure-source-form [source_form]="source" [index]="sourcesIndex"
                                         [index_length]="sources.controls.length"
                                         (notice)="handleSourceNotification($event)"></pure-source-form>
                                 </ng-container>
-                                } @empty {
-                                <pure-add-remove-buttons [index]="0" [del_val]="'hidden'" [add_val]="'add source'"
-                                    (notice)="handleSourceNotification($event)"></pure-add-remove-buttons>
-                                }
-                            </ng-container>
+                            </div>
                         </div>
                     </div>
-                </div>
+                    } @empty {
+                    <pure-add-remove-buttons [index]="0" [del_val]="'hidden'" [add_val]="'add source'"
+                        (notice)="handleSourceNotification($event)"></pure-add-remove-buttons>
+                    }
+                </ng-container>
             </div>
         </div>
-
     </div>
-
-
-
 </div>

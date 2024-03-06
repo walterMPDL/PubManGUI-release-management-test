@@ -28,7 +28,7 @@
                     </select>
                 </div>
                 @if (type.value === 'ORGANIZATION') {
-                <div class="col-sm-2" formGroupName="organization">
+                <div class="col-sm" formGroupName="organization">
                     <label for="name" class="col-form-label col-form-label-sm text-end pe-2">name</label>
                     <pure-selector [form]="organization" [control_name]="'name'" (notice)="updateOU($event)" purePureOus
                         placeholder="search ous ...">
@@ -39,11 +39,6 @@
                 @if (type.value === 'PERSON') {
                 <ng-container formGroupName="person">
                     <div class="col-sm-3">
-                        <label for="givenName" class="col-form-label col-form-label-sm text-end pe-2">given</label>
-                        <input type="text" class="form-control form-control-sm" id="givenName"
-                            formControlName="givenName">
-                    </div>
-                    <div class="col-sm-3">
                         <label for="familyName" class="col-form-label col-form-label-sm text-end pe-2">family</label>
                         <!--<input type="text" class="form-control form-control-sm" id="familyName"
                             formControlName="familyName">-->
@@ -51,6 +46,11 @@
                             pureConePersons placeholder="search cone ...">
                             <ng-container *pureOption="let item">{{ item.text }}</ng-container>
                         </pure-selector>
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="givenName" class="col-form-label col-form-label-sm text-end pe-2">given</label>
+                        <input type="text" class="form-control form-control-sm" id="givenName"
+                            formControlName="givenName">
                     </div>
                     @if(person.controls.identifier.controls.type.value == 'CONE') {
                     <div class="col-sm-auto">
