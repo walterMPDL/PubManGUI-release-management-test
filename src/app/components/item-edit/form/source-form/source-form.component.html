@@ -47,17 +47,23 @@
         <div class="col-sm">
             <label for="creatures" class="col-sm-2 col-form-label col-form-label-sm">Creators</label>
             <ng-container formArrayName="creators">
-                @for (creature of creators.controls; track creature; let ci = $index) {
-                <ng-container [formGroupName]="ci">
-                    <pure-creator-form [creator_form]="creature" [index]="ci" [index_length]="creators.length"
-                        (notice)="handleCreatorNotification($event)"></pure-creator-form>
-                </ng-container>
-                } @empty {
-                <div class="col-sm">
-                    <pure-add-remove-buttons [index]="0" [del_val]="'hidden'" [add_val]="'add creator'"
-                        (notice)="handleCreatorNotification($event)"></pure-add-remove-buttons>
+                <div cdkDropList class="drag-list" (cdkDropListDropped)="dropCreator($event)">
+                    @for (creature of creators.controls; track creature; let ci = $index) {
+                    <ng-container [formGroupName]="ci">
+                        <div class="drag-list-box" cdkDrag>
+                            <pure-creator-form [creator_form]="creature" [index]="ci"
+                                [index_length]="creators.length"
+                                (notice)="handleCreatorNotification($event)"></pure-creator-form>
+                        </div>
+                    </ng-container>
+                    } @empty {
+                    <div class="col-sm">
+                        <pure-add-remove-buttons [index]="0" [del_val]="'hidden'"
+                            [add_val]="'add creator'"
+                            (notice)="handleCreatorNotification($event)"></pure-add-remove-buttons>
+                    </div>
+                    }
                 </div>
-                }
             </ng-container>
         </div>
         <div class="col-sm-1"><!--NEEDED to keep the layout including one last collumn for add-remove buttons-->

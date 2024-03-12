@@ -15,7 +15,7 @@ import { SourceFormComponent } from '../source-form/source-form.component';
 import { SubjectFormComponent } from '../subject-form/subject-form.component';
 import { AbstractFormComponent } from '../abstract-form/abstract-form.component';
 import { ProjectInfoFormComponent } from '../project-info-form/project-info-form.component';
-import { CdkDragDrop, CdkDropList, CdkDrag, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, CdkDropList, CdkDrag } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'pure-metadata-form',
