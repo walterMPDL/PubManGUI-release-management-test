@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ControlType, FormBuilderService } from '../../services/form-builder.service';
-import { AbstractVO, AlternativeTitleVO, CreatorVO, EventVO, IdentifierVO, LegalCaseVO, MdsPublicationGenre, ProjectInfoVO, PublishingInfoVO, SourceVO, SubjectVO } from 'src/app/model/inge';
+import { AbstractVO, AlternativeTitleVO, CreatorVO, EventVO, IdentifierVO, LegalCaseVO, MdsPublicationGenre, ProjectInfoVO, PublishingInfoVO, ReviewMethod, SourceVO, SubjectVO } from 'src/app/model/inge';
 import { AltTitleFormComponent } from '../alt-title-form/alt-title-form.component';
 import { CreatorFormComponent } from '../creator-form/creator-form.component';
 import { AddRemoveButtonsComponent } from '../add-remove-buttons/add-remove-buttons.component';
@@ -54,6 +54,7 @@ export class MetadataFormComponent{
   fbs = inject(FormBuilderService);
 
   genre_types = Object.keys(MdsPublicationGenre);
+  review_method_types = Object.keys(ReviewMethod);
   hoverDragList:any;
 
   get alternativeTitles() {
@@ -177,10 +178,6 @@ export class MetadataFormComponent{
     this.languages.removeAt(index);
   }
 
-  genre_change(event: any) {
-    console.log('changed genre', event.target.value)
-  }
-  
   handleSourceNotification(event: any) {
     if (event.action === 'add') {
       this.addSource(event.index);

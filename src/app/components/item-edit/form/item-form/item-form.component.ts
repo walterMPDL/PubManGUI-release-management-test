@@ -13,6 +13,7 @@ import { AddRemoveButtonsComponent } from '../add-remove-buttons/add-remove-butt
 import { remove_null_empty, remove_objects } from 'src/app/shared/services/utils_final';
 import { ChipsComponent } from 'src/app/shared/components/chips/chips.component';
 import { ContextsService } from 'src/app/services/contexts.service';
+import { AaService } from 'src/app/services/aa.service';
 
 @Component({
   selector: 'pure-item-form',
@@ -25,6 +26,7 @@ export class ItemFormComponent implements OnInit {
 
   fbs = inject(FormBuilderService);
   route = inject(ActivatedRoute);
+  aaService = inject(AaService);
   contextService = inject(ContextsService);
   form!: FormGroup;
   form_2_submit: any;

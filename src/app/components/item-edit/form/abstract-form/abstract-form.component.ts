@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AddRemoveButtonsComponent } from '../add-remove-buttons/add-remove-buttons.component';
 import { LanguageFormComponent } from '../language-form/language-form.component';
@@ -8,6 +9,7 @@ import { LanguageFormComponent } from '../language-form/language-form.component'
   standalone: true,
   imports: [
     AddRemoveButtonsComponent,
+    CommonModule,
     LanguageFormComponent,
     FormsModule,
     ReactiveFormsModule,

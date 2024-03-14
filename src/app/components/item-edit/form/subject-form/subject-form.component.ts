@@ -1,8 +1,9 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AddRemoveButtonsComponent } from '../add-remove-buttons/add-remove-buttons.component';
 import { LanguageFormComponent } from '../language-form/language-form.component';
-import { SubjectVO } from 'src/app/model/inge';
+import { SubjectClassification } from 'src/app/model/inge';
+
 
 @Component({
   selector: 'pure-subject-form',
@@ -22,6 +23,8 @@ export class SubjectFormComponent {
   @Input() index_length!: number;
   @Input() multi !: boolean;
   @Output() notice = new EventEmitter();
+
+  subject_classification_types = Object.keys(SubjectClassification);
 
   add_remove_subject(event: any) {
     this.notice.emit(event);

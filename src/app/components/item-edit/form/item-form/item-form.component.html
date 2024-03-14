@@ -1,3 +1,5 @@
+@if (aaService.isDepositor || aaService.isModerator) 
+{
 <div class="container-fluid">
     <form [formGroup]="form" (ngSubmit)="submit()">
         <div class="d-sm-flex flex-sm-row gap-1 mb-3 px-3 align-items-center" formGroupName="context">
@@ -86,3 +88,7 @@
     <pre class="col-sm">{{form.value | json}}</pre>
     <pre class="col-sm">{{form_2_submit | json}}</pre>
 </div>
+} @else {
+    <!--TODO No Depositor/Admin rights Page/Message-->
+    <p>No Depositor/Admin rights</p>
+}

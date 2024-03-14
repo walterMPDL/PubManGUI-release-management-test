@@ -3,8 +3,12 @@
             
             <div class="col-sm-2">
                 <label for="subject_type" class="col-sm-2 col-form-label col-form-label-sm">Type</label>
-                <input type="text" class="form-control form-control-sm" id="subject_type" name="subject_type"
-                    formControlName="type">
+                <select id="subject_type" class="form-select form-select-sm" formControlName="type">
+                    <option [value]="null" selected disabled>Type</option>
+                    @for (subject_classification_type of subject_classification_types; track subject_classification_type) {
+                    <option [value]="subject_classification_type">{{subject_classification_type}}</option>
+                    }
+                </select>
             </div>
             <div class="col-sm">
                 <label for="subject_value" class="col-sm-2 col-form-label col-form-label-sm">Value</label>
