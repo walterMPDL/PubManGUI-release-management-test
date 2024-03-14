@@ -2,21 +2,27 @@
     <label class="col-sm-2 col-form-label col-form-label-sm">Legal Case</label>
     <div class="col-sm-10">
         <div class="d-sm-flex flex-sm-row gap-1 mb-1 align-items-center">
-            <div class="col-sm-2">
-                <label class="col-form-label col-form-label-sm">Title</label>
+            <div class="col-sm">
+                <label class="col-sm-2 col-form-label col-form-label-sm">Title</label>
                 <input type="text" class="form-control form-control-sm" formControlName="title">
             </div>
-            <div class="col-sm-2">
+            <div class="col-sm-1"><!--NEEDED to keep the layout including one last collumn for add-remove buttons-->
+            </div>
+        </div>
+        <div class="d-sm-flex flex-sm-row gap-1 mb-1 align-items-center">
+            <div class="col-sm-4">
                 <label class="col-form-label col-form-label-sm">Court Name</label>
                 <input type="text" class="form-control form-control-sm" formControlName="courtName">
             </div>
-            <div class="col-sm-2">
+            <div class="col-sm-4">
                 <label class="col-form-label col-form-label-sm">Identifier</label>
                 <input type="text" class="form-control form-control-sm" formControlName="identifier">
             </div>
             <div class="col-sm-2">
                 <label class="col-form-label col-form-label-sm">Date Published</label>
-                <input type="text" class="form-control form-control-sm" formControlName="datePublished">
+                <input type="text" class="form-control form-control-sm" formControlName="datePublished" placeholder="YYYY-MM-DD">
+            </div>
+            <div class="col-sm-1"><!--NEEDED to keep the layout including one last collumn for add-remove buttons-->
             </div>
         </div>
     </div>

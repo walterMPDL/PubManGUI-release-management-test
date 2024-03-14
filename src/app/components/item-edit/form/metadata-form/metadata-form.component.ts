@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ControlType, FormBuilderService } from '../../services/form-builder.service';
-import { AbstractVO, AlternativeTitleVO, CreatorVO, EventVO, IdentifierVO, LegalCaseVO, MdsPublicationGenre, ProjectInfoVO, PublishingInfoVO, SourceVO, SubjectVO } from 'src/app/model/inge';
+import { AbstractVO, AlternativeTitleVO, CreatorVO, EventVO, IdentifierVO, LegalCaseVO, MdsPublicationGenre, ProjectInfoVO, PublishingInfoVO, ReviewMethod, SourceVO, SubjectVO } from 'src/app/model/inge';
 import { AltTitleFormComponent } from '../alt-title-form/alt-title-form.component';
 import { CreatorFormComponent } from '../creator-form/creator-form.component';
 import { AddRemoveButtonsComponent } from '../add-remove-buttons/add-remove-buttons.component';
@@ -15,6 +15,7 @@ import { SourceFormComponent } from '../source-form/source-form.component';
 import { SubjectFormComponent } from '../subject-form/subject-form.component';
 import { AbstractFormComponent } from '../abstract-form/abstract-form.component';
 import { ProjectInfoFormComponent } from '../project-info-form/project-info-form.component';
+import { CdkDragDrop, CdkDropList, CdkDrag } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'pure-metadata-form',
@@ -35,11 +36,13 @@ import { ProjectInfoFormComponent } from '../project-info-form/project-info-form
     SourceFormComponent,
     SubjectFormComponent,
     ProjectInfoFormComponent,
+    CdkDropList,
+    CdkDrag,
   ],
   templateUrl: './metadata-form.component.html',
   styleUrls: ['./metadata-form.component.scss']
 })
-export class MetadataFormComponent {
+export class MetadataFormComponent{
 
   constructor(
     private fb: FormBuilder,
@@ -51,6 +54,8 @@ export class MetadataFormComponent {
   fbs = inject(FormBuilderService);
 
   genre_types = Object.keys(MdsPublicationGenre);
+  review_method_types = Object.keys(ReviewMethod);
+  hoverDragList:any;
 
   get alternativeTitles() {
     return this.meta_form.get('alternativeTitles') as FormArray<FormGroup<ControlType<AlternativeTitleVO>>>;
@@ -173,10 +178,6 @@ export class MetadataFormComponent {
     this.languages.removeAt(index);
   }
 
-  genre_change(event: any) {
-    console.log('changed genre', event.target.value)
-  }
-  
   handleSourceNotification(event: any) {
     if (event.action === 'add') {
       this.addSource(event.index);
@@ -257,4 +258,15 @@ export class MetadataFormComponent {
     this.projectInfo.removeAt(index);
   }
   
+  dropCreator(event: CdkDragDrop<string[]>) {
+    this.moveItemInArray(this.creators, event.previousIndex, event.currentIndex);
+  }
+
+  /** Copied from Angular CDK to make our FormArrays work with drag and drop */
+  moveItemInArray<T = any>(array: FormArray<FormGroup<ControlType<T>>>, fromIndex: number, toIndex: number): void {
+    let object:any = array.at(fromIndex);
+    array.removeAt(fromIndex);
+    array.insert(toIndex, object);
+  }
+
 }

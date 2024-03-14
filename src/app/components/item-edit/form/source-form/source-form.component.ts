@@ -7,6 +7,7 @@ import { AlternativeTitleVO, CreatorVO, IdentifierVO, MdsPublicationGenre, Publi
 import { CreatorFormComponent } from '../creator-form/creator-form.component';
 import { PublishingInfoFormComponent } from '../publishing-info-form/publishing-info-form.component';
 import { IdentifierFormComponent } from '../identifier-form/identifier-form.component';
+import { CdkDragDrop, CdkDropList, CdkDrag } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'pure-source-form',
@@ -18,7 +19,8 @@ import { IdentifierFormComponent } from '../identifier-form/identifier-form.comp
     PublishingInfoFormComponent,
     FormsModule, 
     ReactiveFormsModule,
-    
+    CdkDropList,
+    CdkDrag
   ],
   templateUrl: './source-form.component.html',
   styleUrl: './source-form.component.scss'
@@ -90,6 +92,10 @@ export class SourceFormComponent {
     this.creators.insert( index + 1, this.fbs.creator_FG(null));
   }
 
+  dropCreator(event: CdkDragDrop<string[]>) {
+    this.moveItemInArray(this.creators, event.previousIndex, event.currentIndex);
+  }
+
   removeCreator(index: number) {
     this.creators.removeAt(index);
   }
@@ -113,4 +119,12 @@ export class SourceFormComponent {
   removeIdentifier(index: number) {
     this.identifiers.removeAt(index);
   }
+
+  /** Copied from Angular CDK to make our FormArrays work with drag and drop */
+  moveItemInArray<T = any>(array: FormArray<FormGroup<ControlType<T>>>, fromIndex: number, toIndex: number): void {
+    let object:any = array.at(fromIndex);
+    array.removeAt(fromIndex);
+    array.insert(toIndex, object);
+  }
+
 }

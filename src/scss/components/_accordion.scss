@@ -9,6 +9,7 @@
 
         .accordion-body {
             background: var(--secondary-content-bg-color);
+            padding: $spacer;
 
             input{
                 background-color: white;
