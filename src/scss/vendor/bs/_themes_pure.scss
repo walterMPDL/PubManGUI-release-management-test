@@ -89,12 +89,12 @@
         // transform: translateX(.5rem);
     }
 
-    .list-group {
-        --bs-list-group-action-hover-bg: #{$body-tertiary-bg};
+    .list-group-item {
+        background-color: $body-secondary-bg;
     }
 
-    .list-item-bg {
-        background-color: $mpg-bg-gray;
+    .list-group-item:hover {
+        background-color: $body-tertiary-bg;
     }
 
     .mat-mdc-chip.mat-mdc-standard-chip {
@@ -238,12 +238,11 @@
         // transform: translateX(.5rem);
     }
 
-    .list-group {
-        --bs-list-group-action-hover-bg: var(--bs-gray-700);
+    .list-group-item {
+        background-color: $body-secondary-bg-dark;
     }
 
-    .list-item-bg {
-        // background-color: $mpdl-iseo5;
+    .list-group-item:hover {
         background-color: $body-tertiary-bg-dark;
     }
 
