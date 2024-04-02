@@ -3,7 +3,7 @@ import { APP_INITIALIZER, Injectable, LOCALE_ID } from '@angular/core';
 import { loadTranslations } from '@angular/localize';
 // no need 4 default
 // import en from '@angular/common/locales/en';
-import de from '@angular/common/locales/en';
+import de from '@angular/common/locales/de';
 
 @Injectable({
   providedIn: 'root'

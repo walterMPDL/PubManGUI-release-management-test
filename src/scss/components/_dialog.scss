@@ -1,8 +1,19 @@
 .pure-dialog .cdk-dialog-container {
-    // padding: 0 !important;
-    transition: none !important;
-    box-shadow: none !important;
-    background: $body-bg;
     overflow-y: hidden;
     overflow-x: hidden;
+
+    .modal-body {
+        margin: $spacer;
+        input {
+            margin-bottom: $spacer * .25;
+        }
+    }
+
+    .modal-header {
+        margin: $spacer $spacer 0 $spacer;
+    }
+    
+    .modal-footer {
+        margin: $spacer;
+    }
 }

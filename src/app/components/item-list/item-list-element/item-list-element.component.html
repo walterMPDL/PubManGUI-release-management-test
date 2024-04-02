@@ -1,5 +1,4 @@
-<div class="container-fluid list-item-bg" [ngClass]="{'border-bottom': !last_item}">
-    <div class="card">
+    <div class="card" [ngClass]="{'border-bottom': !last_item}">
         <div class="card-header pt-2">
             <div class="d-flex flex-sm-row align-items-center justify-content-start">
                 <form class="me-2">
@@ -23,10 +22,13 @@
             </div>
         </div>
         <div class="card-body mt-3">
-            <div class="d-flex flex-sm-row">
+            <div class="d-sm-flex flex-sm-row">
                 <div class="col-sm-9">
-                    <div class="d-flex flex-sm-row align-items-center">
-                        <h4 class="col-10 text-truncate" [innerHtml]="item?.metadata?.title" (click)="show()"
+                <div class="d-sm-flex flex-sm-row align-items-center">
+                        <!--TODO remove text-truncate for mobile-->
+                        <h4 class="d-block d-lg-none col-10" [innerHtml]="item?.metadata?.title" (click)="show()"
+                            style="cursor: pointer;"></h4>
+                        <h4 class="d-none d-lg-block col-10 text-truncate" [innerHtml]="item?.metadata?.title" (click)="show()"
                             style="cursor: pointer;"></h4>
                     </div>
                     <div class="d-flex flex-sm-row">
@@ -67,7 +69,7 @@
                         <a purePopover class="btn btn-sm" tabindex="0" [attr.title]="item?.metadata?.title" data-bs-toggle="popover" [attr.data-bs-content]="abstract">Abstract</a>
                     </div>
                 </div>
-                <div class="col-sm-3 overflow-hidden">
+                <div class="col-sm overflow-hidden">
                     @if (item?.files) {
                     @for (file of item?.files; track file) {
                     <div class="d-flex flex-sm-row align-items-start">
@@ -76,7 +78,7 @@
                         } @else {
                         <i class="bi-file-earmark-text"></i>
                         }
-                        <small class="col-sm ms-2" [innerHtml]="file.metadata.title"></small>
+                        <a class="btn btn-sm" href="file.content" [innerHtml]=" file.metadata.title.substring(0, 20)" style="overflow-wrap: break-word;"></a>
                     </div>
                     }
                     }
@@ -84,4 +86,3 @@
             </div>
         </div>
     </div>
-</div>

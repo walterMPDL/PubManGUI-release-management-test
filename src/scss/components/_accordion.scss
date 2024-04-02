@@ -2,30 +2,8 @@
 
     .accordion-item {
 
-        .accordion-button {
-            color: var(--accent-text-color);
-            background-color: var(--accent-bg-color);
-        }
-
         .accordion-body {
-            background: var(--secondary-content-bg-color);
             padding: $spacer;
-
-            input{
-                background-color: white;
-                color: black;
-            }
-            
-            textarea {
-                background-color: white;
-                color: black;
-            }
-
-            select {
-                background-color: white;
-                color: black;
-            }
         }
     }
 }
-
