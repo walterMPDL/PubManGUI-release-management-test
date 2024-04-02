@@ -1,7 +1,9 @@
 .batch {
 
-    .nav-bottom-10 {
-        bottom: 10%;
+    .batch-nav {
+        .nav-bottom-10 {
+            bottom: 8%;
+        }
     }
 
     .actions {
@@ -64,6 +66,12 @@
         .form-control::placeholder {
             color: color-mix(in srgb,var(--main-title-text-color),white 15%);
             font-style: italic;
+          }
+    }
+
+    .logs {
+        tr {
+            height: 3em;
           }
     }
 }

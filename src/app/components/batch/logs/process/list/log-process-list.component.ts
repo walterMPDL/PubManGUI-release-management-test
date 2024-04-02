@@ -1,0 +1,50 @@
+import { CommonModule } from '@angular/common';
+import { OnInit, Component } from '@angular/core';
+import { RouterModule, ActivatedRoute } from '@angular/router';
+
+import { BatchService } from 'src/app/components/batch/services/batch.service';
+import * as resp from '../../../interfaces/actions-responses';
+
+import { FormsModule } from '@angular/forms';
+import { NgbPaginationModule, NgbTypeaheadModule} from "@ng-bootstrap/ng-bootstrap";
+
+@Component({
+  selector: 'pure-batch-log-process-list',
+  standalone: true,
+  imports: [
+    CommonModule, 
+    RouterModule,
+    FormsModule,
+    NgbTypeaheadModule, 
+    NgbPaginationModule
+  ],
+  templateUrl: './log-process-list.component.html'
+})
+export class LogProcessListComponent implements OnInit { 
+
+  page = 1;
+	pageSize = 15;
+	collectionSize = 0;
+  inPage: resp.BatchProcessLogHeaderDbVO[] = [];
+  processLogs: resp.BatchProcessLogHeaderDbVO[] = [];
+
+  constructor(private bs: BatchService, private route: ActivatedRoute) { }
+
+  ngOnInit(): void {
+    this.bs.getAllBatchProcessLogHeaders().subscribe( actionResponse => 
+      { 
+        this.processLogs = actionResponse.sort((a,b) => b.startDate.valueOf() - a.startDate.valueOf());
+        this.collectionSize = this.processLogs.length;
+        this.refreshLogs();
+        return;
+      });
+  }
+
+  refreshLogs() {
+		this.inPage = this.processLogs.map((log, i) => ({ id: i + 1, ...log })).slice(
+			(this.page - 1) * this.pageSize,
+			(this.page - 1) * this.pageSize + this.pageSize,
+		);
+	}
+
+}

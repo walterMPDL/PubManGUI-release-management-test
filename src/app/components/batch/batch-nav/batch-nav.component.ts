@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-interface NavItem {
+interface NavOption {
   text : string;
   route: string;
 }
@@ -17,7 +17,7 @@ interface NavItem {
 })
 export class BatchNavComponent {
   
-  public navItems: NavItem[] = [
+  public navList: NavOption[] = [
     { route: '/list', text: 'Datasets' },
     { route: '/batch/actions', text: 'Actions' },
     { route: '/batch/logs', text: 'Logs' },

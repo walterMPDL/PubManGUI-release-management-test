@@ -33,7 +33,7 @@ export class ReplaceFileAudienceFormComponent implements OnInit {
     allowedAudienceIds: this.fb.array([])
   });
 
-  public audienceId: FormControl = new FormControl('', [Validators.required, Validators.minLength(1), this.vs.notBeOnValidator( this.replaceFileAudienceForm.controls['allowedAudienceIds'] )] );
+  public audienceId: FormControl = new FormControl('', [Validators.required, this.vs.notBeOnValidator( this.replaceFileAudienceForm.controls['allowedAudienceIds'] )] );
 
   get replaceFileAudienceParams(): ReplaceFileAudienceParams {
     const actionParams: ReplaceFileAudienceParams = {

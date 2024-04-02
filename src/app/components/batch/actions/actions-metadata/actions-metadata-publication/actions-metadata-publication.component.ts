@@ -6,7 +6,7 @@ import { ReplaceKeywordsComponent } from './replace-keywords/replace-keywords.co
 
 
 @Component({
-  selector: 'pure-actions-metadata-publication',
+  selector: 'pure-batch-actions-metadata-publication',
   standalone: true,
   imports: [
     CommonModule,

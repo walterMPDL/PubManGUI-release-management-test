@@ -15,7 +15,7 @@ import { ChangeContextParams } from 'src/app/components/batch/interfaces/actions
 
 
 @Component({
-  selector: 'pure-actions-context',
+  selector: 'pure-batch-change-context',
   standalone: true,
   imports: [
     CommonModule,
@@ -25,7 +25,7 @@ import { ChangeContextParams } from 'src/app/components/batch/interfaces/actions
     OptionDirective,
     SelectorComponent
   ],
-  templateUrl: './actions-context.component.html',
+  templateUrl: './change-context.component.html',
 })
 export class ActionsContextComponent {
 

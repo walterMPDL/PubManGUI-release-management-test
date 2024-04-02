@@ -1,6 +1,11 @@
 {
   "locale": "de",
   "translations": {
-    "brand.name": "MPG.PüRee"
+    "brand.name": "MPG.PüRee",
+    "batch.log.started.on": "Gestarted am",
+    "batch.log.details.fill.all": "Alle Datensätze übernehmen",
+    "batch.log.details.fill.errors": "Nur Fehler übernehmen",
+    "batch.log.details.failed": "fehlgeschlagen",
+    "batch.log.details.succeded": "erfolgreich"
   }
 }

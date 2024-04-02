@@ -34,6 +34,7 @@ export class ItemListElementComponent {
   ngAfterViewInit() {
     if (this.item?.objectId) {
       const objectId = this.item.objectId;
+      this.check_box.setValue(this.getStoredCheckBoxState(objectId));
       this.check_box_subscription =
         this.check_box.valueChanges.subscribe(val => {
           const item_list = sessionStorage.getItem('item_list');
@@ -79,5 +80,15 @@ export class ItemListElementComponent {
   show() {
     // alert(JSON.stringify(item, undefined, 2));
     this.router.navigate(['edit', this.item?.objectId])
+  }
+
+  getStoredCheckBoxState(objectId: string): boolean {
+    const item_list = sessionStorage.getItem('item_list');
+
+    let items: string[] = [];
+    if (item_list) {
+      items = JSON.parse(item_list);
+    }
+    return items.indexOf(objectId) < 0 ? false : true;
   }
 }

@@ -24,7 +24,7 @@ export class AddLocalTagsFormComponent {
     localTags: this.fb.array([])
   });
 
-  public localTag: FormControl = new FormControl('', [Validators.required, Validators.minLength(1), this.vs.singleWordValidator(), this.vs.notBeOnValidator( this.addLocalTagsForm.controls['localTags'] )]);
+  public localTag: FormControl = new FormControl('', [Validators.required, this.vs.notBeOnValidator( this.addLocalTagsForm.controls['localTags'] )]);
 
   get tagsToAdd() {
     return this.addLocalTagsForm.get('localTags') as FormArray;

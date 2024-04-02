@@ -8,7 +8,7 @@ import { ActionsMetadataPublicationComponent } from './actions-metadata-publicat
 import { ActionsMetadataSourceComponent } from './actions-metadata-source/actions-metadata-source.component';
 
 @Component({
-  selector: 'pure-actions-metadata',
+  selector: 'pure-batch-actions-metadata',
   standalone: true,
   imports: [
     CommonModule,

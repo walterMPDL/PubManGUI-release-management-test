@@ -7,6 +7,7 @@ import * as params from '../interfaces/actions-params';
 import * as resp from '../interfaces/actions-responses';
 
 import { ignoredStatuses } from 'src/app/services/interceptors/http-error.interceptor';
+import { AaService } from 'src/app/services/aa.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,7 @@ export class BatchService {
 
   private ouList: resp.ipList[] = [];
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, public aa: AaService) { }
 
   get items(): any {
     const itemList = sessionStorage.getItem('item_list');
@@ -29,22 +30,26 @@ export class BatchService {
     }
   }
 
+  set items(items: string[]) {
+    sessionStorage.setItem('item_list', JSON.stringify(items));
+  }
+
   get token(): string | null {
-    const token = sessionStorage.getItem('token');
+    const token = this.aa.token ? this.aa.token : undefined;
     if (token) {
       return token; 
     } else throw new Error('Please, log in!');
   }
 
   get user(): any {
-    const user_string = sessionStorage.getItem('user');
+    const user_string = this.aa.user ? this.aa.user : undefined;
     if (user_string) {
-      return JSON.parse(user_string);
+      return user_string;
     } else throw new Error('Please, log in!');
   }
 
-  set batchProcessLogHeaderId(id: string) {
-    sessionStorage.setItem('batchProcessLogHeaderId', id);
+  set batchProcessLogHeaderId(id: number) {
+    sessionStorage.setItem('batchProcessLogHeaderId', id.toString());
   }
 
   get batchProcessLogHeaderId(): any {
@@ -64,7 +69,8 @@ export class BatchService {
   // public updateContext(event: any) {}
 
   getIpList():Observable<resp.ipList[]> {
-    const headers = new HttpHeaders().set('Authorization', this.token!);
+    const headers = new HttpHeaders()
+      .set('Authorization', this.token!);
     const url  = `${ this.baseUrl }/miscellaneous/getIpList`;
     return this.http.get<resp.ipList[]>(url, { headers });
   }
@@ -76,18 +82,18 @@ export class BatchService {
       return this.http.get<resp.BatchProcessLogHeaderDbVO[]>(url, { headers });
   }
 
-  getBatchProcessLogHeaderId():Observable<resp.BatchProcessLogHeaderDbVO> {
-    const url  = `${ this.baseUrl }/batchProcess/${ this.batchProcessLogHeaderId }`;
+  getBatchProcessLogHeaderId(batchLogHeaderId: number):Observable<resp.BatchProcessLogHeaderDbVO> {
+    const url  = `${ this.baseUrl }/batchProcess/${ batchLogHeaderId }`;
     const headers = new HttpHeaders()
       .set('Authorization', this.token!);
       return this.http.get<resp.BatchProcessLogHeaderDbVO>(url, { headers });
   }
 
-  getBatchProcessLogDetails():Observable<resp.getBatchProcessLogDetailsResponse> {
-    const url  = `${ this.baseUrl }/batchProcess/batchProcessLogDetails/${ this.batchProcessLogHeaderId }`;
+  getBatchProcessLogDetails(batchProcessLogDetailId: number):Observable<resp.getBatchProcessLogDetailsResponse[]> {
+    const url  = `${ this.baseUrl }/batchProcess/batchProcessLogDetails/${ batchProcessLogDetailId }`;
     const headers = new HttpHeaders()
       .set('Authorization', this.token!);
-      return this.http.get<resp.getBatchProcessLogDetailsResponse>(url, { headers });
+      return this.http.get<resp.getBatchProcessLogDetailsResponse[]>(url, { headers });
   }
 
   getBatchProcessUserLock():Observable<resp.getBatchProcessUserLockResponse> {
@@ -203,18 +209,18 @@ export class BatchService {
   }
   
   addLocalTags(actionParams: params.AddLocalTagsParams): Observable<resp.actionGenericResponse> {
-    //console.log(`{\"localTags\": ${JSON.stringify(actionParams.localTags)}}`); // DEBUG
     actionParams.itemIds = this.items;
 
-    const headers = new HttpHeaders().set('Authorization', this.token!);  // console.log('headers.Authorization: \n' + headers.get('Authorization')); // DEBUG
+    const headers = new HttpHeaders().set('Authorization', this.token!);
     const url  = `${ this.baseUrl }/batchProcess/addLocalTags`;
-    const body = actionParams; // console.log('actionParams: \n' + JSON.stringify(actionParams)); // DEBUG
-
+    const body = actionParams;
     const actionResponse: Observable<resp.actionGenericResponse> = this.http.put<resp.actionGenericResponse>( url, body, { headers })
       .pipe(
-        tap( (value: resp.actionGenericResponse) => console.log('Success: \n' + JSON.stringify(value)) ),
+        tap( (value: resp.actionGenericResponse) => { 
+          console.log('Success: \n' + JSON.stringify(value));
+          this.batchProcessLogHeaderId = value.batchLogHeaderId;} ),
         catchError( err => throwError( () => err )),
-      ); // console.log('actionResponse: \n' + JSON.stringify(actionResponse)); // DEBUG
+      );
 
     return actionResponse;
   } 

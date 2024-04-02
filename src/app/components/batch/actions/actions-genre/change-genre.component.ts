@@ -10,13 +10,13 @@ import { MdsPublicationGenre, DegreeType } from 'src/app/model/inge';
 
 
 @Component({
-  selector: 'pure-actions-genre',
+  selector: 'pure-batch-change-genre',
   standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule
   ],
-  templateUrl: './actions-genre.component.html',
+  templateUrl: './change-genre.component.html',
 })
 export class ActionsGenreComponent { 
 

@@ -82,8 +82,6 @@ export class ItemListComponent implements AfterViewInit {
         this.items(this.current_query);
       }
     });
-
-    sessionStorage.removeItem('item_list');
   }
 
   items(body: any) {

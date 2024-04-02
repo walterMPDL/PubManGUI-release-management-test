@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { ReplaceOrcidFormComponent } from './replace-orcid-form/replace-orcid-form.component'
 
 @Component({
-  selector: 'pure-actions-metadata-orcid',
+  selector: 'pure-batch-actions-metadata-orcid',
   standalone: true,
   imports: [
     CommonModule,

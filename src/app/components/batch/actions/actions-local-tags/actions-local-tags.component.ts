@@ -5,7 +5,7 @@ import { AddLocalTagsFormComponent } from './add-local-tags-form/add-local-tags-
 import { ChangeLocalTagsFormComponent } from './change-local-tags-form/change-local-tags-form.component'
 
 @Component({
-  selector: 'pure-actions-local-tags',
+  selector: 'pure-batch-actions-local-tags',
   standalone: true,
   imports: [
     CommonModule,

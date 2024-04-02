@@ -14,8 +14,13 @@ const routes: Routes = [
   },
   {
     path: 'logs',
-    loadComponent: () => import('./logs/log-list.component')
-      .then(m => m.LogListComponent),
+    loadComponent: () => import('./logs/logs.component')
+      .then(m => m.LogsComponent),
+  },
+  {
+    path: 'logs/:id', 
+    loadComponent: () => import('./logs/item/list/log-item-list.component')
+      .then(m => m.LogItemListComponent)
   },
   {
     path: '',

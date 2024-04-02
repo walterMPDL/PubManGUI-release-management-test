@@ -1,14 +1,11 @@
 <div class="batch">
   <pure-batch-nav />
 
-  <div class="actions">
-    <div class="mt-5">
-      <h1 class="mb-2">Actions</h1>
-      <div class="content">
+  <div class="actions pt-4 mt-5">
+    <div class="mt-5 fs-6">
         The selected action will be executed on all publications currently stored in the workspace.
         Most actions are associated with a regular "save" operation. Please note, that the state of each item will
         change accordingly.
-      </div>
     </div>
 
     <div class="mt-5">
@@ -23,7 +20,7 @@
           <div id="collapseItemState" class="accordion-collapse collapse show" aria-labelledby="headingItemState"
             data-bs-parent="#accordionActions">
             <div class="accordion-body p-0 my-2">
-              <pure-actions-item-state></pure-actions-item-state>
+              <pure-batch-actions-item-state></pure-batch-actions-item-state>
             </div>
           </div>
         </div>
@@ -39,7 +36,7 @@
           <div id="collapseContext" class="accordion-collapse collapse" aria-labelledby="headingContext"
             data-bs-parent="#accordionActions">
             <div class="accordion-body p-0 my-2">
-              <pure-actions-context></pure-actions-context>
+              <pure-batch-change-context></pure-batch-change-context>
             </div>
           </div>
         </div>
@@ -55,7 +52,7 @@
           <div id="collapseTags" class="accordion-collapse collapse" aria-labelledby="headingTags"
             data-bs-parent="#accordionActions">
             <div class="accordion-body p-0 my-2">
-              <pure-actions-local-tags></pure-actions-local-tags>
+              <pure-batch-actions-local-tags></pure-batch-actions-local-tags>
             </div>
           </div>
         </div>
@@ -71,7 +68,7 @@
           <div id="collapseGenre" class="accordion-collapse collapse" aria-labelledby="headingGenre"
             data-bs-parent="#accordionActions">
             <div class="accordion-body p-0 my-2">
-              <pure-actions-genre></pure-actions-genre>
+              <pure-batch-change-genre></pure-batch-change-genre>
             </div>
           </div>
         </div>
@@ -87,7 +84,7 @@
           <div id="collapseMetadata" class="accordion-collapse collapse" aria-labelledby="headingMetadata"
             data-bs-parent="#accordionActions">
             <div class="accordion-body p-0 my-2">
-              <pure-actions-metadata></pure-actions-metadata>
+              <pure-batch-actions-metadata></pure-batch-actions-metadata>
             </div>
           </div>
         </div>

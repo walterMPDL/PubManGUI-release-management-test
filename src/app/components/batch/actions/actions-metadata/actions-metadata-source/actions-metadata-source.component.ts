@@ -7,7 +7,7 @@ import { AddSourceIdentifierFormComponent } from './add-source-identifier-form/a
 import { ChangeSourceIdentifierFormComponent } from './change-source-identifier-form/change-source-identifier-form.component';
 
 @Component({
-  selector: 'pure-actions-metadata-source',
+  selector: 'pure-batch-actions-metadata-source',
   standalone: true,
   imports: [
     CommonModule,

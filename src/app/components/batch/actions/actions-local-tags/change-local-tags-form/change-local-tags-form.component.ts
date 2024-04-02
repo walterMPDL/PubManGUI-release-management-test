@@ -21,8 +21,8 @@ export class ChangeLocalTagsFormComponent {
   constructor(private fb: FormBuilder, public vs: ValidatorsService, private bs: BatchService) { }
 
   public changeLocalTagsForm: FormGroup = this.fb.group({
-    localTagFrom: ['', [Validators.required, this.vs.singleWordValidator()]],
-    localTagTo: ['', [Validators.required, this.vs.singleWordValidator()]],
+    localTagFrom: ['', [Validators.required]],
+    localTagTo: ['', [Validators.required]],
   },
     {
       validators: this.vs.notEqualsValidator('localTagFrom', 'localTagTo')

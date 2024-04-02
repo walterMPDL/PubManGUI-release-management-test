@@ -1,0 +1,87 @@
+<div class="logs pt-4 mt-5">
+  <div class="mt-5 fs-6">
+
+    <div class="row align-items-center top_nav_pos bg-body">
+      <div class="col-sm-6 ps-0 d-flex justify-content-between">
+        
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-6 d-flex justify-content-between py-4">
+        <button class="btn btn-outline-secondary" i18n="@@batch.log.details.fill.all" (click)="fillWithAll()">Fill batch with all items from the log</button>
+        <div *ngIf="failed > 0">
+          <button class="btn btn-outline-secondary" i18n="@@batch.log.details.fill.errors" (click)="fillWithFailed()">Fill batch with errors only</button>
+        </div>
+      </div>
+
+      <div class="offset-sm-4 col-2 d-flex justify-content-between py-4">
+        <ngb-pagination [collectionSize]="collectionSize" [(page)]="page" [pageSize]="pageSize"
+          (pageChange)="refreshLogs()">
+        </ngb-pagination>
+
+        <!--select class="form-select w-auto d-none d-lg-block" [(ngModel)]="pageSize" (ngModelChange)="refreshLogs()">
+          <option [ngValue]="15">15 logs per page</option>
+          <option [ngValue]="30">30 logs per page</option>
+          <option [ngValue]="45">45 logs per page</option>
+        </select-->
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-12 d-flex justify-content-between py-4">
+        <h4>{{ method }}</h4>
+        <div>
+          <span i18n="@@batch.log.started.on">Started on</span><span> {{ started | date: 'short' }}</span>
+        </div>
+        <div>
+          <span *ngIf="collectionSize - failed > 0">{{ collectionSize }} <span i18n="@@batch.log.details.succeded"> succeeded</span></span>
+          <span *ngIf="failed > 0" class="text-danger ms-3">{{ failed }} <span i18n="@@batch.log.details.failed"> failed</span></span>
+        </div>
+        <button class="btn pt-0" (click)="goBack()">
+          <span class="material-symbols-outlined text-secondary fs-2" style="transform: rotate(-180deg);">
+            exit_to_app
+          </span>
+        </button>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-10 col-sm-12">
+        <table class="table table-responsive fs-6 col-12">
+          <thead>
+            <tr class="border-bottom">
+              <th scope="col" class="pe-2">Status</th>
+              <th scope="col" class="pe-2">Title</th>
+              <th scope="col">Message</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (log of inPage; track log.item.itemObjectId) {
+              <tr class="border-bottom">
+                <td>
+                  {{ log.item.state | titlecase }}
+                </td>
+                <td>
+                  <span>{{ log.title }}</span>
+                </td>
+                <td>
+                  <span>{{ localeMessages.get(log.item.message) }}</span>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <div class="col-lg-2 d-none d-lg-block">
+        <hr>
+        <p class="text-center small">
+          reserved for filters
+        </p>
+        <hr>
+      </div>
+    </div>
+  </div>
+</div>

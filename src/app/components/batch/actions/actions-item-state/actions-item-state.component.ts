@@ -7,7 +7,7 @@ import { SubmitPubItemsFormComponent } from './submit-pub-items-form/submit-pub-
 import { WithdrawPubItemsFormComponent } from './withdraw-pub-items-form/withdraw-pub-items-form.component';
 
 @Component({
-  selector: 'pure-actions-item-state',
+  selector: 'pure-batch-actions-item-state',
   standalone: true,
   imports: [
     CommonModule,

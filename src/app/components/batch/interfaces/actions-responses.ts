@@ -1,10 +1,10 @@
-import { BatchProcessMessages } from 'src/app/model/inge';
+import { BatchProcessMessages, BatchProcessMethod, BatchProcessLogHeaderState, BatchProcessLogDetailState } from 'src/app/model/inge';
 
 export interface actionGenericResponse {
     userAccountObjectId: string,
     state: string,
     numberOfItems: number,
-    method: string,
+    method: BatchProcessMethod,
     startDate: Date,
     endDate: Date,
     batchLogHeaderId: number,
@@ -17,9 +17,9 @@ export interface getBatchProcessUserLockResponse {
 
 export interface BatchProcessLogHeaderDbVO {
         userAccountObjectId: string,
-        state: string,
+        state: BatchProcessLogHeaderState,
         numberOfItems: number,
-        method: string,
+        method: BatchProcessMethod,
         startDate: Date,
         endDate: Date,
         batchLogHeaderId: number
@@ -30,7 +30,7 @@ export interface getBatchProcessLogDetailsResponse {
       batchProcessLogHeaderDbVO: BatchProcessLogHeaderDbVO,
       itemObjectId: string,
       itemVersionnumber: number,
-      state: string,
+      state: BatchProcessLogDetailState,
       message: BatchProcessMessages,
       startDate: Date,
       endDate: Date

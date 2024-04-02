@@ -6,7 +6,7 @@ import { ChangeFileContentCategoryFormComponent } from './change-file-content-ca
 import { ReplaceFileAudienceFormComponent } from './replace-file-audience-form/replace-file-audience-form.component';
 
 @Component({
-  selector: 'pure-actions-metadata-files',
+  selector: 'pure-batch-actions-metadata-files',
   standalone: true,
   imports: [
     CommonModule,
