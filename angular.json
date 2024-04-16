@@ -15,10 +15,8 @@
       "prefix": "pure",
       "architect": {
         "build": {
-
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "baseHref" :"/pubman-gui/browser",
             "outputPath": "dist/pubman-gui",
             "index": "src/index.html",
             "browser": "src/main.ts",
