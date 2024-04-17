@@ -1,5 +1,5 @@
 [data-bs-theme=light] {
- /*
+    /*
     --bs-body-color: #{$mpg-gray}; // text color
     --bs-body-bg: #{$body-bg};
     --bs-body-secondary-color: #{$body-secondary-color};
@@ -43,11 +43,11 @@
     .badge-blue {
         background-color: $mpdl-iseo1;
     }
-    
+
     .badge-green {
         background-color: $mpdl-iseo2;
     }
-    
+
     .badge-yellow {
         background-color: $mpdl-iseo3;
     }
@@ -55,13 +55,13 @@
     .cdk-drag-preview {
         background: #{$mpdl-iseo1};
         box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
-        0 8px 10px 1px rgba(0, 0, 0, 0.14),
+            0 8px 10px 1px rgba(0, 0, 0, 0.14),
     }
 
     .dropdown-item {
         --bs-dropdown-link-hover-bg: var(--bs-gray-200);
     }
-    
+
     .form-control,
     .form-select {
         // background-color: #{shade-color($background-content, 2%)};
@@ -82,7 +82,7 @@
         color: $yellow-200;
         background-color: $gray-600;
     }
-    
+
     .highlighted {
         color: black;
         background-color: $gray-400;
@@ -97,6 +97,18 @@
         background-color: $body-tertiary-bg;
     }
 
+    .material-symbols-outlined {
+        color: var(--bs-nav-link-color);
+    }
+
+    a:hover .material-symbols-outlined {
+        color: var(--bs-nav-link-hover-color);
+    }
+
+    .nav-link {
+        color: var(--bs-nav-link-color);
+    }
+
     .mat-mdc-chip.mat-mdc-standard-chip {
         --mdc-chip-container-height: 24px;
         background-color: $body-secondary-bg;
@@ -106,35 +118,59 @@
     .overlay-backdrop {
         background-color: rgba(0, 0, 0, 0.5);
     }
-    
+
     .pure-dialog .cdk-dialog-container {
         background: $body-secondary-bg;
     }
 
-    .scroll-to-top {
-        color: $mpg-secondary-blue;
+    .side_nav {
+        a path {
+            fill: var(--bs-nav-link-color);
+        }
+
+        a:hover path {
+            fill: var(--bs-nav-link-hover-color);
+        }
     }
 
     .side_nav_mobile {
         background-color: $body-secondary-bg;
+        ;
+
+        a path {
+            fill: var(--bs-nav-link-color);
+        }
+    }
+
+    .svg-icon path {
+        fill: var(--bs-body-color);
+    }
+
+    .svg-bg-icon {
+        circle {
+            fill: var(--bs-body-color);
+        }
+        path {
+            fill: var(--bs-body-bg);
+        }
     }
 }
 
 [data-bs-theme=dark] {
 
     // $mpg-blue is possible but $body-bg-dark not why?
-    --bs-primary:               #{$mpg-light-gray};
-    --bs-primary-rgb:           246,246,246; // rgb($mpg-light-gray)
-    --bs-secondary:             #{$mpg-bg-gray};
-    --bs-secondary-rgb:         238,238,238; // rgb($mpg-bg-gray)
+    --bs-primary: #{$mpg-light-gray};
+    --bs-primary-rgb: 246, 246, 246; // rgb($mpg-light-gray)
+    --bs-secondary: #{$mpg-bg-gray};
+    --bs-secondary-rgb: 238, 238, 238; // rgb($mpg-bg-gray)
     // --bs-body-bg:               #{$mpg-slate-gray-0};
     // --bs-secondary-bg:          #{$mpg-slate-gray-1};
     // --bs-tertiary-bg:           #{$mpg-slate-gray-2};
-    --bs-body-color:            #{$body-color-dark}; // text color
-    --bs-body-secondary-color:  #{$body-secondary-color-dark}; // text color
-    --bs-body-tertiary-color:   #{body-tertiary-color-dar}; // text color
-    --bs-link-color:            #{$body-color-dark};
-    --bs-link-hover-color:      #{$body-tertiary-color-dark};
+    --bs-body-color: #{$body-color-dark}; // text color
+    --bs-body-secondary-color: #{$body-secondary-color-dark}; // text color
+    --bs-body-tertiary-color: #{body-tertiary-color-dar}; // text color
+    --bs-link-color: #{$body-color-dark};
+    --bs-link-hover-color: #{$body-tertiary-color-dark};
     /* 
     // NOT Working: variables from _variables_pure.scss
     --bs-primary:               #{$body-color-dark};
@@ -191,19 +227,19 @@
     .badge-blue {
         background-color: $mpdl-iseo1;
     }
-    
+
     .badge-green {
         background-color: $mpdl-iseo2;
     }
-    
+
     .badge-yellow {
         background-color: $mpdl-iseo3;
     }
 
     .cdk-drag-preview {
         background: #{$mpg-bg-gray};
-        box-shadow: 0 5px 5px -3px rgba(238,238,238, 0.2),
-        0 8px 10px 1px rgba(238,238,238, 0.14),
+        box-shadow: 0 5px 5px -3px rgba(238, 238, 238, 0.2),
+            0 8px 10px 1px rgba(238, 238, 238, 0.14),
     }
 
     .dropdown-item {
@@ -231,7 +267,7 @@
         color: $yellow-200;
         background-color: $gray-600;
     }
-    
+
     .highlighted {
         color: black;
         background-color: $gray-400;
@@ -246,6 +282,14 @@
         background-color: $body-tertiary-bg-dark;
     }
 
+    .material-symbols-outlined {
+        color: var(--bs-nav-link-color);
+    }
+
+    a:hover .material-symbols-outlined {
+        color: var(--bs-nav-link-hover-color);
+    }
+
     .mat-mdc-chip.mat-mdc-standard-chip {
         --mdc-chip-container-height: 24px;
         background-color: darkgray;
@@ -253,7 +297,7 @@
     }
 
     .overlay-backdrop {
-        background-color: rgba(238,238,238, 0.5);
+        background-color: rgba(238, 238, 238, 0.5);
     }
 
     .pure-dialog .cdk-dialog-container {
@@ -264,8 +308,35 @@
         color: $mpg-bg-gray;
     }
 
+    .side_nav {
+        a path {
+            fill: var(--bs-nav-link-color);
+        }
+
+        a:hover path {
+            fill: var(--bs-nav-link-hover-color);
+        }
+    }
+
     .side_nav_mobile {
         background-color: $body-secondary-bg-dark;
+
+        a path {
+            fill: var(--bs-nav-link-color);
+        }
+    }
+
+    .svg-icon path {
+        fill: var(--bs-body-color);
+    }
+
+    .svg-bg-icon {
+        circle {
+            fill: var(--bs-body-color);
+        }
+        path {
+            fill: var(--bs-body-bg);
+        }
     }
 
 }

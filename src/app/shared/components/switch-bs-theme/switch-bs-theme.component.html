@@ -5,9 +5,13 @@
 <div>
     <a [routerLink]="[]" class="nav-link" (click)="switch_theme()">
         @if (icon.localeCompare('moon') === 0) {
-            <i class="bi-moon"></i>
+            <span class="material-symbols-outlined">
+                dark_mode
+                </span>
         } @else {
-            <i class="bi-sun" title="turn off the dark"></i>
+            <span class="material-symbols-outlined" title="turn off the dark">
+                light_mode
+                </span>
         }
     </a>
 </div>
