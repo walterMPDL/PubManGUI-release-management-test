@@ -142,16 +142,28 @@
         }
     }
 
-    .svg-icon path {
-        fill: var(--bs-body-color);
-    }
-
-    .svg-bg-icon {
-        circle {
-            fill: var(--bs-body-color);
+    #topnav {
+        a path {
+            fill: var(--bs-nav-link-color);
         }
-        path {
-            fill: var(--bs-body-bg);
+
+        a:hover path {
+            fill: var(--bs-nav-link-hover-color);
+        }
+    
+        a.svg-bg-icon {
+            circle {
+                fill: var(--bs-nav-link-color);
+            }
+
+            path {
+                fill: var(--bs-body-bg);
+            }
+        }
+        a:hover.svg-bg-icon {
+            circle {
+                fill: var(--bs-nav-link-hover-color);
+            }
         }
     }
 }
@@ -326,16 +338,28 @@
         }
     }
 
-    .svg-icon path {
-        fill: var(--bs-body-color);
-    }
-
-    .svg-bg-icon {
-        circle {
-            fill: var(--bs-body-color);
+    #topnav {
+        a path {
+            fill: var(--bs-nav-link-color);
         }
-        path {
-            fill: var(--bs-body-bg);
+
+        a:hover path {
+            fill: var(--bs-nav-link-hover-color);
+        }
+    
+        a.svg-bg-icon {
+            circle {
+                fill: var(--bs-nav-link-color);
+            }
+
+            path {
+                fill: var(--bs-body-bg);
+            }
+        }
+        a:hover.svg-bg-icon {
+            circle {
+                fill: var(--bs-nav-link-hover-color);
+            }
         }
     }
 
