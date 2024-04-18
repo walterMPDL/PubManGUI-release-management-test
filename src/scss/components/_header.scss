@@ -1,3 +1,8 @@
 .header {
     height: 10vh;
+    .material-symbols-outlined {
+        vertical-align: top;
+        // font-variation-settings: 'FILL' 0, 'wght' 100, 'GRAD' 0, 'opsz' 48;
+        font-variation-settings: 'wght' 500, 'GRAD' 0, 'opsz' 48;
+      }
 }

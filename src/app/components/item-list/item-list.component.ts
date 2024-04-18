@@ -49,6 +49,7 @@ export class ItemListComponent implements AfterViewInit {
   page_size = 10;
   number_of_pages = 1;
   current_page = 1;
+  jump_to = this.current_page;
 
   update_query = (query: any) => {
     return {
