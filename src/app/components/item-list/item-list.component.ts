@@ -1,6 +1,6 @@
-import { AsyncPipe, NgClass, NgFor, NgIf } from '@angular/common';
+import { AsyncPipe, CommonModule, NgClass, NgFor, NgIf } from '@angular/common';
 import { AfterViewInit, Component, QueryList, ViewChildren } from '@angular/core';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PaginationDirective } from 'src/app/shared/directives/pagination.directive';
 import { ItemListElementComponent } from './item-list-element/item-list-element.component';
 import { NavigationEnd, Router, RouterLink } from '@angular/router';
@@ -14,6 +14,7 @@ import { AaService } from 'src/app/services/aa.service';
   selector: 'pure-item-list',
   standalone: true,
   imports: [
+    CommonModule,
     PaginationDirective,
     FormsModule,
     ReactiveFormsModule,
@@ -49,7 +50,7 @@ export class ItemListComponent implements AfterViewInit {
   page_size = 10;
   number_of_pages = 1;
   current_page = 1;
-  jump_to = this.current_page;
+  jump_to = new FormControl<number>(this.current_page, [Validators.nullValidator, Validators.min(1)]);
 
   update_query = (query: any) => {
     return {
@@ -92,9 +93,15 @@ export class ItemListComponent implements AfterViewInit {
       tap(result => {
         this.number_of_results = result.numberOfRecords;
         this.number_of_pages = Math.ceil(this.number_of_results / this.page_size)
+        this.jump_to.addValidators(Validators.max(this.number_of_pages));
       }),
       map(result => result.records?.map(record => record.data))
     );
+  }
+
+  jumpToPage() {
+    console.log("jump_to", this.jump_to.value);
+    this.jump_to.errors? alert("value must be between 1 and " + this.number_of_pages) : this.onPageChange(this.jump_to.value as number);
   }
 
   show(item: ItemVersionVO) {
@@ -126,7 +133,9 @@ export class ItemListComponent implements AfterViewInit {
   isNumber(val: any): boolean { return typeof val === 'number'; }
 
   onPageChange(page_number: number) {
+    console.log("page_number: ", page_number);
     this.current_page = page_number;
+    this.jump_to.setValue(page_number);
     const from = page_number * this.page_size - this.page_size;
     this.current_query.size = this.page_size;
     this.current_query.from = from;
