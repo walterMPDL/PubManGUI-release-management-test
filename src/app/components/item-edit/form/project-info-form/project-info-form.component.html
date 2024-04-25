@@ -16,10 +16,14 @@
             <div class="col-sm-1"><!--NEEDED to keep the layout including one last collumn for add-remove buttons-->
             </div>
         </div>
-        <div [formGroup]="project_info_form" class="d-sm-flex flex-sm-row gap-1 mb-1 align-items-center">
+        <div [formGroup]="grantIdentifier" class="d-sm-flex flex-sm-row gap-1 mb-1 align-items-center">
             <div class="col-sm">
                 <label class="col-form-label col-form-label-sm">Grant Identifier</label>
-                <pure-identifier-form [identifier_form]="grantIdentifier" [multi]="false"></pure-identifier-form>
+                <input type="text" class="form-control form-control-sm" id="grant_identifier_type" formControlName="type" hidden>
+                <input type="text" class="form-control form-control-sm" id="grant_identifier_value" formControlName="id">
+                <!--
+                    <pure-identifier-form [identifier_form]="grantIdentifier" [multi]="false"></pure-identifier-form>
+                -->
             </div>
             <div class="col-sm-1"><!--NEEDED to keep the layout including one last collumn for add-remove buttons-->
             </div>
@@ -29,8 +33,11 @@
                 <label class="col-form-label col-form-label-sm">Funding Program</label>
                 <input type="text" class="form-control form-control-sm" formControlName="title">
             </div>
-            <div class="col-sm">
+            <div [formGroup]="fundingProgramIdentifier" class="col-sm">
                 <label class="col-sm col-form-label col-form-label-sm">Program Identifier</label>
+                <input type="text" class="form-control form-control-sm" id="progam_identifier_type" formControlName="type" hidden>
+                <input type="text" class="form-control form-control-sm" id="progam_identifier_value" formControlName="id">
+                <!--
                 <ng-container formArrayName="identifiers">
                     @for (fundingProgramIdentifier of fundingProgramIdentifiers.controls; track
                     fundingProgramIdentifier; let fundingProgramIdentifierIndex =
@@ -47,6 +54,7 @@
                         (notice)="handleFundingProgramIdentifierNotification($event)"></pure-add-remove-buttons>
                     }
                 </ng-container>
+                -->
             </div>
             <div class="col-sm-1"><!--NEEDED to keep the layout including one last collumn for add-remove buttons-->
             </div>
@@ -56,8 +64,11 @@
                 <label class="col-form-label col-form-label-sm">Funding Organization</label>
                 <input type="text" class="form-control form-control-sm" formControlName="title">
             </div>
-            <div class="col-sm">
+            <div [formGroup]="fundingOrganizationIdentifier" class="col-sm">
                 <label class="col-sm col-form-label col-form-label-sm">Organization Identifier</label>
+                <input type="text" class="form-control form-control-sm" id="progam_identifier_type" formControlName="type" hidden>
+                <input type="text" class="form-control form-control-sm" id="progam_identifier_value" formControlName="id">
+                <!--
                 <ng-container formArrayName="identifiers">
                     @for (fundingOrganizationIdentifier of fundingOrganizationIdentifiers.controls; track
                     fundingOrganizationIdentifier; let fundingOrganizationIdentifierIndex =
@@ -75,6 +86,7 @@
                         (notice)="handleFundingOrganizationIdentifierNotification($event)"></pure-add-remove-buttons>
                     }
                 </ng-container>
+                -->
             </div>
             <div class="col-sm-1"><!--NEEDED to keep the layout including one last collumn for add-remove buttons-->
             </div>
