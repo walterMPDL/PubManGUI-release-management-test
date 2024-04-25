@@ -2,8 +2,9 @@ import { Component, EventEmitter, Input, Output, inject} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormArray, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IdentifierFormComponent } from '../identifier-form/identifier-form.component';import { ControlType, FormBuilderService } from '../../services/form-builder.service';
-import { FundingInfoVO, FundingProgramVO, IdentifierVO } from 'src/app/model/inge';
+import { FundingInfoVO, FundingProgramVO, IdentifierVO, IdType } from 'src/app/model/inge';
 import { AddRemoveButtonsComponent } from '../add-remove-buttons/add-remove-buttons.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'pure-project-info-form',
@@ -21,6 +22,23 @@ export class ProjectInfoFormComponent {
 
   fbs = inject(FormBuilderService);
 
+  private grantIdentiferSubscription: Subscription | undefined;
+  private fundingOrganizationIdentifierSubscription: Subscription | undefined;
+  private fundingProgramIdentifierSubscription: Subscription | undefined;
+
+  ngOnInit(): void {
+    this.grantIdentiferSubscription = this.project_info_form.get('grantIdentifier')?.get('id')?.valueChanges.subscribe(
+      idValue => idValue ? this.project_info_form.get('grantIdentifier')?.get('type')?.patchValue(IdType.GRANT_ID) : this.project_info_form.get('grantIdentifier')?.get('type')?.patchValue(null)
+    );
+    this.fundingOrganizationIdentifierSubscription = this.fundingOrganizationIdentifier?.get('id')?.valueChanges.subscribe(
+      idValue => idValue ? this.fundingOrganizationIdentifier?.get('type')?.patchValue(IdType.OPEN_AIRE) : this.fundingOrganizationIdentifier?.get('type')?.patchValue(null)
+    );
+    this.fundingProgramIdentifierSubscription = this.fundingProgramIdentifier?.get('id')?.valueChanges.subscribe(
+      idValue => idValue ? this.fundingProgramIdentifier?.get('type')?.patchValue(IdType.OPEN_AIRE) : this.fundingProgramIdentifier?.get('type')?.patchValue(null)
+    );
+  }
+
+
   get fundingInfo() {
     return this.project_info_form.get('fundingInfo') as FormGroup<ControlType<FundingInfoVO>>;
   }
@@ -32,8 +50,13 @@ export class ProjectInfoFormComponent {
   get fundingOrganization() {
     return this.project_info_form.get('fundingInfo')?.get('fundingOrganization') as FormGroup<ControlType<FundingProgramVO>>;
   }
+
   get fundingOrganizationIdentifiers() {
     return this.project_info_form.get('fundingInfo')?.get('fundingOrganization')?.get('identifiers') as FormArray<FormGroup<ControlType<IdentifierVO>>>;
+  }
+
+  get fundingOrganizationIdentifier() {
+    return this.fundingOrganizationIdentifiers.at(0) as FormGroup<ControlType<IdentifierVO>>;
   }
 
   get fundingProgram() {
@@ -42,6 +65,10 @@ export class ProjectInfoFormComponent {
 
   get fundingProgramIdentifiers() {
     return this.project_info_form.get('fundingInfo')?.get('fundingProgram')?.get('identifiers') as FormArray<FormGroup<ControlType<IdentifierVO>>>;
+  }
+
+  get fundingProgramIdentifier() {
+    return this.fundingProgramIdentifiers.at(0) as FormGroup<ControlType<IdentifierVO>>;
   }
 
   add_remove_projectInfo(event: any) {
@@ -68,8 +95,6 @@ export class ProjectInfoFormComponent {
     this.fundingOrganizationIdentifiers.removeAt(index);
   }
 
-  
-
   handleFundingProgramIdentifierNotification(event: any) {
     if (event.action === 'add') {
       this.addFundingProgramIdentifier(event.index);
@@ -88,5 +113,11 @@ export class ProjectInfoFormComponent {
 
   removeFundingProgramIdentifier(index: number) {
     this.fundingProgramIdentifiers.removeAt(index);
+  }
+
+  ngOnDestroy(): void {
+    this.grantIdentiferSubscription?.unsubscribe();
+    this.fundingOrganizationIdentifierSubscription?.unsubscribe();
+    this.fundingProgramIdentifierSubscription?.unsubscribe();
   }
 }
