@@ -517,6 +517,7 @@ export enum OA_STATUS {
     HYBRID = "HYBRID",
     GREEN = "GREEN",
     MISCELLANEOUS = "MISCELLANEOUS",
+    CLOSED_ACCESS = "CLOSED_ACCESS",
 }
 
 export enum DegreeType {

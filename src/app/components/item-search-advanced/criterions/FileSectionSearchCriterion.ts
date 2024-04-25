@@ -63,35 +63,35 @@ export class FileSectionSearchCriterion extends SearchCriterion {
         defaultIfEmpty([]),
         map(queries => {
 
-          let boolQuery: { [k: string]: any } = {};
-          switch (this.content.get("component_available")?.value) {
-            case "YES" : {
-              boolQuery['must'] = [baseElasticSearchQueryBuilder("files.storage", this.type), ...queries];
-              break;
-            }
-            case "NO" : {
-              boolQuery['mustNot'] = [baseElasticSearchQueryBuilder("files.storage", this.type)];
-              break;
-            }
-            case "WHATEVER" : {
-              return of(undefined);
-            }
-          }
-
-          const query =
-            {
-              nested: {
-                path: "files",
-                query: {
-                  bool: boolQuery
-                }
+            let boolQuery: { [k: string]: any } = {};
+            switch (this.content.get("component_available")?.value) {
+              case "YES" : {
+                boolQuery['must'] = [baseElasticSearchQueryBuilder("files.storage", this.type), ...queries];
+                break;
+              }
+              case "NO" : {
+                boolQuery['mustNot'] = [baseElasticSearchQueryBuilder("files.storage", this.type)];
+                break;
+              }
+              case "WHATEVER" : {
+                return of(undefined);
               }
             }
-          console.log("Returning query" + JSON.stringify(query));
-          return query;
 
-        }
-      ))
+            const query =
+              {
+                nested: {
+                  path: "files",
+                  query: {
+                    bool: boolQuery
+                  }
+                }
+              }
+            console.log("Returning query" + JSON.stringify(query));
+            return query;
+
+          }
+        ))
   }
 
   getElasticSearchNestedPath(): string | undefined {
@@ -257,16 +257,23 @@ export class ComponentOaStatusSearchCriterion extends SearchCriterion {
   override toElasticSearchQuery(): Observable<Object | undefined> {
 
     const oastates: string[] = Object.keys(this.oaStatusFormGroup.controls)
-      .filter(genre => this.oaStatusFormGroup.get(genre)?.value).map(state=>state.toLowerCase());
+      .filter(genre => this.oaStatusFormGroup.get(genre)?.value).map(state => state.toLowerCase());
 
-    if (oastates.includes(OA_STATUS.NOT_SPECIFIED)) {
+    if (oastates.includes(OA_STATUS.NOT_SPECIFIED.toLowerCase())) {
       return of({
         bool: {
-          must_not: {
-            exists: {
-              field: "files.metadata.oaStatus"
+          should: [{
+            bool: {
+              must_not: {
+                exists: {
+                  field: "files.metadata.oaStatus"
+                }
+              }
             }
-          }
+          },
+            baseElasticSearchQueryBuilder("files.metadata.oaStatus.keyword", oastates)
+          ]
+
         }
 
       })

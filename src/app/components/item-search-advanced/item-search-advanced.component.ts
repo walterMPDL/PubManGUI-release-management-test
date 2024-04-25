@@ -49,7 +49,7 @@ export class ItemSearchAdvancedComponent {
   genreListSearchCriterion = new GenreListSearchCriterion();
   publicationStateSearchCriterion = new PublicationStateSearchCriterion();
   fileSectionSearchCriterion = new FileSectionSearchCriterion(COMPONENT_SEARCH_TYPES.FILES);
-  //locatorSectionSearchCriterion = new FileSectionSearchCriterion(COMPONENT_SEARCH_TYPES.LOCATORS);
+  locatorSectionSearchCriterion = new FileSectionSearchCriterion(COMPONENT_SEARCH_TYPES.LOCATORS);
   //fileContentCategorySearchCriterion = new ComponentContentCategorySearchCriterion();
   //locatorContentCategorySearchCriterion = new ComponentContentCategorySearchCriterion();
 
@@ -523,13 +523,13 @@ export class ItemSearchAdvancedComponent {
     searchCriterions.push(new Parenthesis(PARENTHESIS_TYPE.OPENING_PARENTHESIS));
     searchCriterions.push(this.fileSectionSearchCriterion);
     searchCriterions.push(new Parenthesis(PARENTHESIS_TYPE.CLOSING_PARENTHESIS));
-    /*
+
     searchCriterions.push(new LogicalOperator("and"));
     searchCriterions.push(new Parenthesis(PARENTHESIS_TYPE.OPENING_PARENTHESIS));
     searchCriterions.push(this.locatorSectionSearchCriterion);
     searchCriterions.push(new Parenthesis(PARENTHESIS_TYPE.CLOSING_PARENTHESIS));
 
-     */
+
 
 
     return searchCriterions

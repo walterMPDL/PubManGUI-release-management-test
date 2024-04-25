@@ -255,9 +255,9 @@
               @if (currentGenre != 'THESIS'){
               <div class="col-md-6 col-xxl-4">
                 <div class="form-check">
-                  <input id="genreName" class="form-check-input" type="checkbox"
+                  <input id="genreName{{i}}" class="form-check-input" type="checkbox"
                          [formControl]="$any(genreListSearchCriterion.genreFormGroup).get(currentGenre)"/>
-                  <label class="form-check-label" for="genreName">{{ currentGenre }}</label>
+                  <label class="form-check-label" for="genreName{{i}}">{{ currentGenre }}</label>
                 </div>
               </div>
               }
@@ -279,9 +279,9 @@
             @for (currentDegree of genreListSearchCriterion.degreeOptions; track currentDegree; let i = $index; ) {
               <div class="col-md-4 col-xxl-2">
                 <div class="form-check">
-                  <input id="degreeName" class="form-check-input" type="checkbox"
+                  <input id="degreeName{{i}}" class="form-check-input" type="checkbox"
                          [formControl]="$any(genreListSearchCriterion.degreeFormGroup).get(currentDegree)"/>
-                  <label class="form-check-label" for="genreName">{{ currentDegree }}</label>
+                  <label class="form-check-label" for="degreeName{{i}}">{{ currentDegree }}</label>
                 </div>
               </div>
             }
@@ -308,9 +308,9 @@
             @for (pubState of publicationStateSearchCriterion.pubStateOptions; track pubState; let i = $index; ) {
                 <div class="col-md-6 col-xxl-4">
                   <div class="form-check">
-                    <input id="pubStateName" class="form-check-input" type="checkbox"
+                    <input id="pubStateName{{i}}" class="form-check-input" type="checkbox"
                            [formControl]="$any(publicationStateSearchCriterion.publicationStatesFormGroup).get(pubState)"/>
-                    <label class="form-check-label" for="genreName">{{ pubState }}</label>
+                    <label class="form-check-label" for="pubStateName{{i}}">{{ pubState }}</label>
                   </div>
                 </div>
             }
@@ -349,9 +349,9 @@
                 @for (visibility of fileSectionSearchCriterion.componentVisibilitySearchCriterion.visibilityOptions; track visibility; let i = $index; ) {
                   <div class="col-md-6 col-xxl-4">
                     <div class="form-check">
-                      <input id="fileVisibility" class="form-check-input" type="checkbox"
+                      <input id="fileVisibility{{i}}" class="form-check-input" type="checkbox"
                              [formControl]="$any(fileSectionSearchCriterion.componentVisibilitySearchCriterion.componentVisibilityFormGroup).get(visibility)"/>
-                      <label class="form-check-label" for="fileVisibility">{{ visibility }}</label>
+                      <label class="form-check-label" for="fileVisibility{{i}}">{{ visibility }}</label>
                     </div>
                   </div>
                 }
@@ -378,9 +378,9 @@
             @for (cc of fileSectionSearchCriterion.componentContentCategorySearchCriterion.contentCategoryOptions; track cc; let i = $index; ) {
 
                 <div class="form-check">
-                  <input id="fileCcName" class="form-check-input" type="checkbox"
+                  <input id="fileCcName{{i}}" class="form-check-input" type="checkbox"
                          [formControl]="$any(fileSectionSearchCriterion.componentContentCategorySearchCriterion.contentCategoryFormGroup).get(cc)"/>
-                  <label class="form-check-label" for="fileCcName">{{ cc }}</label>
+                  <label class="form-check-label" for="fileCcName{{i}}">{{ cc }}</label>
                 </div>
             }
           </div>
@@ -389,9 +389,9 @@
               @for (cc of fileSectionSearchCriterion.oaStatusSearchCriterion.oaStatusOptions; track cc; let i = $index; ) {
 
                 <div class="form-check">
-                  <input id="oaStatus" class="form-check-input" type="checkbox"
+                  <input id="oaStatus{{i}}" class="form-check-input" type="checkbox"
                          [formControl]="$any(fileSectionSearchCriterion.oaStatusSearchCriterion.oaStatusFormGroup).get(cc)"/>
-                  <label class="form-check-label" for="oaStatus">{{ cc }}</label>
+                  <label class="form-check-label" for="oaStatus{{i}}">{{ cc }}</label>
                 </div>
               }
             </div>
@@ -415,7 +415,45 @@
         <div class="accordion-body mt-3 mb-3">
 
 
-          <div class="d-sm-flex flex-sm-row gap-1 mb-3 align-items-center">
+          <div class="row">
+            <div class="col-md-6 col-xxl-4">
+              <div class="container mb-4">
+                <h5>with file(s)</h5>
+                <select class="form-select" [formControl]="$any(locatorSectionSearchCriterion.content).get('component_available')">
+                  @for (val of locatorSectionSearchCriterion.availabilityOptions; track val) {
+                    <option [value]="val">
+                      {{ val }}
+                    </option>
+                  }
+                </select>
+              </div>
+
+
+            </div>
+
+
+            <div class="col-md-6 col-xxl-4">
+              <h5>Content Category</h5>
+              @for (cc of locatorSectionSearchCriterion.componentContentCategorySearchCriterion.contentCategoryOptions; track cc; let i = $index; ) {
+
+                <div class="form-check">
+                  <input id="locatorCcName{{i}}" class="form-check-input" type="checkbox"
+                         [formControl]="$any(locatorSectionSearchCriterion.componentContentCategorySearchCriterion.contentCategoryFormGroup).get(cc)"/>
+                  <label class="form-check-label" for="locatorCcName{{i}}">{{ cc }}</label>
+                </div>
+              }
+            </div>
+            <div class="col-md-6 col-xxl-4">
+              <h5>OA Status</h5>
+              @for (cc of locatorSectionSearchCriterion.oaStatusSearchCriterion.oaStatusOptions; track cc; let i = $index; ) {
+
+                <div class="form-check">
+                  <input id="locatorOaStatus{{i}}" class="form-check-input" type="checkbox"
+                         [formControl]="$any(locatorSectionSearchCriterion.oaStatusSearchCriterion.oaStatusFormGroup).get(cc)"/>
+                  <label class="form-check-label" for="locatorOaStatus{{i}}">{{ cc }}</label>
+                </div>
+              }
+            </div>
           </div>
         </div>
       </div>
