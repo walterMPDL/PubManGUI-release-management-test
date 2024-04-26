@@ -18,12 +18,14 @@
     --accent-color-contrast: #{$body-secondary-bg};
 
     .accordion {
+
+        .accordion-button {
+            color: #{$mpg-light-gray};
+            background-color: #{$mpg-blue};
+        }
+
         .accordion-item {
 
-            .accordion-button {
-                color: #{$mpg-light-gray};
-                background-color: #{$mpg-blue};
-            }
 
             .accordion-body {
                 background: #{$body-secondary-bg};
@@ -214,16 +216,16 @@
 
     .accordion {
 
+        .accordion-button {
+            color: #{$mpg-light-gray};
+            background-color: #{$mpg-blue};
+        }
+
         .accordion-item {
 
             .accordion-header {
                 color: #{$body-color-dark};
                 background-color: #{$body-tertiary-color-dark};
-            }
-
-            .accordion-button {
-                color: var(--accent-color-contrast);
-                background-color: #{$mpg-blue};
             }
 
             .accordion-body {
