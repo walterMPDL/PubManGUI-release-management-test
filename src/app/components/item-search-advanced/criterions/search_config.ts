@@ -18,6 +18,9 @@ import {
   PersonSearchCriterion
 } from "./StringOrHiddenIdSearchCriterion";
 import {GenreSearchCriterion, ReviewMethodSearchCriterion, StateSearchCriterion} from "./EnumSearchCriterion";
+import {GenreListSearchCriterion} from "./GenreListSearchCriterion";
+import {PublicationStateSearchCriterion} from "./PublicationStateSearchCriterion";
+import {COMPONENT_SEARCH_TYPES, FileSectionSearchCriterion} from "./FileSectionSearchCriterion";
 
 
 export enum DisplayType {
@@ -28,7 +31,7 @@ export enum DisplayType {
   CLASSIFICATION,
   DATE,
   ENUM,
-  GENRELIST,
+  EXTERNAL_BLOCKS,
   OPERATOR,
   PARENTHESIS
 }
@@ -43,6 +46,9 @@ export interface searchTypeI {
 }
 
 
+/**
+ * Directory for flexible search criterions of the advanced search
+ */
 export const searchTypes : searchTypesI = {
   title: {
     displayType: DisplayType.STANDARD,
@@ -174,10 +180,6 @@ export const searchTypes : searchTypesI = {
   },
   state: {
     displayType: DisplayType.ENUM,
-    handlerClass: StateSearchCriterion
-  },
-  genreList: {
-    displayType: DisplayType.GENRELIST,
     handlerClass: StateSearchCriterion
   },
   and: {

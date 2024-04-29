@@ -1,12 +1,15 @@
 <div class="row align-items-center top_nav_pos bg-body">
-    <div class="col-sm-4 ps-0">
+    <div class="col-12 col-xxl-4 ps-0">
         <pure-topnav></pure-topnav>
     </div>
+    <!--
     <div class="col-sm-1">
         <small>{{current_page}} / {{number_of_pages}}</small>
     </div>
-    <nav class="col-sm-6" purePagination #pagination="purePagination" [totalPages]="number_of_pages"
+    -->
+    <nav class="col-12 col-xxl-5" purePagination #pagination="purePagination" [totalPages]="number_of_pages"
         [pageNo]="current_page" (pageChange)="onPageChange($event)">
+        <!--
         <ul class="pagination pagination-sm">
             <li class="page-item" [ngClass]="{'disabled': pagination.isFirst}">
                 <button class="page-link" (click)="pagination.first()" [disabled]="pagination.isFirst">
@@ -51,52 +54,91 @@
                 </button>
             </li>
         </ul>
-<!--
-        <div class="input-group pagination">
-            <div class="input-group-btn" [ngClass]="{'disabled': pagination.isFirst}">
+        -->
+        <!--
+        <ul class="pagination pagination-sm">
+            <li class="page-item" [ngClass]="{'disabled': pagination.isFirst}">
                 <button class="page-link" (click)="pagination.first()" [disabled]="pagination.isFirst">
                     <span class="material-symbols-outlined">
                         first_page
                     </span>
                 </button>
+            </li>
+            <li class="page-item" [ngClass]="{'disabled': pagination.isFirst}">
                 <button class="page-link" (click)="pagination.prev()" [disabled]="pagination.isFirst">
                     <span class="material-symbols-outlined">
                         navigate_before
                     </span>
                 </button>
-            </div>
-            <div class="input-group-btn">
-                <input class="form-control" style="width: 50px;" type="number" class="form-control form-control-sm "
-                    id="title" name="title" formControlName="jump_to_page" value="jump_to" submit="onPageChange(jump_to)">
-                    <small>{{number_of_pages}}</small>
-            </div>
-            <div class="input-group-btn">
-                <button class="btn btn-primary" type="button">Go</button>
+            </li>
+            <li class="page-item">
+                <div class="input-group">
+                    <input type="text" class="form-control" [formControl]="jump_to" submit="onPageChange(jump_to)">
+                    <button class="page-link" type="button">Go</button>
+                </div>
+            </li>
+            <li>
+                <small>{{number_of_pages}}</small>
+            </li>
+            <li>
+                <button class="page-link" type="button">Go</button>
+            </li>
+            <li class="page-item" [ngClass]="{'disabled': pagination.isLast}">
                 <button class="page-link" (click)="pagination.next()" [disabled]="pagination.isLast">
                     <span class="material-symbols-outlined">
                         navigate_next
                     </span>
                 </button>
+            </li>
+            <li class="page-item" [ngClass]="{'disabled': pagination.isLast}">
                 <button class="page-link" (click)="pagination.last()" [disabled]="pagination.isLast">
                     <span class="material-symbols-outlined">
                         last_page
                     </span>
                 </button>
-            </div>
+            </li>
+        </ul>
+        -->
+        <div class="mpdl-pagination float-xxl-end">
+            <button type="button" class="btn btn-sm border border-0" (click)="pagination.first()"
+                [disabled]="pagination.isFirst">
+                <span class="material-symbols-outlined">
+                    first_page
+                </span>
+            </button>
+            <button type="button" class="btn btn-sm border border-0" (click)="pagination.prev()"
+                [disabled]="pagination.isFirst">
+                <span class="material-symbols-outlined">
+                    navigate_before
+                </span>
+            </button>
+            <span>Page</span>
+            <input type="text" class="form-control mx-2" [formControl]="jump_to" [value]="jump_to.value"
+                (keyup.enter)="jumpToPage()">
+            <span>of {{number_of_pages}}</span>
+            <button type="button" class="btn btn-sm border border-0" (click)="pagination.next()"
+                [disabled]="pagination.isLast">
+                <span class="material-symbols-outlined">
+                    navigate_next
+                </span>
+            </button>
+            <button type="button" class="btn btn-sm border border-0" (click)="pagination.last()"
+                [disabled]="pagination.isLast">
+                <span class="material-symbols-outlined">
+                    last_page
+                </span>
+            </button>
+            <select class="form-select form-select-sm" [formControl]="select_pages_2_display"
+                (change)="pageSizeHandler($event)" size="1">
+                @for (pages of pages_2_display; track pages) {
+                <option [selected]="pages.value === 10" [value]="pages.value">{{pages.label}}</option>
+                }
+            </select>
         </div>
--->
-
-        
     </nav>
-    <div class="col-sm-1 text-start">
-        <select class="form-select form-select-sm" [formControl]="select_pages_2_display"
-            (change)="pageSizeHandler($event)" size="1">
-            @for (pages of pages_2_display; track pages) {
-            <option [selected]="pages.value === 10" [value]="pages.value">{{pages.label}}</option>
-            }
-        </select>
-        <!--<label for="pageSize"><small>&nbsp; per Page</small></label>-->
+    <div class="col-xxl-3 d-none d-xxl-block">
     </div>
+    
 </div>
 <div class="row">
     <div class="col-lg-9 col-sm-12">

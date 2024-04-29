@@ -1,46 +1,39 @@
-import {Component, Input} from '@angular/core';
-import {
-  AbstractControl,
-  Form,
-  FormArray,
-  FormBuilder,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule
-} from "@angular/forms";
-import {AaService} from "../../services/aa.service";
+import {Component, ViewEncapsulation} from '@angular/core';
+import {FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {Router} from "@angular/router";
-import {ConeService} from "../../services/cone.service";
 
-import {AsyncPipe, JsonPipe, NgFor, NgIf} from "@angular/common";
+import {DatePipe, JsonPipe, NgFor, NgIf} from "@angular/common";
 
 import {SearchCriterion} from "./criterions/SearchCriterion";
 import {LogicalOperator} from "./criterions/operators/LogicalOperator";
 import {DisplayType, searchTypes, searchTypesI} from "./criterions/search_config";
 import {Parenthesis, PARENTHESIS_TYPE} from "./criterions/operators/Parenthesis";
-import {CreatorRole, IdType, MdsPublicationGenre} from "../../model/inge";
-import {KeywordSearchCriterion, TitleSearchCriterion} from "./criterions/StandardSearchCriterion";
+import {CreatorRole, IdType} from "../../model/inge";
+import {TitleSearchCriterion} from "./criterions/StandardSearchCriterion";
 import {OrganizationSearchCriterion, PersonSearchCriterion} from "./criterions/StringOrHiddenIdSearchCriterion";
 import {DATE_SEARCH_TYPES, DateSearchCriterion} from "./criterions/DateSearchCriterion";
-import {OrganizationsService} from "../../services/organizations.service";
-import {debounceTime, distinctUntilChanged, forkJoin, map, Observable, OperatorFunction, switchMap, tap} from "rxjs";
+import {forkJoin, map, tap} from "rxjs";
 import {OptionDirective} from "../../shared/components/selector/directives/option.directive";
 import {PureOusDirective} from "../../shared/components/selector/services/pure_ous/pure-ous.directive";
 import {SelectorComponent} from "../../shared/components/selector/selector.component";
-import {NgbTypeaheadModule} from "@ng-bootstrap/ng-bootstrap";
 import {OuAutosuggestComponent} from "../../shared/components/ou-autosuggest/ou-autosuggest.component";
 import {PersonAutosuggestComponent} from "../../shared/components/person-autosuggest/person-autosuggest.component";
 import {GenreListSearchCriterion} from "./criterions/GenreListSearchCriterion";
+import {PublicationStateSearchCriterion} from "./criterions/PublicationStateSearchCriterion";
+import {COMPONENT_SEARCH_TYPES, FileSectionSearchCriterion} from "./criterions/FileSectionSearchCriterion";
+import {FileSectionComponent} from "./file-section-component/file-section-component.component";
+//import formJson from './formJson.json';
 
 
 @Component({
   selector: 'pure-item-search-advanced',
   standalone: true,
   imports: [
-    FormsModule, ReactiveFormsModule, NgFor, NgIf, JsonPipe, OptionDirective, PureOusDirective, SelectorComponent, OuAutosuggestComponent, PersonAutosuggestComponent
+    FormsModule, ReactiveFormsModule, NgFor, NgIf, JsonPipe, OptionDirective, PureOusDirective, SelectorComponent, OuAutosuggestComponent, PersonAutosuggestComponent, FileSectionComponent, DatePipe
   ],
   templateUrl: './item-search-advanced.component.html',
-  styleUrl: './item-search-advanced.component.scss'
+  styleUrl: './item-search-advanced.component.scss',
+  encapsulation: ViewEncapsulation.None
 })
 export class ItemSearchAdvancedComponent {
 
@@ -51,12 +44,16 @@ export class ItemSearchAdvancedComponent {
 
   identifierOptions = Object.keys(IdType);
   personOptions = Object.keys(CreatorRole);
-  genreOptions = Object.keys(MdsPublicationGenre);
   currentlyOpenedParenthesis!: Parenthesis | undefined;
   possibleCriterionsForClosingParenthesisMap: SearchCriterion[] = []
   protected readonly DisplayType = DisplayType;
 
-  genreListFormGroup: GenreListSearchCriterion = new GenreListSearchCriterion();
+  genreListSearchCriterion = new GenreListSearchCriterion();
+  publicationStateSearchCriterion = new PublicationStateSearchCriterion();
+  fileSectionSearchCriterion = new FileSectionSearchCriterion(COMPONENT_SEARCH_TYPES.FILES);
+  locatorSectionSearchCriterion = new FileSectionSearchCriterion(COMPONENT_SEARCH_TYPES.LOCATORS);
+
+  searchHistory: SavedSearch[] = [];
 
   constructor(
     private router: Router,
@@ -65,38 +62,80 @@ export class ItemSearchAdvancedComponent {
   }
 
   ngOnInit() {
-    this.searchForm = this.fb.group({
-      fields: this.fb.array([])
-    });
+    this.reset()
+    //this.parseFormJson(formJson);
 
-    this.fields.push(new TitleSearchCriterion());
-    this.fields.push(new LogicalOperator("and"));
-    this.fields.push(new PersonSearchCriterion());
-    this.fields.push(new LogicalOperator("and"));
-    this.fields.push(new OrganizationSearchCriterion());
-    this.fields.push(new LogicalOperator("and"));
-    this.fields.push(new DateSearchCriterion(DATE_SEARCH_TYPES.ANYDATE));
-
+    let searchHistory = localStorage.getItem("pure-advanced-search-history");
+    if (searchHistory) {
+      let json = JSON.parse(searchHistory) as SavedSearch[];
+      this.searchHistory = json;
+    }
 
   }
 
+  reset() {
+    this.genreListSearchCriterion = new GenreListSearchCriterion();
+    this.publicationStateSearchCriterion = new PublicationStateSearchCriterion();
+    this.fileSectionSearchCriterion = new FileSectionSearchCriterion(COMPONENT_SEARCH_TYPES.FILES);
+    this.locatorSectionSearchCriterion = new FileSectionSearchCriterion(COMPONENT_SEARCH_TYPES.LOCATORS);
+
+    this.searchForm = this.fb.group({
+      flexibleFields: this.fb.array([]),
+      genres: this.genreListSearchCriterion,
+      publicationState: this.publicationStateSearchCriterion,
+      files: this.fileSectionSearchCriterion,
+      locators: this.locatorSectionSearchCriterion
+    });
+
+    this.flexibleFields.push(new TitleSearchCriterion());
+    this.flexibleFields.push(new LogicalOperator("and"));
+    this.flexibleFields.push(new PersonSearchCriterion());
+    this.flexibleFields.push(new LogicalOperator("and"));
+    this.flexibleFields.push(new OrganizationSearchCriterion());
+    this.flexibleFields.push(new LogicalOperator("and"));
+    this.flexibleFields.push(new DateSearchCriterion(DATE_SEARCH_TYPES.ANYDATE));
+  }
+
+  parseFormJson(formJson: any) {
+    for (let [key, value] of Object.entries(formJson)) {
+
+      if(key === "flexibleFields") {
+        //Clear old fields
+        this.flexibleFields.clear();
+
+        //Recreate flexible search criterions and patch form values
+        for (let currentField of (value as any[])) {
+          const newSearchCriterion: SearchCriterion = new searchTypes[currentField.type].handlerClass(currentField.type);
+          newSearchCriterion.patchValue(currentField);
+          this.flexibleFields.push(newSearchCriterion);
+        }
+      }
+      else {
+        //Just patch the values for genre list, file section etc.
+        this.searchForm.patchValue({[key]: value});
+      }
+    }
+  }
+
+
+
   changeType(index: number, newType: string) {
-    console.log("Change criterion at index " + index + " to type " + newType);
+    //console.log("Change criterion at index " + index + " to type " + newType);
 
     const newSearchCriterion: SearchCriterion = new searchTypes[newType].handlerClass(newType);
-    this.fields.removeAt(index);
-    this.fields.insert(index, newSearchCriterion);
+    this.flexibleFields.removeAt(index);
+    this.flexibleFields.insert(index, newSearchCriterion);
   }
 
   changeOperator(index: number, newOperatorType: string) {
     //console.log("Change operator at index " + index + " to type " + newOperatorType);
     const newSearchCriterion = new LogicalOperator(newOperatorType);
-    this.fields.removeAt(index);
-    this.fields.insert(index, newSearchCriterion);
+    this.flexibleFields.removeAt(index);
+    this.flexibleFields.insert(index, newSearchCriterion);
   }
 
-  get fields(): FormArray {
-    return this.searchForm.get("fields") as FormArray;
+  get flexibleFields(): FormArray {
+    return this.searchForm.get("flexibleFields") as FormArray;
   }
 
 
@@ -105,7 +144,7 @@ export class ItemSearchAdvancedComponent {
   }
 
   get genreListKeys(): string[] {
-    return Object.keys((this.genreListFormGroup.get('content')?.get('genres') as FormGroup).controls);
+    return Object.keys((this.genreListSearchCriterion.get('content')?.get('genres') as FormGroup).controls);
     //return this.genreListFormGroup as FormGroup;
   }
 
@@ -120,14 +159,14 @@ export class ItemSearchAdvancedComponent {
     }
 
     newSearchCriterion.level = searchCriterion.level;
-    this.fields.insert(index + 1, newSearchCriterion);
+    this.flexibleFields.insert(index + 1, newSearchCriterion);
 
     // If the add button of an opening parenthesis is used, the logical operator has to be added
     // after the new criterion
     if (PARENTHESIS_TYPE.OPENING_PARENTHESIS === searchCriterion.type) {
-      this.fields.insert(index + 2, new LogicalOperator("and"));
+      this.flexibleFields.insert(index + 2, new LogicalOperator("and"));
     } else {
-      this.fields.insert(index + 1, new LogicalOperator("and"));
+      this.flexibleFields.insert(index + 1, new LogicalOperator("and"));
     }
 
     this.updateListForClosingParenthesis(this.currentlyOpenedParenthesis);
@@ -137,17 +176,17 @@ export class ItemSearchAdvancedComponent {
 
   removeSearchCriterion(index: number) {
 
-    const sc = this.fields.at(index) as SearchCriterion;
-    this.removeSearchCriterionWithOperator(this.fields.controls as SearchCriterion[], sc);
+    const sc = this.flexibleFields.at(index) as SearchCriterion;
+    this.removeSearchCriterionWithOperator(this.flexibleFields.controls as SearchCriterion[], sc);
     this.updateListForClosingParenthesis(this.currentlyOpenedParenthesis);
 
   }
 
   addOpeningParenthesis(index: number) {
     this.currentlyOpenedParenthesis = new Parenthesis(PARENTHESIS_TYPE.OPENING_PARENTHESIS);
-    this.currentlyOpenedParenthesis.level = (this.fields.at(index) as SearchCriterion).level;
+    this.currentlyOpenedParenthesis.level = (this.flexibleFields.at(index) as SearchCriterion).level;
     // add before criterion
-    this.fields.insert(index, this.currentlyOpenedParenthesis);
+    this.flexibleFields.insert(index, this.currentlyOpenedParenthesis);
 
     this.updateListForClosingParenthesis(this.currentlyOpenedParenthesis);
     //console.log(this.possibleCriterionsForClosingParenthesisMap);
@@ -158,17 +197,17 @@ export class ItemSearchAdvancedComponent {
     this.currentlyOpenedParenthesis!.partnerParenthesis = closingParenthesis;
     closingParenthesis.partnerParenthesis = this.currentlyOpenedParenthesis;
     this.currentlyOpenedParenthesis = undefined;
-    this.fields.insert(index + 1, closingParenthesis);
+    this.flexibleFields.insert(index + 1, closingParenthesis);
     this.updateListForClosingParenthesis(undefined);
   }
 
   removeParenthesis(position: number) {
-    const parenthesis = this.fields.at(position) as Parenthesis;
+    const parenthesis = this.flexibleFields.at(position) as Parenthesis;
     const partnerParenthesis = parenthesis.partnerParenthesis;
 
-    this.fields.controls.splice(position, 1);
+    this.flexibleFields.controls.splice(position, 1);
     if (partnerParenthesis) {
-      this.fields.controls.splice(this.fields.controls.indexOf(partnerParenthesis), 1);
+      this.flexibleFields.controls.splice(this.flexibleFields.controls.indexOf(partnerParenthesis), 1);
     }
 
     if (parenthesis === (this.currentlyOpenedParenthesis)) {
@@ -186,7 +225,7 @@ export class ItemSearchAdvancedComponent {
 
     let numberOfSearchCriterions = 0;
 
-    for (let sc of this.fields.controls as SearchCriterion[]) {
+    for (let sc of this.flexibleFields.controls as SearchCriterion[]) {
 
       if (PARENTHESIS_TYPE.CLOSING_PARENTHESIS === sc.type) {
         balanceCounter--;
@@ -244,7 +283,7 @@ export class ItemSearchAdvancedComponent {
     if (deleteBefore) {
       for (let i = position; i >= 0; i--) {
         const sci = criterionList[i];
-        if (DisplayType.OPERATOR === (searchTypes[sci.type].displayType)) {
+        if (searchTypes[sci.type] && DisplayType.OPERATOR === (searchTypes[sci.type].displayType)) {
           criterionList.splice(position, 1);
           criterionList.splice(i, 1);
           break;
@@ -255,7 +294,7 @@ export class ItemSearchAdvancedComponent {
       // delete logical operator after
       for (let i = position; i < criterionList.length; i++) {
         const sci = criterionList[i];
-        if (DisplayType.OPERATOR === (searchTypes[sci.type].displayType)) {
+        if (searchTypes[sci.type] && DisplayType.OPERATOR === (searchTypes[sci.type].displayType)) {
           criterionList.splice(i, 1);
           criterionList.splice(position, 1);
           break;
@@ -290,8 +329,8 @@ export class ItemSearchAdvancedComponent {
     });
 
     // if first criterion is an operand, remove it
-    if (criterionList != null && criterionList.length > 0
-      && DisplayType.OPERATOR == (searchTypes[criterionList[0].type].displayType)) {
+    if (criterionList != null && criterionList.length > 0 &&
+      searchTypes[criterionList[0].type] && DisplayType.OPERATOR == (searchTypes[criterionList[0].type].displayType)) {
       criterionList.splice(0, 1);
     }
 
@@ -348,10 +387,16 @@ export class ItemSearchAdvancedComponent {
       }
     }
     //Join all subquery-creations
-    return forkJoin(cleanedScList.map(sc => sc.toElasticSearchQuery()))
+    return forkJoin(cleanedScList.map(sc => {
+      const query = sc.toElasticSearchQuery();
+      //console.log("Calling " + sc.type + query);
+      return query;
+    }))
+
       //Set query in every search criterion object
       .pipe(tap(queries => cleanedScList.forEach((sc, i) => {
-        sc.query = queries[i]
+        //console.log("Transforming list to queries " + sc.type + " -- " + JSON.stringify(queries[i]));
+        sc.query = queries[i];
       })))
 
       //when everything is ready, create complete query
@@ -367,6 +412,7 @@ export class ItemSearchAdvancedComponent {
 
     //SearchCriterionBase.logger.debug("Call with list: " + scList);
 
+    //console.log("Transforming list to queries " + queries)
     if (scList.length == 0) {
       return {match_all: {}};
     }
@@ -396,7 +442,7 @@ export class ItemSearchAdvancedComponent {
 
     for (let sc of criterionList) {
 
-      if (DisplayType.OPERATOR === (searchTypes[sc.type].displayType)) {
+      if (searchTypes[sc.type] && DisplayType.OPERATOR === (searchTypes[sc.type].displayType)) {
 
         if (parenthesisOpened == 0) {
 
@@ -501,12 +547,45 @@ export class ItemSearchAdvancedComponent {
 
   }
 
+
+  prepareQuery() {
+    const searchCriterions = this.flexibleFields.controls.map(fc => fc as SearchCriterion);
+    searchCriterions.unshift(new Parenthesis(PARENTHESIS_TYPE.OPENING_PARENTHESIS));
+    searchCriterions.push(new Parenthesis(PARENTHESIS_TYPE.CLOSING_PARENTHESIS));
+
+    searchCriterions.push(new LogicalOperator("and"));
+    searchCriterions.push(new Parenthesis(PARENTHESIS_TYPE.OPENING_PARENTHESIS));
+    searchCriterions.push(this.genreListSearchCriterion);
+    searchCriterions.push(new Parenthesis(PARENTHESIS_TYPE.CLOSING_PARENTHESIS));
+    searchCriterions.push(new LogicalOperator("and"));
+    searchCriterions.push(new Parenthesis(PARENTHESIS_TYPE.OPENING_PARENTHESIS));
+    searchCriterions.push(this.publicationStateSearchCriterion);
+    searchCriterions.push(new Parenthesis(PARENTHESIS_TYPE.CLOSING_PARENTHESIS));
+
+
+    searchCriterions.push(new LogicalOperator("and"));
+    searchCriterions.push(new Parenthesis(PARENTHESIS_TYPE.OPENING_PARENTHESIS));
+    searchCriterions.push(this.fileSectionSearchCriterion);
+    searchCriterions.push(new Parenthesis(PARENTHESIS_TYPE.CLOSING_PARENTHESIS));
+
+    searchCriterions.push(new LogicalOperator("and"));
+    searchCriterions.push(new Parenthesis(PARENTHESIS_TYPE.OPENING_PARENTHESIS));
+    searchCriterions.push(this.locatorSectionSearchCriterion);
+    searchCriterions.push(new Parenthesis(PARENTHESIS_TYPE.CLOSING_PARENTHESIS));
+
+
+
+
+    return searchCriterions
+  }
+
   search() {
-    const searchCriterions = this.fields.controls.map(fc => fc as SearchCriterion)
-    this.scListToElasticSearchQuery(searchCriterions)
-      .subscribe(query =>
+
+    this.scListToElasticSearchQuery(this.prepareQuery())
+      .subscribe(query =>{
+        this.saveSearchInSession();
         this.router.navigateByUrl('/list', {onSameUrlNavigation: 'reload', state: {query}})
-      );
+  });
 
   }
 
@@ -515,7 +594,37 @@ export class ItemSearchAdvancedComponent {
   }
 
   show_query() {
-    const searchCriterions = this.fields.controls.map(fc => fc as SearchCriterion)
-    this.scListToElasticSearchQuery(searchCriterions).subscribe(query => this.query = query);
+    this.scListToElasticSearchQuery(this.prepareQuery()).subscribe(query => this.query = query);
+  }
+
+  saveSearchInSession() {
+    this.searchHistory.unshift(new SavedSearch("search", this.searchForm.value));
+    if(this.searchHistory.length>10) {
+      this.searchHistory.splice(10, this.searchHistory.length-10);
+    }
+    localStorage.setItem("pure-advanced-search-history", JSON.stringify(this.searchHistory));
+  }
+
+
+  applySearchFromHistory(value:string) {
+    if(value) {
+      this.parseFormJson(this.searchHistory[Number(value)].searchForm);
+    }
+    else this.reset();
+
+  }
+}
+
+export class SavedSearch {
+
+
+  date: number = Date.now();
+  title: string;
+  searchForm: any;
+
+  constructor(title:string, searchFormContent:any) {
+    this.title = title;
+    this.searchForm= searchFormContent;
+
   }
 }
