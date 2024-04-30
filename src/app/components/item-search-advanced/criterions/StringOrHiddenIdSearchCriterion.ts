@@ -45,7 +45,7 @@ export abstract class StringOrHiddenIdSearchCriterion extends SearchCriterion {
   override toElasticSearchQuery(): Observable<Object | undefined> {
     const text: string = this.content.get('text')?.value;
     const hidden: string = this.content.get('hidden')?.value;
-    if (hidden && hidden.trim()!=="") {
+    if (hidden && hidden.trim() !== "") {
       return of(baseElasticSearchQueryBuilder(this.getElasticSearchFieldForHiddenId(), hidden));
     } else {
       return of(baseElasticSearchQueryBuilder(this.getElasticSearchFieldForSearchString(), text));
@@ -53,10 +53,9 @@ export abstract class StringOrHiddenIdSearchCriterion extends SearchCriterion {
   }
 
 
-
   protected abstract getElasticSearchFieldForHiddenId(): string[];
 
-  protected abstract  getElasticSearchFieldForSearchString(): string[];
+  protected abstract getElasticSearchFieldForSearchString(): string[];
 }
 
 export class PersonSearchCriterion extends StringOrHiddenIdSearchCriterion {
@@ -65,6 +64,7 @@ export class PersonSearchCriterion extends StringOrHiddenIdSearchCriterion {
     super("person");
     this.content.addControl("role", new FormControl(""));
   }
+
   protected getElasticSearchFieldForHiddenId(): string[] {
     return ["metadata.creators.person.identifier.id"];
   }
@@ -84,7 +84,7 @@ export class PersonSearchCriterion extends StringOrHiddenIdSearchCriterion {
     const role: string = this.content.get('role')?.value;
 
     const multiMatchForSearchString = {
-      multi_match : {
+      multi_match: {
         query: text,
         fields: this.getElasticSearchFieldForSearchString(),
         operator: "and",
@@ -99,14 +99,14 @@ export class PersonSearchCriterion extends StringOrHiddenIdSearchCriterion {
       } else {
         return of(multiMatchForSearchString);
         //return MultiMatchQuery.of(m -> m.query(this.getSearchString()).fields(Arrays.asList(this.getElasticSearchFieldForSearchString()))
-          //.type(TextQueryType.CrossFields).operator(Operator.And))._toQuery();
+        //.type(TextQueryType.CrossFields).operator(Operator.And))._toQuery();
       }
 
     } else {
 
       return of({
         nested: {
-          path:"metadata.creators",
+          path: "metadata.creators",
           query: {
             bool: {
               must: [
@@ -153,7 +153,11 @@ export class OrganizationSearchCriterion extends StringOrHiddenIdSearchCriterion
     if (hidden && hidden.trim() && this.content.get("includePredecessorsAndSuccessors")?.value) {
       let idSources: Observable<string | string[]>[] = [of(hidden)];
 
-      idSources.push(OrganizationsService.instance.getOrganization(hidden).pipe(map(ou => ou.predecessorAffiliations?.map(pa => pa.objectId))).pipe(tap(obj => console.log(obj))));
+      idSources.push(OrganizationsService.instance.getOrganization(hidden)
+        .pipe(
+          map(ou => ou.predecessorAffiliations?.map(pa => pa.objectId)))
+        .pipe(
+          tap(obj => console.log(obj))));
       idSources.push(OrganizationsService.instance.getSuccessors(hidden).pipe(map(sr => sr.records?.map(rec => rec.data.objectId))));
 
       return forkJoin(idSources)
@@ -172,6 +176,7 @@ export class CreatedBySearchCriterion extends StringOrHiddenIdSearchCriterion {
   constructor() {
     super("createdBy");
   }
+
   protected getElasticSearchFieldForHiddenId(): string[] {
     return ["createdByRO.objectId"];
   }
@@ -186,6 +191,7 @@ export class ModifiedBySearchCriterion extends StringOrHiddenIdSearchCriterion {
   constructor() {
     super("modifiedBy");
   }
+
   protected getElasticSearchFieldForHiddenId(): string[] {
     return ["version.modifiedByRO.objectId"];
   }

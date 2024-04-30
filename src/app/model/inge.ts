@@ -332,6 +332,11 @@ export interface FundingProgramVO extends ValueObject, Cloneable {
     identifiers: IdentifierVO[];
 }
 
+export interface SavedSearchVO extends BasicDbRO, Cloneable {
+
+  searchForm: any;
+}
+
 export enum AffiliationState {
     CLOSED = "CLOSED",
     OPENED = "OPENED",

@@ -1,20 +1,50 @@
-@if(searchHistory.length) {
-<div class="container mb-4">
-  <div class="row">
-    Search history:
-    <div class="col">
-      <select class="form-select" (change)="applySearchFromHistory(searchHistorySelect.value)" #searchHistorySelect>
-        <option value="">
-          -
-        </option>
-        @for (savedSearch of searchHistory; track savedSearch; let i = $index;) {
-          <option [value]="i">
-            {{ savedSearch.title + ' '+ (savedSearch.date | date:'yyyy-MM-dd HH:mm:ss')}}
-          </option>
+@if(aaService.isLoggedIn) {
+
+  <script>
+
+  </script>
+<div class="mb-4">
+  <div class="dropdown">
+  <button class="btn btn-secondary btn-lg dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" data-bs-auto-close="outside" >
+    My Saved Searches
+  </button>
+  <div class="dropdown-menu" >
+        @for (savedSearch of savedSearches; track savedSearch; let i = $index;) {
+          <div class="row mb-2">
+           <div class="col-6">
+            <button class="btn btn-link" (click)="applySearchFromHistory(i)">{{ savedSearch.name + ' '}}</button>
+          </div>
+            <div class="col-2">
+              {{savedSearch.creationDate | date:'yyyy-MM-dd HH:mm:ss'}}
+            </div>
+            <div class="col-2">
+              <button class="btn btn-sm btn-secondary" (click)="copySavedSearchLink(savedSearch.objectId)">copy link</button>
+            </div>
+            <div class="col-2">
+              <button class="btn btn-sm btn-danger" (click)="deleteSavedSearch(i)">Delete</button>
+
+            </div>
+          </div>
+
         }
-      </select>
+    <hr class="dropdown-divider">
+    <form >
+    <div class="row">
+
+        <div class="col-9">
+          <label for="searchName" class="form-label">Name</label>
+          <input type=text class="form-control" id="searchName" [formControl]="savedSearchNameForm">
+        </div>
+        <div class="col-3">
+          <button type="button" class="btn btn-primary btn-sm" [disabled]="savedSearchNameForm.invalid || searchForm.invalid" (click)="saveCurrentSearchForm()">Save current</button>
+        </div>
+
+
     </div>
-  </div>
+    </form>
+    </div>
+
+</div>
 </div>
 }
 <div class="accordion">
@@ -356,6 +386,10 @@
       <button type="button" class="btn btn-sm btn-outline-primary"
               [disabled]="searchForm.invalid || flexibleFields.controls.length === 0" (click)="search()">
         search
+      </button>
+      <button type="button" class="btn btn-sm btn-outline-danger"
+              [disabled]="searchForm.invalid || flexibleFields.controls.length === 0" (click)="reset()">
+        reset
       </button>
       <button type="button" class="btn btn-sm btn-outline-info"
               [disabled]="searchForm.invalid || flexibleFields.controls.length === 0" (click)="show_form()">

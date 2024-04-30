@@ -1,6 +1,14 @@
 import {Component, ViewEncapsulation} from '@angular/core';
-import {FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {Router} from "@angular/router";
+import {
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators
+} from "@angular/forms";
+import {ActivatedRoute, DefaultUrlSerializer, Router, UrlSerializer} from "@angular/router";
 
 import {DatePipe, JsonPipe, NgFor, NgIf} from "@angular/common";
 
@@ -8,7 +16,7 @@ import {SearchCriterion} from "./criterions/SearchCriterion";
 import {LogicalOperator} from "./criterions/operators/LogicalOperator";
 import {DisplayType, searchTypes, searchTypesI} from "./criterions/search_config";
 import {Parenthesis, PARENTHESIS_TYPE} from "./criterions/operators/Parenthesis";
-import {CreatorRole, IdType} from "../../model/inge";
+import {CreatorRole, IdType, SavedSearchVO} from "../../model/inge";
 import {TitleSearchCriterion} from "./criterions/StandardSearchCriterion";
 import {OrganizationSearchCriterion, PersonSearchCriterion} from "./criterions/StringOrHiddenIdSearchCriterion";
 import {DATE_SEARCH_TYPES, DateSearchCriterion} from "./criterions/DateSearchCriterion";
@@ -22,6 +30,10 @@ import {GenreListSearchCriterion} from "./criterions/GenreListSearchCriterion";
 import {PublicationStateSearchCriterion} from "./criterions/PublicationStateSearchCriterion";
 import {COMPONENT_SEARCH_TYPES, FileSectionSearchCriterion} from "./criterions/FileSectionSearchCriterion";
 import {FileSectionComponent} from "./file-section-component/file-section-component.component";
+import {SavedSearchService} from "../../services/saved-search.service";
+import {AaService} from "../../services/aa.service";
+import {Clipboard} from "@angular/cdk/clipboard";
+
 //import formJson from './formJson.json';
 
 
@@ -53,23 +65,32 @@ export class ItemSearchAdvancedComponent {
   fileSectionSearchCriterion = new FileSectionSearchCriterion(COMPONENT_SEARCH_TYPES.FILES);
   locatorSectionSearchCriterion = new FileSectionSearchCriterion(COMPONENT_SEARCH_TYPES.LOCATORS);
 
-  searchHistory: SavedSearch[] = [];
+  savedSearches: SavedSearchVO[] = [];
+  savedSearchNameForm: FormControl = new FormControl("", Validators.required);
 
   constructor(
     private router: Router,
-    private fb: FormBuilder
+    private route: ActivatedRoute,
+    private urlSerializer: UrlSerializer,
+    private fb: FormBuilder,
+    protected aaService: AaService,
+    private savedSearchService: SavedSearchService,
+    private clipboard: Clipboard
   ) {
   }
 
   ngOnInit() {
-    this.reset()
-    //this.parseFormJson(formJson);
-
-    let searchHistory = localStorage.getItem("pure-advanced-search-history");
-    if (searchHistory) {
-      let json = JSON.parse(searchHistory) as SavedSearch[];
-      this.searchHistory = json;
+    this.reset();
+    const searchId = this.route.snapshot.queryParamMap.get("searchId");
+    if (searchId) {
+      this.savedSearchService.getSearch(searchId).subscribe(savedSearch => {
+        this.parseFormJson(savedSearch.searchForm);
+      })
     }
+
+
+    this.updateSavedSearches();
+
 
   }
 
@@ -102,7 +123,7 @@ export class ItemSearchAdvancedComponent {
 
     for (let [key, value] of Object.entries(formJson)) {
 
-      if(key === "flexibleFields") {
+      if (key === "flexibleFields") {
         //Clear old fields
         this.flexibleFields.clear();
         //Recreate flexible search criterions and patch form values
@@ -111,14 +132,12 @@ export class ItemSearchAdvancedComponent {
           newSearchCriterion.patchValue(currentField);
           this.flexibleFields.push(newSearchCriterion);
         }
-      }
-      else {
+      } else {
         //Just patch the values for genre list, file section etc.
         this.searchForm.patchValue({[key]: value});
       }
     }
   }
-
 
 
   changeType(index: number, newType: string) {
@@ -576,18 +595,15 @@ export class ItemSearchAdvancedComponent {
     searchCriterions.push(new Parenthesis(PARENTHESIS_TYPE.CLOSING_PARENTHESIS));
 
 
-
-
     return searchCriterions
   }
 
   search() {
 
     this.scListToElasticSearchQuery(this.prepareQuery())
-      .subscribe(query =>{
-        this.saveSearchInSession();
+      .subscribe(query => {
         this.router.navigateByUrl('/list', {onSameUrlNavigation: 'reload', state: {query}})
-  });
+      });
 
   }
 
@@ -599,34 +615,67 @@ export class ItemSearchAdvancedComponent {
     this.scListToElasticSearchQuery(this.prepareQuery()).subscribe(query => this.query = query);
   }
 
-  saveSearchInSession() {
-    this.searchHistory.unshift(new SavedSearch("search", this.searchForm.value));
-    if(this.searchHistory.length>10) {
-      this.searchHistory.splice(10, this.searchHistory.length-10);
+  saveCurrentSearchForm() {
+
+    const savedSearch: SavedSearchVO = {
+      objectId: "",
+      name: this.savedSearchNameForm.value,
+      searchForm: this.searchForm.value
     }
-    localStorage.setItem("pure-advanced-search-history", JSON.stringify(this.searchHistory));
+    this.savedSearchService.createSearch(savedSearch, this.aaService.token == null ? "" : this.aaService.token).subscribe(search => {
+      console.log("Successfully saved search!");
+
+      this.updateSavedSearches();
+      this.savedSearchNameForm.setValue("");
+
+    });
+
+
   }
 
 
-  applySearchFromHistory(value:string) {
-    if(value) {
-      this.parseFormJson(this.searchHistory[Number(value)].searchForm);
-    }
-    else this.reset();
+  applySearchFromHistory(value: number) {
+    this.parseFormJson(this.savedSearches[value].searchForm);
 
+  }
+
+  deleteSavedSearch(value: number) {
+    this.savedSearchService.deleteSearch(this.savedSearches[value].objectId, this.aaService.token == null ? "" : this.aaService.token).subscribe(search => {
+      console.log("Successfully deleted search!");
+      this.updateSavedSearches();
+
+    });
+  }
+
+  private updateSavedSearches() {
+    if (this.aaService.isLoggedIn) {
+      this.savedSearchService.getAllSearch(this.aaService.token == null ? "" : this.aaService.token).subscribe(savedSearches => this.savedSearches = savedSearches)
+    }
+  }
+
+  /*
+  copySavedSearchLink(value: number) {
+
+    const tree = this.router.createUrlTree([], {
+      relativeTo: this.route,
+      queryParams: {"searchId": this.savedSearches[value].objectId}},
+      );
+    const url = this.urlSerializer.serialize(tree);
+    console.log(url)
+    console.log(this.route.snapshot.url)
+    this.clipboard.copy(this.urlSerializer.serialize(tree));
+
+  }
+
+   */
+
+  copySavedSearchLink(savedSearchId: string) {
+    const urlString = window.location.toString();
+    const url = new URL(urlString);
+    url.searchParams.set('searchId', savedSearchId);
+    this.clipboard.copy(url.toString());
+    console.log(`${url}`);
   }
 }
 
-export class SavedSearch {
 
-
-  date: number = Date.now();
-  title: string;
-  searchForm: any;
-
-  constructor(title:string, searchFormContent:any) {
-    this.title = title;
-    this.searchForm= searchFormContent;
-
-  }
-}
