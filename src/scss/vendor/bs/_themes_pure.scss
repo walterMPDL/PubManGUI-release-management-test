@@ -228,6 +228,11 @@
                 background-color: #{$body-tertiary-color-dark};
             }
 
+            .accordion-button {
+                color: var(--accent-text-color);
+                background-color: #{$mpg-blue};
+            }
+
             .accordion-body {
                 background: #{$body-secondary-bg-dark};
 
