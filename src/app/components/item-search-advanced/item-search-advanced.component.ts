@@ -1,4 +1,3 @@
-import {Component, ViewEncapsulation} from '@angular/core';
 import {
   FormArray,
   FormBuilder,
@@ -9,9 +8,7 @@ import {
   Validators
 } from "@angular/forms";
 import {ActivatedRoute, Router, UrlSerializer} from "@angular/router";
-
 import {DatePipe, JsonPipe, NgFor, NgIf} from "@angular/common";
-
 import {SearchCriterion} from "./criterions/SearchCriterion";
 import {LogicalOperator} from "./criterions/operators/LogicalOperator";
 import {DisplayType, searchTypes, searchTypesI} from "./criterions/search_config";
@@ -31,18 +28,16 @@ import {PublicationStateSearchCriterion} from "./criterions/PublicationStateSear
 import {COMPONENT_SEARCH_TYPES, FileSectionSearchCriterion} from "./criterions/FileSectionSearchCriterion";
 import {FileSectionComponent} from "./file-section-component/file-section-component.component";
 import {AaService} from "../../services/aa.service";
-import {Clipboard, ClipboardModule} from "@angular/cdk/clipboard";
+import {Clipboard} from "@angular/cdk/clipboard";
 import {ItemStateListSearchCriterion} from "./criterions/ItemStateListSearchCriterion";
 import {SavedSearchService} from "../../services/pubman-rest-client/saved-search.service";
-
-//import formJson from './formJson.json';
-
+import {Component, ElementRef, ViewChild, ViewEncapsulation} from "@angular/core";
 
 @Component({
   selector: 'pure-item-search-advanced',
   standalone: true,
   imports: [
-     FormsModule, ReactiveFormsModule, NgFor, NgIf, JsonPipe, OptionDirective, PureOusDirective, SelectorComponent, OuAutosuggestComponent, PersonAutosuggestComponent, FileSectionComponent, DatePipe
+    FormsModule, ReactiveFormsModule, NgFor, NgIf, JsonPipe, OptionDirective, PureOusDirective, SelectorComponent, OuAutosuggestComponent, PersonAutosuggestComponent, FileSectionComponent, DatePipe
   ],
   templateUrl: './item-search-advanced.component.html',
   styleUrl: './item-search-advanced.component.scss',
@@ -51,6 +46,8 @@ import {SavedSearchService} from "../../services/pubman-rest-client/saved-search
 export class ItemSearchAdvancedComponent {
 
   searchForm!: FormGroup;
+
+  @ViewChild('myElement', {read: ElementRef}) myElementRef!: ElementRef;
 
   result: any;
   query: any;
@@ -90,8 +87,6 @@ export class ItemSearchAdvancedComponent {
       })
     }
     this.updateSavedSearchList();
-
-
   }
 
 
@@ -172,6 +167,32 @@ export class ItemSearchAdvancedComponent {
     //return this.genreListFormGroup as FormGroup;
   }
 
+  getAnzGenreCols(): number {
+    console.log('akt. Breite des Elements:', this.myElementRef !== undefined ? this.myElementRef.nativeElement.clientWidth : 'undefined');
+    console.log('akt. Breite des Elements mit Rand:', this.myElementRef !== undefined ? this.myElementRef.nativeElement.offsetWidth : 'undefined');
+    return this.myElementRef !== undefined && this.myElementRef.nativeElement.clientWidth < 718 ? 1 : this.myElementRef !== undefined && this.myElementRef.nativeElement.clientWidth < 940 ? 2 : 3;
+  }
+
+  getAnzGenreRows(): number {
+    return Math.ceil((this.genreListSearchCriterion.genreOptions.length - 1) / this.getAnzGenreCols()); // ohne Thesis
+
+  }
+
+  getRows(): number[] {
+    let rows: number[] = [];
+
+    rows = Array(this.getAnzGenreRows()).fill(null).map((x, i) => i);
+
+    return rows;
+  }
+
+  getCols(): number[] {
+    let cols: number[] = [];
+
+    cols = Array(this.getAnzGenreCols()).fill(null).map((x, i) => i);
+
+    return cols;
+  }
 
   addSearchCriterion(index: number, searchCriterion: SearchCriterion) {
 
