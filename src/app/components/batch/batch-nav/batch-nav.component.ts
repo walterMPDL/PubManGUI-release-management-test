@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, LowerCasePipe } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
@@ -18,8 +18,9 @@ interface NavOption {
 export class BatchNavComponent {
   
   public navList: NavOption[] = [
-    { route: '/batch/datasets', text: 'Datasets' },
-    { route: '/batch/actions', text: 'Actions' },
-    { route: '/batch/logs', text: 'Logs' },
+    { route: '/batch/datasets', text: 'datasets' },
+    { route: '/batch/actions', text: 'actions' },
+    { route: '/batch/logs', text: 'logs' },
   ];
+
 }

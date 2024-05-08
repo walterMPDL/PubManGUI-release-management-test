@@ -1,9 +1,9 @@
 <div class="batch-nav">
     <div class="position-absolute start-50 translate-middle nav-bottom-10">
-        <ul class="nav justify-content-center">
+        <ul class="nav p-3 d-flex justify-content-around">
             <li *ngFor="let option of navList" [routerLink]="[ option.route ]" routerLinkActive="active"
-                class="nav-item btn btn-outline-secondary rounded-pill border-5 m-2 shadow-lg fw-bold"
-                data-bs-toggle="button">{{ option.text }}
+                class="nav-item fw-bold"
+                data-bs-toggle="button">{{ option.text | titlecase}} 
             </li>
         </ul>
     </div>

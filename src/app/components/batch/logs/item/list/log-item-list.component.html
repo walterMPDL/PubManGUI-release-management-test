@@ -4,12 +4,12 @@
 
       <div class="row">
         <div class="col-sm-6 d-flex justify-content-between py-4">
-          <button class="btn btn-outline-secondary h-75 d-inline-block" i18n="@@batch.log.details.fill.all" 
+          <button class="btn btn-outline-secondary h-75 d-inline-block" i18n="@@batch.logs.details.fill.all" 
             (click)="fillWithAll()">
             Fill batch with all items from the log
           </button>
           <div *ngIf="failed > 0">
-            <button class="btn btn-outline-secondary h-75 d-inline-block" i18n="@@batch.log.details.fill.errors"
+            <button class="btn btn-outline-secondary h-75 d-inline-block" i18n="@@batch.logs.details.fill.errors"
               (click)="fillWithFailed()">
               Fill batch with errors only
             </button>
@@ -57,12 +57,12 @@
         <div class="col-sm-12 d-flex justify-content-between py-4">
           <h4>{{ method }}</h4>
           <div>
-            <span i18n="@@batch.log.started.on">Started on</span><span> {{ started | date: 'short' }}</span>
+            <span i18n="@@batch.logs.started.on">Started on</span><span> {{ started | date: 'short' }}</span>
           </div>
           <div>
-            <span *ngIf="collectionSize - failed > 0">{{ collectionSize - failed }} <span i18n="@@batch.log.details.succeded">
+            <span *ngIf="collectionSize - failed > 0">{{ collectionSize - failed }} <span i18n="@@batch.logs.details.succeded">
                 successful</span></span>
-            <span *ngIf="failed > 0" class="text-danger fw-bold ms-3">{{ failed }} <span i18n="@@batch.log.details.failed">
+            <span *ngIf="failed > 0" class="text-danger fw-bold ms-3">{{ failed }} <span i18n="@@batch.logs.details.failed">
                 failed</span></span>
           </div>
           <button class="btn pt-0" (click)="goBack()">
@@ -108,13 +108,13 @@
           <form [formGroup]="filterForm">
             <div class="form-check" *ngIf="(collectionSize - failed) > 0">
               <input class="form-check-input" type="checkbox" id="success" formControlName="success" checked>
-              <label class="form-check-label" for="success" i18n="@@batch.log.details.filter.succeded">
+              <label class="form-check-label" for="success" i18n="@@batch.logs.details.filter.succeded">
                 Show successful items
               </label>
             </div>
             <div class="form-check" *ngIf="failed > 0">
               <input class="form-check-input" type="checkbox" value="" id="faile" formControlName="fail" checked>
-              <label class="form-check-label" for="fail" i18n="@@batch.log.details.filter.failed">
+              <label class="form-check-label" for="fail" i18n="@@batch.logs.details.filter.failed">
                 Show failed items
               </label>
             </div>
