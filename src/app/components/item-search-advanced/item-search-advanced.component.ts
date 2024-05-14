@@ -31,7 +31,7 @@ import {AaService} from "../../services/aa.service";
 import {Clipboard} from "@angular/cdk/clipboard";
 import {ItemStateListSearchCriterion} from "./criterions/ItemStateListSearchCriterion";
 import {SavedSearchService} from "../../services/pubman-rest-client/saved-search.service";
-import {Component, ElementRef, ViewChild, ViewEncapsulation} from "@angular/core";
+import {Component, ElementRef, ViewChild, ViewEncapsulation, HostListener} from "@angular/core";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 import {ContextListSearchCriterion} from "./criterions/ContextListSearchCriterion";
 
@@ -48,8 +48,6 @@ import {ContextListSearchCriterion} from "./criterions/ContextListSearchCriterio
 export class ItemSearchAdvancedComponent {
 
   searchForm!: FormGroup;
-
-  @ViewChild('myElement', {read: ElementRef}) myElementRef!: ElementRef;
 
   result: any;
   query: any;
@@ -72,19 +70,23 @@ export class ItemSearchAdvancedComponent {
 
   private principalSubscription?: Subscription;
 
+  anzGenreCols: number = 0;
+  anzGenreRows: number = 0;
+  genreRows: number[] = [];
+  genreCols: number[] = [];
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private urlSerializer: UrlSerializer,
     private fb: FormBuilder,
     protected aaService: AaService,
     private savedSearchService: SavedSearchService,
     private clipboard: Clipboard
-  ) {
+) {
+    this.initializeGenres();
   }
 
   ngOnInit() {
-    console.log("Initializing advanced search");
     this.reset();
     const searchId = this.route.snapshot.queryParamMap.get("searchId");
     if (searchId) {
@@ -105,6 +107,24 @@ export class ItemSearchAdvancedComponent {
     this.principalSubscription?.unsubscribe();
   }
 
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+//    console.log('Fenstergröße geändert', event.target.innerWidth);
+    this.initializeGenres();
+  }
+
+  initializeGenres() {
+    this.anzGenreCols = 3;
+    if (window.innerWidth < 768) {
+      this.anzGenreCols = 1;
+    } else if (window.innerWidth < 1400) {
+      this.anzGenreCols = 2;
+    }
+
+    this.anzGenreRows = Math.ceil((this.genreListSearchCriterion.genreOptions.length - 1) / this.anzGenreCols); // ohne Thesis
+    this.genreRows = Array(this.anzGenreRows).fill(null).map((x, i) => i);
+    this.genreCols = Array(this.anzGenreCols).fill(null).map((x, i) => i);
+  }
 
   reset() {
     this.itemStateListSearchCriterion = new ItemStateListSearchCriterion();
@@ -186,32 +206,7 @@ export class ItemSearchAdvancedComponent {
     //return this.genreListFormGroup as FormGroup;
   }
 
-  getAnzGenreCols(): number {
-    //console.log('akt. Breite des Elements:', this.myElementRef !== undefined ? this.myElementRef.nativeElement.clientWidth : 'undefined');
-    //console.log('akt. Breite des Elements mit Rand:', this.myElementRef !== undefined ? this.myElementRef.nativeElement.offsetWidth : 'undefined');
-    return this.myElementRef !== undefined && this.myElementRef.nativeElement.clientWidth < 718 ? 1 : this.myElementRef !== undefined && this.myElementRef.nativeElement.clientWidth < 940 ? 2 : 3;
-  }
 
-  getAnzGenreRows(): number {
-    return Math.ceil((this.genreListSearchCriterion.genreOptions.length - 1) / this.getAnzGenreCols()); // ohne Thesis
-
-  }
-
-  getRows(): number[] {
-    let rows: number[] = [];
-
-    rows = Array(this.getAnzGenreRows()).fill(null).map((x, i) => i);
-
-    return rows;
-  }
-
-  getCols(): number[] {
-    let cols: number[] = [];
-
-    cols = Array(this.getAnzGenreCols()).fill(null).map((x, i) => i);
-
-    return cols;
-  }
 
   addSearchCriterion(index: number, searchCriterion: SearchCriterion) {
 
