@@ -69,8 +69,15 @@ export class DatasetsComponent implements OnInit {
       throwError(() => msg);
     };
 
-    this.items(this.bs.items);
-
+    if (!this.bs.items || this.bs.items.length === 0) {
+      const msg = `Please, select items to be processed!\n`;
+      this.message.error(msg);
+      this.router.navigate(['list'])
+      //throwError(() => msg);
+    } else {
+      this.items(this.bs.items);
+    }
+    
     this.router.events.pipe(
       filter((event) => event instanceof NavigationEnd),
       // required to work immediately.

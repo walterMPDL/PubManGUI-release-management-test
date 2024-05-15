@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { throwError } from 'rxjs';
+import { Router } from '@angular/router';
 import { MessageService } from 'src/app/shared/services/message.service';
 
 import { BatchNavComponent } from '../batch-nav/batch-nav.component';
@@ -33,7 +34,11 @@ export class ActionsComponent {
 
   private isProcessing: boolean = false;
 
-  constructor(private bs: BatchService, private message: MessageService) { }
+  constructor(
+    private bs: BatchService, 
+    private message: MessageService,
+    private router: Router
+  ) { }
 
   ngAfterViewInit() {
     this.bs.getBatchProcessUserLock().subscribe({
@@ -47,10 +52,11 @@ export class ActionsComponent {
       throwError(() => msg);
     };
 
-    if (!this.bs.items) {
+    if (!this.bs.items || this.bs.items.length === 0) {
       const msg = `Please, select items to be processed!\n`;
       this.message.error(msg);
-      throwError(() => msg);
+      this.router.navigate(['list'])
+      //throwError(() => msg);
     }
   }
 }

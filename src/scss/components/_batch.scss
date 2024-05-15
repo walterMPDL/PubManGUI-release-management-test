@@ -24,9 +24,7 @@
     }
 
     .datasets {
-
         #topnav {
-
             nav:nth-child(1),
             .nav-link:nth-of-type(2n),
             .nav-link:nth-of-type(3n),
@@ -37,15 +35,17 @@
             }
         }
 
-        pure-item-list {
-            
+        pure-item-list {       
             .row:nth-of-type(2n) {
-
                 .col-lg-3 {
                     display: none !important;
                 }
 
             }
+        }
+
+        .top_nav_pos {
+            z-index: 1000;
         }
     }
 
@@ -123,7 +123,7 @@
             }
 
             tbody {
-                background-color: var(--accent-color-contrast);
+                background-color: #{$body-tertiary-bg};
             }
         }
     }
