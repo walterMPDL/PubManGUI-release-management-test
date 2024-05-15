@@ -1,4 +1,3 @@
-import {Component, ViewEncapsulation} from '@angular/core';
 import {
   FormArray,
   FormBuilder,
@@ -8,10 +7,8 @@ import {
   ReactiveFormsModule,
   Validators
 } from "@angular/forms";
-import {ActivatedRoute, Router, UrlSerializer} from "@angular/router";
-
-import {DatePipe, JsonPipe, NgFor, NgIf} from "@angular/common";
-
+import {ActivatedRoute, Router} from "@angular/router";
+import {DatePipe, JsonPipe, KeyValuePipe, NgFor, NgIf} from "@angular/common";
 import {SearchCriterion} from "./criterions/SearchCriterion";
 import {LogicalOperator} from "./criterions/operators/LogicalOperator";
 import {DisplayType, searchTypes, searchTypesI} from "./criterions/search_config";
@@ -20,7 +17,7 @@ import {CreatorRole, IdType, SavedSearchVO} from "../../model/inge";
 import {TitleSearchCriterion} from "./criterions/StandardSearchCriterion";
 import {OrganizationSearchCriterion, PersonSearchCriterion} from "./criterions/StringOrHiddenIdSearchCriterion";
 import {DATE_SEARCH_TYPES, DateSearchCriterion} from "./criterions/DateSearchCriterion";
-import {forkJoin, map, tap} from "rxjs";
+import {forkJoin, map, Subscription, tap} from "rxjs";
 import {OptionDirective} from "../../shared/components/selector/directives/option.directive";
 import {PureOusDirective} from "../../shared/components/selector/services/pure_ous/pure-ous.directive";
 import {SelectorComponent} from "../../shared/components/selector/selector.component";
@@ -31,18 +28,17 @@ import {PublicationStateSearchCriterion} from "./criterions/PublicationStateSear
 import {COMPONENT_SEARCH_TYPES, FileSectionSearchCriterion} from "./criterions/FileSectionSearchCriterion";
 import {FileSectionComponent} from "./file-section-component/file-section-component.component";
 import {AaService} from "../../services/aa.service";
-import {Clipboard, ClipboardModule} from "@angular/cdk/clipboard";
+import {Clipboard} from "@angular/cdk/clipboard";
 import {ItemStateListSearchCriterion} from "./criterions/ItemStateListSearchCriterion";
 import {SavedSearchService} from "../../services/pubman-rest-client/saved-search.service";
-
-//import formJson from './formJson.json';
-
+import {Component, HostListener, ViewEncapsulation} from "@angular/core";
+import {ContextListSearchCriterion} from "./criterions/ContextListSearchCriterion";
 
 @Component({
   selector: 'pure-item-search-advanced',
   standalone: true,
   imports: [
-     FormsModule, ReactiveFormsModule, NgFor, NgIf, JsonPipe, OptionDirective, PureOusDirective, SelectorComponent, OuAutosuggestComponent, PersonAutosuggestComponent, FileSectionComponent, DatePipe
+    FormsModule, ReactiveFormsModule, NgFor, NgIf, JsonPipe, OptionDirective, PureOusDirective, SelectorComponent, OuAutosuggestComponent, PersonAutosuggestComponent, FileSectionComponent, DatePipe, KeyValuePipe
   ],
   templateUrl: './item-search-advanced.component.html',
   styleUrl: './item-search-advanced.component.scss',
@@ -61,6 +57,7 @@ export class ItemSearchAdvancedComponent {
   possibleCriterionsForClosingParenthesisMap: SearchCriterion[] = []
   protected readonly DisplayType = DisplayType;
 
+  contextListSearchCriterion = new ContextListSearchCriterion();
   itemStateListSearchCriterion = new ItemStateListSearchCriterion();
   genreListSearchCriterion = new GenreListSearchCriterion();
   publicationStateSearchCriterion = new PublicationStateSearchCriterion();
@@ -70,15 +67,22 @@ export class ItemSearchAdvancedComponent {
   savedSearches: SavedSearchVO[] = [];
   savedSearchNameForm: FormControl = new FormControl("", Validators.required);
 
+  private principalSubscription?: Subscription;
+
+  anzGenreCols: number = 0;
+  anzGenreRows: number = 0;
+  genreRows: number[] = [];
+  genreCols: number[] = [];
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private urlSerializer: UrlSerializer,
     private fb: FormBuilder,
     protected aaService: AaService,
     private savedSearchService: SavedSearchService,
     private clipboard: Clipboard
-  ) {
+) {
+    this.initializeGenres();
   }
 
   ngOnInit() {
@@ -89,11 +93,37 @@ export class ItemSearchAdvancedComponent {
         this.parseFormJson(savedSearch.searchForm);
       })
     }
-    this.updateSavedSearchList();
-
+    this.principalSubscription = this.aaService.principal.subscribe(p =>
+    {
+      this.updateSavedSearchList()
+    })
+    //this.updateSavedSearchList();
 
   }
 
+  ngOnDestroy() {
+    console.log("Destroying advanced search");
+    this.principalSubscription?.unsubscribe();
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+//    console.log('Fenstergröße geändert', event.target.innerWidth);
+    this.initializeGenres();
+  }
+
+  initializeGenres() {
+    this.anzGenreCols = 3;
+    if (window.innerWidth < 768) {
+      this.anzGenreCols = 1;
+    } else if (window.innerWidth < 1400) {
+      this.anzGenreCols = 2;
+    }
+
+    this.anzGenreRows = Math.ceil((this.genreListSearchCriterion.genreOptions.length - 1) / this.anzGenreCols); // ohne Thesis
+    this.genreRows = Array(this.anzGenreRows).fill(null).map((x, i) => i);
+    this.genreCols = Array(this.anzGenreCols).fill(null).map((x, i) => i);
+  }
 
   reset() {
     this.itemStateListSearchCriterion = new ItemStateListSearchCriterion();
@@ -101,9 +131,12 @@ export class ItemSearchAdvancedComponent {
     this.publicationStateSearchCriterion = new PublicationStateSearchCriterion();
     this.fileSectionSearchCriterion = new FileSectionSearchCriterion(COMPONENT_SEARCH_TYPES.FILES);
     this.locatorSectionSearchCriterion = new FileSectionSearchCriterion(COMPONENT_SEARCH_TYPES.LOCATORS);
+    this.contextListSearchCriterion = new ContextListSearchCriterion();
 
     this.searchForm = this.fb.group({
+
       flexibleFields: this.fb.array([]),
+      contexts: this.contextListSearchCriterion,
       itemStates: this.itemStateListSearchCriterion,
       genres: this.genreListSearchCriterion,
       publicationState: this.publicationStateSearchCriterion,
@@ -171,6 +204,7 @@ export class ItemSearchAdvancedComponent {
     return Object.keys((this.genreListSearchCriterion.get('content')?.get('genres') as FormGroup).controls);
     //return this.genreListFormGroup as FormGroup;
   }
+
 
 
   addSearchCriterion(index: number, searchCriterion: SearchCriterion) {
@@ -418,13 +452,13 @@ export class ItemSearchAdvancedComponent {
     }))
 
       //Set query in every search criterion object
-      .pipe(tap(queries => cleanedScList.forEach((sc, i) => {
-        //console.log("Transforming list to queries " + sc.type + " -- " + JSON.stringify(queries[i]));
-        sc.query = queries[i];
-      })))
-
-      //when everything is ready, create complete query
-      .pipe(map(data => {
+      .pipe(
+        tap(queries => cleanedScList.forEach((sc, i) => {
+          //console.log("Transforming list to queries " + sc.type + " -- " + JSON.stringify(queries[i]));
+          sc.query = queries[i];
+        })),
+        //when everything is ready, create complete query
+        map(data => {
             return this.cleanedScListToElasticSearchQuery(cleanedScList, data, undefined)
           }
         )
@@ -577,6 +611,10 @@ export class ItemSearchAdvancedComponent {
     searchCriterions.unshift(new Parenthesis(PARENTHESIS_TYPE.OPENING_PARENTHESIS));
     searchCriterions.push(new Parenthesis(PARENTHESIS_TYPE.CLOSING_PARENTHESIS));
 
+    searchCriterions.push(new LogicalOperator("and"));
+    searchCriterions.push(new Parenthesis(PARENTHESIS_TYPE.OPENING_PARENTHESIS));
+    searchCriterions.push(this.contextListSearchCriterion);
+    searchCriterions.push(new Parenthesis(PARENTHESIS_TYPE.CLOSING_PARENTHESIS));
 
     searchCriterions.push(new LogicalOperator("and"));
     searchCriterions.push(new Parenthesis(PARENTHESIS_TYPE.OPENING_PARENTHESIS));
@@ -656,8 +694,10 @@ export class ItemSearchAdvancedComponent {
     });
   }
 
+
+
   private updateSavedSearchList() {
-    if (this.aaService.isLoggedIn) {
+    if (this.aaService.principal.getValue().loggedIn) {
       this.savedSearchService.getAllSearch(this.aaService.token == null ? "" : this.aaService.token).subscribe(savedSearches => this.savedSearches = savedSearches)
     }
   }

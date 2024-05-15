@@ -1,21 +1,7 @@
 import {SearchCriterion} from "./SearchCriterion";
-import {FormControl, Validators} from "@angular/forms";
-import {baseElasticSearchQueryBuilder, buildDateRangeQuery} from "../../../shared/services/search-utils";
-import {inject} from "@angular/core";
-import {HttpClient} from "@angular/common/http";
-import {AffiliationDbVO} from "../../../model/inge";
-import {
-  catchError,
-  debounceTime, distinctUntilChanged,
-  firstValueFrom,
-  forkJoin,
-  lastValueFrom,
-  map,
-  Observable,
-  of,
-  OperatorFunction, switchMap,
-  tap
-} from "rxjs";
+import {FormControl} from "@angular/forms";
+import {baseElasticSearchQueryBuilder} from "../../../shared/services/search-utils";
+import {forkJoin, map, Observable, of} from "rxjs";
 import {OrganizationsService} from "../../../services/pubman-rest-client/organizations.service";
 
 
@@ -152,16 +138,24 @@ export class OrganizationSearchCriterion extends StringOrHiddenIdSearchCriterion
     if (hidden && hidden.trim() && this.content.get("includePredecessorsAndSuccessors")?.value) {
       let idSources: Observable<string | string[]>[] = [of(hidden)];
 
-      idSources.push(OrganizationsService.instance.retrieve(hidden)
-        .pipe(
-          map(ou => ou.predecessorAffiliations?.map(pa => pa.objectId)))
-        .pipe(
-          tap(obj => console.log(obj))));
-      idSources.push(OrganizationsService.instance.getSuccessors(hidden).pipe(map(sr => sr.records?.map(rec => rec.data.objectId))));
+      idSources.push(
+        OrganizationsService.instance.retrieve(hidden)
+          .pipe(
+            map(ou => ou.predecessorAffiliations?.map(pa => pa.objectId))
+          )
+      );
+      idSources.push(
+        OrganizationsService.instance.getSuccessors(hidden)
+          .pipe(
+            map(sr => sr.records?.map(rec => rec.data.objectId))
+          )
+      );
 
       return forkJoin(idSources)
-        .pipe(map(data => data.flat().filter(val => val)))
-        .pipe(map(ouIds => baseElasticSearchQueryBuilder(this.getElasticSearchFieldForHiddenId(), ouIds)));
+        .pipe(
+          map(data => data.flat().filter(val => val)),
+          map(ouIds => baseElasticSearchQueryBuilder(this.getElasticSearchFieldForHiddenId(), ouIds))
+        )
 
     } else {
       return super.toElasticSearchQuery();

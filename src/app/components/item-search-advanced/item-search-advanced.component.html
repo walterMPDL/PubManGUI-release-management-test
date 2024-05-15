@@ -280,34 +280,64 @@
 
 
 
-    <!--Item state -->
-    <div class="accordion-item border-0">
+    @if(aaService.isLoggedIn) {
+      <!--Contexts -->
+      <div class="accordion-item border-0">
 
-      <h2 class="accordion-header">
-        <button class="accordion-button rounded-0" type="button" data-bs-toggle="collapse"
-                data-bs-target="#accordionBodyPubStatusGroup" aria-expanded="true"
-                aria-controls="accordionBodyPubStatusGroup">
-          Item Status
-        </button>
-      </h2>
-      <div id="accordionBodyItemStateGroup" class="accordion-collapse collapse show">
-        <div class="accordion-body mt-3 mb-3">
+        <h2 class="accordion-header">
+          <button class="accordion-button rounded-0" type="button" data-bs-toggle="collapse"
+                  data-bs-target="#accordionBodyPubStatusGroup" aria-expanded="true"
+                  aria-controls="accordionBodyPubStatusGroup">
+            Contexts
+          </button>
+        </h2>
+        <div id="accordionBodyItemStateGroup" class="accordion-collapse collapse show">
+          <div class="accordion-body mt-3 mb-3">
 
 
-          <div class="row mb-3">
-            @for (pubState of itemStateListSearchCriterion.itemStateOptions; track pubState; let i = $index; ) {
-              <div class="col-md-6 col-xxl-4">
-                <div class="form-check">
-                  <input id="pubStateName{{i}}" class="form-check-input" type="checkbox"
-                         [formControl]="$any(itemStateListSearchCriterion.publicationStatesFormGroup).get(pubState)"/>
-                  <label class="form-check-label" for="pubStateName{{i}}">{{ pubState }}</label>
+            <div class="row mb-3">
+              @for (context of contextListSearchCriterion.contextOptions | keyvalue; track context; let i = $index; ) {
+                <div class="col-md-6 col-xxl-4">
+                  <div class="form-check">
+                    <input id="pubStateName{{i}}" class="form-check-input" type="checkbox"
+                           [formControl]="$any(contextListSearchCriterion.contextListFormGroup).get(context.key)"/>
+                    <label class="form-check-label" for="pubStateName{{i}}">{{ context.value.name }} ({{ context.value.objectId }})</label>
+                  </div>
                 </div>
-              </div>
-            }
+              }
+            </div>
           </div>
         </div>
       </div>
-    </div>
+
+      <!--Item state -->
+      <div class="accordion-item border-0">
+        <h2 class="accordion-header">
+          <button class="accordion-button rounded-0" type="button" data-bs-toggle="collapse"
+                  data-bs-target="#accordionBodyPubStatusGroup" aria-expanded="true"
+                  aria-controls="accordionBodyPubStatusGroup">
+            Item Status
+          </button>
+        </h2>
+        <div id="accordionBodyItemStateGroup" class="accordion-collapse collapse show">
+          <div class="accordion-body mt-3 mb-3">
+
+
+            <div class="row mb-3">
+              @for (pubState of itemStateListSearchCriterion.itemStateOptions; track pubState; let i = $index; ) {
+                <div class="col-md-6 col-xxl-4">
+                  <div class="form-check">
+                    <input id="pubStateName{{i}}" class="form-check-input" type="checkbox"
+                           [formControl]="$any(itemStateListSearchCriterion.publicationStatesFormGroup).get(pubState)"/>
+                    <label class="form-check-label" for="pubStateName{{i}}">{{ pubState }}</label>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    }
 
     <!--Genre -->
     <div class="accordion-item border-0">
@@ -331,7 +361,24 @@
               </div>
             </div>
           </div>
+
           <!--All genres except THESIS -->
+          <div class="row" *ngFor="let row of genreRows; let i = index">
+              <div class="col-md-6 col-xxl-4" *ngFor="let col of genreCols; let j = index">
+                @if (genreListSearchCriterion.genreOptions[(i + j * anzGenreRows)] != 'THESIS'){
+                    <div class="form-check">
+                        <input id="genreName{{(i + j * anzGenreRows)}}" class="form-check-input" type="checkbox"
+                               [formControl]="$any(genreListSearchCriterion.genreFormGroup).get(genreListSearchCriterion.genreOptions[(i + j * anzGenreRows)])"/>
+                        <label class="form-check-label" for="genreName{{(i + j * anzGenreCols)}}">{{ genreListSearchCriterion.genreOptions[(i + j * anzGenreRows)] }}</label>
+                      <!--<pre>{{anzGenreRows}},{{anzGenreCols}}  {{i}},{{j}} : {{ (i + j * anzGenreRows) }} : {{ genreListSearchCriterion.genreOptions[(i + j * anzGenreRows)] | json }}</pre>-->
+                    </div>
+                }
+              </div>
+          </div>
+
+          <!--
+          <div class="row mb-3">
+          </div>
           <div class="row mb-3">
             @for (currentGenre of genreListSearchCriterion.genreOptions; track currentGenre; let i = $index; ) {
               @if (currentGenre != 'THESIS'){
@@ -345,9 +392,10 @@
               }
             }
           </div>
+          -->
 
           <!--THESIS genre-->
-          <div class="row">
+          <div class="row mt-2">
               <div class="col-md-6 col-xxl-4">
                 <div class="form-check">
                   <input id="genreDegreeName" class="form-check-input" type="checkbox"
