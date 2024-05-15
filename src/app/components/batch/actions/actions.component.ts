@@ -32,7 +32,7 @@ import { BatchService } from '../services/batch.service';
 })
 export class ActionsComponent {
 
-  private isProcessing: boolean = false;
+  public isProcessing: boolean = true;
 
   constructor(
     private bs: BatchService, 
@@ -47,16 +47,21 @@ export class ActionsComponent {
     })
 
     if (this.isProcessing) {
-      const msg = `Please wait, a process is runnig!\n`;
-      this.message.error(msg);
-      throwError(() => msg);
+      this.message.error(`Please wait, a process is runnig!\n`);
+      this.message.dialog.afterAllClosed.subscribe(result => {
+        this.router.navigate(['batch/datasets'])
+      })
     };
 
-    if (!this.bs.items || this.bs.items.length === 0) {
-      const msg = `Please, select items to be processed!\n`;
-      this.message.error(msg);
-      this.router.navigate(['list'])
-      //throwError(() => msg);
+    if (!this.areItemsSelected()) {
+      this.message.error(`Please, select items to be processed!\n`);
+      this.message.dialog.afterAllClosed.subscribe(result => {
+        this.router.navigate(['list'])
+      })
     }
+  }
+
+  areItemsSelected(): boolean {
+    return this.bs.items && this.bs.items.length > 0;
   }
 }

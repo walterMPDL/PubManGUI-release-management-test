@@ -1,7 +1,7 @@
 <div class="batch">
-  <pure-batch-nav />
+  <pure-batch-nav *ngIf="areItemsSelected()"/>
 
-  <div class="datasets pt-4 mt-5">
+  <div *ngIf="areItemsSelected()" class="datasets pt-4 mt-5">
     <div class="mt-5 fs-6">
 
       <div class="row align-items-center top_nav_pos bg-body">
@@ -93,5 +93,4 @@
         </div>
       </div>
     </div>
-
-  </div>
+</div>

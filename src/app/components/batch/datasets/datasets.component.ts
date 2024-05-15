@@ -64,16 +64,14 @@ export class DatasetsComponent implements OnInit {
     })
 
     if (this.isProcessing) {
-      const msg = `Please wait, a process is runnig!\n`;
-      this.message.error(msg);
-      throwError(() => msg);
+      this.message.error(`Please wait, a process is runnig!\n`);
     };
 
-    if (!this.bs.items || this.bs.items.length === 0) {
-      const msg = `Please, select items to be processed!\n`;
-      this.message.error(msg);
-      this.router.navigate(['list'])
-      //throwError(() => msg);
+    if (!this.areItemsSelected()) {
+      this.message.error(`Please, select items to be processed!\n`);
+      this.message.dialog.afterAllClosed.subscribe(result => {
+        this.router.navigate(['list'])
+      })
     } else {
       this.items(this.bs.items);
     }
@@ -86,6 +84,10 @@ export class DatasetsComponent implements OnInit {
       this.items(this.bs.items);
     });
 
+  }
+
+  areItemsSelected(): boolean {
+    return this.bs.items && this.bs.items.length > 0;
   }
 
   items(itemList: string[]) {
@@ -142,6 +144,12 @@ export class DatasetsComponent implements OnInit {
     this.bs.removeFromBatchDatasets(this.bs.savedSelection);
     this.items(this.bs.items);
     sessionStorage.removeItem(this.bs.savedSelection);
+    if (this.bs.items.length === 0) {
+      this.message.error(`Please, select items to be processed!\n`);
+      this.message.dialog.afterAllClosed.subscribe(result => {
+        this.router.navigate(['list'])
+      })
+    }
   }
 
 }
