@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { throwError } from 'rxjs';
+import { Router } from '@angular/router';
 import { MessageService } from 'src/app/shared/services/message.service';
 
 import { BatchNavComponent } from '../batch-nav/batch-nav.component';
@@ -31,9 +32,13 @@ import { BatchService } from '../services/batch.service';
 })
 export class ActionsComponent {
 
-  private isProcessing: boolean = false;
+  public isProcessing: boolean = false;
 
-  constructor(private bs: BatchService, private message: MessageService) { }
+  constructor(
+    private bs: BatchService, 
+    private message: MessageService,
+    private router: Router
+  ) { }
 
   ngAfterViewInit() {
     this.bs.getBatchProcessUserLock().subscribe({
@@ -42,15 +47,21 @@ export class ActionsComponent {
     })
 
     if (this.isProcessing) {
-      const msg = `Please wait, a process is runnig!\n`;
-      this.message.error(msg);
-      throwError(() => msg);
+      this.message.error(`Please wait, a process is runnig!\n`);
+      this.message.dialog.afterAllClosed.subscribe(result => {
+        this.router.navigate(['batch/datasets'])
+      })
     };
 
-    if (!this.bs.items) {
-      const msg = `Please, select items to be processed!\n`;
-      this.message.error(msg);
-      throwError(() => msg);
+    if (!this.areItemsSelected()) {
+      this.message.error(`Please, select items to be processed!\n`);
+      this.message.dialog.afterAllClosed.subscribe(result => {
+        this.router.navigate(['list'])
+      })
     }
+  }
+
+  areItemsSelected(): boolean {
+    return this.bs.items && this.bs.items.length > 0;
   }
 }

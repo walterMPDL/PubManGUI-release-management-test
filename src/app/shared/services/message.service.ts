@@ -13,7 +13,7 @@ export class MessageService {
   // confirmationDialogRef!: DialogRef<boolean>;
   confirmation = false;
 
-  constructor(private dialog: Dialog) { }
+  constructor(public dialog: Dialog) { }
 
   displayMessage(message?: { type: string; text: string; }) {
     // this.messageDialogRef = this.dialog.open(MessageComponent, {
