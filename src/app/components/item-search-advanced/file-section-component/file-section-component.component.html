@@ -2,12 +2,12 @@
 
   <h2 class="accordion-header">
     <button class="accordion-button rounded-0" type="button" data-bs-toggle="collapse"
-            data-bs-target="#accordionBodyFilesGroup" aria-expanded="true"
+            [attr.data-bs-target]="'#accordionBodyFilesGroup_' + fileSectionSearchCriterion.type" aria-expanded="true"
             aria-controls="accordionBodyFilesGroup">
       {{fileSectionSearchCriterion.type === 'INTERNAL_MANAGED' ? 'Files' : 'Locators'}}
     </button>
   </h2>
-  <div id="accordionBodyFilesGroup" class="accordion-collapse collapse show">
+  <div id="{{'accordionBodyFilesGroup_' + fileSectionSearchCriterion.type}}" class="accordion-collapse collapse show">
     <div class="accordion-body mt-3 mb-3">
 
       <div class="row">
