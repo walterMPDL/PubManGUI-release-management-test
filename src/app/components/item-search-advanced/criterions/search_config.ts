@@ -29,6 +29,7 @@ export enum DisplayType {
   PERSON,
   ORGANIZATION,
   CLASSIFICATION,
+  CONTEXT,
   DATE,
   ENUM,
   EXTERNAL_BLOCKS,
@@ -107,7 +108,7 @@ export const searchTypes : searchTypesI = {
     handlerClass: IdentifierSearchCriterion
   },
   collection: {
-    displayType: DisplayType.STANDARD,
+    displayType: DisplayType.CONTEXT,
     handlerClass: CollectionSearchCriterion
   },
   projectInfo: {
