@@ -64,11 +64,11 @@ export class DatasetsComponent implements OnInit {
     })
 
     if (this.isProcessing) {
-      this.message.error(`Please wait, a process is runnig!\n`);
+      this.message.warning(`Please wait, a process is runnig!\n`);
     };
 
     if (!this.areItemsSelected()) {
-      this.message.error(`The batch processing is empty!\n`);
+      this.message.warning(`The batch processing is empty!\n`);
       /*this.message.dialog.afterAllClosed.subscribe(result => {
         this.router.navigate(['batch/logs'])
       })*/

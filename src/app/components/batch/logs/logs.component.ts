@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
-import { MessageService } from 'src/app/shared/services/message.service';
+import { AaService } from 'src/app/services/aa.service';
 
 import { BatchNavComponent } from '../batch-nav/batch-nav.component';
 
@@ -25,7 +25,9 @@ export class LogsComponent implements OnInit {
   
   batchProcessLogHeaderId = 0;
 
-  constructor(private bs: BatchService, private message: MessageService) { }
+  constructor(
+    private bs: BatchService, 
+    public aaSvc: AaService) { }
 
   ngOnInit(): void {    
 
