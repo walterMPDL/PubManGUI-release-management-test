@@ -24,7 +24,7 @@ export class ChangeSourceIdentifierFormComponent {
   sourceIdTypes = Object.keys(IdType);
 
   public changeSourceIdentifierForm: FormGroup = this.fb.group({
-    sourceNumber: ['', [ Validators.required ]],
+    sourceNumber: ['1', [ Validators.required ]],
     sourceIdentifierType: ['', [ Validators.required ]],
     sourceIdentifierFrom: ['', [ Validators.required ]],
     sourceIdentifierTo: ['', [ Validators.required ]], 

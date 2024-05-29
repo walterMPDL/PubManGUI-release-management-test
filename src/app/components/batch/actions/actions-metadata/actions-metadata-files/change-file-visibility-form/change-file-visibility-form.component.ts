@@ -25,8 +25,8 @@ export class ChangeFileVisibilityFormComponent {
   visibilityTypes = Object.keys(Visibility);
 
   public changeFileVisibilityForm: FormGroup = this.fb.group({
-    fileVisibilityFrom: ['', [Validators.required]],
-    fileVisibilityTo: ['', [Validators.required]],
+    fileVisibilityFrom: [Object.keys(Visibility)[0], [Validators.required]],
+    fileVisibilityTo: [Object.keys(Visibility)[0], [Validators.required]],
   }, 
   { validators: this.vs.notEqualsValidator('fileVisibilityFrom','fileVisibilityTo') });
 

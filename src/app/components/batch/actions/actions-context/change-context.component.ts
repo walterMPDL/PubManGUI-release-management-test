@@ -32,7 +32,7 @@ export class ActionsContextComponent {
 
   constructor(private fb: FormBuilder, public vs: ValidatorsService, private aaSvc: AaService, private bs: BatchService) { }
 
-  user_contexts?: ContextDbRO[];
+  user_contexts?: ContextDbRO[] = [];
 
   ngOnInit(): void {
     this.aaSvc.principal.subscribe(
@@ -43,8 +43,8 @@ export class ActionsContextComponent {
   }
 
   public changeContextForm: FormGroup = this.fb.group({
-    contextFrom: this.fb.group<ControlType<ContextDbVO>>,
-    contextTo: this.fb.group<ControlType<ContextDbVO>>
+    contextFrom: this.fb.group<ControlType<ContextDbRO>>,
+    contextTo: this.fb.group<ControlType<ContextDbRO>>,
   }, { validators: this.vs.notEqualsValidator('contextFrom','contextTo') });
 
   get changeContextParams(): ChangeContextParams {

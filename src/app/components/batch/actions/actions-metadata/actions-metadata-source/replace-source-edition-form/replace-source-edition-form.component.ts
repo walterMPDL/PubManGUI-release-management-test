@@ -20,7 +20,7 @@ export class ReplaceSourceEditionFormComponent {
   constructor(private fb: FormBuilder, private bs: BatchService) { }
 
   public replaceSourceEditionForm: FormGroup = this.fb.group({
-    sourceNumber: ['', [ Validators.required ]],
+    sourceNumber: ['1', [ Validators.required ]],
     sourceEdition: ['', [ Validators.required ]],
   });
 

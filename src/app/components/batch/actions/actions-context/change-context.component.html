@@ -12,7 +12,7 @@
       </div>
       <div class="col-sm-9">
         <select class="form-control form-select-sm" formControlName="contextFrom">
-          <option [value]="" selected disabled>Context</option>
+          <option [value]="" selected disabled hidden>Context</option>
           @for (contextObject of user_contexts; track contextObject) {
           <option [value]="contextObject.objectId">{{contextObject.name}}</option>
           }
@@ -26,7 +26,7 @@
       </div>
       <div class="col-sm-9">
         <select class="form-control form-select-sm" formControlName="contextTo">
-          <option [value]="" selected disabled>Context</option>
+          <option [value]="" selected disabled hidden>Context</option>
           @for (contextObject of user_contexts; track contextObject) {
           <option [value]="contextObject.objectId">{{contextObject.name}}</option>
           }

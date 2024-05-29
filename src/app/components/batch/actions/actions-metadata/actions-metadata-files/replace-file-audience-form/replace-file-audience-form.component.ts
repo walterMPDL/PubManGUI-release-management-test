@@ -43,32 +43,12 @@ export class ReplaceFileAudienceFormComponent implements OnInit {
     return actionParams;
   }
 
-  onSubmit(): void {    
-    if (this.replaceFileAudienceForm.invalid) {
-      this.replaceFileAudienceForm.markAllAsTouched();
-      return;
-    }
-
-    if (this.audienceId.valid) {
-      this.onAddToNewAudiences();
-    }
-
-    this.bs.replaceFileAudience(this.replaceFileAudienceParams).subscribe( actionResponse => console.log(actionResponse) );
-    ( this.replaceFileAudienceForm.controls['allowedAudienceIds'] as FormArray ) = this.fb.array([]);
-    this.replaceFileAudienceForm.reset;
-  }
 
   get AudiencesToAdd() {
     return this.replaceFileAudienceForm.get('allowedAudienceIds') as FormArray;
   }
 
   onAddToNewAudiences(): void {
-    /*
-    const range = this.audienceId.value;
-    const added = this.AudiencesToAdd.controls.map(control => control.value);
-    const hasDuplicate = added.indexOf(range) != -1;
-    this.audienceId.setErrors( hasDuplicate ? { 'duplicated': true } : null);
-    */
     if (this.audienceId.invalid) return;
 
     this.AudiencesToAdd.push(
@@ -90,6 +70,21 @@ export class ReplaceFileAudienceFormComponent implements OnInit {
     }
 
     return Audiences;
+  }
+
+  onSubmit(): void {    
+    if (this.replaceFileAudienceForm.invalid) {
+      this.replaceFileAudienceForm.markAllAsTouched();
+      return;
+    }
+
+    if (this.audienceId.valid) {
+      this.onAddToNewAudiences();
+    }
+
+    this.bs.replaceFileAudience(this.replaceFileAudienceParams).subscribe( actionResponse => console.log(actionResponse) );
+    ( this.replaceFileAudienceForm.controls['allowedAudienceIds'] as FormArray ) = this.fb.array([]);
+    this.replaceFileAudienceForm.reset;
   }
 
 }

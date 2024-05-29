@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 
@@ -20,14 +20,19 @@ import { MdsPublicationGenre, DegreeType } from 'src/app/model/inge';
 })
 export class ActionsGenreComponent { 
 
-  constructor(private fb: FormBuilder, public vs: ValidatorsService, private bs: BatchService) { }
+  constructor(
+    private fb: FormBuilder, 
+    public vs: ValidatorsService, 
+    private bs: BatchService
+  ) { }
 
   genres = Object.keys(MdsPublicationGenre);
-  degreeTypes = Object.keys(DegreeType);
+  degreeTypes = Object.keys(DegreeType);    
+
 
   public changeGenreForm: FormGroup = this.fb.group({
-    genreFrom: ['', [Validators.required]],
-    genreTo: ['', [Validators.required]],
+    genreFrom: [Object.keys(MdsPublicationGenre)[0], [Validators.required]],
+    genreTo: [Object.keys(MdsPublicationGenre)[0], [Validators.required]],
     degreeType: ['', [Validators.required]],
   }, { validators: this.vs.notEqualsValidator('genreFrom','genreTo') });
 
