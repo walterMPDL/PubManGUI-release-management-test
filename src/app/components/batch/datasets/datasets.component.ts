@@ -163,10 +163,12 @@ export class DatasetsComponent implements OnInit {
     this.items(this.batchSvc.items);
     sessionStorage.removeItem(this.batchSvc.savedSelection);
     if (this.batchSvc.items.length === 0) {
-      this.msgSvc.error(`The batch processing is empty!\n`);
+      this.msgSvc.warning(`The batch processing is empty!\n`);
+      /*
       this.msgSvc.dialog.afterAllClosed.subscribe(result => {
         this.router.navigate(['list'])
       })
+      */
     }
   }
 
