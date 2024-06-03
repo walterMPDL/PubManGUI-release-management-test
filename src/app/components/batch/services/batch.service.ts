@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { catchError, map, tap, Observable, of, throwError } from 'rxjs';
+import { catchError, tap, Observable, throwError } from 'rxjs';
 import { inge_rest_uri } from 'src/assets/properties.json';
 
 import * as params from '../interfaces/actions-params';

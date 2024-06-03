@@ -6,6 +6,7 @@ import { FormArray, FormBuilder, FormGroup, Validators, ValidatorFn, FormControl
 
 import { ValidatorsService } from 'src/app/components/batch/services/validators.service';
 import { BatchService } from 'src/app/components/batch/services/batch.service';
+import { MessageService } from 'src/app/shared/services/message.service';
 import { ReplaceFileAudienceParams } from 'src/app/components/batch/interfaces/actions-params';
 import { ipList }  from 'src/app/components/batch/interfaces/actions-responses';
 
@@ -22,10 +23,14 @@ export class ReplaceFileAudienceFormComponent implements OnInit {
 
   ous: ipList[] = [];
 
-  constructor(private fb: FormBuilder, public vs: ValidatorsService, private bs: BatchService) { }
+  constructor(
+    private fb: FormBuilder, 
+    public validSvc: ValidatorsService,
+    private batchSvc: BatchService,
+    private msgSvc: MessageService) { }
 
   ngOnInit(): void {
-    this.bs.getIpList()
+    this.batchSvc.getIpList()
       .subscribe( ous => this.ous = ous );
   }
 
@@ -33,7 +38,7 @@ export class ReplaceFileAudienceFormComponent implements OnInit {
     allowedAudienceIds: this.fb.array([])
   });
 
-  public audienceId: FormControl = new FormControl('', [Validators.required, this.vs.notBeOnValidator( this.replaceFileAudienceForm.controls['allowedAudienceIds'] )] );
+  public audienceId: FormControl = new FormControl('', [Validators.required, this.validSvc.notBeOnValidator( this.replaceFileAudienceForm.controls['allowedAudienceIds'] )] );
 
   get replaceFileAudienceParams(): ReplaceFileAudienceParams {
     const actionParams: ReplaceFileAudienceParams = {
@@ -82,9 +87,15 @@ export class ReplaceFileAudienceFormComponent implements OnInit {
       this.onAddToNewAudiences();
     }
 
-    this.bs.replaceFileAudience(this.replaceFileAudienceParams).subscribe( actionResponse => console.log(actionResponse) );
-    ( this.replaceFileAudienceForm.controls['allowedAudienceIds'] as FormArray ) = this.fb.array([]);
-    this.replaceFileAudienceForm.reset;
+    this.batchSvc.replaceFileAudience(this.replaceFileAudienceParams).subscribe( actionResponse => {
+      //console.log(actionResponse); 
+      this.msgSvc.info(`Action started!\n`);
+      setTimeout(() => {
+        ( this.replaceFileAudienceForm.controls['allowedAudienceIds'] as FormArray ) = this.fb.array([]);
+        this.replaceFileAudienceForm.reset();
+      },1000);
+    } );
+
   }
 
 }

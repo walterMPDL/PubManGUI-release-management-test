@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 
 import { ValidatorsService } from 'src/app/components/batch/services/validators.service';
 import { BatchService } from 'src/app/components/batch/services/batch.service';
+import { MessageService } from 'src/app/shared/services/message.service';
 import { ChangeGenreParams } from 'src/app/components/batch/interfaces/actions-params';
 import { MdsPublicationGenre, DegreeType } from 'src/app/model/inge';
 
@@ -22,9 +23,9 @@ export class ActionsGenreComponent {
 
   constructor(
     private fb: FormBuilder, 
-    public vs: ValidatorsService, 
-    private bs: BatchService
-  ) { }
+    public valSvc: ValidatorsService, 
+    private batchSvc: BatchService,
+    private msgSvc: MessageService) { }
 
   genres = Object.keys(MdsPublicationGenre);
   degreeTypes = Object.keys(DegreeType);    
@@ -34,7 +35,7 @@ export class ActionsGenreComponent {
     genreFrom: [Object.keys(MdsPublicationGenre)[0], [Validators.required]],
     genreTo: [Object.keys(MdsPublicationGenre)[0], [Validators.required]],
     degreeType: ['', [Validators.required]],
-  }, { validators: this.vs.notEqualsValidator('genreFrom','genreTo') });
+  }, { validators: this.valSvc.notEqualsValidator('genreFrom','genreTo') });
 
   get changeGenreParams(): ChangeGenreParams {
     const actionParams: ChangeGenreParams = {
@@ -52,7 +53,11 @@ export class ActionsGenreComponent {
       return;
     }
 
-    this.bs.changeGenre(this.changeGenreParams).subscribe( actionResponse => console.log(actionResponse));
+    this.batchSvc.changeGenre(this.changeGenreParams).subscribe( actionResponse => {
+      //console.log(actionResponse); 
+      this.msgSvc.info(`Action started!\n`);
+      setTimeout(() => {this.changeGenreForm.reset();},1000);
+    });
   }
 
 }

@@ -39,9 +39,9 @@
 
       <div class="mb-2 row">
         <div class="offset-sm-2 col-sm-6">
-          @if (vs.notValidField(changeGenreForm.controls['genreTo'])) {
+          @if (valSvc.notValidField(changeGenreForm.controls['genreTo'])) {
           <span class="form-text text-danger small">
-            Previous and new genres {{ vs.getFieldError(changeGenreForm.controls['genreTo']) }}
+            Previous and new genres {{ valSvc.getFieldError(changeGenreForm.controls['genreTo']) }}
           </span>
           } @else {
           <span>&nbsp;</span>

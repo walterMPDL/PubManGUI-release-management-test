@@ -51,9 +51,9 @@
     </div>
     <div class="mb-2 row">
       <div class="offset-sm-3 col-sm-6">
-        @if(vs.notValidField(changeSourceIdentifierForm.controls['sourceIdentifierTo'])) {
+        @if(validSvc.notValidField(changeSourceIdentifierForm.controls['sourceIdentifierTo'])) {
         <span class="form-text text-danger small">
-          Previous and new identifiers {{ vs.getFieldError(changeSourceIdentifierForm) }}
+          Previous and new identifiers {{ validSvc.getFieldError(changeSourceIdentifierForm) }}
         </span>
         } @else {
         <span>&nbsp;</span>

@@ -21,9 +21,9 @@
     </div>
     <div class="mb-2 row">
       <div class="offset-sm-2 col-sm-6">
-        @if (vs.notValidField(localTag)) {
+        @if (validSvc.notValidField(localTag)) {
         <span class="form-text text-danger small">
-          Local tag {{ vs.getFieldError(localTag) }}
+          Local tag {{ validSvc.getFieldError(localTag) }}
         </span>
         } @else {
         <span>&nbsp;</span>
@@ -43,9 +43,9 @@
               <span class="material-symbols-outlined">remove</span>
             </button>
           </div>
-          @if(vs.notValidFieldInArray(tagsToAdd, i)) {
+          @if(validSvc.notValidFieldInArray(tagsToAdd, i)) {
           <span class="form-text text-danger small">
-            {{ vs.getFieldError(addLocalTagsForm.controls[i]) }}
+            {{ validSvc.getFieldError(addLocalTagsForm.controls[i]) }}
           </span>
           }
         </div>

@@ -4,6 +4,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 
 import { BatchService } from 'src/app/components/batch/services/batch.service';
+import { MessageService } from 'src/app/shared/services/message.service';
 import { ReplaceSourceEditionParams } from 'src/app/components/batch/interfaces/actions-params';
 
 @Component({
@@ -17,7 +18,10 @@ import { ReplaceSourceEditionParams } from 'src/app/components/batch/interfaces/
 })
 export class ReplaceSourceEditionFormComponent {
 
-  constructor(private fb: FormBuilder, private bs: BatchService) { }
+  constructor(
+    private fb: FormBuilder, 
+    private batchSvc: BatchService,
+    private msgSvc: MessageService) { }
 
   public replaceSourceEditionForm: FormGroup = this.fb.group({
     sourceNumber: ['1', [ Validators.required ]],
@@ -39,6 +43,10 @@ export class ReplaceSourceEditionFormComponent {
       return;
     }
 
-    this.bs.replaceSourceEdition(this.replaceSourceEditionParams).subscribe( actionResponse => console.log(actionResponse));
+    this.batchSvc.replaceSourceEdition(this.replaceSourceEditionParams).subscribe( actionResponse => {
+      //console.log(actionResponse); 
+      this.msgSvc.info(`Action started!\n`);
+      setTimeout(() => {this.replaceSourceEditionForm.controls['sourceEdition'].reset;},1000);
+    });
   }
  }

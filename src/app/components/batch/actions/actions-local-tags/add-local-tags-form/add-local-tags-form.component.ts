@@ -6,6 +6,7 @@ import { FormArray, FormBuilder, FormGroup, Validators, FormControl, ReactiveFor
 import { ValidatorsService } from 'src/app/components/batch/services/validators.service';
 import { BatchService } from 'src/app/components/batch/services/batch.service';
 import { AddLocalTagsParams } from 'src/app/components/batch/interfaces/actions-params';
+import { MessageService } from 'src/app/shared/services/message.service';
 
 @Component({
   selector: 'pure-add-local-tags-form',
@@ -18,13 +19,17 @@ import { AddLocalTagsParams } from 'src/app/components/batch/interfaces/actions-
 })
 export class AddLocalTagsFormComponent {
 
-  constructor(private fb: FormBuilder, public vs: ValidatorsService, private bs: BatchService) { }
+  constructor(
+    private fb: FormBuilder, 
+    public validSvc: ValidatorsService, 
+    private batchSvc: BatchService,
+    private msgSvc: MessageService) { }
 
   public addLocalTagsForm: FormGroup = this.fb.group({
     localTags: this.fb.array([])
   });
 
-  public localTag: FormControl = new FormControl('', [Validators.required, this.vs.notBeOnValidator( this.addLocalTagsForm.controls['localTags'] )]);
+  public localTag: FormControl = new FormControl('', [Validators.required, this.validSvc.notBeOnValidator( this.addLocalTagsForm.controls['localTags'] )]);
 
   get tagsToAdd() {
     return this.addLocalTagsForm.get('localTags') as FormArray;
@@ -61,9 +66,15 @@ export class AddLocalTagsFormComponent {
       this.onAddToNewTags();
     }
 
-    this.bs.addLocalTags(this.addLocalTagsParams).subscribe( actionResponse => console.log(actionResponse));
-    ( this.addLocalTagsForm.controls['localTags'] as FormArray ) = this.fb.array([]);
-    this.addLocalTagsForm.reset;
+    this.batchSvc.addLocalTags(this.addLocalTagsParams).subscribe( actionResponse => {
+      //console.log(actionResponse); 
+      this.msgSvc.info(`Action started!\n`);
+      setTimeout(() => {
+        this.addLocalTagsForm.reset();
+        ( this.addLocalTagsForm.controls['localTags'] as FormArray ) = this.fb.array([]);
+      },1000);
+    });
+
   }
 
 }

@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 
 import { ValidatorsService } from 'src/app/components/batch/services/validators.service';
 import { BatchService } from 'src/app/components/batch/services/batch.service';
+import { MessageService } from 'src/app/shared/services/message.service';
 import { ChangeReviewMethodParams } from 'src/app/components/batch/interfaces/actions-params';
 import { ReviewMethod } from 'src/app/model/inge';
 
@@ -21,13 +22,17 @@ export class ChangeReviewMethodFormComponent {
 
   reviewMethods = Object.keys(ReviewMethod);
 
-  constructor(private fb: FormBuilder, public vs: ValidatorsService, private bs: BatchService) { }
+  constructor(
+    private fb: FormBuilder, 
+    public validSvc: ValidatorsService, 
+    private batchSvc: BatchService,
+    private msgSvc: MessageService) { }
 
   public changeReviewMethodForm: FormGroup = this.fb.group({
     reviewMethodFrom: ['', [ Validators.required ]],
     reviewMethodTo: ['', [ Validators.required ]],
   }, 
-  { validators: this.vs.notEqualsValidator('reviewMethodFrom','reviewMethodTo') });
+  { validators: this.validSvc.notEqualsValidator('reviewMethodFrom','reviewMethodTo') });
 
   get changeReviewMethodParams(): ChangeReviewMethodParams {
     const actionParams: ChangeReviewMethodParams = {
@@ -44,6 +49,9 @@ export class ChangeReviewMethodFormComponent {
       return;
     }
 
-    this.bs.changeReviewMethod(this.changeReviewMethodParams).subscribe( actionResponse => console.log(actionResponse));
+    this.batchSvc.changeReviewMethod(this.changeReviewMethodParams).subscribe( actionResponse => {
+      //console.log(actionResponse); 
+      this.msgSvc.info(`Action started!\n`);
+    });
   }
  }

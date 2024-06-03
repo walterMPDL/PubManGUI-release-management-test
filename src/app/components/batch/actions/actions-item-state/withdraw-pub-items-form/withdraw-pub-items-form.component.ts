@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 
 import { BatchService } from 'src/app/components/batch/services/batch.service';
+import { MessageService } from 'src/app/shared/services/message.service';
 import { WithdrawPubItemsParams } from 'src/app/components/batch/interfaces/actions-params';
 
 @Component({
@@ -14,7 +15,8 @@ import { WithdrawPubItemsParams } from 'src/app/components/batch/interfaces/acti
 })
 export class WithdrawPubItemsFormComponent {
 
-  constructor(private bs: BatchService) { }
+  constructor(private batchSvc: BatchService,
+    private msgSvc: MessageService) { }
 
   get withdrawPubItemsParams(): WithdrawPubItemsParams {
     const actionParams: WithdrawPubItemsParams = {
@@ -24,6 +26,9 @@ export class WithdrawPubItemsFormComponent {
   }
 
   onSubmit(): void {
-    this.bs.withdrawPubItems(this.withdrawPubItemsParams).subscribe(actionResponse => console.log(actionResponse))
+    this.batchSvc.withdrawPubItems(this.withdrawPubItemsParams).subscribe(actionResponse => {
+      //console.log(actionResponse); 
+      this.msgSvc.info(`Action started!\n`);
+    })
   }
  }

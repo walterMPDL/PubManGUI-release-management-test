@@ -73,12 +73,13 @@ export class ValidatorsService {
     return (control: AbstractControl): ValidationErrors | null => {
       if (control instanceof FormGroup) {
         if (control.dirty || control.touched) {
-          const field1Value = control.get(field1)?.value.trim();
-          const field2Value = control.get(field2)?.value.trim();
-
-          if (field2Value.length > 0 && (field1Value === field2Value)) {
-            control.get(field2)?.setErrors({ notEquals: true });
-            return { notEquals: true }
+          let field1Value = control.get(field1)?.value;
+          let field2Value = control.get(field2)?.value;
+          if (field1Value !== null && field2Value !== null) {
+            if (field2Value.length > 0 && (field1Value.trim() === field2Value.trim())) {
+              control.get(field2)?.setErrors({ notEquals: true });
+              return { notEquals: true }
+            }
           }
         }
       }

@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 
 import { ValidatorsService } from 'src/app/components/batch/services/validators.service';
 import { BatchService } from 'src/app/components/batch/services/batch.service';
+import { MessageService } from 'src/app/shared/services/message.service';
 import { ChangeSourceGenreParams } from 'src/app/components/batch/interfaces/actions-params';
 import { SourceGenre } from 'src/app/model/inge';
 
@@ -19,7 +20,11 @@ import { SourceGenre } from 'src/app/model/inge';
 })
 export class ChangeSourceGenreFormComponent {
 
-  constructor(private fb: FormBuilder, public vs: ValidatorsService, private bs: BatchService) { }
+  constructor(
+    private fb: FormBuilder, 
+    public validSvc: ValidatorsService, 
+    private batchSvc: BatchService,
+    private msgSvc: MessageService) { }
 
   sourceGenres = Object.keys(SourceGenre);
 
@@ -28,7 +33,7 @@ export class ChangeSourceGenreFormComponent {
     sourceGenreTo: ['', [Validators.required]],
   },
     {
-      validators: this.vs.notEqualsValidator('sourceGenreFrom', 'sourceGenreTo')
+      validators: this.validSvc.notEqualsValidator('sourceGenreFrom', 'sourceGenreTo')
     });
 
   get changeSourceGenreParams(): ChangeSourceGenreParams {
@@ -46,7 +51,11 @@ export class ChangeSourceGenreFormComponent {
       return;
     }
 
-    this.bs.changeSourceGenre(this.changeSourceGenreParams).subscribe(actionResponse => console.log(actionResponse));
-    this.changeSourceGenreForm.reset();
+    this.batchSvc.changeSourceGenre(this.changeSourceGenreParams).subscribe(actionResponse => {
+      //console.log(actionResponse); 
+      this.msgSvc.info(`Action started!\n`);
+      setTimeout(() => {this.changeSourceGenreForm.reset();},1000);
+    });
+
   }
 }

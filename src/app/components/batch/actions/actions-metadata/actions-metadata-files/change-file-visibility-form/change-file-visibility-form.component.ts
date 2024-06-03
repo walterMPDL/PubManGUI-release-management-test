@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 
 import { ValidatorsService } from 'src/app/components/batch/services/validators.service';
 import { BatchService } from 'src/app/components/batch/services/batch.service';
+import { MessageService } from 'src/app/shared/services/message.service';
 import { ChangeFileVisibilityParams } from 'src/app/components/batch/interfaces/actions-params';
 import { Visibility } from 'src/app/model/inge';
 
@@ -20,7 +21,11 @@ import { Visibility } from 'src/app/model/inge';
 })
 export class ChangeFileVisibilityFormComponent {
 
-  constructor(private fb: FormBuilder, public vs: ValidatorsService, private bs: BatchService) { }
+  constructor(
+    private fb: FormBuilder, 
+    public validSvc: ValidatorsService, 
+    private batchSvc: BatchService,
+    private msgSvc: MessageService) { }
 
   visibilityTypes = Object.keys(Visibility);
 
@@ -28,7 +33,7 @@ export class ChangeFileVisibilityFormComponent {
     fileVisibilityFrom: [Object.keys(Visibility)[0], [Validators.required]],
     fileVisibilityTo: [Object.keys(Visibility)[0], [Validators.required]],
   }, 
-  { validators: this.vs.notEqualsValidator('fileVisibilityFrom','fileVisibilityTo') });
+  { validators: this.validSvc.notEqualsValidator('fileVisibilityFrom','fileVisibilityTo') });
 
   get changeFileVisibilityParams(): ChangeFileVisibilityParams {
     const actionParams: ChangeFileVisibilityParams = {
@@ -45,6 +50,9 @@ export class ChangeFileVisibilityFormComponent {
       return;
     }
 
-    this.bs.changeFileVisibility(this.changeFileVisibilityParams).subscribe( actionResponse => console.log(actionResponse));
+    this.batchSvc.changeFileVisibility(this.changeFileVisibilityParams).subscribe( actionResponse => {
+      //console.log(actionResponse); 
+      this.msgSvc.info(`Action started!\n`);
+    });
   }
 }

@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 
 import { BatchService } from 'src/app/components/batch/services/batch.service';
+import { MessageService } from 'src/app/shared/services/message.service';
 import { RevisePubItemsParams } from 'src/app/components/batch/interfaces/actions-params';
 
 @Component({
@@ -13,7 +14,9 @@ import { RevisePubItemsParams } from 'src/app/components/batch/interfaces/action
   templateUrl: './revise-pub-items-form.component.html',
 })
 export class RevisePubItemsFormComponent { 
-  constructor(private bs: BatchService) { }
+  constructor(
+    private batchSvc: BatchService,
+    private msgSvc: MessageService) { }
 
   get revisePubItemsParams(): RevisePubItemsParams {
     const actionParams: RevisePubItemsParams = {
@@ -23,6 +26,9 @@ export class RevisePubItemsFormComponent {
   }
 
   onSubmit(): void {
-    this.bs.revisePubItems(this.revisePubItemsParams).subscribe(actionResponse => console.log(actionResponse));
+    this.batchSvc.revisePubItems(this.revisePubItemsParams).subscribe(actionResponse => {
+      //console.log(actionResponse); 
+      this.msgSvc.info(`Action started!\n`);
+    });
   }
 }

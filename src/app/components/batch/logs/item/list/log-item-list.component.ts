@@ -96,7 +96,13 @@ export class LogItemListComponent implements OnInit, DoCheck {
     fail: [true, Validators.requiredTrue],
   });
 
-  constructor(private bs: BatchService, private activatedRoute: ActivatedRoute, private router: Router, private is: ItemsService, private message: MessageService, private fb: FormBuilder) {}
+  constructor(
+    private batchSvc: BatchService, 
+    private activatedRoute: ActivatedRoute, 
+    private router: Router, 
+    private is: ItemsService, 
+    private msgSvc: MessageService, 
+    private fb: FormBuilder) {}
 
   ngOnInit(): void {
 
@@ -104,13 +110,13 @@ export class LogItemListComponent implements OnInit, DoCheck {
 
     this.activatedRoute.params
       .pipe(
-        switchMap(({ id }) => this.bs.getBatchProcessLogDetails(id)),
+        switchMap(({ id }) => this.batchSvc.getBatchProcessLogDetails(id)),
       )
       .subscribe(LOGS => {
         if (LOGS.length === 0) return this.router.navigate(['/batch/logs']);
 
         LOGS.sort((a,b) => b.startDate.valueOf() - a.startDate.valueOf())
-          .forEach(element => this.is.retrieve(element.itemObjectId, this.bs.token)
+          .forEach(element => this.is.retrieve(element.itemObjectId, this.batchSvc.token)
             .subscribe( actionResponse =>
                 {
                   this.detailLogs.push({item: element, title: actionResponse.metadata?.title});
@@ -164,17 +170,17 @@ export class LogItemListComponent implements OnInit, DoCheck {
   fillWithAll() {
     const toFill: string[] = [];
     this.detailLogs.forEach(element => { if (element.item.itemObjectId) toFill.push(element.item.itemObjectId) });
-    this.bs.items = toFill;
+    this.batchSvc.items = toFill;
     const msg = `${ toFill.length } items to batch!\n`;
-    this.message.info(msg);
+    this.msgSvc.info(msg);
   }
 
   fillWithFailed() {
     const toFill: string[] = [];
     this.detailLogs.forEach(element => { if (element.item.itemObjectId && element.item.state === BatchProcessLogDetailState.ERROR) toFill.push(element.item.itemObjectId) });
-    this.bs.items = toFill;
+    this.batchSvc.items = toFill;
     const msg = `${ toFill.length } items to batch!\n`;
-    this.message.info(msg);
+    this.msgSvc.info(msg);
   }
 
   refreshFilters():BatchProcessLogDetailState[] {

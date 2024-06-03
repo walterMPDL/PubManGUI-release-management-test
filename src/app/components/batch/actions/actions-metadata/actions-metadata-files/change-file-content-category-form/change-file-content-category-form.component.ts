@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 
 import { ValidatorsService } from 'src/app/components/batch/services/validators.service';
 import { BatchService } from 'src/app/components/batch/services/batch.service';
+import { MessageService } from 'src/app/shared/services/message.service';
 import { ChangeFileContentCategoryParams } from 'src/app/components/batch/interfaces/actions-params';
 
 @Component({
@@ -18,7 +19,11 @@ import { ChangeFileContentCategoryParams } from 'src/app/components/batch/interf
 })
 export class ChangeFileContentCategoryFormComponent { 
 
-  constructor(private fb: FormBuilder, public vs: ValidatorsService, private bs: BatchService) { }
+  constructor(
+    private fb: FormBuilder, 
+    public validSvc: ValidatorsService, 
+    private batchSvc: BatchService,
+    private msgSvc: MessageService) { }
 
   contentCategories = Object.keys(ContentCategories);
 
@@ -26,7 +31,7 @@ export class ChangeFileContentCategoryFormComponent {
     fileContentCategoryFrom: ['', [ Validators.required ]],
     fileContentCategoryTo: ['', [ Validators.required ]],
   }, 
-  { validators: this.vs.notEqualsValidator('fileContentCategoryFrom','fileContentCategoryTo') });
+  { validators: this.validSvc.notEqualsValidator('fileContentCategoryFrom','fileContentCategoryTo') });
 
   get changeFileContentCategoryParams(): ChangeFileContentCategoryParams {
     const actionParams: ChangeFileContentCategoryParams = {
@@ -43,7 +48,10 @@ export class ChangeFileContentCategoryFormComponent {
       return;
     }
 
-    this.bs.changeFileContentCategory(this.changeFileContentCategoryParams).subscribe( actionResponse => console.log(actionResponse));
+    this.batchSvc.changeFileContentCategory(this.changeFileContentCategoryParams).subscribe( actionResponse => {
+      //console.log(actionResponse); 
+      this.msgSvc.info(`Action started!\n`);
+    });
   }
 }
 

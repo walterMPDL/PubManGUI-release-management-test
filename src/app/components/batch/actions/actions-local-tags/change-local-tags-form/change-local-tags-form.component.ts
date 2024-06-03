@@ -6,6 +6,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { ValidatorsService } from 'src/app/components/batch/services/validators.service';
 import { BatchService } from 'src/app/components/batch/services/batch.service';
 import { ChangeLocalTagParams } from 'src/app/components/batch/interfaces/actions-params';
+import { MessageService } from 'src/app/shared/services/message.service';
 
 @Component({
   selector: 'pure-change-local-tags-form',
@@ -18,14 +19,18 @@ import { ChangeLocalTagParams } from 'src/app/components/batch/interfaces/action
 })
 export class ChangeLocalTagsFormComponent {
 
-  constructor(private fb: FormBuilder, public vs: ValidatorsService, private bs: BatchService) { }
+  constructor(
+    private fb: FormBuilder, 
+    public validSvc: ValidatorsService, 
+    private batchSvc: BatchService,
+    private msgSvc: MessageService) { }
 
   public changeLocalTagsForm: FormGroup = this.fb.group({
     localTagFrom: ['', [Validators.required]],
     localTagTo: ['', [Validators.required]],
   },
     {
-      validators: this.vs.notEqualsValidator('localTagFrom', 'localTagTo')
+      validators: this.validSvc.notEqualsValidator('localTagFrom', 'localTagTo')
     });
 
 
@@ -44,8 +49,11 @@ export class ChangeLocalTagsFormComponent {
       return;
     }
 
-    this.bs.changeLocalTags(this.changeLocalTagsParams).subscribe(actionResponse => console.log(actionResponse));
-    this.changeLocalTagsForm.reset();
+    this.batchSvc.changeLocalTags(this.changeLocalTagsParams).subscribe(actionResponse => {
+      //console.log(actionResponse); 
+      this.msgSvc.info(`Action started!\n`);
+      setTimeout(() => {this.changeLocalTagsForm.reset();},1000);
+    });
   }
 
 }

@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 
 import { BatchService } from 'src/app/components/batch/services/batch.service';
+import { MessageService } from 'src/app/shared/services/message.service';
 import { SubmitPubItemsParams } from 'src/app/components/batch/interfaces/actions-params';
 
 @Component({
@@ -14,7 +15,9 @@ import { SubmitPubItemsParams } from 'src/app/components/batch/interfaces/action
 })
 export class SubmitPubItemsFormComponent { 
 
-  constructor(private bs: BatchService) { }
+  constructor(
+    private batchSvc: BatchService,
+    private msgSvc: MessageService) { }
 
   get submitPubItemsParams(): SubmitPubItemsParams {
     const actionParams: SubmitPubItemsParams = {
@@ -24,6 +27,9 @@ export class SubmitPubItemsFormComponent {
   }
 
   onSubmit(): void {
-    this.bs.submitPubItems(this.submitPubItemsParams).subscribe(actionResponse => console.log(actionResponse));
+    this.batchSvc.submitPubItems(this.submitPubItemsParams).subscribe(actionResponse => {
+      //console.log(actionResponse); 
+      this.msgSvc.info(`Action started!\n`);
+    });
   }
 }

@@ -30,10 +30,10 @@ export class LogProcessListComponent implements OnInit {
   inPage: resp.BatchProcessLogHeaderDbVO[] = [];
   processLogs: resp.BatchProcessLogHeaderDbVO[] = [];
 
-  constructor(private bs: BatchService) {}
+  constructor(private batchSvc: BatchService) {}
 
   ngOnInit(): void {
-    this.bs.getAllBatchProcessLogHeaders().subscribe( actionResponse => 
+    this.batchSvc.getAllBatchProcessLogHeaders().subscribe( actionResponse => 
       { console.log(actionResponse);
         this.processLogs = actionResponse.sort((b,a) => a.batchLogHeaderId - b.batchLogHeaderId);
         console.log(actionResponse);

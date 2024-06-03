@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 
 import { ValidatorsService } from 'src/app/components/batch/services/validators.service';
 import { BatchService } from 'src/app/components/batch/services/batch.service';
+import { MessageService } from 'src/app/shared/services/message.service';
 import { ChangeKeywordsParams } from 'src/app/components/batch/interfaces/actions-params';
 
 @Component({
@@ -18,13 +19,17 @@ import { ChangeKeywordsParams } from 'src/app/components/batch/interfaces/action
 })
 export class ChangeKeywordsFormComponent { 
 
-  constructor(private fb: FormBuilder, public vs: ValidatorsService, private bs: BatchService) { }
+  constructor(
+    private fb: FormBuilder, 
+    public validSvc: ValidatorsService, 
+    private batchSvc: BatchService,
+    private msgSvc: MessageService) { }
 
   public changeKeywordsForm: FormGroup = this.fb.group({
     keywordsFrom: ['', [ Validators.required ]],
     keywordsTo: ['', [ Validators.required ]],
   }, 
-  { validators: this.vs.notEqualsValidator('keywordsFrom','keywordsTo') });
+  { validators: this.validSvc.notEqualsValidator('keywordsFrom','keywordsTo') });
 
   // TO-DO if multiple words? check if they don't repeat
 
@@ -43,6 +48,10 @@ export class ChangeKeywordsFormComponent {
       return;
     }
 
-    this.bs.changeKeywords(this.changeKeywordsParams).subscribe( actionResponse => console.log(actionResponse));
+    this.batchSvc.changeKeywords(this.changeKeywordsParams).subscribe( actionResponse => {
+      //console.log(actionResponse); 
+      this.msgSvc.info(`Action started!\n`);
+      setTimeout(() => {this.changeKeywordsForm.reset();},1000);
+    });
   }
 }

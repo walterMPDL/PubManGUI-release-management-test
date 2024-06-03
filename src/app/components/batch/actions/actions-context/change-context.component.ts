@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 
-import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { ContextDbRO, ContextDbVO } from 'src/app/model/inge';
+import { ContextDbRO } from 'src/app/model/inge';
 import { PureCtxsDirective } from 'src/app/shared/components/selector/services/pure_ctxs/pure-ctxs.directive';
 import { ControlType } from "src/app/components/item-edit/services/form-builder.service";
 import { OptionDirective } from "src/app/shared/components/selector/directives/option.directive";
@@ -13,6 +13,7 @@ import { ValidatorsService } from 'src/app/components/batch/services/validators.
 import { BatchService } from 'src/app/components/batch/services/batch.service';
 import { ChangeContextParams } from 'src/app/components/batch/interfaces/actions-params';
 import { AaService } from 'src/app/services/aa.service';
+import { MessageService } from 'src/app/shared/services/message.service';
 
 
 @Component({
@@ -30,7 +31,12 @@ import { AaService } from 'src/app/services/aa.service';
 })
 export class ActionsContextComponent {
 
-  constructor(private fb: FormBuilder, public vs: ValidatorsService, private aaSvc: AaService, private bs: BatchService) { }
+  constructor(
+    private fb: FormBuilder, 
+    public valSvc: ValidatorsService, 
+    private aaSvc: AaService, 
+    private batchSvc: BatchService,
+    private msgSvc: MessageService) { }
 
   user_contexts?: ContextDbRO[] = [];
 
@@ -46,7 +52,7 @@ export class ActionsContextComponent {
     {
     contextFrom: this.fb.group<ControlType<ContextDbRO>>,
     contextTo: this.fb.group<ControlType<ContextDbRO>>}, 
-    { validators: this.vs.notEqualsValidator('contextFrom','contextTo') }
+    { validators: this.valSvc.notEqualsValidator('contextFrom','contextTo') }
   );
 
   get changeContextParams(): ChangeContextParams {
@@ -63,7 +69,11 @@ export class ActionsContextComponent {
       this.changeContextForm.markAllAsTouched();
       return;
     }
-    this.bs.changeContext(this.changeContextParams).subscribe(actionResponse => console.log(actionResponse));
+    this.batchSvc.changeContext(this.changeContextParams).subscribe(actionResponse => {
+      //console.log(actionResponse); 
+      this.msgSvc.info(`Action started!\n`);
+      setTimeout(() => {this.changeContextForm.reset();},1000);
+    });
   }
 
 }

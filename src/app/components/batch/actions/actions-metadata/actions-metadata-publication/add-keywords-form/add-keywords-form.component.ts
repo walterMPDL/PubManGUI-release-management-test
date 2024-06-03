@@ -4,6 +4,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 
 import { BatchService } from 'src/app/components/batch/services/batch.service';
+import { MessageService } from 'src/app/shared/services/message.service';
 import { AddKeywordsParams } from 'src/app/components/batch/interfaces/actions-params';
 
 @Component({
@@ -17,7 +18,10 @@ import { AddKeywordsParams } from 'src/app/components/batch/interfaces/actions-p
 })
 export class AddKeywordsFormComponent {
   
-  constructor(private fb: FormBuilder, private bs: BatchService) { }
+  constructor(
+    private fb: FormBuilder, 
+    private batchSvc: BatchService,
+    private msgSvc: MessageService) { }
 
   public addKeywordsForm: FormGroup = this.fb.group({
     keywords: ['', [ Validators.required ]],
@@ -39,6 +43,10 @@ export class AddKeywordsFormComponent {
       return;
     }
 
-    this.bs.addKeywords(this.addKeywordsParams).subscribe( actionResponse => console.log(actionResponse));
+    this.batchSvc.addKeywords(this.addKeywordsParams).subscribe( actionResponse => {
+      //console.log(actionResponse); 
+      this.msgSvc.info(`Action started!\n`);
+      setTimeout(() => {this.addKeywordsForm.reset();},1000);
+    });
   }
 }

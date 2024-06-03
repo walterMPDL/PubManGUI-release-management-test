@@ -26,7 +26,7 @@ export class LogsComponent implements OnInit {
   batchProcessLogHeaderId = 0;
 
   constructor(
-    private bs: BatchService, 
+    private batchSvc: BatchService, 
     public aaSvc: AaService) { }
 
   ngOnInit(): void {    
@@ -34,6 +34,6 @@ export class LogsComponent implements OnInit {
   }
 
   areItemsSelected(): boolean {
-    return this.bs.items && this.bs.items.length > 0;
+    return this.batchSvc.items && this.batchSvc.items.length > 0;
   }
 }

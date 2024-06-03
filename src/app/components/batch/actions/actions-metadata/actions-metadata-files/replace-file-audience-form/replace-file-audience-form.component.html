@@ -25,9 +25,9 @@
     </div>
     <div class="mb-2 row">
       <div class="offset-sm-2 col-sm-6">
-        @if (vs.notValidField(audienceId)) {
+        @if (validSvc.notValidField(audienceId)) {
         <span class="form-text text-danger small">
-          IP range {{ vs.getFieldError(audienceId) }}
+          IP range {{ validSvc.getFieldError(audienceId) }}
         </span>
         } @else {
         <span>&nbsp;</span>
@@ -51,9 +51,9 @@
               <span class="material-symbols-outlined">remove</span>
             </button>
           </div>
-          @if (vs.notValidFieldInArray(AudiencesToAdd, i)) {
+          @if (validSvc.notValidFieldInArray(AudiencesToAdd, i)) {
           <span class="form-text text-danger small">
-            {{ vs.getFieldError(replaceFileAudienceForm.controls[i]) }}
+            {{ validSvc.getFieldError(replaceFileAudienceForm.controls[i]) }}
           </span>
           } @else {
           <span>&nbsp;</span>

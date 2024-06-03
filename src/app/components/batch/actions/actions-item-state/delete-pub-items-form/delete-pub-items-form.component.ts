@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 
 import { BatchService } from 'src/app/components/batch/services/batch.service';
+import { MessageService } from 'src/app/shared/services/message.service';
 import { DeletePubItemsParams } from 'src/app/components/batch/interfaces/actions-params';
 
 @Component({
@@ -14,7 +15,9 @@ import { DeletePubItemsParams } from 'src/app/components/batch/interfaces/action
 })
 export class DeletePubItemsFormComponent { 
 
-  constructor(private bs: BatchService) { }
+  constructor(
+    private batchSvc: BatchService,
+    private msgSvc: MessageService) { }
 
   get deletePubItemsParams(): DeletePubItemsParams {
     const actionParams: DeletePubItemsParams = {
@@ -24,6 +27,9 @@ export class DeletePubItemsFormComponent {
   }
 
   onSubmit(): void {
-    this.bs.deletePubItems(this.deletePubItemsParams).subscribe(actionResponse => console.log(actionResponse));
+    this.batchSvc.deletePubItems(this.deletePubItemsParams).subscribe(actionResponse => {
+      //console.log(actionResponse); 
+      this.msgSvc.info(`Action started!\n`);
+    });
   }
 }

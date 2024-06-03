@@ -51,25 +51,25 @@ export class DatasetsComponent implements OnInit {
   private isProcessing: boolean = false;
 
   constructor(
-    private bs: BatchService,
-    private message: MessageService,
+    private batchSvc: BatchService,
+    private msgSvc: MessageService,
     public aaSvc: AaService,
     private router: Router
   ) { }
 
   ngOnInit(): void {
-    this.bs.getBatchProcessUserLock().subscribe({
+    this.batchSvc.getBatchProcessUserLock().subscribe({
       next: () => this.isProcessing = true,
       error: () => this.isProcessing = false
     })
 
     if (this.isProcessing) {
-      this.message.warning(`Please wait, a process is runnig!\n`);
+      this.msgSvc.warning(`Please wait, a process is runnig!\n`);
     };
 
     if (!this.areItemsSelected()) {
-      this.message.warning(`The batch processing is empty!\n`);
-      /*this.message.dialog.afterAllClosed.subscribe(result => {
+      this.msgSvc.warning(`The batch processing is empty!\n`);
+      /*this.msgSvc.dialog.afterAllClosed.subscribe(result => {
         this.router.navigate(['batch/logs'])
       })*/
     } 
@@ -79,19 +79,19 @@ export class DatasetsComponent implements OnInit {
       // required to work immediately.
       startWith(this.router)
     ).subscribe(() => {
-      this.items(this.bs.items);
+      this.items(this.batchSvc.items);
     });
   }
 
   areItemsSelected(): boolean {
-    return this.bs.items && this.bs.items.length > 0;
+    return this.batchSvc.items && this.batchSvc.items.length > 0;
   }
 
   items(itemList: string[]) {
     this.results = [];
     for (var element of itemList) {
       if (element) {
-        this.bs.getItem(element).subscribe( actionResponse => { 
+        this.batchSvc.getItem(element).subscribe( actionResponse => { 
           this.results.push(actionResponse);
         })
       }
@@ -159,12 +159,12 @@ export class DatasetsComponent implements OnInit {
   }
 
   removeChecked() {
-    this.bs.removeFromBatchDatasets(this.bs.savedSelection);
-    this.items(this.bs.items);
-    sessionStorage.removeItem(this.bs.savedSelection);
-    if (this.bs.items.length === 0) {
-      this.message.error(`The batch processing is empty!\n`);
-      this.message.dialog.afterAllClosed.subscribe(result => {
+    this.batchSvc.removeFromBatchDatasets(this.batchSvc.savedSelection);
+    this.items(this.batchSvc.items);
+    sessionStorage.removeItem(this.batchSvc.savedSelection);
+    if (this.batchSvc.items.length === 0) {
+      this.msgSvc.error(`The batch processing is empty!\n`);
+      this.msgSvc.dialog.afterAllClosed.subscribe(result => {
         this.router.navigate(['list'])
       })
     }

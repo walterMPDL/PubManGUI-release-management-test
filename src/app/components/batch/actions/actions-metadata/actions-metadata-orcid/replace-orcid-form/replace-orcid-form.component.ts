@@ -10,6 +10,7 @@ import { SelectorComponent } from "src/app/shared/components/selector/selector.c
 import { OptionDirective } from 'src/app/shared/components/selector/directives/option.directive';
 
 import { BatchService } from 'src/app/components/batch/services/batch.service';
+import { MessageService } from 'src/app/shared/services/message.service';
 import { ReplaceOrcidParams } from 'src/app/components/batch/interfaces/actions-params';
 
 @Component({
@@ -26,8 +27,11 @@ import { ReplaceOrcidParams } from 'src/app/components/batch/interfaces/actions-
 })
 export class ReplaceOrcidFormComponent {
 
-  constructor(private fb: FormBuilder, private bs: BatchService, private cone: ConePersonsService) { 
-  }
+  constructor(
+    private fb: FormBuilder, 
+    private batchSvc: BatchService, 
+    private cone: ConePersonsService,
+    private msgSvc: MessageService) { }
 
   public changeOrcidForm: FormGroup = this.fb.group<ControlType<PersonVO>>({
     completeName: this.fb.control(''),
@@ -88,6 +92,10 @@ export class ReplaceOrcidFormComponent {
       return;
     }
 
-    this.bs.replaceOrcid(this.changeOrcidParams).subscribe( actionResponse => console.log(actionResponse));
+    this.batchSvc.replaceOrcid(this.changeOrcidParams).subscribe( actionResponse => {
+      //console.log(actionResponse); 
+      this.msgSvc.info(`Action started!\n`);
+      setTimeout(() => {this.changeOrcidForm.reset();},1000);
+    });
   }
 }

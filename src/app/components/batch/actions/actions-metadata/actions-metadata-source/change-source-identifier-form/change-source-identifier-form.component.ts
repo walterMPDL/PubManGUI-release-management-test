@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 
 import { ValidatorsService } from 'src/app/components/batch/services/validators.service';
 import { BatchService } from 'src/app/components/batch/services/batch.service';
+import { MessageService } from 'src/app/shared/services/message.service';
 import { ChangeSourceIdentifierParams } from 'src/app/components/batch/interfaces/actions-params';
 import { IdType } from 'src/app/model/inge';
 
@@ -19,7 +20,11 @@ import { IdType } from 'src/app/model/inge';
 })
 export class ChangeSourceIdentifierFormComponent { 
 
-  constructor(private fb: FormBuilder, public vs: ValidatorsService, private bs: BatchService) { }
+  constructor(
+    private fb: FormBuilder, 
+    public validSvc: ValidatorsService, 
+    private batchSvc: BatchService,
+    private msgSvc: MessageService) { }
 
   sourceIdTypes = Object.keys(IdType);
 
@@ -30,7 +35,7 @@ export class ChangeSourceIdentifierFormComponent {
     sourceIdentifierTo: ['', [ Validators.required ]], 
   },
   {
-    validators: this.vs.notEqualsValidator('sourceIdentifierFrom', 'sourceIdentifierTo')
+    validators: this.validSvc.notEqualsValidator('sourceIdentifierFrom', 'sourceIdentifierTo')
   });
 
   get changeSourceIdentifierParams(): ChangeSourceIdentifierParams {
@@ -50,6 +55,15 @@ export class ChangeSourceIdentifierFormComponent {
       return;
     }
 
-    this.bs.changeSourceIdentifier(this.changeSourceIdentifierParams).subscribe( actionResponse => console.log(actionResponse));
+    this.batchSvc.changeSourceIdentifier(this.changeSourceIdentifierParams).subscribe( actionResponse => {
+      //console.log(actionResponse); 
+      this.msgSvc.info(`Action started!\n`);
+      setTimeout(() => {
+        this.changeSourceIdentifierForm.controls['sourceIdentifierFrom'].reset();
+      },1000);
+      setTimeout(() => {
+        this.changeSourceIdentifierForm.controls['sourceIdentifierTo'].reset();
+      },1000);
+    });
   }
 }

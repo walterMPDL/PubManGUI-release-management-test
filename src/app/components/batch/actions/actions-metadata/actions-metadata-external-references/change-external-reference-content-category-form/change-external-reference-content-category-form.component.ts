@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 
 import { ValidatorsService } from 'src/app/components/batch/services/validators.service';
 import { BatchService } from 'src/app/components/batch/services/batch.service';
+import { MessageService } from 'src/app/shared/services/message.service';
 import { ChangeExternalReferenceContentCategoryParams } from 'src/app/components/batch/interfaces/actions-params';
 
 @Component({
@@ -20,13 +21,17 @@ export class ChangeExternalReferenceContentCategoryFormComponent {
 
   contentCategories = Object.keys(ContentCategories);
   
-  constructor(private fb: FormBuilder, public vs: ValidatorsService, private bs: BatchService) { }
+  constructor(
+    private fb: FormBuilder, 
+    public validSvc: ValidatorsService, 
+    private batchSvc: BatchService,
+    private msgSvc: MessageService) { }
 
   public changeExternalReferenceContentCategoryForm: FormGroup = this.fb.group({
     externalReferenceContentCategoryFrom: ['', [ Validators.required ]],
     externalReferenceContentCategoryTo: ['', [ Validators.required ]],
   }, 
-  { validators: this.vs.notEqualsValidator('externalReferenceContentCategoryFrom','externalReferenceContentCategoryTo') });
+  { validators: this.validSvc.notEqualsValidator('externalReferenceContentCategoryFrom','externalReferenceContentCategoryTo') });
 
   get changeExternalReferenceContentCategoryParams(): ChangeExternalReferenceContentCategoryParams {
     const actionParams: ChangeExternalReferenceContentCategoryParams = {
@@ -43,7 +48,10 @@ export class ChangeExternalReferenceContentCategoryFormComponent {
       return;
     }
 
-    this.bs.changeExternalReferenceContentCategory(this.changeExternalReferenceContentCategoryParams).subscribe( actionResponse => console.log(actionResponse));
+    this.batchSvc.changeExternalReferenceContentCategory(this.changeExternalReferenceContentCategoryParams).subscribe( actionResponse => {
+      //console.log(actionResponse); 
+      this.msgSvc.info(`Action started!\n`);
+    });
   }
 
  }

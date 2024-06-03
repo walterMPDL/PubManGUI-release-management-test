@@ -4,6 +4,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 
 import { BatchService } from 'src/app/components/batch/services/batch.service';
+import { MessageService } from 'src/app/shared/services/message.service';
 import { ReplaceKeywordsParams } from 'src/app/components/batch/interfaces/actions-params';
 
 @Component({
@@ -17,7 +18,10 @@ import { ReplaceKeywordsParams } from 'src/app/components/batch/interfaces/actio
 })
 export class ReplaceKeywordsFormComponent {
 
-  constructor(private fb: FormBuilder, private bs: BatchService) { }
+  constructor(
+    private fb: FormBuilder, 
+    private batchSvc: BatchService,
+    private msgSvc: MessageService) { }
 
   public replaceKeywordsForm: FormGroup = this.fb.group({
     keywords: ['', [ Validators.required ]],
@@ -37,7 +41,11 @@ export class ReplaceKeywordsFormComponent {
       return;
     }
 
-    this.bs.replaceKeywords(this.replaceKeywordsParams).subscribe( actionResponse => console.log(actionResponse));
+    this.batchSvc.replaceKeywords(this.replaceKeywordsParams).subscribe( actionResponse => {
+      //console.log(actionResponse); 
+      this.msgSvc.info(`Action started!\n`);
+      setTimeout(() => {this.replaceKeywordsForm.reset();},1000);
+    });
   }
 
  }
