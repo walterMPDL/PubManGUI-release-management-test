@@ -63,7 +63,6 @@ export class ValidatorsService {
       if (control.dirty || control.touched) {
         const words = control.value.split(/[\s,.;:|]./);
         // TO-DO
-        console.log(`words: ${JSON.stringify(words)}`);
         return null;
       }
       return null;
@@ -74,10 +73,10 @@ export class ValidatorsService {
     return (control: AbstractControl): ValidationErrors | null => {
       if (control instanceof FormGroup) {
         if (control.dirty || control.touched) {
-          const field1Value = control.get(field1)?.value;
-          const field2Value = control.get(field2)?.value;
+          const field1Value = control.get(field1)?.value.trim();
+          const field2Value = control.get(field2)?.value.trim();
 
-          if (field2Value.length > 0 && (field1Value.trim === field2Value.trim)) {
+          if (field2Value.length > 0 && (field1Value === field2Value)) {
             control.get(field2)?.setErrors({ notEquals: true });
             return { notEquals: true }
           }

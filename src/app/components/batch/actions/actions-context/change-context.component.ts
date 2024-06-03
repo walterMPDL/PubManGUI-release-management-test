@@ -42,10 +42,12 @@ export class ActionsContextComponent {
     )
   }
 
-  public changeContextForm: FormGroup = this.fb.group({
+  public changeContextForm: FormGroup = this.fb.group(
+    {
     contextFrom: this.fb.group<ControlType<ContextDbRO>>,
-    contextTo: this.fb.group<ControlType<ContextDbRO>>,
-  }, { validators: this.vs.notEqualsValidator('contextFrom','contextTo') });
+    contextTo: this.fb.group<ControlType<ContextDbRO>>}, 
+    { validators: this.vs.notEqualsValidator('contextFrom','contextTo') }
+  );
 
   get changeContextParams(): ChangeContextParams {
     const actionParams: ChangeContextParams = {
