@@ -56,7 +56,8 @@
 
     <div class="mb-1 row">
       <div class="offset-sm-9 col-sm-3">
-        <button type="submit" [disabled]="!addLocalTagsForm.valid" class="btn btn-outline-secondary col-4 float-end">
+        <button type="submit" [disabled]="addLocalTagsForm.invalid" 
+          class="btn btn-outline-secondary col-4 float-end">
           Add
         </button>
       </div>

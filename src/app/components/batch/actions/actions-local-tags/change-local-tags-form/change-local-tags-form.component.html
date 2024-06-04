@@ -47,7 +47,8 @@
 
     <div class="mb-1 row">
       <div class="offset-sm-9 col-sm-3">
-        <button type="submit" [disabled]="!changeLocalTagsForm.valid" class="btn btn-outline-secondary col-4 float-end">
+        <button type="submit" [disabled]="changeLocalTagsForm.invalid || changeLocalTagsForm.pristine" 
+          class="btn btn-outline-secondary col-4 float-end">
           Replace
         </button>
       </div>

@@ -63,7 +63,7 @@
 
     <div class="row">
       <div class="col-sm-12">
-        <button type="submit" [disabled]="!changeSourceIdentifierForm.valid"
+        <button type="submit" [disabled]="changeSourceIdentifierForm.invalid || changeSourceIdentifierForm.pristine"
           class="btn btn-outline-secondary col-1 float-end">
           Replace
         </button>

@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { ContextDbRO } from 'src/app/model/inge';
 import { PureCtxsDirective } from 'src/app/shared/components/selector/services/pure_ctxs/pure-ctxs.directive';
@@ -33,7 +33,7 @@ export class ActionsContextComponent {
 
   constructor(
     private fb: FormBuilder, 
-    public valSvc: ValidatorsService, 
+    public validSvc: ValidatorsService, 
     private aaSvc: AaService, 
     private batchSvc: BatchService,
     private msgSvc: MessageService) { }
@@ -48,11 +48,15 @@ export class ActionsContextComponent {
     )
   }
 
-  public changeContextForm: FormGroup = this.fb.group(
-    {
-    contextFrom: this.fb.group<ControlType<ContextDbRO>>,
-    contextTo: this.fb.group<ControlType<ContextDbRO>>}, 
-    { validators: this.valSvc.notEqualsValidator('contextFrom','contextTo') }
+  public changeContextForm: FormGroup = this.fb.group({
+    /*
+    contextFrom: [this.fb.group<ControlType<ContextDbRO>>,[ Validators.required ]],
+    contextTo: [this.fb.group<ControlType<ContextDbRO>>,[ Validators.required ]]
+    */
+    contextFrom: ['-',[ Validators.required ]],
+    contextTo: ['-',[ Validators.required ]]
+  }, 
+  { validators: this.validSvc.notEqualsValidator('contextFrom','contextTo') }
   );
 
   get changeContextParams(): ChangeContextParams {

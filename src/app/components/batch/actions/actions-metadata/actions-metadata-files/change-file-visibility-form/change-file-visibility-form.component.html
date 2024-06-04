@@ -44,7 +44,7 @@
 
     <div class="row">
       <div class="offset-sm-9 col-sm-3">
-        <button type="submit" [disabled]="!changeFileVisibilityForm.valid"
+        <button type="submit" [disabled]="changeFileVisibilityForm.invalid || changeFileVisibilityForm.pristine"
           class="btn btn-outline-secondary col-4 float-end">
           Change
         </button>

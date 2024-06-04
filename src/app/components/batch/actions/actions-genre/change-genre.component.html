@@ -52,7 +52,7 @@
       <div class="mb-3 row">
         <label class="col-sm-2 col-form-label">Degree type</label>
         <div class="col-sm-10">
-          <select class="form-control form-select-sm" formControlName="degreeType" disable="disabled">
+          <select class="form-control form-select-sm" formControlName="degreeType">
             <option value="" selected disabled hidden>-</option>
             @for (degreeType of degreeTypes; track degreeType) {
               <option [value]="degreeType">{{degreeType | titlecase}}</option>
@@ -63,7 +63,8 @@
 
       <div class="row">
         <div class="offset-sm-9 col-sm-3">
-          <button type="submit" [disabled]="!changeGenreForm.valid" class="btn btn-outline-secondary col-4 float-end">
+          <button type="submit" [disabled]="changeGenreForm.invalid || changeGenreForm.pristine" 
+            class="btn btn-outline-secondary col-4 float-end">
             Change
           </button>
         </div>

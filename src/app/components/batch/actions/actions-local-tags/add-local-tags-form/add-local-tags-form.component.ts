@@ -66,13 +66,13 @@ export class AddLocalTagsFormComponent {
       this.onAddToNewTags();
     }
 
+    if (this.tagsToAdd.length === 0) return;
+
     this.batchSvc.addLocalTags(this.addLocalTagsParams).subscribe( actionResponse => {
       //console.log(actionResponse); 
       this.msgSvc.info(`Action started!\n`);
-      setTimeout(() => {
-        this.addLocalTagsForm.reset();
-        ( this.addLocalTagsForm.controls['localTags'] as FormArray ) = this.fb.array([]);
-      },1000);
+      this.addLocalTagsForm.reset();
+      ( this.addLocalTagsForm.controls['localTags'] as FormArray ) = this.fb.array([]);
     });
 
   }

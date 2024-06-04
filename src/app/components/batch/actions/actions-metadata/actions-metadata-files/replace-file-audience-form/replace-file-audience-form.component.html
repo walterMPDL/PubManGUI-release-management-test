@@ -66,7 +66,7 @@
 
     <div class="row">
       <div class="offset-sm-9 col-sm-3">
-        <button type="submit" [disabled]="!audienceId.valid || !replaceFileAudienceForm.valid"
+        <button type="submit" [disabled]="audienceId.invalid || replaceFileAudienceForm.invalid"
           class="btn btn-outline-secondary col-4 float-end">
           Assign
         </button>

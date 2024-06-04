@@ -87,13 +87,14 @@ export class ReplaceFileAudienceFormComponent implements OnInit {
       this.onAddToNewAudiences();
     }
 
+    if (this.AudiencesToAdd.length === 0) return
+
     this.batchSvc.replaceFileAudience(this.replaceFileAudienceParams).subscribe( actionResponse => {
       //console.log(actionResponse); 
       this.msgSvc.info(`Action started!\n`);
-      setTimeout(() => {
-        ( this.replaceFileAudienceForm.controls['allowedAudienceIds'] as FormArray ) = this.fb.array([]);
-        this.replaceFileAudienceForm.reset();
-      },1000);
+      ( this.replaceFileAudienceForm.controls['allowedAudienceIds'] as FormArray ) = this.fb.array([]);
+      this.replaceFileAudienceForm.reset();
+
     } );
 
   }

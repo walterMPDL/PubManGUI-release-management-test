@@ -75,8 +75,14 @@ export class ValidatorsService {
         if (control.dirty || control.touched) {
           let field1Value = control.get(field1)?.value;
           let field2Value = control.get(field2)?.value;
+          if (typeof field1Value === 'string') {
+            field1Value = field1Value.trim();
+          }
+          if (typeof field2Value === 'string') {
+            field2Value = field2Value.trim();
+          };
           if (field1Value !== null && field2Value !== null) {
-            if (field2Value.length > 0 && (field1Value.trim() === field2Value.trim())) {
+            if (field2Value.length > 0 && (field1Value === field2Value)) {
               control.get(field2)?.setErrors({ notEquals: true });
               return { notEquals: true }
             }
