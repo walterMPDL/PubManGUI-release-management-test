@@ -32,8 +32,12 @@ export class ActionsGenreComponent {
 
 
   public changeGenreForm: FormGroup = this.fb.group({
+    /*
     genreFrom: [Object.keys(MdsPublicationGenre)[0], [Validators.required]],
     genreTo: [Object.keys(MdsPublicationGenre)[0], [Validators.required]],
+    */
+    genreFrom: ['-', [Validators.required]],
+    genreTo: ['-', [Validators.required]],
     degreeType: ['', [Validators.required]],
   }, { validators: this.valSvc.notEqualsValidator('genreFrom','genreTo') });
 

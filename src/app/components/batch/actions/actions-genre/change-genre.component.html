@@ -17,6 +17,7 @@
         </div>
         <div class="col-sm-10">
           <select class="form-control form-select-sm" formControlName="genreFrom">
+            <option selected disabled hidden>-</option>
             @for (genre of genres; track genre) {
               <option [value]="genre">{{genre | titlecase}}</option>
             }
@@ -30,6 +31,7 @@
         </div>
         <div class="col-sm-10">
           <select class="form-control form-select-sm" formControlName="genreTo">
+            <option selected disabled hidden>-</option>
             @for (genre of genres; track genre) {
               <option [value]="genre">{{genre | titlecase}}</option>
             }
