@@ -50,10 +50,16 @@
                         <label for="familyName" class="col-form-label col-form-label-sm text-end pe-2">family</label>
                         <!--<input type="text" class="form-control form-control-sm" id="familyName"
                             formControlName="familyName">-->
+                        <pure-person-autosuggest [formForPersonsGivenName]="$any(person.controls.givenName)"
+                            [formForPersonsFamilyName]="$any(person.controls.familyName)"
+                            [formForPersonOrganizations]="$any(person.controls.organizations)"
+                            [formForPersonsId]="$any(person.controls.identifier.controls.id)" />
+                        <!--
                         <pure-selector [form]="person" [control_name]="'familyName'" (notice)="updatePerson($event)"
                             pureConePersons placeholder="search cone ...">
                             <ng-container *pureOption="let item">{{ item.text }}</ng-container>
                         </pure-selector>
+                        -->
                     </div>
                     <div class="col-sm-3">
                         <label for="givenName" class="col-form-label col-form-label-sm text-end pe-2">given</label>
@@ -103,28 +109,30 @@
             <ng-container formGroupName="person">
                 <div formArrayName="organizations">
                     @for (pou of organizations.controls; track pou; let i = $index) {
-                    <div>
-                        <div class="d-sm-flex flex-sm-row gap-1 mb-1 align-items-center" [formGroupName]="i">
-                            <label for="ou_name" class="col-sm-1 col-form-label col-form-label-sm text-end pe-2">ou
-                                {{i+1}}</label>
-                            <div class="col-sm">
+                    <div class="d-sm-flex flex-sm-row gap-1 mb-1 align-items-center" [formGroupName]="i">
+                        <label for="ou_name" class="col-sm-1 col-form-label col-form-label-sm text-end pe-2">ou
+                            {{i+1}}</label>
+                        <div class="col-sm">
+                            <!--
                                 <pure-selector [form]="pou" [control_name]="'name'" (notice)="updatePersonOU($event, i)"
                                     purePureOus placeholder="search ous ...">
                                     <ng-container *pureOption="let item">{{ item.text }}</ng-container>
                                 </pure-selector>
-                            </div>
-                            <!--TODO link-->
-                            <a routerLink="/TODO" routerLinkActive="active">
-                                <span class="material-symbols-outlined"
-                                    [ngClass]="{'invisible': !pou.controls.identifier.value}"
-                                    title="{{pou.controls.identifier.value}}">
-                                    info
-                                </span>
-                            </a>
-                            <div class="col-sm-1">
-                                <pure-add-remove-buttons [index]="i"
-                                    (notice)="add_remove_person_ou($event)"></pure-add-remove-buttons>
-                            </div>
+                            -->
+                            <input type="text" class="form-control form-control-sm" id="OuName" formControlName="name">
+                            <!--<pre class="col-sm">{{pou.value.name | json}}</pre>-->
+                        </div>
+                        <!--TODO link-->
+                        <a routerLink="/TODO" routerLinkActive="active">
+                            <span class="material-symbols-outlined"
+                                [ngClass]="{'invisible': !pou.controls.identifier.value}"
+                                title="{{pou.controls.identifier.value}}">
+                                info
+                            </span>
+                        </a>
+                        <div class="col-sm-1">
+                            <pure-add-remove-buttons [index]="i"
+                                (notice)="add_remove_person_ou($event)"></pure-add-remove-buttons>
                         </div>
                     </div>
                     } @empty {
