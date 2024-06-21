@@ -9,17 +9,14 @@
     --bs-body-tertiary-bg: #{$body-tertiary-bg};
     --bs-link-color: #{$mpg-gray};
 */
-    --bs-body-tertiary-color: #{body-tertiary-color-dark};
-
     --accent-bg-color: #{$mpg-slate-gray-0};
     --accent-color-contrast: #{$body-secondary-bg};
-    --input-bg-color: #{$body-tertiary-bg};
 
     .accordion {
 
         .accordion-button {
-            color: #{$mpg-light-gray};
-            background-color: #{$mpg-blue};
+            color: $body-secondary-bg;
+            background-color: $body-bg-dark;
         }
 
         .accordion-item {
@@ -28,17 +25,6 @@
             .accordion-body {
                 background: #{$body-secondary-bg};
 
-                input:not([type=checkbox]) {
-                    background-color: #{$body-tertiary-bg};
-                }
-
-                textarea {
-                    background-color: #{$body-tertiary-bg};
-                }
-
-                select {
-                    background-color: #{$body-tertiary-bg};
-                }
             }
         }
     }
@@ -60,7 +46,7 @@
   }
 
     .cdk-drag-preview {
-        background: #{$mpdl-iseo1};
+        background: $body-secondary-bg-dark;
         box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
             0 8px 10px 1px rgba(0, 0, 0, 0.14),
     }
@@ -72,12 +58,12 @@
     .form-control,
     .form-select {
         // background-color: #{shade-color($background-content, 2%)};
-        background-color: #{$body-tertiary-bg};
+        background-color: $body-bg;
     }
 
     .form-control:focus,
     .form-select:focus {
-        background-color: $body-secondary-bg;
+        background-color: $body-bg;
         border-color: #{tint-color($secondary, 10%)};
     }
 
@@ -105,19 +91,19 @@
     }
 
     .material-symbols-outlined {
-        color: var(--bs-nav-link-color);
+        color: $link-color;
     }
 
     a:hover .material-symbols-outlined {
-        color: var(--bs-nav-link-hover-color);
+        color: $link-hover-color;
     }
 
     .nav-link {
-        color: var(--bs-nav-link-color);
+        color: $link-color;
     }
 
     .nav-link:hover {
-        color: var(--bs-nav-link-hover-color);
+        color: $link-hover-color;
     }
 
     .mat-mdc-chip.mat-mdc-standard-chip {
@@ -136,11 +122,11 @@
 
     .side_nav {
         a path {
-            fill: var(--bs-nav-link-color);
+            fill: $link-color;
         }
 
         a:hover path {
-            fill: var(--bs-nav-link-hover-color);
+            fill: $link-hover-color;
         }
     }
 
@@ -149,31 +135,32 @@
         ;
 
         a path {
-            fill: var(--bs-nav-link-color);
+            fill: $link-color;
         }
     }
 
     #topnav {
         a path {
-            fill: var(--bs-nav-link-color);
+            fill: $link-color;
         }
 
         a:hover path {
-            fill: var(--bs-nav-link-hover-color);
+            fill: $link-hover-color;
         }
 
         a.svg-bg-icon {
             circle {
-                fill: var(--bs-nav-link-color);
+                fill: $link-color;
             }
 
             path {
-                fill: var(--bs-body-bg);
+                //fill: var(--bs-body-bg);
+                fill: $body-bg;
             }
         }
         a:hover.svg-bg-icon {
             circle {
-                fill: var(--bs-nav-link-hover-color);
+                fill: $link-hover-color;
             }
         }
     }

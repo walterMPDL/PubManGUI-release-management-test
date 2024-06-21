@@ -5,6 +5,10 @@
     overflow: hidden;
 
     svg {
-        vertical-align: top;
+        vertical-align: middle;
     }
+
+    .material-symbols-outlined {
+        top: 0px;
+      }
 }
