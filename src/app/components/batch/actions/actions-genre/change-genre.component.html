@@ -54,7 +54,7 @@
       <div class="mb-3 row">
         <label class="col-sm-2 col-form-label">Degree type</label>
         <div class="col-sm-10">
-          <select class="form-select" formControlName="degreeType">
+          <select class="form-select" formControlName="degreeType" [attr.disabled]="changeGenreForm.controls['genreTo'].value.includes('THESIS') ? null : ''">
             <option value="" selected disabled hidden>-</option>
             @for (degreeType of degreeTypes; track degreeType) {
               <option [value]="degreeType">{{degreeType | titlecase}}</option>
@@ -67,10 +67,10 @@
         <div class="offset-sm-9 col-sm-3">
           <button type="submit" [disabled]="changeGenreForm.invalid || changeGenreForm.pristine" 
             class="btn btn-outline-secondary col-4 float-end">
-            Change
+            GO
           </button>
         </div>
       </div>
     </form>
-
+    <pre class="col-sm">{{changeGenreForm.value | json}}</pre>
   </div>

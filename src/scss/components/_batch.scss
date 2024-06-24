@@ -30,7 +30,7 @@
         .disabled {
             text-decoration: none;
             color: color-mix(in srgb, var(--bs-body-color), transparent 40%);
-            cursor: not-allowed;
+            //pointer-events: none;
         }
     }
 
