@@ -14,7 +14,7 @@ import {
   switchMap, tap
 } from "rxjs";
 import {ConeService, PersonResource} from "../../../services/cone.service";
-import {HttpParams} from "@angular/common/http";
+import { HttpParams } from "@angular/common/http";
 import { FormBuilderService } from 'src/app/components/item-edit/services/form-builder.service';
 import { IdType, IdentifierVO, OrganizationVO, PersonVO } from 'src/app/model/inge';
 
