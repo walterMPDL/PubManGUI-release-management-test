@@ -1,13 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 import { ValidatorsService } from 'src/app/components/batch/services/validators.service';
 import { BatchService } from 'src/app/components/batch/services/batch.service';
-import { MessageService } from 'src/app/shared/services/message.service';
 import { ChangeGenreParams } from 'src/app/components/batch/interfaces/actions-params';
-import { MdsPublicationGenre, DegreeType } from 'src/app/model/inge';
+import { MdsPublicationGenre, DegreeType, BatchProcessLogHeaderState } from 'src/app/model/inge';
 
 
 @Component({
@@ -25,10 +25,11 @@ export class ActionsGenreComponent {
     private fb: FormBuilder, 
     public valSvc: ValidatorsService, 
     private batchSvc: BatchService,
-    private msgSvc: MessageService) { }
+    private router: Router) { }
 
   genres = Object.keys(MdsPublicationGenre);
-  degreeTypes = Object.keys(DegreeType);    
+  degreeTypes = Object.keys(DegreeType); 
+  state = BatchProcessLogHeaderState;   
 
 
   public changeGenreForm: FormGroup = this.fb.group({
@@ -38,8 +39,10 @@ export class ActionsGenreComponent {
     */
     genreFrom: ['-', [Validators.required]],
     genreTo: ['-', [Validators.required]],
-    degreeType: ['', [Validators.required]],
-  }, { validators: this.valSvc.notEqualsValidator('genreFrom','genreTo') });
+    degreeType: [{value: '', disabled: true}],
+    }, 
+    // { validators: this.valSvc.notEqualsValidator('genreFrom','genreTo') }
+  );
 
   get changeGenreParams(): ChangeGenreParams {
     const actionParams: ChangeGenreParams = {
@@ -56,12 +59,20 @@ export class ActionsGenreComponent {
       this.changeGenreForm.markAllAsTouched();
       return;
     }
+    console.log("changeGenreParams: " + JSON.stringify(this.changeGenreParams));
 
     this.batchSvc.changeGenre(this.changeGenreParams).subscribe( actionResponse => {
-      //console.log(actionResponse); 
-      this.msgSvc.info(`Action started!\n`);
-      setTimeout(() => {this.changeGenreForm.reset();},1000);
+      // console.log(actionResponse); 
+      this.batchSvc.startProcess(actionResponse.batchLogHeaderId);
+      /*
+      if (actionResponse.state === this.state.FINISHED) {
+        this.msgSvc.info(`Action finished!\n`);
+      }
+      */
+      setTimeout(() => { this.changeGenreForm.reset(); }, 500);
+      this.router.navigate(['/batch']);
     });
+    
   }
 
 }

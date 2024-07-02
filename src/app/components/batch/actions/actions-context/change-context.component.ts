@@ -2,10 +2,10 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 import { ContextDbRO } from 'src/app/model/inge';
 import { PureCtxsDirective } from 'src/app/shared/components/selector/services/pure_ctxs/pure-ctxs.directive';
-import { ControlType } from "src/app/components/item-edit/services/form-builder.service";
 import { OptionDirective } from "src/app/shared/components/selector/directives/option.directive";
 import { SelectorComponent } from "src/app/shared/components/selector/selector.component";
 
@@ -13,8 +13,6 @@ import { ValidatorsService } from 'src/app/components/batch/services/validators.
 import { BatchService } from 'src/app/components/batch/services/batch.service';
 import { ChangeContextParams } from 'src/app/components/batch/interfaces/actions-params';
 import { AaService } from 'src/app/services/aa.service';
-import { MessageService } from 'src/app/shared/services/message.service';
-
 
 @Component({
   selector: 'pure-batch-change-context',
@@ -36,7 +34,7 @@ export class ActionsContextComponent {
     public validSvc: ValidatorsService, 
     private aaSvc: AaService, 
     private batchSvc: BatchService,
-    private msgSvc: MessageService) { }
+    private router: Router) { }
 
   user_contexts?: ContextDbRO[] = [];
 
@@ -56,7 +54,7 @@ export class ActionsContextComponent {
     contextFrom: ['-',[ Validators.required ]],
     contextTo: ['-',[ Validators.required ]]
   }, 
-  { validators: this.validSvc.notEqualsValidator('contextFrom','contextTo') }
+  //{ validators: this.validSvc.notEqualsValidator('contextFrom','contextTo') }
   );
 
   get changeContextParams(): ChangeContextParams {
@@ -74,9 +72,10 @@ export class ActionsContextComponent {
       return;
     }
     this.batchSvc.changeContext(this.changeContextParams).subscribe(actionResponse => {
-      //console.log(actionResponse); 
-      this.msgSvc.info(`Action started!\n`);
-      setTimeout(() => {this.changeContextForm.reset();},1000);
+      // console.log(actionResponse); 
+      this.batchSvc.startProcess(actionResponse.batchLogHeaderId);
+      setTimeout(() => {this.changeContextForm.reset();}, 500);
+      this.router.navigate(['/batch']);
     });
   }
 
