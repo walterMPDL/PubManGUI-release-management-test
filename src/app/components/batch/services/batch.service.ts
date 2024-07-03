@@ -18,8 +18,6 @@ export class BatchService {
 
   readonly #baseUrl: string = inge_rest_uri;
 
-  #ouList: resp.ipList[] = [];
-
   datasetList = "dataset-list";
   savedSelection = "datasets-checked";
 
@@ -32,7 +30,9 @@ export class BatchService {
     return this.aa.token || '';
   }
 
-  public user = computed( () => this.aa.principal.getValue().user?.objectId || '' );
+  get user(): string {
+    return this.aa.principal.getValue().user?.objectId || '';
+  }
 
   addToBatchDatasets(selection: string): number {
     const fromSelection = sessionStorage.getItem(selection);
@@ -109,7 +109,7 @@ export class BatchService {
         if (resp.state === BatchProcessLogHeaderState.RUNNING) {
           setTimeout(() => {
             this.updateProcessProgress();
-          }, 5000);
+          }, 5000); // 1000); on PROD
         } else {
           this.endProcess();
         }
@@ -152,7 +152,7 @@ export class BatchService {
   }
 
   deleteBatchProcessUserLock(): Observable<any> {
-    const url = `${this.#baseUrl}/batchProcess/deleteBatchProcessUserLock/${this.user}`;
+    const url = `${this.#baseUrl}/batchProcess/deleteBatchProcessUserLock/${ this.user }`;
     const headers = new HttpHeaders().set('Authorization', this.token!);
 
     return this.http.delete<any>(url, { headers });

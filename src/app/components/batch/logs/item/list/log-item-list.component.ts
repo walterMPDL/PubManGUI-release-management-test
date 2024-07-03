@@ -6,7 +6,7 @@ import { switchMap } from 'rxjs';
 import { BatchService } from 'src/app/components/batch/services/batch.service';
 import type * as resp from 'src/app/components/batch/interfaces/actions-responses';
 
-import { NgbPaginationModule, NgbTypeaheadModule } from "@ng-bootstrap/ng-bootstrap";
+import { NgbPaginationModule } from "@ng-bootstrap/ng-bootstrap";
 
 import { BatchProcessMessages, ItemVersionVO, BatchProcessLogDetailState } from 'src/app/model/inge';
 import { MessageService } from 'src/app/shared/services/message.service';
@@ -29,7 +29,6 @@ type detail = {
     CommonModule,
     ReactiveFormsModule,
     FormsModule,
-    NgbTypeaheadModule,
     NgbPaginationModule,
     StateFilterPipe
   ],
