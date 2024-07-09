@@ -30,7 +30,7 @@
         ></h4>
       </a>
       -->
-      <a class="nav-link" routerLink="/edit/{{item?.objectId}}" ngbTooltip="{{item?.metadata?.title}}">
+      <a class="nav-link" routerLink="/edit/{{item?.objectId}}">
         <h3 class="" style="font-weight: bold; font-size: 1.4rem;" [innerHTML]="item?.metadata?.title | sanitizeHtml"
         ></h3>
       </a>
@@ -75,14 +75,14 @@
     <div class="col-sm-3">
       @if (item?.files) {
         @for (file of item?.files; track file) {
-          <div class="d-flex flex-sm-row align-items-start">
+          <div class="d-flex flex-sm-row align-items-start" [ngbTooltip]="file.metadata.title">
             @if (file?.storage === 'EXTERNAL_URL') {
               <i class="bi-link"></i>
             } @else {
               <i class="bi-file-earmark-text"></i>
             }
             <a class="btn btn-sm" href="file.content"
-               style="overflow-wrap: break-word;"> {{file.metadata.title.substring(0, 20)}}</a>
+               style="overflow-wrap: break-word;"> {{file.metadata.contentCategory}}</a>
           </div>
         }
       }
