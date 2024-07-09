@@ -8,12 +8,14 @@
                  id="form_check1">
       </span>
 
-      <span class="badge badge-blue me-2" style="font-weight: normal">{{item?.metadata?.genre}}</span>
-      @if (item?.metadata?.dateCreated) {
-        <span class="badge badge-green me-2" style="font-weight: normal">{{item?.metadata?.dateCreated}}</span>
+      <span class="badge badge-blue me-2">{{item?.metadata?.genre}}</span>
+      @if (publicationState) {
+        <span class="badge badge-green me-2">{{publicationState}}</span>
       }
-      <span class="badge badge-yellow me-2" style="font-weight: normal">OA Gold</span>
-      <span class="badge bg-secondary me-2 float-end" style="font-weight: normal">{{item?.versionState}}</span>
+      @if (doi) {
+      <span class="badge badge-yellow me-2">DOI: {{doi}}</span>
+      }
+      <span class="badge bg-secondary me-2 float-end">{{item?.versionState}}</span>
     </div>
   </div>
 
@@ -44,7 +46,7 @@
         @for (author of first_three_authors; track author; let i = $index) {
           <div class="me-3">
 
-            {{ (author?.person?.familyName || no_name) + ' ' + (author?.person?.givenName || no_name) }}
+            {{ (author?.person?.familyName || no_name) + ', ' + (author?.person?.givenName || no_name) }}
 
             @if (author?.person?.orcid) {
               <sup>
@@ -66,7 +68,7 @@
       @if (sourceCitation) {
         <div class="row my-3">
           <div class="col">
-            <small>Published in: {{ sourceCitation }}</small>
+            Published in: {{ sourceCitation }}
           </div>
         </div>
       }
