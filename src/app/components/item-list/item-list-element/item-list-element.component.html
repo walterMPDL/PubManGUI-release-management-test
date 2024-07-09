@@ -13,7 +13,7 @@
         <span class="badge badge-green me-2">{{publicationState}}: {{publicationStateDate | dateToYear}}</span>
       }
       @if (doi) {
-      <span class="badge badge-yellow me-2">DOI: {{doi}}</span>
+      <a class="badge badge-yellow me-2" href="https://doi.org/{{doi}}" target="_blank">DOI: {{doi}}</a>
       }
       <span class="badge bg-secondary me-2 float-end">{{item?.versionState}}</span>
     </div>
