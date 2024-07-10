@@ -44,9 +44,10 @@
   }
 
   .material-symbols-outlined:hover {
-    transform:scale(1.1); 
+    transform: scale(1.2); 
     border-radius: 40%; 
-    box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.05);
+    background-color: rgba(0, 0, 0, 0.05);
   }
 
 }
