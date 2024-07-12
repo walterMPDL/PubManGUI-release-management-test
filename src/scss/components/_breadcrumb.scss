@@ -1,0 +1,30 @@
+:host {
+  display: block;
+}
+
+.breadcrumb {
+  background: none;
+  font-size: 0.9em;
+  margin: 0;
+  a,
+  span {
+    text-decoration: none;
+    color: darkgrey;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+  }
+  a:hover,
+  span:hover {
+    color: dimgrey;
+    text-decoration: none;
+  }
+}
+
+._visible {
+  visibility: visible;
+}
+
+._hidden {
+  visibility: hidden;
+}
+

@@ -14,12 +14,17 @@ import {SearchResultListComponent} from "./components/search-result-list/search-
 export const routes: Routes = [
     {
         path: '',
-        redirectTo: 'start',
+        redirectTo: 'home',
         pathMatch: 'full'
       },
       {
-        path: 'start',
-        component: HomeComponent
+        path: 'home',
+        component: HomeComponent,
+        data: {
+          breadcrumb: {
+            label: '',
+          }
+        },
       },
       {
         path: 'list',
@@ -59,7 +64,12 @@ export const routes: Routes = [
       },
       {
         path: 'batch',
-        loadChildren: () => import('./components/batch/batch-routing.module').then(m => m.BatchRoutingModule)
+        loadChildren: () => import('./components/batch/batch-routing.module').then(m => m.BatchRoutingModule),
+        data: {
+          breadcrumb: {
+            label: 'Batch',
+          }
+        },
       },
       {
         path: '**',

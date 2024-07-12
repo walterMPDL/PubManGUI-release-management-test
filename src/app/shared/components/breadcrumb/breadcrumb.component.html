@@ -1,0 +1,11 @@
+<div class="breadcrumb">
+  <a [ngClass]="(breadcrumbs.length && breadcrumbs[0].link === '/home') ? '_hidden' : '_visible'" [routerLink]="['/home']"> 
+      <span class="material-icons-outlined">home</span> 
+  </a>
+  <ng-container *ngFor="let bc of breadcrumbs; let last = last">
+
+      <a [routerLink]="bc.link" [ngClass]="{ 'font-weight-bold': last }">{{ bc.label }}</a>
+      <span *ngIf="!last"> &gt; </span>
+
+  </ng-container>
+</div>
