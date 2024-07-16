@@ -1,0 +1,31 @@
+.breadcrumb {
+  background: none;
+  font-size: 0.9em;
+  position: fixed;
+  top: 110px;
+  height: 30px;
+  margin: 0;
+
+  &.scrolled {
+    visibility: hidden;
+  }
+
+
+  a,
+  span {
+    text-decoration: none;
+    color: darkgrey;
+    margin: auto 0.3rem;
+  }
+
+  a:hover,
+  span:hover {
+    color: dimgrey;
+    text-decoration: none;
+  }
+}
+
+.bold {
+  font-weight: bold !important;
+}
+
