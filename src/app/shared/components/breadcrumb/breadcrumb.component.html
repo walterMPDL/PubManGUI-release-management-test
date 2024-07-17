@@ -5,7 +5,7 @@
 
   <ng-container *ngFor="let crumb of breadcrumbs; let last = last; let first = first">
     @if(crumb.label !== 'Home') {
-    <span>&gt;</span>
+    <span class="text-muted">&gt;</span>
     <a [routerLink]="crumb.link">
       <span [ngClass]="{'bold': last}">{{ crumb.label }}</span>
     </a>
