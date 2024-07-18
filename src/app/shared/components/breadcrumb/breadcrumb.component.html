@@ -4,11 +4,15 @@
   </a>
 
   <ng-container *ngFor="let crumb of breadcrumbs; let last = last; let first = first">
-    @if(crumb.label !== 'Home') {
+    @if(crumb.label.length && crumb.label !== 'Home') {
     <span class="text-muted">&gt;</span>
-    <a [routerLink]="crumb.link">
-      <span [ngClass]="{'bold': last}">{{ crumb.label }}</span>
-    </a>
+      @if(last) {
+        <span class="bold">{{ crumb.label }}</span>
+      } @else {
+      <a [routerLink]="crumb.link">
+        <span>{{ crumb.label }}</span>
+      </a>
+     }
     }
   </ng-container>
 </div>

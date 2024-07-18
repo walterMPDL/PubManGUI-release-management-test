@@ -106,6 +106,7 @@ export default class LogItemListComponent implements OnInit, DoCheck {
     private fb: FormBuilder) {}
 
   ngOnInit(): void {
+    console.log("LogItemListComponent");
 
     if (this.getLang() === 'de') this.localeMessages = this.messagesDe;
 

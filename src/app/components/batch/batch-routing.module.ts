@@ -23,21 +23,31 @@ const routes: Routes = [
   },
   {
     path: 'logs',
-    loadComponent: () => import('./logs/logs.component'),
     data: {
       breadcrumb: {
         label: 'Logs',
       }
     },
-  },
-  {
-    path: 'logs/:id', 
-    loadComponent: () => import('./logs/item/list/log-item-list.component'),
-    data: {
-      breadcrumb: {
-        label: 'Log items',
-      }
-    },
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./logs/logs.component'),
+        data: {
+          breadcrumb: {
+            label: '',
+          }
+        },
+      },
+      { 
+        path: ':id', 
+        loadComponent: () => import('./logs/item/list/log-item-list.component'),
+        data: {
+          breadcrumb: {
+            label: 'Log details',
+          }
+        }
+      }, 
+    ],
   },
   {
     path: '',
