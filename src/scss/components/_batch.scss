@@ -189,11 +189,14 @@
             cursor: wait;
         }
 
-        .material-symbols-outlined:hover {
-            border-radius: 40%;
-            box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.05);
-            background-color: rgba(0, 0, 0, 0.05);
-            color: black !important;
+        a {
+            
+            .material-symbols-outlined:hover {
+                border-radius: 40%;
+                box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.05);
+                background-color: rgba(0, 0, 0, 0.05);
+                color: black !important;
+            }
         }
 
     }

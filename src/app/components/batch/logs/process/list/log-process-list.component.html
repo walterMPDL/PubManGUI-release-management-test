@@ -76,43 +76,47 @@
             @for (log of inPage; track log.batchLogHeaderId) {
             <tr class="border-bottom">
               @if (log.state === state.RUNNING) {
-                <td class="col-2">
-                  {{ batchSvc.getProcessLog().state | titlecase }}
-                  @if (log.batchLogHeaderId === batchSvc.getProcessLog().batchLogHeaderId) {
-                    @if (batchSvc.isProcessRunning()) {
-                      {{batchSvc.getProcessLog().percentageOfProcessedItems - calculateProcessedStep(batchSvc.getProcessLog().numberOfItems) }}&percnt;
-                    }
-                  } @else {
-                    <span class="material-symbols-outlined" title="Something gone wrong!">
-                      error
-                    </span>
-                  }                       
-                </td>             
+              <td class="col-2">
+                {{ batchSvc.getProcessLog().state | titlecase }}
+                @if (log.batchLogHeaderId === batchSvc.getProcessLog().batchLogHeaderId) {
+                @if (batchSvc.isProcessRunning()) {
+                {{batchSvc.getProcessLog().percentageOfProcessedItems -
+                calculateProcessedStep(batchSvc.getProcessLog().numberOfItems) }}&percnt;
+                }
+                } @else {
+                <span class="material-symbols-outlined" title="Something gone wrong!">
+                  error
+                </span>
+                }
+              </td>
               } @else {
-                <td class="col-2">
-                  {{ log.state | titlecase }}
-                </td>
+              <td class="col-2">
+                {{ log.state | titlecase }}
+              </td>
               }
-              <td class="col-6">
+              <td class="col-5">
                 {{ log.method | titlecase | separate }}
               </td>
               <td class="col-4">
-                {{  log.endDate | date:'fullDate':'':getLang() }} <span class="material-symbols-outlined">
-                  schedule</span> {{  log.endDate | date: "HH:mm":'':getLang() }}
+                <span>{{ log.endDate | date:'fullDate':'':getLang() }}</span>
+                <div class="float-end">
+                  <span class="material-symbols-outlined" style="cursor: auto">schedule</span>&nbsp;
+                  <span>{{ log.endDate | date: "HH:mm":'':getLang() }}</span>
+                </div>
               </td>
               <td class="col-1">
-                @if (log.state === state.RUNNING 
-                  && log.batchLogHeaderId === batchSvc.getProcessLog().batchLogHeaderId 
-                  && batchSvc.isProcessRunning()) {
-                  <span class="spinner-border ms-3" aria-hidden="true"></span>
+                @if (log.state === state.RUNNING
+                && log.batchLogHeaderId === batchSvc.getProcessLog().batchLogHeaderId
+                && batchSvc.isProcessRunning()) {
+                <span class="spinner-border ms-3" aria-hidden="true"></span>
                 } @else {
-                  <a [routerLink]="['/batch/logs/', log.batchLogHeaderId]"
+                <a [routerLink]="['/batch/logs/', log.batchLogHeaderId]"
                   [state]="{ method: log.method, started: log.startDate }">
                   <span class="material-symbols-outlined ms-3">
                     list
                   </span>
                 </a>
-                } 
+                }
               </td>
             </tr>
             }

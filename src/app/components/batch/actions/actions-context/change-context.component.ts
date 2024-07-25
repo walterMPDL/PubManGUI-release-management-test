@@ -43,7 +43,7 @@ export class ActionsContextComponent {
       p => {
         this.user_contexts = p.depositorContexts;
       }
-    )
+    );
   }
 
   public changeContextForm: FormGroup = this.fb.group({
@@ -51,8 +51,8 @@ export class ActionsContextComponent {
     contextFrom: [this.fb.group<ControlType<ContextDbRO>>,[ Validators.required ]],
     contextTo: [this.fb.group<ControlType<ContextDbRO>>,[ Validators.required ]]
     */
-    contextFrom: ['Context',[ Validators.required ]],
-    contextTo: ['Context',[ Validators.required ]]
+    contextFrom: [localStorage.getItem('locale') === 'de' ? 'Kontext' : 'Context', [Validators.required]],
+    contextTo: [localStorage.getItem('locale') === 'de' ? 'Kontext' : 'Context', [Validators.required]]
   }, 
   //{ validators: this.validSvc.notEqualsValidator('contextFrom','contextTo') }
   );
