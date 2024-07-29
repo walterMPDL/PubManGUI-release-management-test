@@ -133,6 +133,7 @@ export default class LogItemListComponent implements OnInit, DoCheck {
 
     this.method = history.state.method;
     this.started = history.state.started;
+
   }
 
   ngDoCheck(): void {

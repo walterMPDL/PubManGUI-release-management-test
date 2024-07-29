@@ -25,7 +25,7 @@
       </div>
       <div class="col-sm-9">
         <select class="form-select" formControlName="sourceIdentifierType">
-          <option [value]=''  selected disabled>Type</option>
+          <option [value]='' selected disabled>Type</option>
           @for (type of sourceIdTypes; track type) {
           <option [value]="type">
             {{type | titlecase}}</option>

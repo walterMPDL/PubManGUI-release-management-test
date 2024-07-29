@@ -13,7 +13,7 @@
       </div>
       <div class="col-sm-9">
         <select class="form-select" formControlName="fileVisibilityFrom">
-          <option [value]=''  selected disabled>Visibility</option>
+          <option [value]='' selected disabled i18n="@@batch.actions.metadata.files.visibility">Visibility</option>
           @for (fileVisibility of visibilityTypes; track fileVisibility) {
             <option [value]="fileVisibility"> {{fileVisibility | titlecase}}</option>
           }
@@ -27,7 +27,7 @@
       </div>
       <div class="col-sm-9">
         <select class="form-select" formControlName="fileVisibilityTo">
-          <option [value]=''  selected disabled>Visibility</option>
+          <option [value]='' selected disabled i18n="@@batch.actions.metadata.files.visibility">Visibility</option>
           @for (fileVisibility of visibilityTypes; track fileVisibility) {
             <option [value]="fileVisibility"> {{fileVisibility | titlecase}}</option>
           }

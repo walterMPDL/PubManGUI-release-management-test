@@ -98,10 +98,10 @@
                 {{ log.method | titlecase | separate }}
               </td>
               <td class="col-4">
-                <span>{{ log.endDate | date:'fullDate':'':getLang() }}</span>
+                <span>{{ log.endDate | date:'fullDate' }}</span>
                 <div class="float-end">
                   <span class="material-symbols-outlined" style="cursor: auto">schedule</span>&nbsp;
-                  <span>{{ log.endDate | date: "HH:mm":'':getLang() }}</span>
+                  <span>{{ log.endDate | date: "HH:mm" }}</span>
                 </div>
               </td>
               <td class="col-1">

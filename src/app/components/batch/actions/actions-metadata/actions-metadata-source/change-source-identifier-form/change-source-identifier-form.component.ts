@@ -30,7 +30,7 @@ export class ChangeSourceIdentifierFormComponent {
 
   public changeSourceIdentifierForm: FormGroup = this.fb.group({
     sourceNumber: ['1', [ Validators.required ]],
-    sourceIdentifierType: ['', [ Validators.required ]],
+    sourceIdentifierType: ['Type', [ Validators.required ]],
     sourceIdentifierFrom: ['', [ Validators.required ]],
     sourceIdentifierTo: ['', [ Validators.required ]], 
   },

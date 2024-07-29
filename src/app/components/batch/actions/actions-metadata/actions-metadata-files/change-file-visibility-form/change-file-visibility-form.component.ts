@@ -34,8 +34,8 @@ export class ChangeFileVisibilityFormComponent {
     fileVisibilityFrom: [Object.keys(Visibility)[0], [Validators.required]],
     fileVisibilityTo: [Object.keys(Visibility)[0], [Validators.required]],
     */
-    fileVisibilityFrom: ['Visibility', [Validators.required]],
-    fileVisibilityTo: ['Visibility', [Validators.required]],
+    fileVisibilityFrom: [localStorage.getItem('locale') === 'de' ? 'Sichtbarkeit' : 'Visibility', [Validators.required]],
+    fileVisibilityTo: [localStorage.getItem('locale') === 'de' ? 'Sichtbarkeit' : 'Visibility', [Validators.required]],
   }, 
   { validators: this.validSvc.notEqualsValidator('fileVisibilityFrom','fileVisibilityTo') });
 

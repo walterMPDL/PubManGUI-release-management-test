@@ -75,19 +75,4 @@ export class LogProcessListComponent implements OnInit {
     return Math.floor(100/numberOfItems);
   };
 
-  getLang(): string {
-    const userLocale = localStorage.getItem('locale');
-    const browserLocale = navigator.language.slice(0, 2);
-
-    if (userLocale) {
-      return userLocale;
-    } else {
-      if (browserLocale === 'en') {
-        return browserLocale;
-      } else {
-        return 'de';
-      }
-    }
-  }
-
 }

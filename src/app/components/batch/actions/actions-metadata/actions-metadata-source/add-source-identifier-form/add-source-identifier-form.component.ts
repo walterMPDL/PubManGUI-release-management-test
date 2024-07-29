@@ -29,7 +29,7 @@ export class AddSourceIdentifierFormComponent {
 
   public addSourceIdentifierForm: FormGroup = this.fb.group({
     sourceNumber: ['1', [ Validators.required ]],
-    sourceIdentifierType: ['', [ Validators.required ]],
+    sourceIdentifierType: ['Type', [ Validators.required ]],
     sourceIdentifier: ['', [ Validators.required ]],
   });
 
