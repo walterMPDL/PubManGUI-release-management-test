@@ -84,8 +84,8 @@
           <span i18n="@@batch.logs.details.for">Action</span>: <strong class="fw-bolder"> {{ method! | titlecase | separate }} </strong>
         </div>
         <div class="fw-light">
-          <span i18n="@@batch.logs.started.on">started on</span><span> {{ started | date:'fullDate':'':getLang() }} </span><span class="material-symbols-outlined" style="cursor: auto">
-            schedule</span><span> {{ started | date: "HH:mm":'':getLang() }}</span>
+          <span i18n="@@batch.logs.started.on">started on</span><span> {{ started | date:'fullDate' }} </span><span class="material-symbols-outlined" style="cursor: auto">
+            schedule</span><span> {{ started | date: "HH:mm" }}</span>
         </div>
       </div>
     </div>
@@ -97,8 +97,8 @@
             @if((inPage | stateFilter:refreshFilters():'state').length > 0) {
             <tr class="border-bottom">
               <th scope="col" class="pe-2">Status</th>
-              <th scope="col" class="pe-2">Title</th>
-              <th scope="col">Message</th>
+              <th scope="col" class="pe-2" i18n="@@batch.logs.header.title">Title</th>
+              <th scope="col" i18n="@@batch.logs.header.message">Message</th>
             </tr>
             }
           </thead>
@@ -106,14 +106,14 @@
           <tbody>
             @for (log of inPage | stateFilter:refreshFilters():'state' ; track log.item.itemObjectId) {
             <tr class="border-bottom">
-              <td class="col-1">
-                <span>{{ log.item.state | titlecase }}</span>
+              <td class="col-2">
+                <span>{{ getProcessLogDetailStateTranslation(log.item.state) }}</span>
               </td>
               <td>
                 <span>{{ log.title }}</span>
               </td>
               <td>
-                <span>{{ localeMessages.get(log.item.message) }}</span>
+                <span>{{ getProcessMessageTranslation(log.item.message) }}</span>
               </td>
               <hr>
             </tr>

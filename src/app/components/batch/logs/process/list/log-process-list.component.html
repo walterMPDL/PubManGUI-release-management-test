@@ -66,9 +66,9 @@
           <thead>
             <tr class="border-bottom">
               <th scope="col" class="pe-2">Status</th>
-              <th scope="col" class="pe-2">Action</th>
-              <th scope="col" class="pe-2">Date</th>
-              <th scope="col">Details</th>
+              <th scope="col" class="pe-2" i18n="@@batch.logs.details.for">Action</th>
+              <th scope="col" class="pe-2" i18n="@@batch.logs.header.date">Date</th>
+              <th scope="col" i18n="@@batch.logs.header.details">Details</th>
             </tr>
           </thead>
 
@@ -91,17 +91,17 @@
               </td>
               } @else {
               <td class="col-2">
-                {{ log.state | titlecase }}
+                {{ getProcessLogHeaderStateTranslation(log.state) }}
               </td>
               }
               <td class="col-5">
-                {{ log.method | titlecase | separate }}
+                {{ getProcessMethodTranslation(log.method) }}
               </td>
               <td class="col-4">
-                <span>{{ log.endDate | date:'fullDate':'':getLang() }}</span>
+                <span>{{ log.endDate | date:'fullDate' }}</span>
                 <div class="float-end">
                   <span class="material-symbols-outlined" style="cursor: auto">schedule</span>&nbsp;
-                  <span>{{ log.endDate | date: "HH:mm":'':getLang() }}</span>
+                  <span>{{ log.endDate | date: "HH:mm" }}</span>
                 </div>
               </td>
               <td class="col-1">

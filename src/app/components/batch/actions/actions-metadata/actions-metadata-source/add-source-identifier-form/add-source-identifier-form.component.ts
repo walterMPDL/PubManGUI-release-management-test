@@ -52,8 +52,8 @@ export class AddSourceIdentifierFormComponent {
     this.batchSvc.addSourceIdentifer(this.addSourceIdentifierParams).subscribe( actionResponse => {
       //console.log(actionResponse); 
       this.batchSvc.startProcess(actionResponse.batchLogHeaderId);
-      this.msgSvc.info(`Action started!\n`);
-      setTimeout(() => {this.addSourceIdentifierForm.controls['sourceIdentifier'].reset();},1000);
+
+      setTimeout(() => {this.addSourceIdentifierForm.controls['sourceIdentifier'].reset();}, 500);
     });
   }
  }
