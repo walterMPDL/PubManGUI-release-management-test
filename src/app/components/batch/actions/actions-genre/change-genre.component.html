@@ -22,8 +22,8 @@
         <div class="col-sm-10">
           <select class="form-select" formControlName="genreFrom">
             <option [value]='' selected disabled>Genre</option>
-            @for (genre of genres; track genre) {
-              <option [value]="genre">{{genre | titlecase}}</option>
+            @for (genre of genresOptions; track genre) {
+              <option [value]="genre.value">{{genre.option}}</option>
             }
           </select>
         </div>
@@ -36,8 +36,8 @@
         <div class="col-sm-10">
           <select class="form-select" formControlName="genreTo">
             <option [value]=''  selected disabled>Genre</option>
-            @for (genre of genres; track genre) {
-              <option [value]="genre">{{genre | titlecase}}</option>
+            @for (genre of genresOptions; track genre) {
+              <option [value]="genre.value">{{genre.option}}</option>
             }
           </select>
         </div>
@@ -60,8 +60,8 @@
         <div class="col-sm-10">
           <select class="form-select" formControlName="degreeType" [attr.disabled]="changeGenreForm.controls['genreTo'].value.includes('THESIS') ? null : ''">
             <option value=null selected disabled>Type</option>
-            @for (degreeType of degreeTypes; track degreeType) {
-              <option [value]="degreeType">{{degreeType | titlecase}}</option>
+            @for (degreeType of degreeTypesOptions; track degreeType) {
+              <option [value]="degreeType.value">{{degreeType.option}}</option>
             }
           </select>
         </div>

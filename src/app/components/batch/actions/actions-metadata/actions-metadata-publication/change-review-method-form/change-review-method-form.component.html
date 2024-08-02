@@ -15,8 +15,8 @@
         <select class="form-select" formControlName="reviewMethodFrom">
           <option [value]='' selected disabled i18n="@@batch.actions.metadata.publication.reviewType">Review type</option>
           <option [value]=''>---</option>
-          @for (method of reviewMethods; track method) {
-            <option [value]="method">{{method | titlecase}}</option>
+          @for (method of reviewMethodssOptions; track method) {
+            <option [value]="method.value"> {{method.option}}</option>
           }
         </select>
       </div>
@@ -30,8 +30,8 @@
         <select class="form-select" formControlName="reviewMethodTo">
           <option [value]='' selected disabled i18n="@@batch.actions.metadata.publication.reviewType">Review type</option>
           <option [value]=''>---</option>
-          @for (method of reviewMethods; track method) {
-            <option [value]="method">{{method | titlecase}}</option>
+          @for (method of reviewMethodssOptions; track method) {
+            <option [value]="method.value"> {{method.option}}</option>
           }
         </select>
       </div>

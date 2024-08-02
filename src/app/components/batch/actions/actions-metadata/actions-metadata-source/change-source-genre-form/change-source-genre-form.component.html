@@ -14,8 +14,8 @@
       <div class="col-sm-9">
         <select class="form-select" formControlName="sourceGenreFrom">
           <option [value]='' selected disabled>Genre</option>
-          @for (genre of sourceGenres; track genre) {
-            <option [value]="genre">{{genre | titlecase}}</option>
+          @for (genre of sourceGenresOptions; track genre) {
+            <option [value]="genre.value"> {{genre.option}}</option>
           }
         </select>
       </div>
@@ -28,8 +28,8 @@
       <div class="col-sm-9">
         <select class="form-select" formControlName="sourceGenreTo">
           <option [value]='' selected disabled>Genre</option>
-          @for (genre of sourceGenres; track genre) {
-            <option [value]="genre">{{genre | titlecase}}</option>
+          @for (genre of sourceGenresOptions; track genre) {
+            <option [value]="genre.value"> {{genre.option}}</option>
           }
         </select>
       </div>

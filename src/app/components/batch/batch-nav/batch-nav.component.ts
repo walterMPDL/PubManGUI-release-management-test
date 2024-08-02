@@ -7,8 +7,8 @@ import { MessageService } from 'src/app/shared/services/message.service';
 import { BatchService } from '../services/batch.service';
 
 interface NavOption {
-  text: string;
   route: string;
+  label: string;
   disabled: boolean;
 }
 
@@ -23,9 +23,9 @@ interface NavOption {
 export class BatchNavComponent implements OnInit {
 
   public navList = signal<NavOption[]>([
-    { route: '/batch/datasets', text: 'datasets', disabled: false },
-    { route: '/batch/actions', text: 'actions', disabled: false },
-    { route: '/batch/logs', text: 'logs', disabled: false },
+    { route: '/batch/datasets', label: $localize`:@@datasets:datasets`, disabled: false },
+    { route: '/batch/actions', label: $localize`:@@actions:actions`, disabled: false },
+    { route: '/batch/logs', label: $localize`:@@logs:logs`, disabled: false },
   ]);
 
   constructor(
@@ -42,7 +42,7 @@ export class BatchNavComponent implements OnInit {
 
   warning(option: string) {
     switch (option) {
-      case 'datasets':
+      case '/batch/datasets':
         if (!this.batchSvc.areItemsSelected()) {
           this.msgSvc.warning(`The batch processing is empty!\n`);
           this.msgSvc.dialog.afterAllClosed.subscribe(result => {
@@ -50,7 +50,7 @@ export class BatchNavComponent implements OnInit {
           })
         }
         break;
-      case 'actions':
+      case '/batch/actions':
         if (!this.batchSvc.areItemsSelected()) {
           this.msgSvc.warning(`The batch processing is empty!\n`);
           this.msgSvc.dialog.afterAllClosed.subscribe(result => {
