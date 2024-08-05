@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { OnInit, Component, signal } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
+import { NavigationEnd, Router, RouterModule } from '@angular/router';
 
 import { AaService } from 'src/app/services/aa.service';
 import { MessageService } from 'src/app/shared/services/message.service';
@@ -36,6 +36,7 @@ export class BatchNavComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.batchSvc.items;
     this.navList()[0].disabled = !this.batchSvc.areItemsSelected();
     this.navList()[1].disabled = !this.batchSvc.areItemsSelected() || this.batchSvc.isProcessRunning();
   }
