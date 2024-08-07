@@ -15,13 +15,12 @@
     "ouTree": "Organisationsstruktur",
     "search": "Suche",
     "advancedSearch": "Erweiterte Suche",
-    "privacyPolicy": "Datenschutzerklärung",
-    "batch": "Batch-Verarbeitung",
+    "batch": "Batchverarbeitung",
     "datasets": "Datensätze",
     "actions": "Aktionen",
     "logs": "Protokolle",
-    "details": "Protokoll detailliert",
-    "batch.actions":"Die gewählte Aktion wird auf alle jeweils im Arbeitsbereich hinterlegten Datensätze ausgeführt. Die meisten Aktionen sind mit einem regulären 'Speichern' verbunden: Bitte beachten Sie, dass sich der Status der einzelnen Datensätze dementsprechend ändert. ",
+    "details": "Details",
+    "batch.actions":"Die gewählte Aktion wird auf alle jeweils im Arbeitsbereich hinterlegten Datensätze ausgeführt. Die meisten Aktionen sind mit einem regulären 'Speichern' verbunden: Bitte beachten Sie, dass sich der Status der einzelnen Datensätze dementsprechend ändert.",
     "batch.actions.item.state": "Datensatz-Status",
     "batch.actions.item.state.delete": "Löschen",
     "batch.actions.item.state.delete.info": "Die Datensätze werden gelöscht, sofern ihr aktueller Status dies zulässt",
@@ -145,7 +144,7 @@
   "BatchProcessLogHeaderState": {
     "INITIALIZED": "Initialisiert",
     "RUNNING": "Läuft",
-    "FINISHED": "Vollendet"
+    "FINISHED": "Abgeschlossen"
   },
   "BatchProcessLogDetailState": {
     "INITIALIZED": "Initialisiert",

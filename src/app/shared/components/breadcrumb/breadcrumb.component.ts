@@ -66,6 +66,9 @@ export class BreadcrumbComponent {
       case 'QA Area':
         localizedlabel = $localize`:@@qa:QA Area`;
         break;
+      case 'Basket':
+        localizedlabel = $localize`:@@basket:Basket`;
+        break;
       case 'Organizational units':
         localizedlabel = $localize`:@@ouTree:Organizational units`;
         break;
@@ -84,7 +87,6 @@ export class BreadcrumbComponent {
       case 'Privacy Policy':
         localizedlabel = $localize`:@@privacyPolicy:Privacy Policy`;
     }
-
     return localizedlabel;
   }
 
