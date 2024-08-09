@@ -40,7 +40,4 @@ export class SidenavComponent implements AfterViewInit {
     this.renderer.addClass(this.nav.nativeElement, 'collapsed');
   }
 
-  selectedItems():number {
-    return this.batchSvc.getItemsCount();
-  }
 }
