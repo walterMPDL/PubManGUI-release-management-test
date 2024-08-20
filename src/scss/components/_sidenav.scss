@@ -2,14 +2,15 @@
   left: 10%;
   position: fixed;
   top: 14%;
-  width: 14em;
+  width: 12.8rem;
   z-index: 16;
   overflow: hidden;
-
+  opacity: 0.96;
+  border-radius: 0.4rem;
 }
 
 .side_nav.collapsed {
-  width: 80px;
+  width: 8rem //80px;
 }
 
 .side_nav.collapsed .bi {
