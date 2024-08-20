@@ -10,7 +10,7 @@
 }
 
 .side_nav.collapsed {
-  width: 8rem //80px;
+  width: 8rem;
 }
 
 .side_nav.collapsed .bi {
@@ -23,6 +23,27 @@
 
 .side_nav .matBadge {
   top: -1.3rem;
+}
+
+.side_nav .mat-badge-content {
+  position: absolute;
+  text-align: center;
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  pointer-events: none;
+  border-radius: 50%;
+  opacity: 0.7;
+  box-shadow: 0 1px 6px 0 #{$mpdl-pale-purple};
+  --mat-badge-background-color: var(--bs-body-background) !important;
+  --mat-badge-text-color: var(--bs-body-color);
+  --mat-badge-text-font: var(--bs-body-font-family);
+  --mat-badge-text-size: x-small;
+  --mat-badge-text-weight: bolder;
+  --mat-badge-container-size:1.4rem;
+  --mat-badge-container-overlap-offset:-0.8rem 0.1rem;
+  --mat-badge-container-padding:0 0.3rem; 
 }
 
 .side_nav_mobile {
