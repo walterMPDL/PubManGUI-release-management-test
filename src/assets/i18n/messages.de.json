@@ -83,7 +83,7 @@
     "batch.actions.metadata.publication.keywordsReplace": "Schlagwörter ersetzen",
     "batch.actions.metadata.publication.keywordsReplace.info": "Schlagwörter in den Datensätzen werden ersetzt. Sie können wählen zwischen dem vollständigen Überschreiben aller bisherigen Inhalte und dem gezielten Ersetzen einzelner Begriffe",
     "batch.actions.metadata.publication.keywordsReplace.method": "Wähle eine Methode",
-    "batch.actions.metadata.publication.keywordsReplace.method.all": "Alles",
+    "batch.actions.metadata.publication.keywordsReplace.method.all": "Alle",
     "batch.actions.metadata.publication.keywordsReplace.method.specific": "Spezifischer Wert",
     "batch.actions.metadata.publication.keywordsReplace.from": "Zu ersetzendes Schlagwort",
     "batch.actions.metadata.publication.keywordsReplace.to": "Neue(s) Schlagwort/Schlagwörter",
@@ -99,12 +99,16 @@
     "batch.actions.metadata.source.addId": "Identifikator hinzufügen",
     "batch.actions.metadata.source.addId.info": "Neue Identifikatoren werden in den vorhandenen Quellen hinzugefügt.",
     "batch.actions.metadata.source.addId.type": "Typ der ID",
+    "batch.actions.metadata.source.addId.default": "Typ",
     "batch.actions.metadata.source.addId.to": "Wert der zusätzlichen ID",
     "batch.actions.metadata.source.replaceId": "Identifikator ersetzen",
     "batch.actions.metadata.source.replaceId.info": "Die Werte einzelner Identifikatoren aus den Quellen werden ersetzt.",
     "batch.actions.metadata.source.replaceId.type": "Typ der ID",
+    "batch.actions.metadata.source.replaceId.default": "Typ",
     "batch.actions.metadata.source.replaceId.from": "Bisheriger Wert der ID",
     "batch.actions.metadata.source.replaceId.to": "Neuer Wert der ID",
+    "batch.actions.metadata.source.type.other": "Andere",
+    "batch.actions.metadata.source.type.report": "Report Nr.",
     "batch.logs.started.on": "gestarted am",
     "batch.logs.header.date":"Datum",
     "batch.logs.header.details":"Details",
@@ -276,6 +280,20 @@
     "pre_print": "Preprint",
     "any_fulltext": "Beliebiger Volltext",
     "table_of_contents": "Inhaltsverzeichnis"
+  },
+  "SourceIdType": {
+    "BIBTEX_CITEKEY": "BibTex Citekey",
+    "CONE": "CoNE",
+    "DOI": "DOI",
+    "ISBN": "ISBN",
+    "ISI": "ISI",
+    "ISSN": "ISSN",
+    "OTHER": "Andere",
+    "PII": "PII",
+    "REPORT_NR": "Report Nr.",
+    "URI": "URI",
+    "URN": "URN",
+    "ZDB": "ZDB"
   }
 
 }

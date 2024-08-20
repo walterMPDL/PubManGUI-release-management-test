@@ -234,5 +234,20 @@
     "pre_print": "Preprint",
     "any_fulltext": "Any fulltext",
     "table_of_contents": "Table of contents"
+  },
+  "SourceIdType": {
+    "BIBTEX_CITEKEY": "BibTex Citekey",
+    "CONE": "CoNE",
+    "DOI": "DOI",
+    "ISBN": "ISBN",
+    "ISI": "ISI",
+    "ISSN": "ISSN",
+    "OTHER": "Other",
+    "PII": "PII",
+    "REPORT_NR": "Report No.",
+    "URI": "URI",
+    "URN": "URN",
+    "ZDB": "ZDB"
   }
+
 }
