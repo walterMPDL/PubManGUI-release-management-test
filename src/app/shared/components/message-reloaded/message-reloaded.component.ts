@@ -1,14 +1,18 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component, OnInit, Inject, HostListener } from '@angular/core';
 import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
-import { NgClass } from '@angular/common';
+
 
 @Component({
-    selector: 'pure-message',
-    templateUrl: './message.component.html',
-    standalone: true,
-    imports: [NgClass]
+  selector: 'pure-message-reloaded',
+  standalone: true,
+  imports: [
+    CommonModule
+  ],
+  templateUrl: './message-reloaded.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MessageComponent implements OnInit {
+export class MessageReloadedComponent implements OnInit {
 
   message: any;
 
@@ -19,11 +23,13 @@ export class MessageComponent implements OnInit {
 
   ngOnInit(): void {
     this.message = this.data;
+    /*
     if (this.message.type === 'info' || this.message.type === 'success') {
       setTimeout(() => {
         this.close();
       }, 5000);
-    }  
+    }
+    */  
   }
 
   close(): void {

@@ -2,15 +2,31 @@
   left: 10%;
   position: fixed;
   top: 14%;
-  width: 12.8rem;
+  width: 15rem;
   z-index: 16;
   overflow: hidden;
-  opacity: 0.96;
   border-radius: 0.4rem;
+  box-shadow: color-mix(in srgb, var(--bs-body-color), transparent 80%) 0.4rem 1rem 2rem 0;
+  transition: all 0.1s ease;
+  white-space: nowrap;
+
+  .nav-link {
+
+    &:not(disabled):hover {
+      background-color: rgba(0, 0, 0, 0.04);
+      span {
+        color: var(--accent-bg-color) !important;
+      }
+      path {
+        fill: var(--accent-bg-color) !important;
+      }
+      cursor:pointer;
+    }
+  }
 }
 
 .side_nav.collapsed {
-  width: 8rem;
+  width: 5.3rem;
 }
 
 .side_nav.collapsed .bi {
@@ -34,10 +50,10 @@
   text-overflow: ellipsis;
   pointer-events: none;
   border-radius: 50%;
-  opacity: 0.7;
+  //opacity: 0.7;
   box-shadow: 0 1px 6px 0 #{$mpdl-pale-purple};
   --mat-badge-background-color: var(--bs-body-background) !important;
-  --mat-badge-text-color: var(--bs-body-color);
+  --mat-badge-text-color: color-mix(in srgb, var(--bs-body-color), transparent 20%);
   --mat-badge-text-font: var(--bs-body-font-family);
   --mat-badge-text-size: x-small;
   --mat-badge-text-weight: bolder;

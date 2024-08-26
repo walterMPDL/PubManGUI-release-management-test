@@ -7,8 +7,7 @@ import { MessageService } from 'src/app/shared/services/message.service';
   selector: 'pure-topnav',
   standalone: true,
   imports: [RouterLink],
-  templateUrl: './topnav.component.html',
-  styleUrl: './topnav.component.scss'
+  templateUrl: './topnav.component.html'
 })
 export class TopnavComponent {
 

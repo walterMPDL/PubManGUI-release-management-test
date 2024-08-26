@@ -1,14 +1,22 @@
+<!--
 <div class="batch-nav">
     <div class="position-absolute start-50 translate-middle nav-bottom-10">
         <ul class="nav p-3 d-flex justify-content-around">
+        -->
+        <ul>
             @for(option of navList(); track option) {
-            <li [routerLink]="[ option.route ]" routerLinkActive="current" 
+            <li [routerLink]="[ option.route ]" 
+                routerLinkActive="current" 
                 isActive="false" 
                 [ngClass]="{'disabled' : option.disabled}"
                 (click)="warning(option.route)"
-                data-bs-toggle="button">{{ option.label | titlecase }} 
+                data-bs-toggle="button"
+                class="nav-link nav-label ms-4">
+                {{ option.label | titlecase }} 
             </li>
             }
         </ul>
+        <!--
     </div>
 </div>
+-->
