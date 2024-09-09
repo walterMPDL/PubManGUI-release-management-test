@@ -1,14 +1,6 @@
-.breadcrumb {
+pure-breadcrumb {
   background: none;
   font-size: 0.9em;
-  position: fixed;
-  top: 110px;
-  height: 30px;
-  margin: 0;
-
-  &.scrolled {
-    visibility: hidden;
-  }
 
   a,
   span,
@@ -27,5 +19,4 @@
     font-weight: bold !important;
     cursor: not-allowed;
   }
-
 }

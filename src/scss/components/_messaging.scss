@@ -1,0 +1,66 @@
+pure-messaging {
+    background: none;
+    font-size: 0.9em;
+
+    .msg-header {
+        display: inline-block !important;
+        max-height: 2rem;
+        overflow: hidden;
+
+        padding: 0.2rem;
+        border-radius: 0.5rem;
+        background-color: color-mix(in srgb, #{$mpdl-apricot}, transparent 60%);
+    }
+
+    .material-symbols-outlined {
+        text-decoration: none;
+        color: var(--bs-body-color);
+    }
+
+    .type {
+        position: absolute;
+        top: 0.2rem;
+        margin-right: 1rem;
+        opacity: 0.5;
+        animation: blinker 1s ease infinite;
+        cursor: not-allowed;
+    }
+
+    @keyframes blinker {
+        100% {
+            opacity: 0.4;
+        }
+    }
+
+    .title {
+        display: inline-block;
+        margin-left: 3rem;
+        margin-right: 3rem;
+        max-height: 1.5rem;
+        overflow-y: scroll;
+        max-width: 90%;
+    }
+
+    .tooltip-inner {
+        background-color: #{$mpdl-pale-purple};
+        color: #{$mpdl-dark};
+    }
+
+    .bs-tooltip-bottom .tooltip-arrow::before {
+        border-bottom-color: #{$mpdl-pale-purple};
+    }
+
+    .close {
+        position: absolute;
+        top: 0.2rem;
+        margin-left: -1.5rem;
+        cursor: pointer;
+
+        &:hover {
+            border-radius: 40%;
+            box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.05);
+            background-color: rgba(0, 0, 0, 0.05);
+            color: #{$mpdl-dark} !important;
+        }
+    }
+}
