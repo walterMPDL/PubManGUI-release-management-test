@@ -60,8 +60,13 @@ export class MessageService {
   }
 
   error(message: string) {
-    const title = (message.substring(message.lastIndexOf('/'))).substring(message.indexOf(' ')+1);
-    const msg = { type: 'danger', title: title, text: message };
+    let title, msg = null;
+    if (message.lastIndexOf('\n')>=0) {
+      title = (message.substring(message.lastIndexOf('\n')));
+      msg = { type: 'danger', title: title, text: message };
+    } else {
+      msg = { type: 'danger', text: message };
+    }
     //this.displayMessage(msg);
     this.displayOnArea(msg);
   }
