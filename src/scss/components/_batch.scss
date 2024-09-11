@@ -225,4 +225,14 @@
               }
         }
     }
+
+    .tooltip-inner {
+        background-color: #{$mpdl-light};
+        color: #{$mpdl-dark};
+    }
+
+    .bs-tooltip-end .tooltip-arrow::before {
+        border-right-color: #{$mpdl-light};
+    }
+
 }
