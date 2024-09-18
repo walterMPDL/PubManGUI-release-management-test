@@ -6,7 +6,10 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "e2e": "ng e2e",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run"
   },
   "private": true,
   "dependencies": {
@@ -23,19 +26,20 @@
     "@angular/router": "^18.0.5",
     "@ng-bootstrap/ng-bootstrap": "^17.0.0",
     "@popperjs/core": "^2.11.8",
+    "@types/sanitize-html": "^2.11.0",
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
     "material-symbols": "^0.15.0",
     "rxjs": "~7.8.0",
+    "sanitize-html": "^2.13.0",
     "tslib": "^2.3.0",
-    "zone.js": "^0.14.4",
-    "@types/sanitize-html": "^2.11.0",
-    "sanitize-html": "^2.13.0"
+    "zone.js": "^0.14.4"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^18.0.6",
     "@angular/cli": "^18.0.6",
     "@angular/compiler-cli": "^18.0.5",
+    "@cypress/schematic": "^2.5.2",
     "@types/jasmine": "~5.1.0",
     "jasmine-core": "~5.1.0",
     "karma": "~6.4.0",
@@ -43,6 +47,7 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
-    "typescript": "~5.4.5"
+    "typescript": "~5.4.5",
+    "cypress": "latest"
   }
 }
