@@ -1,10 +1,16 @@
 pure-info-panel {
-    position: relative;
-    top: 65px;
-    height: 15px;
-    margin: 0;
-
-    div.scrolled {
-        visibility: hidden;
+    height: 30px;
+    
+    .row {
+        position: fixed;
+        top: 115px;
+        z-index: 1032;
+    
+        &.scrolled {
+            //visibility: hidden;
+            position: fixed;
+            top: 55px;
+            transition: all 0.3s ease;
+        }
     }
 }

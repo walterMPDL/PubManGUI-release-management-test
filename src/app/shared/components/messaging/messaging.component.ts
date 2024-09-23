@@ -14,6 +14,7 @@ import { MessageService } from "src/app/shared/services/message.service";
 })
 export class MessagingComponent {
   message: any = {};
+  collapsed: boolean = true; 
 
   fg_color = 'text-info-emphasis';
   bg_color = 'bg-info-subtle';
@@ -57,5 +58,9 @@ export class MessagingComponent {
 
   close(): void {
     this.message = {};
+  }
+
+  slide(): void {
+    this.collapsed = this.collapsed ? false : true;
   }
 }
