@@ -7,7 +7,7 @@
         <small>{{current_page}} / {{number_of_pages}}</small>
     </div>
     -->
-    <nav class="col-12 col-xxl-5" purePagination #pagination="purePagination" [totalPages]="number_of_pages"
+    <nav class="col-12 col-xxl-8" purePagination #pagination="purePagination" [totalPages]="number_of_pages"
         [pageNo]="current_page" (pageChange)="onPageChange($event)">
         <!--
         <ul class="pagination pagination-sm">
