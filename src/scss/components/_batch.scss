@@ -200,9 +200,10 @@
 
                 &:hover {
                     border-radius: 40%;
-                    box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.05);
+                    //box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.05);
+                    box-shadow: color-mix(in srgb, var(--bs-body-color), transparent 80%) 0 0 6px 0;
                     background-color: rgba(0, 0, 0, 0.05);
-                    color: black !important;
+                    color: var(--bs-body-color) !important;
                 }
             }
 
