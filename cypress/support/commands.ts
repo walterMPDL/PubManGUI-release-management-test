@@ -41,3 +41,30 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+
+Cypress.Commands.add('loginViaAPI', (userName, password) => {
+  cy.request({
+    'method': 'POST',
+    'url': '/rest/login',
+    'body': userName + ':' + password
+  }).then((response) => {
+    expect(response.status).to.eq(200)
+    let responseToken = response.headers['token'] as string
+    expect(responseToken).to.exist
+
+    //Cookies from the response are automatically used for further requests
+    //For a successful authentication the response token must be set as 'token' in the Local Storage
+    window.localStorage.setItem('token', responseToken)
+  })
+})
+
+Cypress.Commands.add('logoutViaAPI', () => {
+  cy.request({
+    'method': 'GET',
+    'url': '/rest/logout'
+  }).then((response) => {
+    expect(response.status).to.eq(200)
+
+    window.localStorage.removeItem('token')
+  })
+})
