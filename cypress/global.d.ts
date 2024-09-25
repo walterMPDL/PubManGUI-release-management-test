@@ -1,7 +1,7 @@
 declare namespace Cypress {
   interface Chainable {
     /**
-     * Login using the REST API
+     * Login using the REST API & Setting the token in the Local Storage
      */
     loginViaAPI(username: string, password: string): void
 
@@ -9,5 +9,10 @@ declare namespace Cypress {
      * Logout using the REST API
      */
     logoutViaAPI(): void
+
+    /**
+     * Logout by clearing the Local Storage
+     */
+    logoutByClearingLocalStorage(): void
   }
 }

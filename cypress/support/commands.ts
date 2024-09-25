@@ -45,7 +45,7 @@
 Cypress.Commands.add('loginViaAPI', (userName, password) => {
   cy.request({
     'method': 'POST',
-    'url': '/rest/login',
+    'url': Cypress.env('restUrl') + '/login',
     'body': userName + ':' + password
   }).then((response) => {
     expect(response.status).to.eq(200)
@@ -61,10 +61,12 @@ Cypress.Commands.add('loginViaAPI', (userName, password) => {
 Cypress.Commands.add('logoutViaAPI', () => {
   cy.request({
     'method': 'GET',
-    'url': '/rest/logout'
+    'url': Cypress.env('restUrl') + '/logout'
   }).then((response) => {
     expect(response.status).to.eq(200)
-
-    window.localStorage.removeItem('token')
   })
+})
+
+Cypress.Commands.add('logoutByClearingLocalStorage', () => {
+  window.localStorage.clear()
 })
