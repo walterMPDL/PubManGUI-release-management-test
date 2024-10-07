@@ -59,6 +59,7 @@ export default class LogItemListComponent implements OnInit, DoCheck {
 
   batchProcessLogDetailStateTranslations = {};
   batchProcessMessageTranslations = {};
+  batchProcessMethodTranslations = {};
 
   public filterForm: FormGroup = this.fb.group({
     success: [true, Validators.requiredTrue],
@@ -77,17 +78,7 @@ export default class LogItemListComponent implements OnInit, DoCheck {
     @Inject(LOCALE_ID) public locale: string) {}
 
   ngOnInit(): void {
-    if (this.locale === 'de') {
-      import('src/assets/i18n/messages.de.json').then((msgs) => {
-        this.batchProcessLogDetailStateTranslations = msgs.BatchProcessLogDetailState;
-        this.batchProcessMessageTranslations = msgs.BatchProcessMessages;
-      })
-    } else {
-      import('src/assets/i18n/messages.json').then((msgs) => {
-        this.batchProcessLogDetailStateTranslations = msgs.BatchProcessLogDetailState;
-        this.batchProcessMessageTranslations = msgs.BatchProcessMessages;
-      })
-    }
+    this.loadTranslations(this.locale);
 
     this.activatedRoute.params
       .pipe(
@@ -112,7 +103,22 @@ export default class LogItemListComponent implements OnInit, DoCheck {
 
     this.method = history.state.method;
     this.started = history.state.started;
+  }
 
+  async loadTranslations(lang: string) {
+    if (lang === 'de') {
+      import('src/assets/i18n/messages.de.json').then((msgs) => {
+        this.batchProcessLogDetailStateTranslations = msgs.BatchProcessLogDetailState;
+        this.batchProcessMessageTranslations = msgs.BatchProcessMessages;
+        this.batchProcessMethodTranslations = msgs.BatchProcessMethod;
+      })
+    } else {
+      import('src/assets/i18n/messages.json').then((msgs) => {
+        this.batchProcessLogDetailStateTranslations = msgs.BatchProcessLogDetailState;
+        this.batchProcessMessageTranslations = msgs.BatchProcessMessages;
+        this.batchProcessMethodTranslations = msgs.BatchProcessMethod;
+      })
+    }
   }
 
   ngDoCheck(): void {
@@ -146,6 +152,11 @@ export default class LogItemListComponent implements OnInit, DoCheck {
   getProcessMessageTranslation(txt: string):string {
     let key = txt as keyof typeof this.batchProcessMessageTranslations;
     return this.batchProcessMessageTranslations[key];
+  }
+
+  getProcessMethodTranslation(txt: string):string {
+    let key = txt as keyof typeof this.batchProcessMethodTranslations;
+    return this.batchProcessMethodTranslations[key];
   }
 
   fillWithAll() {
