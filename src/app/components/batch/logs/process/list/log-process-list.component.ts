@@ -37,7 +37,7 @@ type detail = {
 export class LogProcessListComponent implements OnInit {
 
   page = 1;
-  pageSize = 10;
+  pageSize = 25;
   collectionSize = 0;
   inPage: resp.BatchProcessLogHeaderDbVO[] = [];
   processLogs: resp.BatchProcessLogHeaderDbVO[] = [];

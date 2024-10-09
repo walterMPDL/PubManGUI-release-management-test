@@ -46,7 +46,7 @@ type detail = {
 
 export default class LogItemListComponent implements OnInit, DoCheck {
   page = 1;
-  pageSize = 10;
+  pageSize = 25;
   collectionSize = 0;
   inPage: detail[] = [];
 

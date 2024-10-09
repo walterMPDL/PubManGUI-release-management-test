@@ -131,7 +131,7 @@
             <select class="form-select" [formControl]="select_pages_2_display"
                 (change)="pageSizeHandler($event)" size="1">
                 @for (pages of pages_2_display; track pages) {
-                <option [selected]="pages.value === 10" [value]="pages.value">{{pages.label}}</option>
+                <option [selected]="pages.value === 25" [value]="pages.value">{{pages.label}}</option>
                 }
             </select>
         </div>
