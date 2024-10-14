@@ -35,7 +35,7 @@ export default class ImportsComponent implements OnInit {
       }) 
     }
 
-    if (this.importsSvc.areItemsSelected()) {
+    if (this.importsSvc.haveImports()) {
       this.router.navigate(['/imports/myimports'])
     } else {
       this.router.navigate(['/imports/new'])

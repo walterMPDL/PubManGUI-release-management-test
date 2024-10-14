@@ -60,14 +60,14 @@
           }
           @if (aaService.principal.getValue().isDepositor || aaService.principal.getValue().isModerator) {
             <div class="border-bottom">
-              <a class="nav-link py-3" [routerLink]="['imports']" [ngClass]="{'disabled' : importsSvc.areItemsSelected()}" (click)="collapse()">
+              <a class="nav-link py-3" [routerLink]="['imports']" [ngClass]="{'disabled' : importsSvc.haveImports()}" (click)="collapse()">
                 <span class="material-symbols-outlined">get_app</span>
                 <span class="nav-label ms-3">Import</span>
-                @if ( batchSvc.areItemsSelected() ) {
-                  <div class="matBadge" matBadge='{{ importsSvc.getItemsCount() }}'></div>
+                @if ( importsSvc.haveImports() ) {
+                  <div class="matBadge" matBadge='9999'></div>
                 } 
               </a>
-              @if ( batchSvc.areItemsSelected() ) {
+              @if ( importsSvc.haveImports() ) {
                 @defer {
                 <pure-imports-nav></pure-imports-nav>
                 }
