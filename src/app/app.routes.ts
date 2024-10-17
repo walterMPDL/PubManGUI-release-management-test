@@ -108,6 +108,15 @@ export const routes: Routes = [
     },
   },
   {
+    path: 'imports',
+    loadChildren: () => import('./components/imports/imports-routing.module').then(m => m.ImportsRoutingModule),
+    data: {
+      breadcrumb: {
+        label: 'Imports',
+      }
+    },
+  },
+  {
     path: '**',
     component: PageNotFoundComponent
   }
