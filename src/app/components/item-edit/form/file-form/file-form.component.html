@@ -1,9 +1,11 @@
 <div [formGroup]="file_form">
     <div class="custom-drag-placeholder" *cdkDragPlaceholder></div>
     <div class="d-sm-flex flex-sm-row gap-1 mb-1" cdkDragHandle>
-        <span class="material-symbols-outlined containerShowOnSort">
-            drag_indicator
-        </span>
+        <div class="py-1">
+            <span class="material-symbols-outlined containerShowOnSort">
+                drag_indicator
+            </span>
+        </div>
         @if(file_form.get('storage')?.value == 'INTERNAL_MANAGED') {
         <label for="file" class="col-sm col-form-label fw-semibold">{{index + 1}}. File -
             {{file_form.get('name')?.value}}</label>
