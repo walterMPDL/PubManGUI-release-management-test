@@ -43,7 +43,7 @@
                         <!-- TODO File upload -->
                         <div class="d-sm-flex flex-sm-row gap-1 mb-1">
                             <label class="col-sm-2 col-form-label">File Upload</label>
-                            <pure-file-upload></pure-file-upload>
+                            <pure-file-upload [file_upload_form]="internalFiles"></pure-file-upload>
                         </div>
                     </div>
                     @if (internalFiles.controls.length > 0) {
