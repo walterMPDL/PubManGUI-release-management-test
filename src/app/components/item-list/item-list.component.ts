@@ -1,5 +1,14 @@
 import { AsyncPipe, CommonModule, NgClass, NgFor, NgIf } from '@angular/common';
-import {AfterViewInit, Component, Input, QueryList, TemplateRef, ViewChildren, HostListener} from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  Input,
+  QueryList,
+  TemplateRef,
+  ViewChildren,
+  HostListener,
+  ViewChild, ViewContainerRef
+} from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PaginationDirective } from 'src/app/shared/directives/pagination.directive';
 import { ItemListElementComponent } from './item-list-element/item-list-element.component';
@@ -36,8 +45,9 @@ import {ItemStateFilterComponent} from "./filters/item-state-filter/item-state-f
 export class ItemListComponent implements AfterViewInit {
 
   @Input() searchQuery: Observable<any> = of({});
-  @Input() filterSectionTemplate?: TemplateRef<any> | undefined;
+  //@Input() filterSectionTemplate?: TemplateRef<any> | undefined;
   @ViewChildren(ItemListElementComponent) list_items!: QueryList<ItemListElementComponent>;
+  @ViewChild("sortAndFilter", { read: ViewContainerRef }) vcr!: ViewContainerRef;
 
   result_list: Observable<ItemVersionVO[]> | undefined;
   number_of_results: number | undefined;
@@ -61,17 +71,6 @@ export class ItemListComponent implements AfterViewInit {
 
   selectAll = $localize`:@@selectAll:select all`;
   deselectAll = $localize`:@@deselectAll:deselect all`;
-
-  update_query = (query: any) => {
-    return {
-      query,
-      size: this.page_size,
-      from: 0,
-      sort: [
-        {modificationDate: "desc"}
-      ]
-    }
-  }
 
   currentSortQuery: any;
   currentQuery: any;
@@ -225,19 +224,33 @@ export class ItemListComponent implements AfterViewInit {
     this.isScrolled = scrollPosition > 50 ? true : false;
   }
 
-  updateFilter(fe: any) {
-   const filterEvent : FilterEvent = fe as FilterEvent;
-   console.log(filterEvent)
-   {
-     this.filterEvents.set(filterEvent.name,filterEvent);
-     this.update_query(this.currentQuery, this.page_size, 0);
-   }
+  registerFilter(fe: FilterEvent) {
+    //const filterEvent : FilterEvent = fe as FilterEvent;
+    console.log("registerFilter: " + fe)
+    this.filterEvents.set(fe.name,fe);
+    //this.update_query(this.currentQuery, this.page_size, 0);
+
+  }
+
+  updateFilter(fe: FilterEvent) {
+
+   console.log("updateFilter: " + fe)
+    this.filterEvents.set(fe.name,fe);
+   this.update_query(this.currentQuery, this.page_size, 0);
+
 
 
   }
 
-  updateSort($event: any) {
-    const sortQuery : string = $event as string;
+  registerSort(sortQuery: any) {
+    //const filterEvent : FilterEvent = fe as FilterEvent;
+    console.log("registerSort: " + sortQuery)
+    this.currentSortQuery = sortQuery;
+    //this.update_query(this.currentQuery, this.page_size, 0);
+
+  }
+
+  updateSort(sortQuery: any) {
     this.currentSortQuery = sortQuery
     this.update_query(this.currentQuery, this.page_size, 0, this.currentSortQuery);
 

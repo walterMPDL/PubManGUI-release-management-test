@@ -1,34 +1,37 @@
-import {Component, EventEmitter, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {CreatorRole, ItemVersionState} from "../../../../model/inge";
-import {FilterEvent} from "../../../item-list/item-list.component";
+import {FilterEvent, ItemListComponent} from "../../../item-list/item-list.component";
+import {SortSelectorComponent} from "../sort-selector/sort-selector.component";
 
 @Component({
   selector: 'pure-item-state-filter',
   standalone: true,
-    imports: [
-        FormsModule,
-        ReactiveFormsModule
-    ],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    ItemListComponent,
+    SortSelectorComponent
+  ],
   templateUrl: './item-state-filter.component.html',
   styleUrl: './item-state-filter.component.scss'
 })
 export class ItemStateFilterComponent {
-
-  @Output() filterChanged = new EventEmitter<FilterEvent>();
+  @Input() itemList!: ItemListComponent;
+  //@Output() filterChanged = new EventEmitter<FilterEvent>();
   itemStateOptions = Object.keys(ItemVersionState);
 
   ngAfterViewInit(){
-    this.fireEventForFilterChange("")
+    this.itemList.registerFilter(this.getFilterEvent(""))
   }
 
   handleInputChange($event: any){
     const targetVal = $event.target.value;
-    this.fireEventForFilterChange(targetVal);
+    this.itemList.updateFilter(this.getFilterEvent(targetVal));
 
   }
 
-  fireEventForFilterChange(state:string) {
+  getFilterEvent(state:string): FilterEvent {
     let query = undefined;
     if(ItemVersionState.WITHDRAWN === state) {
       query =
@@ -62,7 +65,7 @@ export class ItemStateFilterComponent {
       name: "stateFilter",
       query: query
     }
-    this.filterChanged.emit(fe); // this will pass the $event object to the parent component.
+    return fe; // this will pass the $event object to the parent component.
   }
 
 }

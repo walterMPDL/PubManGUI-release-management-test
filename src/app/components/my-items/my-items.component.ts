@@ -3,12 +3,16 @@ import {AaService} from "../../services/aa.service";
 import {baseElasticSearchQueryBuilder} from "../../shared/services/search-utils";
 import {ItemListComponent} from "../item-list/item-list.component";
 import {map, Observable} from "rxjs";
+import {ItemStateFilterComponent} from "../item-list/filters/item-state-filter/item-state-filter.component";
+import {SortSelectorComponent} from "../item-list/filters/sort-selector/sort-selector.component";
 
 @Component({
   selector: 'pure-my-items',
   standalone: true,
   imports: [
-    ItemListComponent
+    ItemListComponent,
+    ItemStateFilterComponent,
+    SortSelectorComponent
   ],
   templateUrl: './my-items.component.html',
   styleUrl: './my-items.component.scss'

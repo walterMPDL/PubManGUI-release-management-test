@@ -1,4 +1,3 @@
 <pure-item-list [searchQuery]="searchQuery" #itemList>
-  <pure-sort-selector (sortChanged)="itemList.updateSort($event)"/>
-  <pure-item-state-filter (filterChanged)="itemList.updateFilter($event)"/>
+  <pure-sort-selector [itemList]="itemList"/>
 </pure-item-list>

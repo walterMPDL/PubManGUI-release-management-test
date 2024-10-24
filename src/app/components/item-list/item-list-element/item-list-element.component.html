@@ -15,7 +15,7 @@
       @if (doi) {
       <a class="badge badge-yellow me-2" href="https://doi.org/{{doi}}" target="_blank">DOI: {{doi}}</a>
       }
-      <span class="badge bg-secondary me-2 float-end">{{item?.versionState}}</span>
+      <span class="badge bg-secondary me-2 float-end">{{item?.publicState !== 'WITHDRAWN' ? item?.versionState : item?.publicState}}</span>
     </div>
   </div>
 

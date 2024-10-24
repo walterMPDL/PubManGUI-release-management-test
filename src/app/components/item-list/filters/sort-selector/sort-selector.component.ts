@@ -1,28 +1,63 @@
-import {Component, EventEmitter, Output} from '@angular/core';
-import {FormsModule} from "@angular/forms";
-import {FilterEvent} from "../../item-list.component";
+import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {FilterEvent, ItemListComponent} from "../../item-list.component";
 import {ItemVersionState} from "../../../../model/inge";
 import {baseElasticSearchSortBuilder} from "../../../../shared/services/search-utils";
 
 @Component({
   selector: 'pure-sort-selector',
   standalone: true,
-    imports: [
-        FormsModule
-    ],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule
+  ],
   templateUrl: './sort-selector.component.html',
   styleUrl: './sort-selector.component.scss'
 })
 export class SortSelectorComponent {
-
+  @Input() itemList!: ItemListComponent;
+  @Input() defaultSort:string = "modificationDate";
   sortOptionNames = Object.keys(sortOptions);
-  @Output() sortChanged = new EventEmitter<any>();
+  //@Output() sortChanged = new EventEmitter<any>();
+  selectedSort!:string;
+  selectedSortOrder!:string;
 
+  constructor() {
+   this.selectedSort = this.defaultSort
+    this.selectedSortOrder = sortOptions[this.selectedSort].order;
+  }
+
+  ngAfterViewInit(){
+    //this.selectedSort = this.defaultSort;
+    this.itemList.registerSort(this.getSortQuery(this.selectedSort))
+  }
+
+  getCurrentSortQuery(){
+    return baseElasticSearchSortBuilder(sortOptions[this.selectedSort].index[0], this.selectedSortOrder);
+  }
   handleInputChange($event: any){
     const targetVal:string = $event.target.value;
-    const sortQuery = baseElasticSearchSortBuilder(sortOptions[targetVal].index[0], sortOptions[targetVal].order);
+    this.selectedSort = targetVal;
+    this.selectedSortOrder = sortOptions[targetVal].order;
+    const sortQuery = this.getCurrentSortQuery()
 
-    this.sortChanged.emit(sortQuery);
+    console.log(this.selectedSort + ' / '+ this.selectedSortOrder)
+    this.itemList.updateSort(sortQuery);
+  }
+
+  switchSortOrder() {
+    if(this.selectedSortOrder==='asc')
+      this.selectedSortOrder = 'desc'
+    else
+      this.selectedSortOrder = 'asc';
+    const sortQuery = this.getCurrentSortQuery()
+    console.log(this.selectedSort + ' / '+ this.selectedSortOrder)
+    this.itemList.updateSort(sortQuery);
+  }
+
+  getSortQuery(sortOption: string)
+  {
+    return baseElasticSearchSortBuilder(sortOptions[sortOption].index[0], sortOptions[sortOption].order);
   }
 
 }

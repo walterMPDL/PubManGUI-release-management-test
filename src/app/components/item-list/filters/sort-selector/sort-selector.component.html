@@ -1,7 +1,33 @@
-<select class="form-select" (change)="handleInputChange($event)">
-  @for (val of sortOptionNames; track val) {
-    <option [value]="val">
-      {{ val }}
-    </option>
-  }
-</select><p>sort-selector works!</p>
+<div class="accordion">
+  <div class="accordion-item border-0">
+    <h2 class="accordion-header">
+      <button class="accordion-button rounded-0" type="button" data-bs-toggle="collapse"
+              data-bs-target="#accordionBodyStandardGroup" aria-expanded="true"
+              aria-controls="accordionBodyStandardGroup">
+        Sort by
+      </button>
+    </h2>
+    <div id="accordionBodyStandardGroup" class="accordion-collapse collapse show">
+      <div class="accordion-body mt-3 mb-3">
+        <div class="row">
+          <div class="col">
+        <select class="form-select" (change)="handleInputChange($event)">
+          @for (val of sortOptionNames; track val) {
+            <option [value]="val" [selected]="val === selectedSort">
+              {{ val }}
+            </option>
+          }
+        </select>
+          </div>
+        <div class="col">
+<button type="button" class="btn btn-primary btn-sm" (click)="switchSortOrder()">
+          <i class="bi {{selectedSortOrder==='asc' ? 'bi-arrow-up' : 'bi-arrow-down'}}"></i>
+</button>
+
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+
