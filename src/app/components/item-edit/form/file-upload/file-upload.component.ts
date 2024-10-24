@@ -39,13 +39,12 @@ export class FileUploadComponent {
       this.files.push(file)
     }
   }
-  */
+    */
 
   onChange($event:any): void {
-    for (let file of $event.target.files) {
-        file.storage = Storage.INTERNAL_MANAGED;
-        this.file_upload_form.push(this.fbs.file_FG(file))
-      }
+    for (let item of $event.target.files) {
+      this.files.push(item)
+    }
   }
 
   stageFile(file: FileDbVO) {
@@ -54,8 +53,7 @@ export class FileUploadComponent {
   }
 
   deleteFile(f: File){
-    // this.files = this.files.filter(function(w){ return w.name != f.name });
-    this.file_upload_form.controls = this.file_upload_form.controls.filter(function(w){ return w.controls.name.value != f.name });
+    this.files = this.files.filter(function(w){ return w.name != f.name });
   }
 
 }
