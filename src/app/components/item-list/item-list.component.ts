@@ -12,7 +12,7 @@ import {
 import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PaginationDirective } from 'src/app/shared/directives/pagination.directive';
 import { ItemListElementComponent } from './item-list-element/item-list-element.component';
-import { NavigationEnd, Router, RouterLink } from '@angular/router';
+import {ActivatedRoute, NavigationEnd, Params, Router, RouterLink} from '@angular/router';
 import { TopnavComponent } from 'src/app/shared/components/topnav/topnav.component';
 import { Observable, filter, map, startWith, tap, of} from 'rxjs';
 import { ItemVersionVO } from 'src/app/model/inge';
@@ -36,13 +36,12 @@ import {ItemStateFilterComponent} from "./filters/item-state-filter/item-state-f
     ItemListElementComponent,
     AsyncPipe,
     RouterLink,
-    TopnavComponent,
-    ItemStateFilterComponent
+    TopnavComponent
   ],
   templateUrl: './item-list.component.html',
   styleUrl: './item-list.component.scss'
 })
-export class ItemListComponent implements AfterViewInit {
+export class ItemListComponent implements AfterViewInit{
 
   @Input() searchQuery: Observable<any> = of({});
   //@Input() filterSectionTemplate?: TemplateRef<any> | undefined;
@@ -79,46 +78,59 @@ export class ItemListComponent implements AfterViewInit {
   constructor(
     private service: ItemsService,
     public aa: AaService,
-    private router: Router
-  ) { }
+    private router: Router,
+    private route: ActivatedRoute
+  )
+  {
+   this.readQueryParams()
+  }
 
   ngAfterViewInit(): void {
 
     this.searchQuery.subscribe(q => {
-      console.log("Searching with query: " + q);
       if (q) {
         this.currentQuery = q;
-        this.update_query(this.currentQuery, this.page_size, 0);
+        this.update_query(this.currentQuery, this.page_size, this.getFromValue(), this.currentSortQuery);
       } else {
         this.currentQuery = { bool: { filter: [] } };
-        this.update_query(this.currentQuery, this.page_size, 0);
+        this.update_query(this.currentQuery, this.page_size, this.getFromValue(), this.currentSortQuery);
 
       }
     })
 
-    /*
-    this.router.events.pipe(
-      filter((event) => event instanceof NavigationEnd),
-      // required to work immediately.
-      startWith(this.router)
-    ).subscribe(() => {
-      //const query = history.state.query;
-      console.log(this.searchQuery)
-      if (this.searchQuery) {
-        this.current_query = this.update_query(this.searchQuery);
-        this.items(this.current_query);
-      } else {
-        this.current_query = this.update_query({ bool: { filter: [] } });
-        this.items(this.current_query);
-      }
-    });
+  }
 
-     */
+  private updateQueryParams() {
+    const queryParams: Params = {
+      p: this.current_page,
+      s: this.page_size
+    };
+    this.router.navigate(
+      [],
+      {
+        relativeTo: this.route,
+        queryParams,
+        queryParamsHandling: 'merge', // remove to replace all query params by provided
+      }
+    );
+  }
+
+  private readQueryParams() {
+    const page = this.route.snapshot.queryParamMap.get('p');
+    if(page) {
+      this.current_page = Number(page);
+      this.jump_to.setValue(this.current_page)
+    }
+    const size = this.route.snapshot.queryParamMap.get('s');
+    if(size) {
+      this.page_size = Number(size)
+    }
   }
 
   update_query(query: any, size:number, from:number, sortQuery?: any ) {
 
-    console.log(this.filterEvents);
+    console.log("Query " + query);
+    console.log("sort Query " + sortQuery);
     if(this.filterEvents.size > 0) {
 
       const filterQueries = Array.from(this.filterEvents.values()).filter(fe => fe.query).map(fe => fe.query);
@@ -136,12 +148,13 @@ export class ItemListComponent implements AfterViewInit {
       query,
       size: size,
       from: from,
-      sort: [
-        sortQuery ? sortQuery : {'modificationDate': 'desc'}
-      ]
+      ...sortQuery && {sort: [sortQuery
+      ]}
     }
     console.log(completeQuery)
     this.items(completeQuery);
+
+    this.updateQueryParams();
   }
 
   items(body: any) {
@@ -190,12 +203,16 @@ export class ItemListComponent implements AfterViewInit {
 
   isNumber(val: any): boolean { return typeof val === 'number'; }
 
+  getFromValue(){
+    return this.current_page * this.page_size - this.page_size;
+  }
+
   onPageChange(page_number: number) {
     console.log("page_number: ", page_number);
     this.current_page = page_number;
     this.jump_to.setValue(page_number);
-    const from = page_number * this.page_size - this.page_size;
-    this.update_query(this.currentQuery, this.page_size, from)
+    const from = this.getFromValue();
+    this.update_query(this.currentQuery, this.page_size, from, this.currentSortQuery)
   }
 
   pageSizeHandler(event: any) {
@@ -236,7 +253,7 @@ export class ItemListComponent implements AfterViewInit {
 
    console.log("updateFilter: " + fe)
     this.filterEvents.set(fe.name,fe);
-   this.update_query(this.currentQuery, this.page_size, 0);
+    this.onPageChange(1)
 
 
 
@@ -252,9 +269,11 @@ export class ItemListComponent implements AfterViewInit {
 
   updateSort(sortQuery: any) {
     this.currentSortQuery = sortQuery
-    this.update_query(this.currentQuery, this.page_size, 0, this.currentSortQuery);
+    this.onPageChange(1)
 
   }
+
+
 }
 
 export interface FilterEvent {

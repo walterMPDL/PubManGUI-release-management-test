@@ -1,1 +1,5 @@
-<pure-item-list [searchQuery]="searchQuery"/>
+<pure-item-list [searchQuery]="searchQuery" #itemList>
+  <pure-sort-selector [itemList]="itemList"/>
+  <pure-item-state-filter [itemList]="itemList"/>
+  <pure-item-context-filter [itemList]="itemList"/>
+</pure-item-list>

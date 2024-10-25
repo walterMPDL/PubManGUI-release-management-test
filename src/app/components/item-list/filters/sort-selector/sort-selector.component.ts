@@ -3,6 +3,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {FilterEvent, ItemListComponent} from "../../item-list.component";
 import {ItemVersionState} from "../../../../model/inge";
 import {baseElasticSearchSortBuilder} from "../../../../shared/services/search-utils";
+import {ActivatedRoute, Params, Router} from "@angular/router";
 
 @Component({
   selector: 'pure-sort-selector',
@@ -22,18 +23,42 @@ export class SortSelectorComponent {
   selectedSort!:string;
   selectedSortOrder!:string;
 
-  constructor() {
+  constructor(private route: ActivatedRoute, private router: Router) {
    this.selectedSort = this.defaultSort
     this.selectedSortOrder = sortOptions[this.selectedSort].order;
+    const sort = route.snapshot.queryParamMap.get('sort');
+    if(sort) {
+      this.selectedSort=sort
+    }
+    const sortOrder = route.snapshot.queryParamMap.get('sortOrder');
+    if(sortOrder) {
+      this.selectedSortOrder = sortOrder
+    }
   }
 
-  ngAfterViewInit(){
+  private updateQueryParams() {
+    const queryParams: Params = {
+      sort: this.selectedSort,
+      sortOrder: this.selectedSortOrder
+    };
+    this.router.navigate(
+      [],
+      {
+        relativeTo: this.route,
+        queryParams,
+        queryParamsHandling: 'merge', // remove to replace all query params by provided
+      }
+    );
+  }
+
+  ngOnInit(){
     //this.selectedSort = this.defaultSort;
     this.itemList.registerSort(this.getSortQuery(this.selectedSort))
   }
 
   getCurrentSortQuery(){
     return baseElasticSearchSortBuilder(sortOptions[this.selectedSort].index[0], this.selectedSortOrder);
+
   }
   handleInputChange($event: any){
     const targetVal:string = $event.target.value;
@@ -43,6 +68,7 @@ export class SortSelectorComponent {
 
     console.log(this.selectedSort + ' / '+ this.selectedSortOrder)
     this.itemList.updateSort(sortQuery);
+    this.updateQueryParams()
   }
 
   switchSortOrder() {
@@ -53,6 +79,7 @@ export class SortSelectorComponent {
     const sortQuery = this.getCurrentSortQuery()
     console.log(this.selectedSort + ' / '+ this.selectedSortOrder)
     this.itemList.updateSort(sortQuery);
+    this.updateQueryParams()
   }
 
   getSortQuery(sortOption: string)
@@ -107,6 +134,26 @@ export const sortOptions: SortOptionsType = {
     order: 'asc',
     loggedIn: false
   },
+  "publishing-info" : {
+    index: ['metadata.publishingInfo.publisher', 'metadata.publishingInfo.place', 'metadata.publishingInfo.edition'],
+    order: 'asc',
+    loggedIn: false
+  },
+  "event-title" : {
+    index: ['metadata.event.title'],
+    order: 'asc',
+    loggedIn: false
+  },
+  "source-title" : {
+    index: ['metadata.sources.title'],
+    order: 'asc',
+    loggedIn: false
+  },
+  "review-method" : {
+    index: ['metadata.reviewMethod'],
+    order: 'asc',
+    loggedIn: false
+  }
 
 }
 /*
