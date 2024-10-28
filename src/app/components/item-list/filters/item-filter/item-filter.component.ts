@@ -3,13 +3,16 @@ import {FilterEvent, ItemListComponent} from "../../item-list.component";
 import {fieldOptions} from "../../../../model/pure_search";
 import {KeyValuePipe} from "@angular/common";
 import {ItemFilterDirective} from "../directives/item-filter.directive";
+import {options} from "sanitize-html";
+import {DefaultKeyValuePipe} from "../../../../shared/services/pipes/default-key-value.pipe";
 
 
 @Component({
   selector: 'pure-item-filter',
   standalone: true,
   imports: [
-    KeyValuePipe
+    KeyValuePipe,
+    DefaultKeyValuePipe
   ],
   templateUrl: './item-filter.component.html',
   styleUrl: './item-filter.component.scss'

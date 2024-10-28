@@ -111,7 +111,7 @@ export const sortOptions: SortOptionsType = {
   },
   "creationDate" : {
     index: ['creationDate'],
-    order: 'asc',
+    order: 'desc',
     loggedIn: false
   },
   "title" : {

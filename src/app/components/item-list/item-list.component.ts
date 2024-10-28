@@ -128,8 +128,6 @@ export class ItemListComponent implements AfterViewInit{
 
   update_query(query: any, size:number, from:number, sortQuery?: any ) {
 
-    console.log("Query " + JSON.stringify(query));
-    console.log("sort Query " + sortQuery);
     if(this.filterEvents.size > 0) {
 
       const filterQueries = Array.from(this.filterEvents.values()).filter(fe => fe.query).map(fe => fe.query);
@@ -150,7 +148,6 @@ export class ItemListComponent implements AfterViewInit{
       ...sortQuery && {sort: [sortQuery
       ]}
     }
-    console.log(completeQuery)
     this.items(completeQuery);
 
     this.updateQueryParams();
@@ -170,7 +167,6 @@ export class ItemListComponent implements AfterViewInit{
   }
 
   jumpToPage() {
-    console.log("jump_to", this.jump_to.value);
     this.jump_to.errors? alert("value must be between 1 and " + this.number_of_pages) : this.onPageChange(this.jump_to.value as number);
   }
 
@@ -207,7 +203,6 @@ export class ItemListComponent implements AfterViewInit{
   }
 
   onPageChange(page_number: number) {
-    console.log("page_number: ", page_number);
     this.current_page = page_number;
     this.jump_to.setValue(page_number);
     const from = this.getFromValue();
@@ -242,7 +237,6 @@ export class ItemListComponent implements AfterViewInit{
 
   registerFilter(fe: FilterEvent) {
     //const filterEvent : FilterEvent = fe as FilterEvent;
-    console.log("registerFilter: " + fe)
     this.filterEvents.set(fe.name,fe);
     //this.update_query(this.currentQuery, this.page_size, 0);
 
@@ -250,7 +244,6 @@ export class ItemListComponent implements AfterViewInit{
 
   updateFilter(fe: FilterEvent) {
 
-   console.log("updateFilter: " + fe)
     this.filterEvents.set(fe.name,fe);
     this.onPageChange(1)
 
@@ -259,10 +252,7 @@ export class ItemListComponent implements AfterViewInit{
   }
 
   registerSort(sortQuery: any) {
-    //const filterEvent : FilterEvent = fe as FilterEvent;
-    console.log("registerSort: " + sortQuery)
     this.currentSortQuery = sortQuery;
-    //this.update_query(this.currentQuery, this.page_size, 0);
 
   }
 
