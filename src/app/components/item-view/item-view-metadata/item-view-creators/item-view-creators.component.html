@@ -1,0 +1,40 @@
+
+    <pure-item-view-metadata-element [sub]="true">
+      <span label>Creators</span>
+      <span content>
+        <div class="mt-2">
+          @for (author of creatorMap.keys(); track author; let i = $index) {
+
+            <div class="mt-1 me-3">
+              @if(author.person) {
+                {{ (author?.person?.familyName || 'n/a') + ', ' + (author?.person?.givenName || 'n/a') }}
+                <sup>{{creatorMap.get(author)}}</sup>
+                @if (author?.person?.orcid) {
+                  <sup>
+                    <a [href]="author?.person?.orcid" target="_blank">
+                      <img alt="ORCID logo"
+                           src="https://info.orcid.org/wp-content/uploads/2019/11/orcid_16x16.png"
+                           width="16" height="16"/>
+                    </a>
+                  </sup>
+                }
+              }
+              @else {
+                {{ author?.organization?.name }}
+              }
+            </div>
+          }
+        </div>
+      </span>
+    </pure-item-view-metadata-element>
+    <pure-item-view-metadata-element [sub]="true">
+      <span label>Affiliations</span>
+      <span content>
+         @for (aff of affiliations; track aff; let i = $index) {
+           <div class="mt-1 me-3">
+           {{i+1}}: {{aff.name}}
+           </div>
+         }
+      </span>
+    </pure-item-view-metadata-element>
+

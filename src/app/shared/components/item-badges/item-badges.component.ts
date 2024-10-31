@@ -13,7 +13,7 @@ import {IdType, ItemVersionVO} from "../../../model/inge";
 })
 export class ItemBadgesComponent {
 
-  @Input() item!: ItemVersionVO;
+  @Input() item: ItemVersionVO | undefined;
 
   get doi() {
     return this.item?.metadata?.identifiers?.filter(i => i.type === IdType.DOI).map(i => i.id)[0]

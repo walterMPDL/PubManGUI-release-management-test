@@ -19,7 +19,7 @@ import {ItemBadgesComponent} from "../../../shared/components/item-badges/item-b
 })
 export class ItemListElementComponent {
 
-  @Input() item!: ItemVersionVO;
+  @Input() item: ItemVersionVO | undefined;
   @Input() last_item!: boolean;
   @Input()
   authenticated = false;
