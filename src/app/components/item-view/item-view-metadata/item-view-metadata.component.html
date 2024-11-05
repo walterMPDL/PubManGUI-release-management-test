@@ -4,7 +4,7 @@
     <span label>Creators</span>
     <span content>
 @if (item) {
-    <pure-item-view-creators [creators]="item.metadata.creators"/>
+    <pure-item-view-creators [creators]="item.metadata?.creators"/>
 }
     </span>
 </pure-item-view-metadata-element>
@@ -15,18 +15,18 @@
     <pure-item-view-metadata-element [sub]="true">
         <span label>Free keywords</span>
         <span content>
-          {{ item?.metadata?.freeKeywords }},
+          {{ item.metadata?.freeKeywords }},
         </span>
     </pure-item-view-metadata-element>
     <pure-item-view-metadata-element [sub]="true">
         <span label>DDC</span>
         <span content>
-            @for (sub of item?.metadata?.subjects; track sub; let i = $index) {
+            @for (sub of item.metadata?.subjects; track sub; let i = $index) {
                 <div> {{ sub.value }}</div>
             }
         </span>
     </pure-item-view-metadata-element>
-        @for (abs of item?.metadata?.abstracts; track abs; ) {
+        @for (abs of item.metadata?.abstracts; track abs; ) {
             <pure-item-view-metadata-element [sub]="true" >
         <span label>Abstract ({{ abs.language }})</span>
         <span content>
@@ -43,7 +43,7 @@
     <pure-item-view-metadata-element [sub]="true">
       <span label>Language</span>
         <span content>
-          @for (lang of item?.metadata?.languages; track lang) {
+          @for (lang of item.metadata?.languages; track lang) {
               <div>{{ lang }}</div>
           }
         </span>
@@ -52,34 +52,34 @@
       <span label>Dates</span>
         <span content>
           <div class="d-inline-flex">
-            @if (item?.metadata?.dateCreated) {
+            @if (item.metadata?.dateCreated) {
                 <div class="me-3">
-              Created: {{ item?.metadata?.dateCreated }}
+              Created: {{ item.metadata?.dateCreated }}
               </div>
             }
-              @if (item?.metadata?.dateModified) {
+              @if (item.metadata?.dateModified) {
                   <div class="me-3">
-                Modified: {{ item?.metadata?.dateModified }}
+                Modified: {{ item.metadata?.dateModified }}
               </div>
               }
-              @if (item?.metadata?.dateSubmitted) {
+              @if (item.metadata?.dateSubmitted) {
                   <div class="me-3">
-                Submitted: {{ item?.metadata?.dateSubmitted }}
+                Submitted: {{ item.metadata?.dateSubmitted }}
               </div>
               }
-              @if (item?.metadata?.dateAccepted) {
+              @if (item.metadata?.dateAccepted) {
                   <div class="me-3">
-                Accepted: {{ item?.metadata?.dateAccepted }}
+                Accepted: {{ item.metadata?.dateAccepted }}
               </div>
               }
-              @if (item?.metadata?.datePublishedOnline) {
+              @if (item.metadata?.datePublishedOnline) {
                   <div class="me-3">
-                Published Online: {{ item?.metadata?.datePublishedOnline }}
+                Published Online: {{ item.metadata?.datePublishedOnline }}
               </div>
               }
-              @if (item?.metadata?.datePublishedInPrint) {
+              @if (item.metadata?.datePublishedInPrint) {
                   <div class="me-3">
-                Published in print: {{ item?.metadata?.datePublishedInPrint }}
+                Published in print: {{ item.metadata?.datePublishedInPrint }}
               </div>
               }
         </div>
@@ -94,33 +94,33 @@
     <pure-item-view-metadata-element [sub]="true">
       <span label>Pages</span>
         <span content>
-          {{ item?.metadata?.totalNumberOfPages }}
+          {{ item.metadata?.totalNumberOfPages }}
         </span>
     </pure-item-view-metadata-element>
     <pure-item-view-metadata-element [sub]="true">
       <span label>Publishing Info</span>
         <span content>
-          {{ item?.metadata?.publishingInfo?.place }} :
-            {{ item?.metadata?.publishingInfo?.publisher }},
-            {{ item?.metadata?.publishingInfo?.edition }}
+          {{ item.metadata?.publishingInfo?.place }} :
+            {{ item.metadata?.publishingInfo?.publisher }},
+            {{ item.metadata?.publishingInfo?.edition }}
         </span>
     </pure-item-view-metadata-element>
     <pure-item-view-metadata-element [sub]="true">
       <span label>Table of Contents</span>
         <span content>
-          {{ item?.metadata?.tableOfContents }}
+          {{ item.metadata?.tableOfContents }}
         </span>
     </pure-item-view-metadata-element>
     <pure-item-view-metadata-element [sub]="true">
       <span label>Review Type</span>
         <span content>
-          {{ item?.metadata?.reviewMethod }}
+          {{ item.metadata?.reviewMethod }}
         </span>
     </pure-item-view-metadata-element>
     <pure-item-view-metadata-element [sub]="true">
       <span label>Identifiers</span>
         <span content>
-          @for (id of item?.metadata?.identifiers; track id) {
+          @for (id of item.metadata?.identifiers; track id) {
               <div>{{ id.type }}: {{ id.id }}</div>
           }
         </span>
@@ -128,7 +128,7 @@
     <pure-item-view-metadata-element [sub]="true">
       <span label>Degree</span>
         <span content>
-          {{ item?.metadata?.degree }}
+          {{ item.metadata?.degree }}
         </span>
     </pure-item-view-metadata-element>
 
@@ -141,25 +141,25 @@
         <pure-item-view-metadata-element [sub]="true">
             <span label>Title</span>
             <span content>
-                {{ item?.metadata?.event?.title }}
+                {{ item.metadata?.event?.title }}
             </span>
         </pure-item-view-metadata-element>
         <pure-item-view-metadata-element [sub]="true">
             <span label>Place of Event</span>
             <span content>
-                {{ item?.metadata?.event?.place }}
+                {{ item.metadata?.event?.place }}
             </span>
         </pure-item-view-metadata-element>
         <pure-item-view-metadata-element [sub]="true">
             <span label>Start / End Date</span>
             <span content>
-                {{ item?.metadata?.event?.startDate }} - {{ item?.metadata?.event?.endDate }}
+                {{ item.metadata?.event?.startDate }} - {{ item.metadata?.event?.endDate }}
             </span>
         </pure-item-view-metadata-element>
         <pure-item-view-metadata-element [sub]="true">
             <span label>Invited</span>
             <span content>
-                {{ item?.metadata?.event?.invitationStatus === 'INVITED' ? 'Yes' : 'No' }}
+                {{ item.metadata?.event?.invitationStatus === 'INVITED' ? 'Yes' : 'No' }}
             </span>
         </pure-item-view-metadata-element>
     </span>
@@ -171,25 +171,25 @@
         <pure-item-view-metadata-element [sub]="true">
             <span label>Title</span>
             <span content>
-                {{ item?.metadata?.legalCase?.title }}
+                {{ item.metadata?.legalCase?.title }}
             </span>
         </pure-item-view-metadata-element>
         <pure-item-view-metadata-element [sub]="true">
             <span label>Court Name</span>
             <span content>
-                {{ item?.metadata?.legalCase?.courtName }}
+                {{ item.metadata?.legalCase?.courtName }}
             </span>
         </pure-item-view-metadata-element>
         <pure-item-view-metadata-element [sub]="true">
             <span label>Date Published</span>
             <span content>
-                {{ item?.metadata?.legalCase?.datePublished }}
+                {{ item.metadata?.legalCase?.datePublished }}
             </span>
         </pure-item-view-metadata-element>
         <pure-item-view-metadata-element [sub]="true">
             <span label>Identifier</span>
             <span content>
-                {{ item?.metadata?.legalCase?.identifier }}
+                {{ item.metadata?.legalCase?.identifier }}
             </span>
         </pure-item-view-metadata-element>
     </span>
@@ -199,7 +199,7 @@
 <pure-item-view-metadata-element>
     <span label>Project Information</span>
     <span content>
-        @for (pi of item?.metadata?.projectInfo; track pi) {
+        @for (pi of item.metadata?.projectInfo; track pi) {
             <pure-item-view-metadata-element [sub]="true">
                 <span label>Project name</span>
                 <span content>
@@ -231,7 +231,7 @@
 </pure-item-view-metadata-element>
 
 <!--Sources -->
-@for (source of item?.metadata?.sources; track source; let i = $index) {
+@for (source of item.metadata?.sources; track source; let i = $index) {
     <pure-item-view-metadata-element>
         <span label>Source {{ i + 1 }}</span>
         <span content>

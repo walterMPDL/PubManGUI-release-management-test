@@ -18,7 +18,7 @@ import {AsyncPipe} from "@angular/common";
 })
 export class ItemViewMetadataComponent {
 
-  @Input() itemSubject!:BehaviorSubject<ItemVersionVO | undefined>;
+  @Input() item!:ItemVersionVO;
 
   affiliations: OrganizationVO[] = [];
   affiliationMap: Map<string, OrganizationVO> = new Map();
@@ -27,10 +27,11 @@ export class ItemViewMetadataComponent {
 
   constructor() {
 
-    //console.log("item" + this.item)
+
   }
 
   ngOnInit() {
+    console.log("item" + this.item.metadata.title)
     /*
     this.itemSubject.subscribe(item => {
       if(item) {
@@ -41,13 +42,6 @@ export class ItemViewMetadataComponent {
      */
 
   }
-
-
-  get item(){
-    return this.itemSubject.value;
-  }
-
-
 
 
 
