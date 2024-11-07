@@ -19,5 +19,10 @@ declare namespace Cypress {
      * Delete Item using the REST API
      */
     deleteItemViaAPI(itemId: string): void
+
+    /**
+     * Get Item using the REST API
+     */
+    getItemViaAPI(itemId: string):  Chainable<Cypress.Response<any>>
   }
 }

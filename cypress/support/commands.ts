@@ -42,6 +42,8 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
+import Chainable = Cypress.Chainable;
+
 Cypress.Commands.add('loginViaAPI', (userName, password) => {
   cy.request({
     'method': 'POST',
@@ -79,6 +81,16 @@ Cypress.Commands.add('deleteItemViaAPI', (itemId) => {
     'body': {
       lastModificationDate: ""
     }
+  }).then((response) => {
+    expect(response.status).to.eq(200)
+  })
+})
+
+Cypress.Commands.add('getItemViaAPI', (itemId):  Chainable<Cypress.Response<any>> => {
+  return cy.request({
+    'method': 'GET',
+    'url': Cypress.env('restUrl') + '/items/' + itemId
+    //Existing (authentication) cookies are automatically send with requests
   }).then((response) => {
     expect(response.status).to.eq(200)
   })

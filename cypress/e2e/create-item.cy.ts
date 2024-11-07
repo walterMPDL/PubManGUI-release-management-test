@@ -17,12 +17,13 @@ describe('Create Item', () => {
     //Given
     cy.visit('/edit')
     cy.intercept('POST', '/rest/items').as('createItem')
+    const title = "Cypress Test Create-Item"
 
     //When
     cy.get('select[data-test="context"]').select(context)
     cy.get('select[data-test="genre"]').select('ARTICLE')
     //cy.get('input[data-test="degree"]').type("The Degree")
-    cy.get('input[data-test="title"]').type("Cypress Test Create-Item")
+    cy.get('input[data-test="title"]').type(title)
 
     cy.get('[data-test="add-remove-creators"]').find('button[name="add"]').click()
     cy.get('select[data-test="creator"]').select('AUTHOR')
@@ -43,8 +44,13 @@ describe('Create Item', () => {
       expect(interception.response.statusCode).to.equal(201)
       // @ts-ignore
       itemId = interception.response.body['objectId']
+      //TODO: Check creation message in the GUI
+      cy.getItemViaAPI(itemId).then((response) => {
+        //TODO: Check more item metadata
+        expect(response.body.metadata.title).to.equal(title)
+      })
+
     })
-    //TODO: Check successful creation via REST & in the GUI
   })
 
 })
