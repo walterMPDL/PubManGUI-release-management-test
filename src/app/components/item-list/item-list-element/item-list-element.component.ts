@@ -5,15 +5,16 @@ import {Router, ActivatedRoute, RouterLink} from '@angular/router';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PopoverDirective } from 'src/app/shared/directives/popover.directive';
 import { Subscription } from 'rxjs';
-import {NgbTooltip} from "@ng-bootstrap/ng-bootstrap";
+import {NgbPopover, NgbTooltip} from "@ng-bootstrap/ng-bootstrap";
 import {SanitizeHtmlPipe} from "../../../shared/services/pipes/sanitize-html.pipe";
 import {DateToYearPipe} from "../../../shared/services/pipes/date-to-year.pipe";
 import {ItemBadgesComponent} from "../../../shared/components/item-badges/item-badges.component";
+import {ExportItemsComponent} from "../../../shared/components/export-items/export-items.component";
 
 @Component({
   selector: 'pure-item-list-element',
   standalone: true,
-  imports: [NgIf, NgFor, NgClass, JsonPipe, FormsModule, ReactiveFormsModule, PopoverDirective, NgbTooltip, RouterLink, SanitizeHtmlPipe, DateToYearPipe, ItemBadgesComponent],
+  imports: [NgIf, NgFor, NgClass, JsonPipe, FormsModule, ReactiveFormsModule, PopoverDirective, NgbTooltip, RouterLink, SanitizeHtmlPipe, DateToYearPipe, ItemBadgesComponent, ExportItemsComponent, NgbPopover],
   templateUrl: './item-list-element.component.html',
   styleUrl: './item-list-element.component.scss'
 })

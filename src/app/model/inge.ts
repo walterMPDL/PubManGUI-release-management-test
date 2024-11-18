@@ -658,3 +658,30 @@ export enum ContentCategories {
   code = "http://purl.org/escidoc/metadata/ves/content-categories/code"
 }
 
+export enum exportTypes {
+  JSON = "json",
+    ESCIDOC_ITEMLIST_XML = "eSciDoc_Itemlist_Xml",
+    BIBTEX = "BibTeX",
+    ENDNOTE = "EndNote",
+    MARC_XML = "Marc_Xml",
+    PDF = "pdf",
+    DOCX = "docx",
+    HTML_PLAIN = "html_plain",
+    HTML_LINKED = "html_linked",
+    JSON_CITATION = "json_citation",
+    ESCIDOC_SNIPPET = "escidoc_snippet"
+}
+
+export enum citationTypes{
+
+  APA="APA",
+  CSL="CSL",
+  APA_CJK="APA(CJK)",
+  APA6="APA6",
+  AJP="AJP",
+  JUS="JUS",
+  JUS_Report="JUS_Report"
+}
+
+
+

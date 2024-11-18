@@ -62,16 +62,21 @@ export class ItemsService extends PubmanSearchableGenericRestClientService<ItemV
     return this.httpGet(this.subPath + '/' + itemId + '/authorization', token);
   }
 
-  retrieveSingleCitation(id: string, format?: string, citation?:string, cslConeId?:string, token?:string): Observable<string> {
-    const params: HttpParams = new HttpParams()
+  retrieveSingleExport(id: string, format?: string, citation?:string, cslConeId?:string, token?:string, respType?: "arraybuffer" | "blob" | "text" | "json" | undefined): Observable<any> {
+    let params: HttpParams = new HttpParams()
     .set('format', format ? format : 'json_citation')
     .set('citation', citation ? citation : 'APA6');
-    if(cslConeId) params.set('cslConeId', cslConeId);
-    return this.httpGet(this.subPath + '/' + id + '/export', token, params).pipe(
+    if(cslConeId) params=params.set('cslConeId', cslConeId);
+    return this.httpGet(this.subPath + '/' + id + '/export', token, params, respType);
+  }
+
+  retrieveSingleCitation(id: string, citation?:string, cslConeId?:string, token?:string): Observable<string> {
+
+    return this.retrieveSingleExport(id, 'json_citation', citation, cslConeId, token).pipe(
       map(jsonCitation => {
         return jsonCitation.records[0].data.bibliographicCitation;
       })
-    );
+    )
   }
 
   checkFileAudienceAccess(itemId: string, fileId: string) {

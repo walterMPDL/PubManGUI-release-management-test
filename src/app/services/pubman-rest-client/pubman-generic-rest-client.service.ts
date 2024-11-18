@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams, HttpRequest} from '@angular/common/http';
 import {inject, Inject, Injectable} from '@angular/core';
 import {Observable, catchError, map, throwError, isObservable, lastValueFrom} from 'rxjs';
 import * as props from 'src/assets/properties.json';
@@ -55,13 +55,13 @@ export abstract class PubmanGenericRestClientService<modelType> {
 
 
 
-  private httpRequest(method: string, path: string, body?: any, headers?: HttpHeaders, params?: HttpParams): Observable<modelType> {
+  private httpRequest(method: string, path: string, body?: any, headers?: HttpHeaders, params?: HttpParams, respType?: "arraybuffer" | "blob" | "text" | "json" | undefined): Observable<any> {
     const requestUrl = this.restUri + path;
-    console.log(params)
     return this.httpClient.request(method, requestUrl, {
       body,
       headers,
       params: params,
+      responseType: respType ? respType : 'json'
     }).pipe(
       map((response: any) => response),
       catchError((error) => {
@@ -109,11 +109,11 @@ export abstract class PubmanGenericRestClientService<modelType> {
 
 
 
-  protected httpGet(path: string, token?: string, params?: HttpParams): Observable<any> {
+  protected httpGet(path: string, token?: string, params?: HttpParams, respType?: "arraybuffer" | "blob" | "text" | "json" | undefined): Observable<any> {
     if (token) {
-      return this.httpRequest('GET', path, undefined, this.addAuhorizationHeader(token), params);
+      return this.httpRequest('GET', path, undefined, this.addAuhorizationHeader(token), params, respType);
     }
-    return this.httpRequest('GET', path, undefined, undefined, params);
+    return this.httpRequest('GET', path, undefined, undefined, params, respType);
   }
 
   protected httpPost(path: string, resource: any, token: string): Observable<any> {
