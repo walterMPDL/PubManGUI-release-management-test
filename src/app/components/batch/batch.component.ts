@@ -2,11 +2,11 @@ import { CommonModule } from '@angular/common';
 import { OnInit, Component } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 
-import { BatchNavComponent } from '../batch-nav/batch-nav.component';
+import { BatchNavComponent } from './batch-nav/batch-nav.component';
 
 import { AaService } from 'src/app/services/aa.service';
 import { MessageService } from 'src/app/shared/services/message.service';
-import { BatchService } from '../services/batch.service';
+import { BatchService } from './services/batch.service';
 
 @Component({
   selector: 'pure-batch',

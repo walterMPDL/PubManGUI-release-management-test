@@ -5,9 +5,9 @@ import { FormArray, FormBuilder, FormGroup, FormControl, Validators, ValidatorFn
 
 import { ValidatorsService } from 'src/app/components/batch/services/validators.service';
 import { BatchService } from 'src/app/components/batch/services/batch.service';
+import { MiscellaneousService, IpEntry } from 'src/app/services/pubman-rest-client/miscellaneous.service';
 import { MessageService } from 'src/app/shared/services/message.service';
-import type { ReplaceFileAudienceParams } from 'src/app/components/batch/interfaces/actions-params';
-import type { ipList } from 'src/app/components/batch/interfaces/actions-responses';
+import type { ReplaceFileAudienceParams } from 'src/app/components/batch/interfaces/batch-params';
 
 import { AudienceFormComponent } from 'src/app/components/batch/actions/actions-metadata/actions-metadata-files/replace-file-audience-form/audience-form/audience-form.component'
 import { AddRemoveButtonsComponent } from 'src/app/shared/components/add-remove-buttons/add-remove-buttons.component';
@@ -28,16 +28,17 @@ export class ReplaceFileAudienceFormComponent implements OnInit {
   index!: number;
   index_length!: number;
 
-  ous: ipList[] = [];
+  ous: IpEntry[] = [];
 
   constructor(
     private fb: FormBuilder, 
     public validSvc: ValidatorsService,
     private batchSvc: BatchService,
+    private miscSvc: MiscellaneousService,
     private msgSvc: MessageService) { }
 
   ngOnInit(): void {
-    this.batchSvc.getIpList()
+    this.miscSvc.retrieveIpList()
       .subscribe( ous => {
         this.ous = ous.sort((a,b) => a.name.localeCompare(b.name));
       }) 

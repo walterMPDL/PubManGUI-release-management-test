@@ -162,7 +162,8 @@
     "BATCH_VALIDATION_GLOBAL": "Validierungsfehler.",
     "BATCH_VALIDATION_INVALID_ORCID": "Die ORCID ID von $2 ist nicht im richtigen Format angegeben:<br/>\r\n-> $1<br/>\r\nBitte \u00E4ndern Sie diese in CONE.",
     "BATCH_VALIDATION_IP_RANGE_NOT_PROVIDED": "Bei einer angeh\u00E4ngten Datei fehlt der IP Range.",
-    "BATCH_VALIDATION_NO_SOURCE": "Keine passende Quelle gefunden."
+    "BATCH_VALIDATION_NO_SOURCE": "Keine passende Quelle gefunden.",
+    "BATCH_CONTEXT_NOT_OPEN": "Keinen passenden Kontext gefunden."
   },
   "BatchProcessLogHeaderState": {
     "INITIALIZED": "Initialisiert",

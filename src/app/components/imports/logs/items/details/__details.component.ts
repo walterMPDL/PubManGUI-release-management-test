@@ -11,7 +11,7 @@ import { RouterModule } from '@angular/router';
     CommonModule,
     RouterModule,
   ],
-  templateUrl: './log.component.html'
+  templateUrl: './__details.component.html'
 })
 export default class LogComponent { 
   activeModal = inject(NgbActiveModal);

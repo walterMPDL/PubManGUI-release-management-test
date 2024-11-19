@@ -1,6 +1,6 @@
 import { Pipe, type PipeTransform } from '@angular/core';
 
-import { BatchProcessLogDetailState } from '../interfaces/batch-responses';
+import { ImportErrorLevel } from '../interfaces/imports-responses';
 
 @Pipe({
   name: 'stateFilter',
@@ -9,14 +9,14 @@ import { BatchProcessLogDetailState } from '../interfaces/batch-responses';
 })
 export class StateFilterPipe implements PipeTransform {
 
-  transform(value: any, filterValues: BatchProcessLogDetailState[], propName: string): any {
+  transform(value: any, filterValues: ImportErrorLevel[], propName: string): any {
     if (value.length === 0 || filterValues.length === 0) {
       return value;
     }
     const resultArray = [];
     for (const item of value) {
       for (const filterValue of filterValues) {
-        if (item.item.state === filterValue) {
+        if (item.errorLevel === filterValue) {
           resultArray.push(item);
           break;
         }

@@ -5,6 +5,7 @@ import { Observable, filter, startWith, of, tap, map, timeInterval } from 'rxjs'
 
 import { ItemVersionVO } from 'src/app/model/inge';
 import { AaService } from 'src/app/services/aa.service';
+import { ItemsService} from "src/app/services/pubman-rest-client/items.service";
 import { MessageService } from 'src/app/shared/services/message.service';
 import { BatchNavComponent } from '../batch-nav/batch-nav.component';
 import { BatchService } from '../services/batch.service';
@@ -59,6 +60,7 @@ export default class DatasetsComponent implements OnInit {
 
   constructor(
     public batchSvc: BatchService,
+    private itemSvc: ItemsService, 
     private msgSvc: MessageService,
     public aaSvc: AaService,
     private router: Router
@@ -76,9 +78,9 @@ export default class DatasetsComponent implements OnInit {
 
   items(itemList: string[]) {
     this.results = [];
-    for (var element of itemList) {
-      if (element) {
-        this.batchSvc.getItem(element).subscribe( actionResponse => { 
+    for (var itemObjectId of itemList) {
+      if (itemObjectId) {
+        this.itemSvc.retrieve(itemObjectId, this.aaSvc.token).subscribe( actionResponse => {
           this.results.push(actionResponse);
         })
       }

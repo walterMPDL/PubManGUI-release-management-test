@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
+import DetailsComponent from './logs/items/details/details.component';
+
 
 const routes: Routes = [
   {
@@ -22,7 +24,7 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        loadComponent: () => import('./list/list.component'),
+        loadComponent: () => import('./logs/import-logs.component'),
         data: {
           breadcrumb: {
             //label: '',
@@ -31,16 +33,38 @@ const routes: Routes = [
       },
       {
         path: ':id',
-        loadComponent: () => import('./list/details/details.component'),
+        loadComponent: () => import('./logs/items/items.component'),
+        data: {
+          breadcrumb: {
+            label: 'Import items', //$localize`:@@details:Import details`,
+          }
+        },
+        /*
+        children: [
+          {
+            path: 'details',
+            loadComponent: () => import('./logs/items/details/details.component'),
+            data: {
+              breadcrumb: {
+                label: 'Import log',
+              }
+            },
+          },
+        ],
+        */
+      },
+      {
+        path: ':id/details',
+        loadComponent: () => import('./logs/items/details/details.component'),
         data: {
           breadcrumb: {
             label: 'Import details', //$localize`:@@details:Import details`,
           }
-        },
+        }
       },
-    ],
+],
   },
-  {
+{
     path: '',
     loadComponent: () => import('./imports.component'),
     data: {

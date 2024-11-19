@@ -4,7 +4,7 @@ import { catchError, tap, of, Observable, throwError, EMPTY } from 'rxjs';
 import { inge_rest_uri } from 'src/assets/properties.json';
 
 import type * as params from '../interfaces/imports-params';
-//import type * as resp from '../interfaces/imports-responses';
+import type * as resp from '../interfaces/imports-responses';
 import { ItemVersionVO } from 'src/app/model/inge';
 
 import { AaService } from 'src/app/services/aa.service';
@@ -22,15 +22,15 @@ export class ImportsService {
     private http: HttpClient,
     public aa: AaService,
     private msgSvc: MessageService,
-    private batchSvc: BatchService) { }
+    private batchSvc: BatchService) { } // Mock
 
   get token(): string {
     return this.aa.token || '';
   }
 
-  public haveImports = computed( () => this.batchSvc.areItemsSelected() );
+  public haveImports = computed( () => this.batchSvc.areItemsSelected() ); // Mock
 
-  #importsCount = signal(666); // Fake
+  #importsCount = signal(666); // Mock
   public getImportsCount = computed( () => this.#importsCount() );
 
   #importRunning = signal(false);
@@ -70,5 +70,25 @@ export class ImportsService {
 
     return importResponse;
   }
-  
+
+  getImportLogs(): Observable<resp.ImportLogDbVO[]> {
+    const url = `${this.#baseUrl}/import/getImportLogs`;
+    const headers = new HttpHeaders().set('Authorization', this.token!);
+
+    return this.http.get<resp.ImportLogDbVO[]>(url, { headers });
+  }
+
+  getImportLogItems(id: number): Observable<resp.ImportLogItemDbVO[]> {
+    const url = `${this.#baseUrl}/import/importLogItems/${id}`;
+    const headers = new HttpHeaders().set('Authorization', this.token!);
+
+    return this.http.get<resp.ImportLogItemDbVO[]>(url, { headers });
+  }
+
+  getImportLogItemDetails(id: number): Observable<resp.ImportLogItemDetailDbVO[]> {
+    const url = `${this.#baseUrl}/import/importLogItemDetails/${id}`;
+    const headers = new HttpHeaders().set('Authorization', this.token!);
+
+    return this.http.get<resp.ImportLogItemDetailDbVO[]>(url, { headers });
+  }
 }

@@ -3,38 +3,35 @@ import { OnInit, Component, Inject, LOCALE_ID, HostListener } from '@angular/cor
 import { RouterModule } from '@angular/router';
 
 import { BatchService } from 'src/app/components/batch/services/batch.service';
-import type * as resp from 'src/app/components/batch/interfaces/actions-responses';
+import * as resp from 'src/app/components/batch/interfaces/batch-responses';
 
 import { ItemsService } from "src/app/services/pubman-rest-client/items.service";
-import { BatchProcessLogHeaderState } from 'src/app/model/inge';
 
 import { FormsModule } from '@angular/forms';
 import { NgbPaginationModule } from "@ng-bootstrap/ng-bootstrap";
-import { SeparateFilterPipe } from 'src/app/components/batch/pipes/separateFilter.pipe';
 
 import { MatBadgeModule } from '@angular/material/badge';
 
 const FILTER_PAG_REGEX = /[^0-9]/g;
 
 type detail = {
-  'item': resp.getBatchProcessLogDetailsResponse,
+  'item': resp.BatchProcessLogDetailDbVO,
   'title': string
 }
 
 @Component({
-  selector: 'pure-batch-log-process-list',
+  selector: 'pure-batch-logs',
   standalone: true,
   imports: [
     CommonModule,
     RouterModule,
     FormsModule,
     NgbPaginationModule,
-    SeparateFilterPipe,
     MatBadgeModule
   ],
-  templateUrl: './log-process-list.component.html'
+  templateUrl: './batch-logs.component.html'
 })
-export class LogProcessListComponent implements OnInit {
+export default class LogProcessListComponent implements OnInit {
 
   page = 1;
   pageSize = 25;
@@ -42,7 +39,7 @@ export class LogProcessListComponent implements OnInit {
   inPage: resp.BatchProcessLogHeaderDbVO[] = [];
   processLogs: resp.BatchProcessLogHeaderDbVO[] = [];
 
-  state = BatchProcessLogHeaderState;
+  state = resp.BatchProcessLogHeaderState;
   batchProcessLogHeaderStateTranslations = {};
   batchProcessMethodTranslations = {};
   detailLogs: detail[] = [];
@@ -56,8 +53,8 @@ export class LogProcessListComponent implements OnInit {
 
   ngOnInit(): void {
     this.batchSvc.getAllBatchProcessLogHeaders()
-      .subscribe(actionResponse => {
-        this.processLogs = actionResponse.sort((b, a) => a.batchLogHeaderId - b.batchLogHeaderId);
+      .subscribe(batchResponse => {
+        this.processLogs = batchResponse.sort((b, a) => a.batchLogHeaderId - b.batchLogHeaderId);
         this.collectionSize = this.processLogs.length;
         this.refreshLogs();
         return;
@@ -83,7 +80,7 @@ export class LogProcessListComponent implements OnInit {
   } 
 
   refreshLogs() {
-    this.inPage = this.processLogs.map((log, i) => ({ id: i + 1, ...log })).slice(
+    this.inPage = this.processLogs.map((log, i) => ({ _id: i + 1, ...log })).slice(
       (this.page - 1) * this.pageSize,
       (this.page - 1) * this.pageSize + (this.pageSize),
     );
