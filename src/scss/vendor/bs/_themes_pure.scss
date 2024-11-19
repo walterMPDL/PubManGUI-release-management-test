@@ -43,8 +43,12 @@
         background-color: $mpdl-yellow;
     }
 
+  .badge-red {
+    background-color: $mpdl-red;
+  }
+
   .badge-gray {
-    background-color: $mpg-slate-gray-0;
+    background-color: $mpg-secondary-gray;
   }
 
     .cdk-drag-preview {
@@ -90,6 +94,10 @@
 
     .list-group-item {
         background-color: $body-secondary-bg;
+
+      &.mark {
+        background-color: $body-tertiary-bg;
+      }
     }
 
     .list-group-item:hover {
@@ -99,13 +107,20 @@
     .material-symbols-outlined {
         color: $link-color;
     }
-
-    a:hover .material-symbols-outlined {
+/*
+    a {
+      color : $link-color;
+    }
+    a:hover {
         color: $link-hover-color;
     }
-
+*/
     .nav-link {
         color: $link-color;
+    }
+
+    .nav-link.active {
+      color: $mpg-blue;
     }
 
     .nav-link:hover {
@@ -246,6 +261,15 @@
     .badge-yellow {
         background-color: $mpdl-yellow;
     }
+  .badge-red {
+    background-color: $mpdl-red;
+  }
+
+  .badge-gray {
+    background-color: $mpg-secondary-gray;
+  }
+
+
 
     .cdk-drag-preview {
         background: $body-secondary-color-dark;
@@ -298,10 +322,6 @@
 
     .material-symbols-outlined {
         color: $link-color-dark;
-    }
-
-    a:hover .material-symbols-outlined {
-        color: $link-hover-color-dark;
     }
 
     .mat-mdc-chip.mat-mdc-standard-chip {
@@ -367,19 +387,4 @@
 
 }
 
-#item-view-subnav {
-  .nav-pills {
-    font-family: $headings-font-family;
-    font-size: 1.1em;
 
-  }
-
-  .nav-pills .active {
-    font-weight: bold;
-    background-color: transparent;
-    color: $mpg-blue;
-    border-bottom: $mpg-blue 3px solid;
-    border-radius: unset;
-
-  }
-}

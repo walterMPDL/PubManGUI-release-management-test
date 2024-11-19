@@ -9,7 +9,6 @@
       </span>
 
       <pure-item-badges [item] = "item"/>
-      <span class="badge bg-secondary me-2 float-end">{{item?.publicState !== 'WITHDRAWN' ? item?.versionState : item?.publicState}}</span>
 
     </div>
   </div>
@@ -47,7 +46,7 @@
               <sup>
                 <a [href]="author?.person?.orcid" target="_blank">
                   <img alt="ORCID logo"
-                       src="https://info.orcid.org/wp-content/uploads/2019/11/orcid_16x16.png"
+                       src="/assets/images/ORCID-iD_icon_vector.svg"
                        width="16" height="16"/>
                 </a>
               </sup>
@@ -97,6 +96,7 @@
          [attr.data-bs-content]="abstract"><i class="bi bi-card-text"></i></a>
       }
     </div>
+
   </div>
 
 </div>

@@ -42,18 +42,26 @@ export abstract class PubmanGenericRestClientService<modelType> {
     return this.httpPut(this.subPath + '/' + id, obj, token);
   }
 
-  delete(id: string, token:string): Observable<number> {
-    return this.httpDelete(this.subPath + '/' + id, null, token);
+  delete(id: string, lastModificationDate: Date|undefined, token:string): Observable<number> {
+    let taskParam = null;
+    if (lastModificationDate) {
+        const isoDate = new Date(lastModificationDate).toISOString();
+        taskParam = {
+          'lastModificationDate': isoDate
+    }
+  }
+    return this.httpDelete(this.subPath + '/' + id, taskParam, token);
   }
 
 
 
   private httpRequest(method: string, path: string, body?: any, headers?: HttpHeaders, params?: HttpParams): Observable<modelType> {
     const requestUrl = this.restUri + path;
+    console.log(params)
     return this.httpClient.request(method, requestUrl, {
       body,
       headers,
-      params,
+      params: params,
     }).pipe(
       map((response: any) => response),
       catchError((error) => {
