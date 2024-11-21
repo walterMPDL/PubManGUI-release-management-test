@@ -17,6 +17,7 @@ import {Observable, filter, map, startWith, tap, of, BehaviorSubject} from 'rxjs
 import { ItemVersionVO } from 'src/app/model/inge';
 import { AaService } from 'src/app/services/aa.service';
 import { ItemsService}  from "../../services/pubman-rest-client/items.service";
+import {PaginatorChangeEvent, PaginatorComponent} from "../../shared/components/paginator/paginator.component";
 
 
 @Component({
@@ -24,16 +25,13 @@ import { ItemsService}  from "../../services/pubman-rest-client/items.service";
   standalone: true,
   imports: [
     CommonModule,
-    PaginationDirective,
     FormsModule,
     ReactiveFormsModule,
     NgClass,
-    NgFor,
-    NgIf,
     ItemListElementComponent,
     AsyncPipe,
-    RouterLink,
-    TopnavComponent
+    TopnavComponent,
+    PaginatorComponent
   ],
   templateUrl: './item-list.component.html',
   styleUrl: './item-list.component.scss'
@@ -43,28 +41,16 @@ export class ItemListComponent implements AfterViewInit{
   @Input() searchQuery: Observable<any> = of({});
   //@Input() filterSectionTemplate?: TemplateRef<any> | undefined;
   @ViewChildren(ItemListElementComponent) list_items!: QueryList<ItemListElementComponent>;
-  @ViewChild("sortAndFilter", { read: ViewContainerRef }) vcr!: ViewContainerRef;
+  @ViewChild(PaginatorComponent) paginator!: PaginatorComponent
 
   result_list: Observable<ItemVersionVO[]> | undefined;
-  number_of_results: number | undefined;
+  number_of_results: number = 0;
+
   filterEvents: Map<string, FilterEvent> = new Map();
   aggregationEvents: Map<string, AggregationEvent> = new Map();
 
+  currentPaginatorEvent!: PaginatorChangeEvent;
   select_all = new FormControl(false);
-  select_pages_2_display = new FormControl(25);
-
-  pages_2_display = [
-    { value: 25, label: '25' },
-    { value: 50, label: '50' },
-    { value: 100, label: '100' },
-    { value: 250, label: '250' },
-  ];
-
-  // Pagination:
-  page_size = 25;
-  number_of_pages = 1;
-  current_page = 1;
-  jump_to = new FormControl<number>(this.current_page, [Validators.nullValidator, Validators.min(1)]);
 
   selectAll = $localize`:@@selectAll:select all`;
   deselectAll = $localize`:@@deselectAll:deselect all`;
@@ -80,15 +66,16 @@ export class ItemListComponent implements AfterViewInit{
     private route: ActivatedRoute
   )
   {
-   this.readQueryParams()
+
   }
 
   ngAfterViewInit(): void {
 
+    this.currentPaginatorEvent = this.paginator.fromToValues();
     this.searchQuery.subscribe(q => {
       if (q) {
         this.currentQuery = q;
-        this.update_query(this.currentQuery, this.page_size, this.getFromValue(), this.currentSortQuery);
+        this.updateList();
 
       } /*else {
         this.currentQuery = { bool: { filter: [] } };
@@ -101,44 +88,23 @@ export class ItemListComponent implements AfterViewInit{
 
   }
 
-  private updateQueryParams() {
-    const queryParams: Params = {
-      p: this.current_page,
-      s: this.page_size
-    };
-    this.router.navigate(
-      [],
-      {
-        relativeTo: this.route,
-        queryParams,
-        queryParamsHandling: 'merge', // remove to replace all query params by provided
-      }
-    );
-  }
 
-  private readQueryParams() {
-    const page = this.route.snapshot.queryParamMap.get('p');
-    if(page) {
-      this.current_page = Number(page);
-      this.jump_to.setValue(this.current_page)
-    }
-    const size = this.route.snapshot.queryParamMap.get('s');
-    if(size) {
-      this.page_size = Number(size)
-    }
-  }
 
-  update_query(query: any, size:number, from:number, sortQuery?: any ) {
+  updateList() {
+    let query = this.currentQuery;
 
     if(this.filterEvents.size > 0) {
-
       const filterQueries = Array.from(this.filterEvents.values()).filter(fe => fe.query).map(fe => fe.query);
-      query = {
-        bool: {
-          must: [
-            query,
-            ...filterQueries
-          ]
+      console.log("Filter Queries " + JSON.stringify(filterQueries))
+
+      if (filterQueries.length) {
+        query = {
+          bool: {
+            must: [
+              this.currentQuery,
+              ...filterQueries
+            ]
+          }
         }
       }
     }
@@ -151,29 +117,27 @@ export class ItemListComponent implements AfterViewInit{
     }
 
     const completeQuery = {
-      query,
-      size: size,
-      from: from,
-      ...sortQuery && {sort: [sortQuery
+      query: query,
+      size: this.currentPaginatorEvent.size,
+      from: this.currentPaginatorEvent.from,
+      ...this.currentSortQuery && {sort: [this.currentSortQuery
       ]},
       ...runtimeMappings && {runtime_mappings: runtimeMappings},
       ...aggQueries && {aggs: aggQueries}
     }
-//    console.log(JSON.stringify(completeQuery))
-    this.items(completeQuery);
-
-    this.updateQueryParams();
+    //console.log(JSON.stringify(completeQuery))
+    this.search(completeQuery);
   }
 
-  items(body: any) {
+  private search(body: any) {
     let token = undefined;
     if (this.aa.token) token = this.aa.token;
     this.result_list = this.service.elasticSearch(body, token).pipe(
       tap(result => {
         //console.log(JSON.stringify(result))
         this.number_of_results = result.hits.total.value as number;
-        this.number_of_pages = Math.ceil(this.number_of_results / this.page_size)
-        this.jump_to.addValidators(Validators.max(this.number_of_pages));
+        //this.number_of_pages = Math.ceil(this.number_of_results / this.page_size)
+        //this.jump_to.addValidators(Validators.max(this.number_of_pages));
 
         if(result.aggregations) {
           this.applyAggregationResults(result.aggregations);
@@ -193,62 +157,8 @@ export class ItemListComponent implements AfterViewInit{
     })
   }
 
-  jumpToPage() {
-    this.jump_to.errors? alert("value must be between 1 and " + this.number_of_pages) : this.onPageChange(this.jump_to.value as number);
-  }
 
-  show(item: ItemVersionVO) {
-    this.router.navigate(['edit', item.objectId])
-  }
-
-  select_pages(total: number): Array<number> {
-    const elems = 7;
-    if (total < elems) {
-      return [...Array(total).keys()];
-    }
-    const left = Math.max(0, Math.min(total - elems, this.current_page - Math.floor(elems / 2)));
-    const items = Array(elems);
-    for (let i = 0; i < elems; i += 1) {
-      items[i] = i + left;
-    }
-    if (items[0] > 0) {
-      items[0] = 0;
-      items[1] = '...';
-    }
-    if (items[items.length - 1] < total - 1) {
-      items[items.length - 1] = total - 1;
-      items[items.length - 2] = '...';
-    }
-
-    return items;
-  }
-
-  isNumber(val: any): boolean { return typeof val === 'number'; }
-
-  getFromValue(){
-    return this.current_page * this.page_size - this.page_size;
-  }
-
-  onPageChange(page_number: number) {
-    this.current_page = page_number;
-    this.jump_to.setValue(page_number);
-    const from = this.getFromValue();
-    this.update_query(this.currentQuery, this.page_size, from, this.currentSortQuery)
-  }
-
-  pageSizeHandler(event: any) {
-    const relocate = this.current_page * this.page_size;
-    this.page_size = Number.parseInt(event.target.value);
-    this.number_of_pages = this.number_of_results ? Math.ceil(this.number_of_results / this.page_size) : 0;
-    if (relocate < this.page_size || relocate > this.number_of_pages) {
-      this.current_page = 1;
-    } else {
-      this.current_page = Math.floor(relocate / this.page_size);
-    }
-    this.onPageChange(this.current_page);
-  }
-
-  select_all_items(event: any) {
+  selectAllItems(event: any) {
     if (event.target.checked) {
       this.list_items.map(li => li.check_box.setValue(true));
     } else {
@@ -270,8 +180,10 @@ export class ItemListComponent implements AfterViewInit{
   }
 
   updateFilter(fe: FilterEvent) {
+    //console.log("Update Filter: " + fe.name + ' - ' + fe.query)
     this.filterEvents.set(fe.name,fe);
-    this.onPageChange(1)
+    this.paginator.first();
+    //this.onPageChange(1)
   }
 
   registerAggregation(ae: AggregationEvent) {
@@ -285,11 +197,17 @@ export class ItemListComponent implements AfterViewInit{
 
   updateSort(sortQuery: any) {
     this.currentSortQuery = sortQuery
-    this.onPageChange(1)
+    this.paginator.first();
+    //this.onPageChange(1)
 
   }
 
 
+  paginatorChanged($event: PaginatorChangeEvent) {
+    this.currentPaginatorEvent = $event;
+    this.updateList();
+
+  }
 }
 
 export interface FilterEvent {

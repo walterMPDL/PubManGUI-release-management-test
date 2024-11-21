@@ -8,6 +8,7 @@ import {ItemFilterComponent} from "../item-list/filters/item-filter/item-filter.
 import {ItemContextFilterDirective} from "../item-list/filters/directives/item-context-filter.directive";
 import {ItemStateFilterDirective} from "../item-list/filters/directives/item-state-filter.directive";
 import {ItemVersionState} from "../../model/inge";
+import {ItemImportFilterDirective} from "../item-list/filters/directives/item-import-filter.directive";
 
 
 @Component({
@@ -19,7 +20,8 @@ import {ItemVersionState} from "../../model/inge";
     ItemFilterComponent,
     //ItemStateFilterDirective,
     ItemContextFilterDirective,
-    ItemStateFilterDirective
+    ItemStateFilterDirective,
+    ItemImportFilterDirective,
   ],
   templateUrl: './qa-workspace.component.html',
   styleUrl: './qa-workspace.component.scss'

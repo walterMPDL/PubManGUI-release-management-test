@@ -3,39 +3,40 @@ import {ItemFilterDirective} from "./item-filter.directive";
 import {AaService} from "../../../../services/aa.service";
 import {FilterEvent} from "../../item-list.component";
 import {baseElasticSearchQueryBuilder} from "../../../../shared/services/search-utils";
-import {ContextDbVO} from "../../../../model/inge";
+import {ImportService} from "../../../../services/pubman-rest-client/import.service";
+import {ImportLogDbVO} from "../../../../model/inge";
+import {Observable} from "rxjs";
 
 
 @Directive({
-  selector: '[pureItemContextFilter]',
+  selector: '[pureItemImportFilter]',
   providers: [{
     provide: ItemFilterDirective,
-    useExisting: ItemContextFilterDirective
+    useExisting: ItemImportFilterDirective
   }],
   standalone: true
 })
-export class ItemContextFilterDirective extends ItemFilterDirective {
+export class ItemImportFilterDirective extends ItemFilterDirective {
   private options!: { [p: string]: string };
 
   @Input() type!: 'my' | 'moderator'
 
-  constructor(private aa: AaService) {
+  constructor(private aa: AaService, private importService: ImportService) {
     super();
     //this.options = Object.assign({'': 'All'}, ...Object.keys(ItemVersionState).map(x => ({ [x]: x })));
   }
 
   ngOnInit() {
-
-    this.aa.principal.subscribe(p => {
-      let contextList: ContextDbVO[] = [];
-      if(this.type==='moderator') {
-        contextList = p.moderatorContexts;
-      }
-      else {
-        contextList = p.depositorContexts;
-      }
-      this.options =  Object.assign({'': 'All'}, ...contextList.map(context => ({ [context.objectId]: context.name })));
-    })
+    let importLogs$ = undefined;
+    if(this.type==='moderator') {
+      importLogs$ = this.importService.getImportLogsForModerator();
+    }
+    else {
+      importLogs$ = this.importService.getImportLogs();
+    }
+    importLogs$.subscribe(importLogs => {
+      this.options =  Object.assign({'': 'All'}, ...importLogs.map(importLog => ({ [importLog.name]: importLog.name +' ('+ importLog.startDate+')' })));
+    });
   }
 
   getOptions():{[key:string]: string } {
@@ -46,11 +47,12 @@ export class ItemContextFilterDirective extends ItemFilterDirective {
     let query = undefined;
 
     if(selectedValue)
-      query = baseElasticSearchQueryBuilder('context.objectId', selectedValue);
+      query = baseElasticSearchQueryBuilder('localTags', '"'+selectedValue+'"');
     else
       query= undefined;
+
     const fe: FilterEvent = {
-      name: "contextFilter",
+      name: "importFilter",
       query: query
     }
     return fe;

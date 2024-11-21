@@ -88,8 +88,15 @@
   <div class="row flex-grow-1 align-content-end">
     <div class="d-inline-flex">
 
+      <ng-template #exportPopOver>
+        <pure-export-items [item]="item"/>
+
+      </ng-template>
+      <button class="btn" [ngbPopover]="exportPopOver" [autoClose]="false"><i class="bi bi-quote"></i></button>
+      <!--
       <a purePopover class="btn btn-sm" tabindex="0" [attr.title]="item?.metadata?.title!" data-bs-toggle="popover"
          [attr.data-bs-content]="'Citation'" ngbTooltip="Citation"><i class="bi bi-quote"></i></a>
+         -->
       @if(abstract) {
       <a purePopover pureTooltip class="btn btn-sm" tabindex="0" [attr.title]="item?.metadata?.title!"
          data-bs-toggle="popover" ngbTooltip="Abstract"

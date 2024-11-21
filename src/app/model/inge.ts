@@ -581,3 +581,84 @@ export enum ContentCategories {
   code = "http://purl.org/escidoc/metadata/ves/content-categories/code"
 }
 
+
+export interface ImportLog {
+  id: number;
+  status: ImportStatus;
+  errorLevel: ImportErrorLevel;
+  startDate: Date;
+}
+
+export interface ImportLogDbVO extends ImportLog {
+  endDate: Date;
+  userId: string;
+  name: string;
+  format: ImportFormat;
+  contextId: string;
+  percentage: number;
+}
+
+export interface ImportLogItemDbVO extends ImportLog {
+  endDate: Date;
+  parent: ImportLogDbVO;
+  message: string;
+  itemId: string;
+}
+
+export interface ImportLogItemDetailDbVO extends ImportLog {
+  parent: ImportLogItemDbVO;
+  message: string;
+}
+
+export const enum ImportStatus {
+  FINISHED = "FINISHED",
+  PENDING = "PENDING",
+  SUSPENDED = "SUSPENDED",
+}
+
+export const enum ImportErrorLevel {
+  ERROR = "ERROR",
+  FATAL = "FATAL",
+  FINE = "FINE",
+  PROBLEM = "PROBLEM",
+  WARNING = "WARNING",
+}
+
+export const enum ImportFormat {
+  BIBTEX_STRING = "BIBTEX_STRING",
+  BMC_XML = "BMC_XML",
+  EDOC_XML = "EDOC_XML",
+  ENDNOTE_STRING = "ENDNOTE_STRING",
+  ESCIDOC_ITEM_V3_XML = "ESCIDOC_ITEM_V3_XML",
+  MARC_XML = "MARC_XML",
+  RIS_STRING = "RIS_STRING",
+  WOS_STRING = "WOS_STRING",
+}
+
+export enum exportTypes {
+  JSON = "json",
+    ESCIDOC_ITEMLIST_XML = "eSciDoc_Itemlist_Xml",
+    BIBTEX = "BibTeX",
+    ENDNOTE = "EndNote",
+    MARC_XML = "Marc_Xml",
+    PDF = "pdf",
+    DOCX = "docx",
+    HTML_PLAIN = "html_plain",
+    HTML_LINKED = "html_linked",
+    JSON_CITATION = "json_citation",
+    ESCIDOC_SNIPPET = "escidoc_snippet"
+}
+
+export enum citationTypes{
+
+  APA="APA",
+  CSL="CSL",
+  APA_CJK="APA(CJK)",
+  APA6="APA6",
+  AJP="AJP",
+  JUS="JUS",
+  JUS_Report="JUS_Report"
+}
+
+
+

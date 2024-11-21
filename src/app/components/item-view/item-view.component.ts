@@ -1,4 +1,4 @@
-import {Component, HostListener, Input} from '@angular/core';
+import {Component, HostListener, Input, TemplateRef} from '@angular/core';
 import {ItemsService} from "../../services/pubman-rest-client/items.service";
 import {AaService} from "../../services/aa.service";
 import {ItemVersionVO} from "../../model/inge";
@@ -7,7 +7,7 @@ import {TopnavComponent} from "../../shared/components/topnav/topnav.component";
 import {AsyncPipe, NgClass, ViewportScroller} from "@angular/common";
 import {DateToYearPipe} from "../../shared/services/pipes/date-to-year.pipe";
 import {ItemBadgesComponent} from "../../shared/components/item-badges/item-badges.component";
-import {NgbTooltip} from "@ng-bootstrap/ng-bootstrap";
+import {NgbModal, NgbPopover, NgbTooltip} from "@ng-bootstrap/ng-bootstrap";
 import {ItemViewMetadataComponent} from "./item-view-metadata/item-view-metadata.component";
 import {BehaviorSubject, delay, map, Observable, pipe, tap, timeout} from "rxjs";
 import * as props from "../../../assets/properties.json";
@@ -18,6 +18,7 @@ import {SanitizeHtmlPipe} from "../../shared/services/pipes/sanitize-html.pipe";
 import {ItemViewFileComponent} from "./item-view-file/item-view-file.component";
 import {EmptyPipe} from "../../shared/services/pipes/empty.pipe";
 import {MessageService} from "../../shared/services/message.service";
+import {ExportItemsComponent} from "../../shared/components/export-items/export-items.component";
 
 @Component({
   selector: 'pure-item-view',
@@ -35,7 +36,9 @@ import {MessageService} from "../../shared/services/message.service";
     AsyncPipe,
     SanitizeHtmlPipe,
     ItemViewFileComponent,
-    EmptyPipe
+    EmptyPipe,
+    ExportItemsComponent,
+    NgbPopover
   ],
   templateUrl: './item-view.component.html',
   styleUrl: './item-view.component.scss'
@@ -57,7 +60,7 @@ export class ItemViewComponent {
   citation: string | undefined
 
   constructor(private itemsService: ItemsService, protected aaService: AaService, private route: ActivatedRoute, private router: Router,
-  private scroller: ViewportScroller, private messageService: MessageService) {
+  private scroller: ViewportScroller, private messageService: MessageService, private modalService: NgbModal) {
 
   }
 
@@ -126,7 +129,7 @@ export class ItemViewComponent {
           }
         })
 
-        this.itemsService.retrieveSingleCitation(i.objectId + '_' + i.versionNumber, undefined,undefined,undefined,this.aaService.token).subscribe(citation => {
+        this.itemsService.retrieveSingleCitation(i.objectId + '_' + i.versionNumber, undefined,undefined,this.aaService.token).subscribe(citation => {
           this.citation = citation;
         })
       }
@@ -137,6 +140,20 @@ export class ItemViewComponent {
   onWindowScroll() {
     const scrollPosition = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
     this.isScrolled = scrollPosition > 50 ? true : false;
+  }
+
+  openModal(content: TemplateRef<any>) {
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' })
+      /*.result.then(
+      (result) => {
+        this.closeResult = `Closed with: ${result}`;
+      },
+      (reason) => {
+        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      },
+    );
+
+       */
   }
 
   get firstAuthors() {
