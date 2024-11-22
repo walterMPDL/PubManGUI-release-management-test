@@ -116,7 +116,7 @@
                 </td>
                 <td class="col-5">
                   @if(item.itemId) {                 
-                    <span class="nav-link" [routerLink]="['/view', item.itemId]">{{ item.itemId }} </span>
+                    <span class="nav-link text-decoration-underline" [routerLink]="['/view', item.itemId]">{{ item.itemId }} </span>
                   } @else {
                     {{ item.message | separate | titlecase }}
                   }
@@ -156,7 +156,7 @@
           @if((problem + error + fatal) > 0) {
           <br>
           <span class="fw-bold"> {{ warning + problem + error + fatal }} <span>
-            import notices</span>
+            importnotices</span>
           </span>
           }
         </div>

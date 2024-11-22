@@ -15,6 +15,7 @@ import { SeparateFilterPipe } from 'src/app/components/imports/pipes/separateFil
 
 //import { SanitizeHtmlPipe } from "src/app//shared/services/pipes/sanitize-html.pipe";
 import xmlFormat from 'xml-formatter';
+import { NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap';
 
 const FILTER_PAG_REGEX = /[^0-9]/g;
 
@@ -31,7 +32,8 @@ const FILTER_PAG_REGEX = /[^0-9]/g;
     //NgbTooltip,
     ///StateFilterPipe,
     //SeparateFilterPipe,
-    //SanitizeHtmlPipe
+    //SanitizeHtmlPipe,
+    NgbCollapseModule
   ],
   templateUrl: './details.component.html'
 })
@@ -45,6 +47,7 @@ export default class DetailsComponent { //implements OnInit {
 
   item: resp.ImportLogItemDbVO | undefined;
   
+  isCollapsed: boolean[] = [];
   isScrolled = false;
 
   constructor(
@@ -55,7 +58,6 @@ export default class DetailsComponent { //implements OnInit {
     @Inject(LOCALE_ID) public locale: string) { }
 
   ngOnInit(): void {
-    console.log('in DETAILS');
     this.item = history.state.item;
     this.importsSvc.getImportLogItemDetails(Number(this.item?.id))
       .subscribe(importsResponse => {
@@ -65,6 +67,8 @@ export default class DetailsComponent { //implements OnInit {
           
         this.logs = importsResponse;
         this.collectionSize = this.logs.length;
+        this.isCollapsed = new Array<boolean>(this.logs.length).fill(true);
+
         this.refreshLogs();
         return;
       }
@@ -74,7 +78,6 @@ export default class DetailsComponent { //implements OnInit {
   }
 
   formatXml(message: string):string {
-    console.log(message);
     return xmlFormat(message, {
       indentation: '    ',
       collapseContent: true,

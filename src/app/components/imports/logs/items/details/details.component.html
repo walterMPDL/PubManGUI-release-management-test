@@ -78,27 +78,39 @@
 
     <div class="row">
       <div class="col-lg-10 col-sm-12">
-        <table class="table table-responsive col-12 mt-1">
+        <table class="table table-responsive-md table-fixed col-12 mt-1">
           <thead>
             <tr class="border-bottom">
-              <th scope="col" class="pe-2">Status</th>
-              <th scope="col" class="pe-2" i18n="@@imports.list.header.message">Report</th>
-              <th scope="col" class="pe-2" i18n="@@imports.list.header.title">Message</th>
+              <th scope="col" class="pe-2 col-1">Status</th>
+              <th scope="col" class="pe-2 col-1" i18n="@@imports.list.header.message">Report</th>
+              <th scope="col" class="pe-2 col-10" i18n="@@imports.list.header.title">Message</th>
             </tr>
           </thead>
 
           <tbody>
             @if(collectionSize > 0) {
-              @for (detail of inPage; track detail.id) {
+              @for (detail of inPage; track detail.id; let idx = $index) {
               <tr class="border-bottom">
-                <td class="col-2 align-text-top">
+                <td class="align-text-top">
                   {{ detail.status }}
                 </td>
-                <td class="col-2 align-text-top">
+                <td class="align-text-top">
                   {{ detail.errorLevel }}
                 </td>
-                <td class="col-8 align-text-top">
-                  <pre>{{ formatXml(detail.message) }}</pre>
+                <td class="align-text-top">
+                  @if(detail.message.length > 80) {
+                    {{ detail.message.slice(0,detail.message.indexOf('>')+1) }}
+                    <button type="button"class="border-0 bg-transparent float-end"
+                      (click)="collapse.toggle()"
+                      [attr.aria-expanded]="!isCollapsed[idx]">
+                      <span class="material-symbols-outlined">unfold_more</span>
+                    </button>
+                    <div #collapse="ngbCollapse" [(ngbCollapse)]="isCollapsed[idx]">
+                      <pre>{{ formatXml(detail.message).slice(detail.message.indexOf('>')+3) }}</pre>
+                    </div>
+                  } @else {
+                    {{ detail.message }}
+                  }
                 </td>
               </tr>
               }
