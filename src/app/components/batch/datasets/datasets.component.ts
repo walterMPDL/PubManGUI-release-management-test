@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { OnInit, DoCheck, Component, QueryList, ViewChildren, AfterViewInit, HostListener } from '@angular/core';
-import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Observable, filter, startWith, of, tap, map, timeInterval } from 'rxjs';
+import { OnInit, DoCheck, Component, QueryList, ViewChildren, HostListener } from '@angular/core';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { filter, startWith } from 'rxjs';
 
 import { ItemVersionVO } from 'src/app/model/inge';
 import { AaService } from 'src/app/services/aa.service';
