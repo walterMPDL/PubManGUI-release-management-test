@@ -59,7 +59,7 @@
             </div>
           </div>
           <div class="list-group list-group-flush">
-            @for (item of list; track item; let last = $last) {
+            @for (item of list; track item.objectId; let last = $last) {
             <div class="list-group-item py-0">
               <pure-item-list-element [item]="item" [last_item]="last" />
             </div>

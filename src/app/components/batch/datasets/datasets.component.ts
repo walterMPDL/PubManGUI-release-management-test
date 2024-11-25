@@ -13,7 +13,7 @@ import { ItemListElementComponent } from 'src/app/components/item-list/item-list
 import { NavigationEnd, Router } from '@angular/router';
 
 import { NgbTooltip } from "@ng-bootstrap/ng-bootstrap";
-import { PaginatorChangeEvent, PaginatorComponent} from "src/app/shared/components/paginator/paginator.component";
+import { PaginatorComponent} from "src/app/shared/components/paginator/paginator.component";
 
 @Component({
   selector: 'pure-batch-datasets',
@@ -75,7 +75,6 @@ export default class DatasetsComponent implements OnInit, DoCheck {
   }
 
   select_all_items(event: any) {
-    console.log(JSON.stringify(event));
     if (event.target.checked) {
       this.list_items.map(li => li.check_box.setValue(true));
     } else {
