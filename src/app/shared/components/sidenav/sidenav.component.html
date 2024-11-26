@@ -97,7 +97,10 @@
                 </g>
               </g>
             </svg>
+            @if(cartService.objectIds.length > 0) {
               <div class="matBadge" matBadge='{{ cartService.objectIds.length }}'></div>
+            }
+
 
             <span class="nav-label ms-3" i18n="@@basket">Basket</span>
           </a>
