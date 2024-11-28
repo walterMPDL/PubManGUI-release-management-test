@@ -20,11 +20,11 @@ import {DefaultKeyValuePipe} from "../../../../shared/services/pipes/default-key
 export class ItemFilterComponent {
   @Input() itemList!: ItemListComponent;
   @Input() label!: string;
-  options!: {[key:string]: string } ;
+  //options!: {[key:string]: string } ;
 
 
   constructor(private filterDirective: ItemFilterDirective) {
-    this.options = this.filterDirective.getOptions();
+    //this.options = this.filterDirective.getOptions();
   }
 
   ngAfterViewInit(){
@@ -34,6 +34,10 @@ export class ItemFilterComponent {
   handleInputChange($event: any){
     const targetVal = $event.target.value;
     this.itemList.updateFilter(this.filterDirective.getFilterEvent(targetVal));
+  }
+
+  get options() {
+    return this.filterDirective.getOptions();
   }
 
 

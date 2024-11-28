@@ -8,7 +8,7 @@ import { IdType } from 'src/app/model/inge';
 import { ValidatorsService } from 'src/app/components/batch/services/validators.service';
 import { BatchService } from 'src/app/components/batch/services/batch.service';
 import { MessageService } from 'src/app/shared/services/message.service';
-import type { ChangeSourceIdentifierParams } from 'src/app/components/batch/interfaces/actions-params';
+import type { ChangeSourceIdentifierParams } from 'src/app/components/batch/interfaces/batch-params';
 
 
 @Component({

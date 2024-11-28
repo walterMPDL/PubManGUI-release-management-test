@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
+import DetailsComponent from './logs/items/details/details.component';
+
 
 const routes: Routes = [
   {
@@ -8,7 +10,7 @@ const routes: Routes = [
     loadComponent: () => import('./new/new.component'),
     data: {
       breadcrumb: {
-        label: 'New', //label: $localize`:@@new:New`,
+        label: $localize`:@@new:New`,
       }
     },
   },
@@ -16,13 +18,13 @@ const routes: Routes = [
     path: 'myimports',
     data: {
       breadcrumb: {
-        label: 'My imports', //$localize`:@@myimports:My imports`,
+        label: $localize`:@@myimports:My imports`,
       }
     },
     children: [
       {
         path: '',
-        loadComponent: () => import('./list/list.component'),
+        loadComponent: () => import('./logs/import-logs.component'),
         data: {
           breadcrumb: {
             //label: '',
@@ -31,21 +33,49 @@ const routes: Routes = [
       },
       {
         path: ':id',
-        loadComponent: () => import('./list/details/details.component'),
         data: {
           breadcrumb: {
-            label: 'Import details', //$localize`:@@details:Import details`,
+            label: $localize`:@@imports.list.items:Details`,
           }
         },
+        children: [
+          {
+            path: '',
+            loadComponent: () => import('./logs/items/items.component'),
+            data: {
+              breadcrumb: {              
+                //label: '',
+              }
+            },
+          },
+          {
+            path: 'log',
+            loadComponent: () => import('./logs/items/details/details.component'),
+            data: {
+              breadcrumb: {
+                label: 'Log', 
+              }
+            },
+          },
+          {
+            path: 'datasets',
+            loadComponent: () => import('./datasets/datasets.component'),
+            data: {
+              breadcrumb: {
+                label: 'Datasets', 
+              }
+            },
+          },
+        ],
       },
-    ],
+],
   },
-  {
+{
     path: '',
     loadComponent: () => import('./imports.component'),
     data: {
       breadcrumb: {
-        label: 'Imports', //label: $localize`:@@imports:Imports`,
+        label: $localize`:@@imports:Imports`,
       }
     }
   }

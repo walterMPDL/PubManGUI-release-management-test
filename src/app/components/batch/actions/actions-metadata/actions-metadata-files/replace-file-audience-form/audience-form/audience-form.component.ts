@@ -3,7 +3,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AddRemoveButtonsComponent } from 'src/app/shared/components/add-remove-buttons/add-remove-buttons.component';
 
-import type { ipList }  from 'src/app/components/batch/interfaces/actions-responses';
+import type { IpEntry }  from 'src/app/services/pubman-rest-client/miscellaneous.service';
 
 @Component({
   selector: 'pure-audience-form',
@@ -18,7 +18,7 @@ import type { ipList }  from 'src/app/components/batch/interfaces/actions-respon
 })
 export class AudienceFormComponent { 
 
-  @Input() ous!: ipList[];
+  @Input() ous!: IpEntry[];
   @Input() audienceId!: FormControl;
   @Input() index!: number;
   @Input() index_length!: number;

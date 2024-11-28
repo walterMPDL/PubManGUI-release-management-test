@@ -11,7 +11,7 @@ import { OptionDirective } from 'src/app/shared/components/selector/directives/o
 
 import { BatchService } from 'src/app/components/batch/services/batch.service';
 import { MessageService } from 'src/app/shared/services/message.service';
-import type { ReplaceOrcidParams } from 'src/app/components/batch/interfaces/actions-params';
+import type { ReplaceOrcidParams } from 'src/app/components/batch/interfaces/batch-params';
 
 @Component({
   selector: 'pure-replace-orcid-form',

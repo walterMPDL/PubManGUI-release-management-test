@@ -1,6 +1,6 @@
 import { Pipe, type PipeTransform } from '@angular/core';
 
-import { BatchProcessLogDetailState } from 'src/app/model/inge';
+import { BatchProcessLogDetailState } from '../interfaces/batch-responses';
 
 @Pipe({
   name: 'stateFilter',

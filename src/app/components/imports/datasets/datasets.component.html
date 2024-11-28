@@ -1,0 +1,7 @@
+@if(aaSvc.isLoggedIn) {
+<div class="imports">
+  <pure-item-list [searchQuery]="searchQuery" #itemList>
+    <pure-sort-selector [itemList]="itemList"/>
+  </pure-item-list>
+</div>
+}

@@ -14,9 +14,9 @@
             <span class="material-symbols-outlined">upload</span>
           </a>
           <div class="vr mx-2"></div>
-          @if (number_of_results && number_of_results > 0) {
-          <a class="nav-link" (click)="removeChecked()" i18n-ngbTooltip="@@batch.datasets.remove" data-test="remove-from-batch"
-            ngbTooltip="Remove checked items from Batch"
+          @if (collectionSize > 0) {
+            <a class="nav-link" (click)="removeChecked()" i18n-ngbTooltip="@@batch.datasets.remove" data-test="remove-from-batch"
+               ngbTooltip="Remove checked items from Batch"
             placement="bottom-left">
             <svg id="web_stories_black_24dp" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
               viewBox="0 0 24 24">
@@ -41,52 +41,12 @@
           }
         </div>
 
-        <nav class="small" purePagination #pagination="purePagination" [totalPages]="number_of_pages" [pageNo]="current_page"
-          (pageChange)="onPageChange($event)">
-          <div class="mpdl-pagination float-xxl-end">
-            <button type="button" class="btn btn-sm border border-0" (click)="pagination.first()"
-              [disabled]="pagination.isFirst">
-              <span class="material-symbols-outlined">
-                first_page
-              </span>
-            </button>
-            <button type="button" class="btn btn-sm border border-0" (click)="pagination.prev()"
-              [disabled]="pagination.isFirst">
-              <span class="material-symbols-outlined">
-                navigate_before
-              </span>
-            </button>
-            <span i18n="@@pagination.page">Page</span>
-            <input type="text" class="form-control mx-2" [formControl]="jump_to" [value]="jump_to.value"
-              (keyup.enter)="jumpToPage()">
-            <span i18n="@@pagination.of"> of </span><span> {{pagination.totalPages}}</span>
-            <button type="button" class="btn btn-sm border border-0" (click)="pagination.next()"
-              [disabled]="pagination.isLast">
-              <span class="material-symbols-outlined">
-                navigate_next
-              </span>
-            </button>
-            <button type="button" class="btn btn-sm border border-0" (click)="pagination.last()"
-              [disabled]="pagination.isLast">
-              <span class="material-symbols-outlined">
-                last_page
-              </span>
-            </button>
-
-            <select class="form-select" [formControl]="select_pages_2_display" (change)="pageSizeHandler($event)"
-              size="1">
-              @for (pages of pages_2_display; track pages) {
-              <option [selected]="pages.value === 10" [value]="pages.value">{{pages.label}}</option>
-              }
-            </select>
-          </div>
-        </nav>
+        <pure-paginator [totalNumberOfItems]="collectionSize" [(size)]="pageSize" [(pageNumber)]="currentPage" (paginatorChanged)="paginatorChanged()"/>
       </div>
     </div>
 
     <div class="row mt-2">
       <div class="col-lg-9 col-sm-12">
-        @if (result_list | async; as list) {
         <div class="card">
           <div class="card-header">
             <div class="form-check m-3">
@@ -97,14 +57,20 @@
             </div>
           </div>
           <div class="list-group list-group-flush">
-            @for (item of list; track item; let last = $last) {
+            @for (item of inPage; track item.objectId; let last = $last) {
             <div class="list-group-item py-0">
               <pure-item-list-element [item]="item" [last_item]="last" />
             </div>
             }
+            @empty {
+              <tr>
+                <th colspan="3" class="text-center">
+                  <span class="text-center">Please, wait ...</span>
+                </th>
+              </tr>
+            }
           </div>
         </div>
-        }
       </div>
       <div class="col-lg-3 d-none d-lg-block">
       </div>

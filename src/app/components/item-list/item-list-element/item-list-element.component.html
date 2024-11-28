@@ -46,7 +46,7 @@
               <sup>
                 <a [href]="author?.person?.orcid" target="_blank">
                   <img alt="ORCID logo"
-                       src="https://info.orcid.org/wp-content/uploads/2019/11/orcid_16x16.png"
+                       src="/assets/images/ORCID-iD_icon_vector.svg"
                        width="16" height="16"/>
                 </a>
               </sup>
@@ -88,14 +88,22 @@
   <div class="row flex-grow-1 align-content-end">
     <div class="d-inline-flex">
 
+      <ng-template #exportPopOver>
+        <pure-export-items [item]="item"/>
+
+      </ng-template>
+      <button class="btn" [ngbPopover]="exportPopOver" [autoClose]="false"><i class="bi bi-quote"></i></button>
+      <!--
       <a purePopover class="btn btn-sm" tabindex="0" [attr.title]="item?.metadata?.title!" data-bs-toggle="popover"
          [attr.data-bs-content]="'Citation'" ngbTooltip="Citation"><i class="bi bi-quote"></i></a>
+         -->
       @if(abstract) {
       <a purePopover pureTooltip class="btn btn-sm" tabindex="0" [attr.title]="item?.metadata?.title!"
          data-bs-toggle="popover" ngbTooltip="Abstract"
          [attr.data-bs-content]="abstract"><i class="bi bi-card-text"></i></a>
       }
     </div>
+
   </div>
 
 </div>

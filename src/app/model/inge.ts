@@ -46,17 +46,6 @@ export interface BasicDbRO extends Serializable {
     modifier?: AccountUserDbRO;
 }
 
-export interface BatchProcessItemVO extends Serializable {
-    objectId: number;
-    batchProcessMessage: BatchProcessMessages;
-    batchProcessMessageType: BatchProcessMessagesTypes;
-    itemVersionVO: ItemVersionVO;
-}
-
-export interface BatchProcessLogDbVO extends Serializable {
-    batchProcessLogItemList: BatchProcessItemVO[];
-}
-
 export interface ContextDbRO extends BasicDbRO {
 }
 
@@ -352,72 +341,6 @@ export enum EventType {
     UPDATE = "UPDATE",
 }
 
-export enum BatchProcessMessages {
-    BATCH_SUCCESS = "BATCH_SUCCESS",
-    BATCH_AUTHENTICATION_ERROR = "BATCH_AUTHENTICATION_ERROR",
-    BATCH_AUTHORIZATION_ERROR = "BATCH_AUTHORIZATION_ERROR",
-    BATCH_CONTEXT_NOT_FOUND = "BATCH_CONTEXT_NOT_FOUND",
-    BATCH_FILES_METADATA_OLD_VALUE_NOT_EQUAL = "BATCH_FILES_METADATA_OLD_VALUE_NOT_EQUAL",
-    BATCH_INTERNAL_ERROR = "BATCH_INTERNAL_ERROR",
-    BATCH_ITEM_NOT_FOUND = "BATCH_ITEM_NOT_FOUND",
-    BATCH_METADATA_CHANGE_VALUE_NOT_ALLOWED = "BATCH_METADATA_CHANGE_VALUE_NOT_ALLOWED",
-    BATCH_METADATA_CHANGE_VALUE_NOT_EQUAL = "BATCH_METADATA_CHANGE_VALUE_NOT_EQUAL",
-    BATCH_METADATA_CHANGE_VALUE_ORCID_NO_PERSON = "BATCH_METADATA_CHANGE_VALUE_ORCID_NO_PERSON",
-    BATCH_METADATA_NO_CHANGE_VALUE = "BATCH_METADATA_NO_CHANGE_VALUE",
-    BATCH_METADATA_NO_NEW_VALUE_SET = "BATCH_METADATA_NO_NEW_VALUE_SET",
-    BATCH_METADATA_NO_SOURCE_FOUND = "BATCH_METADATA_NO_SOURCE_FOUND",
-    BATCH_STATE_WRONG = "BATCH_STATE_WRONG",
-    BATCH_VALIDATION_GLOBAL = "BATCH_VALIDATION_GLOBAL",
-    BATCH_VALIDATION_INVALID_ORCID = "BATCH_VALIDATION_INVALID_ORCID",
-    BATCH_VALIDATION_IP_RANGE_NOT_PROVIDED = "BATCH_VALIDATION_IP_RANGE_NOT_PROVIDED",
-    BATCH_VALIDATION_NO_SOURCE = "BATCH_VALIDATION_NO_SOURCE",
-}
-
-export enum BatchProcessMessagesTypes {
-    INFO = "INFO",
-    ERROR = "ERROR",
-    SUCCESS = "SUCCESS",
-    WARNING = "WARNING",
-}
-
-export enum BatchProcessMethod {
-    ADD_KEYWORDS = "ADD_KEYWORDS",
-    ADD_LOCALTAGS = "ADD_LOCALTAGS",
-    ADD_SOURCE_IDENTIFIER = "ADD_SOURCE_IDENTIFIER",
-    CHANGE_CONTEXT = "CHANGE_CONTEXT",
-    CHANGE_EXTERNAL_REFERENCE_CONTENT_CATEGORY = "CHANGE_EXTERNAL_REFERENCE_CONTENT_CATEGORY",
-    CHANGE_FILE_CONTENT_CATEGORY = "CHANGE_FILE_CONTENT_CATEGORY",
-    CHANGE_FILE_VISIBILITY = "CHANGE_FILE_VISIBILITY",
-    CHANGE_GENRE = "CHANGE_GENRE",
-    CHANGE_KEYWORDS = "CHANGE_KEYWORDS",
-    CHANGE_LOCALTAG = "CHANGE_LOCALTAG",
-    CHANGE_REVIEW_METHOD = "CHANGE_REVIEW_METHOD",
-    CHANGE_SOURCE_GENRE = "CHANGE_SOURCE_GENRE",
-    CHANGE_SOURCE_IDENTIFIER = "CHANGE_SOURCE_IDENTIFIER",
-    DELETE_PUBITEMS = "DELETE_PUBITEMS",
-    RELEASE_PUBITEMS = "RELEASE_PUBITEMS",
-    REPLACE_FILE_AUDIENCE = "REPLACE_FILE_AUDIENCE",
-    REPLACE_KEYWORDS = "REPLACE_KEYWORDS",
-    REPLACE_ORCID = "REPLACE_ORCID",
-    REPLACE_SOURCE_EDITION = "REPLACE_SOURCE_EDITION",
-    REVISE_PUBITEMS = "REVISE_PUBITEMS",
-    SUBMIT_PUBITEMS = "SUBMIT_PUBITEMS",
-    WITHDRAW_PUBITEMS = "WITHDRAW_PUBITEMS",
-}
-
-export enum BatchProcessLogHeaderState {
-    INITIALIZED = "INITIALIZED",
-    RUNNING = "RUNNING",
-    FINISHED = "FINISHED",
-}
-
-export enum BatchProcessLogDetailState {
-    INITIALIZED = "INITIALIZED",
-    RUNNING = "RUNNING",
-    SUCCESS = "SUCCESS",
-    ERROR = "ERROR",
-}
-
 export enum MdsPublicationGenre {
     ARTICLE = "ARTICLE",
     BLOG_POST = "BLOG_POST",
@@ -657,4 +580,85 @@ export enum ContentCategories {
   multimedia = "http://purl.org/escidoc/metadata/ves/content-categories/multimedia",
   code = "http://purl.org/escidoc/metadata/ves/content-categories/code"
 }
+
+
+export interface ImportLog {
+  id: number;
+  status: ImportStatus;
+  errorLevel: ImportErrorLevel;
+  startDate: Date;
+}
+
+export interface ImportLogDbVO extends ImportLog {
+  endDate: Date;
+  userId: string;
+  name: string;
+  format: ImportFormat;
+  contextId: string;
+  percentage: number;
+}
+
+export interface ImportLogItemDbVO extends ImportLog {
+  endDate: Date;
+  parent: ImportLogDbVO;
+  message: string;
+  itemId: string;
+}
+
+export interface ImportLogItemDetailDbVO extends ImportLog {
+  parent: ImportLogItemDbVO;
+  message: string;
+}
+
+export const enum ImportStatus {
+  FINISHED = "FINISHED",
+  PENDING = "PENDING",
+  SUSPENDED = "SUSPENDED",
+}
+
+export const enum ImportErrorLevel {
+  ERROR = "ERROR",
+  FATAL = "FATAL",
+  FINE = "FINE",
+  PROBLEM = "PROBLEM",
+  WARNING = "WARNING",
+}
+
+export const enum ImportFormat {
+  BIBTEX_STRING = "BIBTEX_STRING",
+  BMC_XML = "BMC_XML",
+  EDOC_XML = "EDOC_XML",
+  ENDNOTE_STRING = "ENDNOTE_STRING",
+  ESCIDOC_ITEM_V3_XML = "ESCIDOC_ITEM_V3_XML",
+  MARC_XML = "MARC_XML",
+  RIS_STRING = "RIS_STRING",
+  WOS_STRING = "WOS_STRING",
+}
+
+export enum exportTypes {
+  JSON = "json",
+    ESCIDOC_ITEMLIST_XML = "eSciDoc_Itemlist_Xml",
+    BIBTEX = "BibTeX",
+    ENDNOTE = "EndNote",
+    MARC_XML = "Marc_Xml",
+    PDF = "pdf",
+    DOCX = "docx",
+    HTML_PLAIN = "html_plain",
+    HTML_LINKED = "html_linked",
+    JSON_CITATION = "json_citation",
+    ESCIDOC_SNIPPET = "escidoc_snippet"
+}
+
+export enum citationTypes{
+
+  APA="APA",
+  CSL="CSL",
+  APA_CJK="APA(CJK)",
+  APA6="APA6",
+  AJP="AJP",
+  JUS="JUS",
+  JUS_Report="JUS_Report"
+}
+
+
 
