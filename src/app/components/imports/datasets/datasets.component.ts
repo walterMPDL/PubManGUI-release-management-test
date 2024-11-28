@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Input, OnInit, DoCheck, AfterViewChecked, Component, QueryList, ViewChildren, HostListener } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { filter, startWith } from 'rxjs';
+import {filter, map, Observable, of, startWith, tap} from 'rxjs';
 
 import { ItemVersionVO } from 'src/app/model/inge';
 import { AaService } from 'src/app/services/aa.service';
@@ -12,6 +12,8 @@ import { ItemListElementComponent } from 'src/app/components/item-list/item-list
 import { NavigationEnd, Router, ActivatedRoute } from '@angular/router';
 
 import { PaginatorComponent} from "src/app/shared/components/paginator/paginator.component";
+import {ItemListComponent} from "../../item-list/item-list.component";
+import {baseElasticSearchQueryBuilder} from "../../../shared/services/search-utils";
 
 @Component({
   selector: 'pure-batch-datasets',
@@ -21,70 +23,46 @@ import { PaginatorComponent} from "src/app/shared/components/paginator/paginator
     FormsModule,
     ReactiveFormsModule,
     ItemListElementComponent,
-    PaginatorComponent
+    PaginatorComponent,
+    ItemListComponent
   ],
   templateUrl: './datasets.component.html'
 })
-export default class DatasetsComponent implements OnInit, DoCheck {
-  @ViewChildren(ItemListElementComponent) list_items!: QueryList<ItemListElementComponent>;
+export default class DatasetsComponent implements OnInit {
 
-  page = 1;
-  pageSize = 25;
-  datasets: ItemVersionVO[] = [];
-  collectionSize = 0;
-  inPage: ItemVersionVO[] = [];
 
-  itemList: string[] = []; 
-  select_all = new FormControl(false);
 
-  isScrolled = false;
+  searchQuery: Observable<any>;
 
   constructor(
-    private itemSvc: ItemsService, 
+    private itemSvc: ItemsService,
     private msgSvc: MessageService,
     public aaSvc: AaService,
     private router: Router,
-  ) { }
+  ) {
+    const ids = router.getCurrentNavigation()?.extras?.state?.['itemList'] || [];
+    this.searchQuery = of(baseElasticSearchQueryBuilder("objectId", ids));
+
+  }
 
 
   ngOnInit(): void {
+    /*
     this.router.events.pipe(
       filter((event) => event instanceof NavigationEnd),
       // required to work immediately.
-      startWith(this.router)
-    ).subscribe(() => {
-      this.itemList = history.state['itemList'];
-      this.items(this.itemList);
-    });
-  }
-
-  items(itemList: string[]) {
-    this.datasets = [];
-    for (var itemObjectId of itemList) {
-      if (itemObjectId) {
-        this.itemSvc.retrieve(itemObjectId, this.aaSvc.token).subscribe( importResponse => {
-          this.datasets.push(importResponse);
-        })
+      startWith(this.router),
+      map((event) => {
+        this.itemList = event.history.state['itemList'];
+        //this.items(this.itemList);
       }
-    };
-    this.collectionSize = this.itemList.length;
+  )
+
+    ).subscribe(() => {
+
+    });
+
+     */
   }
 
-
-  @HostListener('window:scroll', ['$event'])
-  onWindowScroll() {
-    const scrollPosition = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
-    this.isScrolled = scrollPosition > 50 ? true : false;
-  }
-
-  ngDoCheck(): void {
-    this.paginatorChanged();
-  }
-
-  paginatorChanged() {
-    this.inPage = this.datasets.map((_item, i) => ({ _id: i + 1, ..._item })).slice(
-      (this.page - 1) * this.pageSize,
-      (this.page - 1) * this.pageSize + (this.pageSize),
-    );
-  }
 }
