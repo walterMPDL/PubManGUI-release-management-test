@@ -27,7 +27,7 @@ import { PaginatorComponent} from "src/app/shared/components/paginator/paginator
   ],
   templateUrl: './datasets.component.html'
 })
-export default class DatasetsComponent implements OnInit, AfterViewChecked { 
+export default class DatasetsComponent implements OnInit, AfterViewChecked {
   @ViewChildren(ItemListElementComponent) list_items!: QueryList<ItemListElementComponent>;
 
   protected currentPage = 1;
@@ -69,7 +69,7 @@ export default class DatasetsComponent implements OnInit, AfterViewChecked {
   }
 
   removeChecked() {
-    this.batchSvc.removeFromBatchDatasets(this.batchSvc.savedSelection);
+    this.batchSvc.removeFromBatchDatasets([this.batchSvc.savedSelection]);
     this.datasets = this.batchSvc.getSelectedItems();
     sessionStorage.removeItem(this.batchSvc.savedSelection);
     if (!this.batchSvc.areItemsSelected()) {
