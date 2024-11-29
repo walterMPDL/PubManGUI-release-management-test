@@ -1,15 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { OnInit, Component, QueryList, ViewChildren, HostListener, AfterViewChecked } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
-import { ItemVersionVO } from 'src/app/model/inge';
-import { AaService } from 'src/app/services/aa.service';
-import { ItemsService} from "src/app/services/pubman-rest-client/items.service";
 import { MessageService } from 'src/app/shared/services/message.service';
 import { BatchService } from '../services/batch.service';
 
+import { ItemVersionVO } from 'src/app/model/inge';
 import { ItemListElementComponent } from 'src/app/components/item-list/item-list-element/item-list-element.component';
-import { Router } from '@angular/router';
 
 import { NgbTooltip } from "@ng-bootstrap/ng-bootstrap";
 import { PaginatorComponent} from "src/app/shared/components/paginator/paginator.component";
@@ -41,7 +39,6 @@ export default class DatasetsComponent {
   constructor(
     public batchSvc: BatchService,
     private msgSvc: MessageService,
-    public aaSvc: AaService,
     private router: Router
   ) {
     //this.datasets = this.batchSvc.getSelectedItems();
