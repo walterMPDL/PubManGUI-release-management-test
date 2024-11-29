@@ -34,7 +34,7 @@ export class ItemSelectionService {
       this.selectedIds$.next(currentIds);
     }
 
-    console.log("Add" + currentIds)
+    //console.log("Add" + currentIds)
     return count;
   }
 
@@ -54,7 +54,7 @@ export class ItemSelectionService {
     if (count>0) {
       this.selectedIds$.next(currentIds);
     }
-    console.log("Remove " + currentIds)
+    //console.log("Remove " + currentIds)
     return count;
   }
 
