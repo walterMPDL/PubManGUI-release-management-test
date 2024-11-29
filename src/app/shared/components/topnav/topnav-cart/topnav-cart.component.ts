@@ -28,7 +28,6 @@ export class TopnavCartComponent {
     protected aaService: AaService) {}
 
   addSelectedToCart() {
-
     const selected: string[] = this.itemSelectionService.selectedIds$.value;
     if (selected.length) {
       const added = this.cartService.addItems(selected)
@@ -38,6 +37,35 @@ export class TopnavCartComponent {
     } else {
       this.message.warning(`The cart is empty!\n`);
     }
+  }
+
+  removeSelectedFromCart() {
+    const selected: string[] = this.itemSelectionService.selectedIds$.value;
+    if (selected.length) {
+      const removed = this.cartService.removeItems(selected)
+      this.itemSelectionService.resetList();
+      this.message.success(selected + ' items selected' + ((selected.length! - removed) > 0 ? `, ${selected.length! - removed} on cart duplicated were ignored.` : ''));
+    } else {
+      this.message.warning(`The cart is empty!\n`);
+    }
+  }
+
+  get isAdd() {
+    const selected: string[] = this.itemSelectionService.selectedIds$.value;
+    if(selected.length > 0)
+    {
+      return selected.some(id => !this.cartService.objectIds.includes(id))
+    }
+    return false;
+    //console.log("isAdd: " + isAdd)
+    //return isAdd
+  }
+  get isRemove() {
+    const selected: string[] = this.itemSelectionService.selectedIds$.value;
+    if(selected.length > 0) {
+      return selected.some(id => this.cartService.objectIds.includes(id))
+    }
+    return false;
   }
 
 }

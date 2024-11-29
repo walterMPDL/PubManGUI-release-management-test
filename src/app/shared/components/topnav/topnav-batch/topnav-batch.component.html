@@ -1,6 +1,6 @@
 @if (aaService.principal.getValue().isDepositor || aaService.principal.getValue().isModerator) {
 <div class="navbar-nav">
-<a [routerLink]="[]" class="nav-link px-2" (click)="addToBatchDatasets()"
+<button class="btn btn-link nav-link px-2" (click)="addToBatchDatasets()" [disabled]="!isAdd"
    i18n-ngbTooltip="@@batch.datasets.add"
    ngbTooltip="Add checked items to Batch"
    placement="bottom-left">
@@ -23,8 +23,8 @@
           d="M4.685-7.776H7.348v1.188H4.685v3.064H3.369V-6.587H.686V-7.776H3.369V-10.6H4.685Z"
           transform="translate(4.652 19.1)" fill="#777" stroke="#777" stroke-width="0.5"></path>
   </svg>
-</a>
-<a [routerLink]="[]" class="nav-link px-2" (click)="removeFromBatchDatasets()"
+</button>
+<button class="btn btn-link nav-link px-2" (click)="removeFromBatchDatasets()" [disabled]="!isRemove"
    i18n-ngbTooltip="@@batch.datasets.remove"
    ngbTooltip="Remove checked items from Batch"
    placement="bottom-left">
@@ -46,6 +46,6 @@
     <path id="Pfad_3494" data-name="Pfad 3494" d="M4.685-7.776H7.348v1.188H.686V-7.776h4Z"
           transform="translate(4.652 19.1)" fill="#777" stroke="#777" stroke-width="0.5"></path>
   </svg>
-</a>
+</button>
 </div>
 }

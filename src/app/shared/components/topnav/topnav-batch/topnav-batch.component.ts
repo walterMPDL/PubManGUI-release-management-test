@@ -54,4 +54,22 @@ export class TopnavBatchComponent {
     }
   }
 
+  get isAdd() {
+    const selected: string[] = this.itemSelectionService.selectedIds$.value;
+    if(selected.length > 0)
+    {
+      return selected.some(id => !this.bs.objectIds.includes(id))
+    }
+    return false;
+    //console.log("isAdd: " + isAdd)
+    //return isAdd
+  }
+  get isRemove() {
+    const selected: string[] = this.itemSelectionService.selectedIds$.value;
+    if(selected.length > 0) {
+      return selected.some(id => this.bs.objectIds.includes(id))
+    }
+    return false;
+  }
+
 }

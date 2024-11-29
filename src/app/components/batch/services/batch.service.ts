@@ -62,6 +62,17 @@ export class BatchService {
 
   public getItemsCount = computed( () => this.#itemsCount() );
 
+  get objectIds() {
+    const itemList = sessionStorage.getItem(this.datasetList);
+    if (itemList) {
+      const items = JSON.parse(itemList);
+      if (items.length > 0) {
+        return items;
+      }
+    }
+    return [] as string[];
+  }
+
   get items(): string[] {
     const itemList = sessionStorage.getItem(this.datasetList);
     if (itemList) {

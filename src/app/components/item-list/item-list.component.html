@@ -1,9 +1,12 @@
-<pure-topnav>
-    <pure-topnav-cart start/>
-    <div start class="vr"></div>
-    <pure-topnav-batch start/>
-    <pure-paginator end [totalNumberOfItems]="number_of_results" [(size)]="size" [(pageNumber)]="currentPage" (paginatorChanged)="paginatorChanged()"/>
-</pure-topnav>
+<ng-content select="[topnav]">
+  <!-- Default top nav for item lists-->
+  <pure-topnav>
+      <pure-topnav-cart start/>
+      <div start class="vr"></div>
+      <pure-topnav-batch start/>
+      <pure-paginator end [totalNumberOfItems]="number_of_results" [(size)]="size" [(pageNumber)]="currentPage" (paginatorChanged)="paginatorChanged()"/>
+  </pure-topnav>
+</ng-content>
 
 <div class="row">
     <div class="col-lg-9 col-sm-12">
