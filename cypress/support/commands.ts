@@ -113,7 +113,7 @@ Cypress.Commands.add('repeatedWait', (alias, responseBodyKey, responseBodyValue,
     maxNumberOfWaits--
     return cy.wait(alias, {timeout: waitTimeout}).then( interception => {
       // @ts-ignore
-      if (interception.response.body[responseBodyKey] === responseBodyValue || maxNumberOfWaits >= 0) {
+      if (interception.response.body[responseBodyKey] === responseBodyValue || maxNumberOfWaits <= 0) {
         return interception.response;
       } else {
         return recursiveWait();
