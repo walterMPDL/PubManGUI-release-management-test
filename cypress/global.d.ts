@@ -34,5 +34,10 @@ declare namespace Cypress {
      * Repeat cy.wait until the response of a request for the given alias contains the given responseBodyValue
      */
     repeatedWait(alias: string, responseBodyKey: string, responseBodyValue: string, waitTimeout: number, maxNumberOfWaits: number): Chainable<Cypress.Response<any>>
+
+    /**
+     * Add Local Tags via Batch using the REST API
+     */
+    addLocalTagsViaAPI(itemMetadata: string): Chainable<Cypress.Response<any>>
   }
 }

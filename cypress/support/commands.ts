@@ -127,3 +127,14 @@ Cypress.Commands.add('repeatedWait', (alias, responseBodyKey, responseBodyValue,
     throw new Error('maxNumberOfWaits < 1')
   }
 })
+
+Cypress.Commands.add('addLocalTagsViaAPI', (localTags):  Chainable<Cypress.Response<any>> => {
+  return cy.request({
+    'method': 'PUT',
+    'url': Cypress.env('restUrl') + '/batchProcess/addLocalTags',
+    //Existing (authentication) cookies are automatically send with requests
+    'body': localTags
+  }).then((response) => {
+    expect(response.status).to.eq(200)
+  })
+})
