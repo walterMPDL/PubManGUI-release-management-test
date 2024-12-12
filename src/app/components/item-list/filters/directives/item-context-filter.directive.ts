@@ -1,8 +1,9 @@
-import {Directive} from '@angular/core';
+import {Directive, Input} from '@angular/core';
 import {ItemFilterDirective} from "./item-filter.directive";
 import {AaService} from "../../../../services/aa.service";
 import {FilterEvent} from "../../item-list.component";
 import {baseElasticSearchQueryBuilder} from "../../../../shared/services/search-utils";
+import {ContextDbVO} from "../../../../model/inge";
 
 
 @Directive({
@@ -16,17 +17,25 @@ import {baseElasticSearchQueryBuilder} from "../../../../shared/services/search-
 export class ItemContextFilterDirective extends ItemFilterDirective {
   private options!: { [p: string]: string };
 
+  @Input() type!: 'my' | 'moderator'
+
   constructor(private aa: AaService) {
     super();
     //this.options = Object.assign({'': 'All'}, ...Object.keys(ItemVersionState).map(x => ({ [x]: x })));
+  }
 
-    aa.principal.subscribe(p => {
-      const contextList = p.moderatorContexts
+  ngOnInit() {
+
+    this.aa.principal.subscribe(p => {
+      let contextList: ContextDbVO[] = [];
+      if(this.type==='moderator') {
+        contextList = p.moderatorContexts;
+      }
+      else {
+        contextList = p.depositorContexts;
+      }
       this.options =  Object.assign({'': 'All'}, ...contextList.map(context => ({ [context.objectId]: context.name })));
     })
-
-
-
   }
 
   getOptions():{[key:string]: string } {

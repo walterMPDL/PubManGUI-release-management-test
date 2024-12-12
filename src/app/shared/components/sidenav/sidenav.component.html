@@ -78,25 +78,24 @@
                 <span class="nav-label ms-3" i18n="@@batch">Batch processing</span>
                 @if ( batchSvc.areItemsSelected() ) {
                   <div class="matBadge" matBadge='{{ batchSvc.getItemsCount() }}'></div>
-                } 
+                }
               </a>
               @if ( batchSvc.areItemsSelected() ) {
                 @defer {
                 <pure-batch-nav></pure-batch-nav>
                 }
-              } 
+              }
           </div>
           }
-          <a class="nav-link border-bottom py-3" [routerLink]="['']" (click)="collapse()">
-            <svg id="inventory_2_black_24dp" xmlns="http://www.w3.org/2000/svg"
-                 width="24" height="24" viewBox="0 0 24 24">
-              <g id="Gruppe_38" data-name="Gruppe 38">
-                <g id="Gruppe_37" data-name="Gruppe 37">
-                  <path stroke-widht="1px" id="Pfad_112" data-name="Pfad 112"
-                        d="M20,2H4A2.074,2.074,0,0,0,2,4V7.01A2.02,2.02,0,0,0,3,8.7V20a2.149,2.149,0,0,0,2,2H19a2.149,2.149,0,0,0,2-2V8.7a2.02,2.02,0,0,0,1-1.69V4A2.074,2.074,0,0,0,20,2ZM19,20H5V9H19ZM20,7H4V4H20Z"/>
-                </g>
-              </g>
+          <a class="nav-link border-bottom py-3" [routerLink]="['cart']" (click)="collapse()">
+            <svg fill="currentColor" height="24px" width="24px">
+              <use href="/assets/icons/icons.svg#cart"></use>
             </svg>
+            @if(cartService.objectIds.length > 0) {
+              <div class="matBadge" matBadge='{{ cartService.objectIds.length }}'></div>
+            }
+
+
             <span class="nav-label ms-3" i18n="@@basket">Basket</span>
           </a>
           <a class="nav-link border-bottom py-3" [routerLink]="['ou_tree']" (click)="collapse()">
@@ -170,14 +169,8 @@
           </a>
           <a class="nav-link border-bottom" [routerLink]="['']" (click)="collapse()">
             <!--materials "inventory_2" without a grip-->
-            <svg id="inventory_2_black_24dp" xmlns="http://www.w3.org/2000/svg"
-                 width="24" height="24" viewBox="0 0 24 24">
-              <g id="Gruppe_38" data-name="Gruppe 38">
-                <g id="Gruppe_37" data-name="Gruppe 37">
-                  <path stroke-widht="1px" id="Pfad_112" data-name="Pfad 112"
-                        d="M20,2H4A2.074,2.074,0,0,0,2,4V7.01A2.02,2.02,0,0,0,3,8.7V20a2.149,2.149,0,0,0,2,2H19a2.149,2.149,0,0,0,2-2V8.7a2.02,2.02,0,0,0,1-1.69V4A2.074,2.074,0,0,0,20,2ZM19,20H5V9H19ZM20,7H4V4H20Z"/>
-                </g>
-              </g>
+            <svg fill="currentColor" height="24px" width="24px">
+              <use href="/assets/icons/icons.svg#cart"></use>
             </svg>
             <small class="nav-label ms-2">Ablage</small>
           </a>

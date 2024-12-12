@@ -16,11 +16,17 @@ export class ItemBadgesComponent {
 
   @Input() item: ItemVersionVO | undefined;
 
+  @Input() showVersion: boolean = false;
+
   constructor(protected aaService: AaService) {
   }
 
   get doi() {
     return this.item?.metadata?.identifiers?.filter(i => i.type === IdType.DOI).map(i => i.id)[0]
+  }
+
+  get state() {
+    return this.item?.publicState !== 'WITHDRAWN' ? this.item?.versionState : this.item?.publicState
   }
 
   get publicationState() {

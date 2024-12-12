@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 
 import { BatchService } from 'src/app/components/batch/services/batch.service';
 import { MessageService } from 'src/app/shared/services/message.service';
-import type { WithdrawPubItemsParams } from 'src/app/components/batch/interfaces/actions-params';
+import type { WithdrawPubItemsParams } from 'src/app/components/batch/interfaces/batch-params';
 
 @Component({
   selector: 'pure-withdraw-pub-items-form',

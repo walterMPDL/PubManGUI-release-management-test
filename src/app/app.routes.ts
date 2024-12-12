@@ -11,7 +11,9 @@ import { MyItemsComponent } from "./components/my-items/my-items.component";
 import { QaWorkspaceComponent } from "./components/qa-workspace/qa-workspace.component";
 import { SearchResultListComponent } from "./components/search-result-list/search-result-list.component";
 import { fetchItemResolver } from "./components/imports/services/fetch-item-resolver";
-import {ItemViewComponent} from "./components/item-view/item-view.component";
+import { ItemViewComponent } from "./components/item-view/item-view.component";
+import { CartListComponent } from "./components/cart-list/cart-list.component";
+import { AuthGuard } from "src/app/services/guards/Auth.guard";
 
 export const routes: Routes = [
   {
@@ -61,6 +63,15 @@ export const routes: Routes = [
     data: {
       breadcrumb: {
         label: 'Search',
+      }
+    },
+  },
+  {
+    path: 'cart',
+    component: CartListComponent,
+    data: {
+      breadcrumb: {
+        label: 'Cart',
       }
     },
   },
@@ -128,8 +139,10 @@ export const routes: Routes = [
     data: {
       breadcrumb: {
         label: 'Batch processing',
+        active: false
       }
     },
+    canActivate: [AuthGuard],
   },
   {
     path: 'imports',
@@ -137,8 +150,10 @@ export const routes: Routes = [
     data: {
       breadcrumb: {
         label: 'Imports',
+        active: false
       }
     },
+    canActivate: [AuthGuard],
   },
   {
     path: '**',

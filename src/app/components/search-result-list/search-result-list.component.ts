@@ -19,18 +19,34 @@ import {
 import {
     ItemOuAggregationDirective
 } from "../item-list/aggregations/aggregation-filter/directives/item-ou-aggregation.directive";
+import {
+  ItemDateAggregationDirective
+} from "../item-list/aggregations/aggregation-filter/directives/item-date-aggregation.directive";
+import {
+  ItemGenreAggregationDirective
+} from "../item-list/aggregations/aggregation-filter/directives/item-genre-aggregation.directive";
+import {
+  ItemLocalTagAggregationDirective
+} from "../item-list/aggregations/aggregation-filter/directives/item-local-tag-aggregation.directive";
+import {
+  ItemStatusAggregationDirective
+} from "../item-list/aggregations/aggregation-filter/directives/item-status-aggregation.directive";
 
 @Component({
   selector: 'pure-search-result-list',
   standalone: true,
-    imports: [
-        ItemListComponent,
-        SortSelectorComponent,
-        ItemAggregationFilterComponent,
-        ItemContextAggregationDirective,
-        ItemCreatorAggregationDirective,
-        ItemOuAggregationDirective
-    ],
+  imports: [
+    ItemListComponent,
+    SortSelectorComponent,
+    ItemAggregationFilterComponent,
+    ItemContextAggregationDirective,
+    ItemCreatorAggregationDirective,
+    ItemOuAggregationDirective,
+    ItemDateAggregationDirective,
+    ItemGenreAggregationDirective,
+    ItemLocalTagAggregationDirective,
+    ItemStatusAggregationDirective
+  ],
   templateUrl: './search-result-list.component.html',
   styleUrl: './search-result-list.component.scss'
 })

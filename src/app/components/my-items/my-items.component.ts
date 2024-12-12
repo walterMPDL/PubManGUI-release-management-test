@@ -30,6 +30,8 @@ import {
 import {
   ItemDateAggregationDirective
 } from "../item-list/aggregations/aggregation-filter/directives/item-date-aggregation.directive";
+import {ItemContextFilterDirective} from "../item-list/filters/directives/item-context-filter.directive";
+import {ItemImportFilterDirective} from "../item-list/filters/directives/item-import-filter.directive";
 
 @Component({
   selector: 'pure-my-items',
@@ -48,7 +50,9 @@ import {
     ItemGenreAggregationDirective,
     ItemStatusAggregationDirective,
     ItemStatusAggregationDirective,
-    ItemDateAggregationDirective
+    ItemDateAggregationDirective,
+    ItemContextFilterDirective,
+    ItemImportFilterDirective
   ],
   templateUrl: './my-items.component.html',
   styleUrl: './my-items.component.scss',

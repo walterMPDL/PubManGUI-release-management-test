@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams, HttpRequest} from '@angular/common/http';
 import {inject, Inject, Injectable} from '@angular/core';
 import {Observable, catchError, map, throwError, isObservable, lastValueFrom} from 'rxjs';
 import * as props from 'src/assets/properties.json';
@@ -42,18 +42,26 @@ export abstract class PubmanGenericRestClientService<modelType> {
     return this.httpPut(this.subPath + '/' + id, obj, token);
   }
 
-  delete(id: string, token:string): Observable<number> {
-    return this.httpDelete(this.subPath + '/' + id, null, token);
+  delete(id: string, lastModificationDate: Date|undefined, token:string): Observable<number> {
+    let taskParam = null;
+    if (lastModificationDate) {
+        const isoDate = new Date(lastModificationDate).toISOString();
+        taskParam = {
+          'lastModificationDate': isoDate
+    }
+  }
+    return this.httpDelete(this.subPath + '/' + id, taskParam, token);
   }
 
 
 
-  private httpRequest(method: string, path: string, body?: any, headers?: HttpHeaders, params?: HttpParams): Observable<modelType> {
+  private httpRequest(method: string, path: string, body?: any, headers?: HttpHeaders, params?: HttpParams, respType?: "arraybuffer" | "blob" | "text" | "json" | undefined): Observable<any> {
     const requestUrl = this.restUri + path;
     return this.httpClient.request(method, requestUrl, {
       body,
       headers,
-      params,
+      params: params,
+      responseType: respType ? respType : 'json'
     }).pipe(
       map((response: any) => response),
       catchError((error) => {
@@ -101,11 +109,11 @@ export abstract class PubmanGenericRestClientService<modelType> {
 
 
 
-  protected httpGet(path: string, token?: string, params?: HttpParams): Observable<any> {
+  protected httpGet(path: string, token?: string, params?: HttpParams, respType?: "arraybuffer" | "blob" | "text" | "json" | undefined): Observable<any> {
     if (token) {
-      return this.httpRequest('GET', path, undefined, this.addAuhorizationHeader(token), params);
+      return this.httpRequest('GET', path, undefined, this.addAuhorizationHeader(token), params, respType);
     }
-    return this.httpRequest('GET', path, undefined, undefined, params);
+    return this.httpRequest('GET', path, undefined, undefined, params, respType);
   }
 
   protected httpPost(path: string, resource: any, token: string): Observable<any> {

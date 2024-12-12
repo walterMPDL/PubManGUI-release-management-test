@@ -4,7 +4,8 @@ import { catchError, tap, of, Observable, throwError, EMPTY } from 'rxjs';
 import { inge_rest_uri } from 'src/assets/properties.json';
 
 import type * as params from '../interfaces/imports-params';
-//import type * as resp from '../interfaces/imports-responses';
+// import type * as resp from '../interfaces/imports-responses';
+import { ImportLogDbVO, ImportLogItemDbVO, ImportLogItemDetailDbVO } from 'src/app/model/inge';
 import { ItemVersionVO } from 'src/app/model/inge';
 
 import { AaService } from 'src/app/services/aa.service';
@@ -22,15 +23,15 @@ export class ImportsService {
     private http: HttpClient,
     public aa: AaService,
     private msgSvc: MessageService,
-    private batchSvc: BatchService) { }
+    private batchSvc: BatchService) { } // Mock
 
   get token(): string {
     return this.aa.token || '';
   }
 
-  public haveImports = computed( () => this.batchSvc.areItemsSelected() );
+  public haveImports = computed( () => this.batchSvc.areItemsSelected() ); // Mock
 
-  #importsCount = signal(666); // Fake
+  #importsCount = signal(666); // Mock
   public getImportsCount = computed( () => this.#importsCount() );
 
   #importRunning = signal(false);
@@ -70,5 +71,25 @@ export class ImportsService {
 
     return importResponse;
   }
-  
+
+  getImportLogs(): Observable<ImportLogDbVO[]> {
+    const url = `${this.#baseUrl}/import/getImportLogs`;
+    const headers = new HttpHeaders().set('Authorization', this.token!);
+
+    return this.http.get<ImportLogDbVO[]>(url, { headers });
+  }
+
+  getImportLogItems(id: number): Observable<ImportLogItemDbVO[]> {
+    const url = `${this.#baseUrl}/import/importLogItems/${id}`;
+    const headers = new HttpHeaders().set('Authorization', this.token!);
+
+    return this.http.get<ImportLogItemDbVO[]>(url, { headers });
+  }
+
+  getImportLogItemDetails(id: number): Observable<ImportLogItemDetailDbVO[]> {
+    const url = `${this.#baseUrl}/import/importLogItemDetails/${id}`;
+    const headers = new HttpHeaders().set('Authorization', this.token!);
+
+    return this.http.get<ImportLogItemDetailDbVO[]>(url, { headers });
+  }
 }

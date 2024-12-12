@@ -31,7 +31,7 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        loadComponent: () => import('./logs/logs.component'),
+        loadComponent: () => import('./logs/batch-logs.component'),
         data: {
           breadcrumb: {
             //label: '',
@@ -40,7 +40,7 @@ const routes: Routes = [
       },
       { 
         path: ':id', 
-        loadComponent: () => import('./logs/item/list/log-item-list.component'),
+        loadComponent: () => import('./logs/items/items.component'),
         data: {
           breadcrumb: {
             label: $localize`:@@details:Log details`,
@@ -51,7 +51,7 @@ const routes: Routes = [
   },
   {
     path: '',
-    loadComponent: () => import('./batch/batch.component'),
+    loadComponent: () => import('./batch.component'),
     data: {
       breadcrumb: {
         label: $localize`:@@batch:Batch processing`,

@@ -20,7 +20,7 @@
     "actions": "Aktionen",
     "logs": "Protokolle",
     "details": "Details",
-    "imports": "Imports",
+    "imports": "Importe",
     "new": "Neu",
     "myimports": "Meine Importe",
     "batch.datasets.remove": "Aus Batch entfernen",
@@ -134,11 +134,13 @@
     "imports.fetch.source": "Quelle",
     "imports.fileImport": "Datei Import",
     "imports.fileImport.upload": "Hochladen",
+    "imports.list.items": "Details",
     "imports.list.started.on": "gestarted am",
     "imports.list.header.date":"Datum",
     "imports.list.header.details":"Details",
     "imports.list.header.title":"Titel",
-    "imports.list.header.message":"Nachricht",    
+    "imports.list.header.message":"Nachricht",
+    "imports.list.details": "Log",    
     "imports.list.details.for": "Aktion",
     "imports.list.details.remove": "Aus 'Meine Importe' entfernen",
     "imports.list.details.delete": "Löschen",
@@ -162,7 +164,8 @@
     "BATCH_VALIDATION_GLOBAL": "Validierungsfehler.",
     "BATCH_VALIDATION_INVALID_ORCID": "Die ORCID ID von $2 ist nicht im richtigen Format angegeben:<br/>\r\n-> $1<br/>\r\nBitte \u00E4ndern Sie diese in CONE.",
     "BATCH_VALIDATION_IP_RANGE_NOT_PROVIDED": "Bei einer angeh\u00E4ngten Datei fehlt der IP Range.",
-    "BATCH_VALIDATION_NO_SOURCE": "Keine passende Quelle gefunden."
+    "BATCH_VALIDATION_NO_SOURCE": "Keine passende Quelle gefunden.",
+    "BATCH_CONTEXT_NOT_OPEN": "Keinen passenden Kontext gefunden."
   },
   "BatchProcessLogHeaderState": {
     "INITIALIZED": "Initialisiert",

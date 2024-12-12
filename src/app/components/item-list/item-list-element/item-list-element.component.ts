@@ -5,15 +5,17 @@ import {Router, ActivatedRoute, RouterLink} from '@angular/router';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PopoverDirective } from 'src/app/shared/directives/popover.directive';
 import { Subscription } from 'rxjs';
-import {NgbTooltip} from "@ng-bootstrap/ng-bootstrap";
+import {NgbPopover, NgbTooltip} from "@ng-bootstrap/ng-bootstrap";
 import {SanitizeHtmlPipe} from "../../../shared/services/pipes/sanitize-html.pipe";
 import {DateToYearPipe} from "../../../shared/services/pipes/date-to-year.pipe";
 import {ItemBadgesComponent} from "../../../shared/components/item-badges/item-badges.component";
+import {ExportItemsComponent} from "../../../shared/components/export-items/export-items.component";
+import {ItemSelectionService} from "../../../shared/services/item-selection.service";
 
 @Component({
   selector: 'pure-item-list-element',
   standalone: true,
-  imports: [NgIf, NgFor, NgClass, JsonPipe, FormsModule, ReactiveFormsModule, PopoverDirective, NgbTooltip, RouterLink, SanitizeHtmlPipe, DateToYearPipe, ItemBadgesComponent],
+  imports: [NgIf, NgFor, NgClass, JsonPipe, FormsModule, ReactiveFormsModule, PopoverDirective, NgbTooltip, RouterLink, SanitizeHtmlPipe, DateToYearPipe, ItemBadgesComponent, ExportItemsComponent, NgbPopover],
   templateUrl: './item-list-element.component.html',
   styleUrl: './item-list-element.component.scss'
 })
@@ -38,17 +40,29 @@ export class ItemListElementComponent {
   doi:10.1152/physrev.00042.2022. `
 
 
-  constructor() {
+  constructor(private itemSelectionService: ItemSelectionService) {
   }
 
   ngAfterViewInit() {
     if (this.item?.objectId) {
       const objectId = this.item.objectId;
       this.check_box.setValue(false);
+
+      this.itemSelectionService.selectedIds$.subscribe(currentIds => {
+        if(currentIds.includes(this.item!.objectId!)) {
+          this.check_box.setValue(true, {emitEvent: false});
+        }
+        else {
+          this.check_box.setValue(false, {emitEvent: false});
+        }
+      })
+
       this.check_box_subscription =
         this.check_box.valueChanges.subscribe(val => {
           this.setStoredCheckBoxState(this.check_box.value as boolean);
         });
+
+
     }
   }
 
@@ -78,6 +92,14 @@ export class ItemListElementComponent {
   }
 
   setStoredCheckBoxState(isChecked: boolean) {
+    if(isChecked) {
+      this.itemSelectionService.addToSelection(this.item!.objectId!)
+    }
+    else {
+      this.itemSelectionService.removeFromSelection(this.item!.objectId!)
+    }
+
+    /*
     let fromSelection: string[] = [];
     if (sessionStorage.getItem(this.savedSelection)) {
       fromSelection = JSON.parse(sessionStorage.getItem(this.savedSelection) as string);
@@ -98,6 +120,8 @@ export class ItemListElementComponent {
     }
 
     sessionStorage.setItem(this.savedSelection, JSON.stringify(fromSelection));
+
+     */
   }
 
   get sourceCitation() {

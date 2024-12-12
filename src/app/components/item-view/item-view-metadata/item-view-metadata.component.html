@@ -1,4 +1,4 @@
-<hr/>
+
 
 <!-- Subtitle -->
 <pure-item-view-metadata-element
@@ -45,9 +45,9 @@
     </pure-item-view-metadata-element>
     @for (abs of item.metadata?.abstracts; track abs; ) {
       <pure-item-view-metadata-element [sub]="true">
-        <span label>Abstract ({{ abs.language }})</span>
+        <span label>Abstract {{ abs.language ? '(' + abs.language + ')' : '' }}</span>
         <span content>
-            {{ abs.value }}
+          <p [innerHTML]="(abs.value | sanitizeHtml)" ></p>
         </span>
     </pure-item-view-metadata-element>
     }
@@ -148,15 +148,13 @@
     <pure-item-view-metadata-element [sub]="true" [condition]="(item.metadata.publishingInfo | empty)">
       <span label>Publishing Info</span>
         <span content>
-          {{ item.metadata?.publishingInfo?.place }} :
-          {{ item.metadata?.publishingInfo?.publisher }},
-          {{ item.metadata?.publishingInfo?.edition }}
+          {{publishingInfoString(item.metadata.publishingInfo)}}
         </span>
     </pure-item-view-metadata-element>
     <pure-item-view-metadata-element [sub]="true" [condition]="(item.metadata.tableOfContents | empty)">
       <span label>Table of Contents</span>
         <span content>
-          {{ item.metadata?.tableOfContents }}
+          <p style="white-space: pre-wrap;" [innerHTML]="(item.metadata.tableOfContents | sanitizeHtml)"></p>
         </span>
     </pure-item-view-metadata-element>
     <pure-item-view-metadata-element [sub]="true" [condition]="(item.metadata.reviewMethod | empty)">
@@ -169,7 +167,17 @@
       <span label>Identifiers</span>
         <span content>
           @for (id of item.metadata?.identifiers; track id) {
-            <div>{{ id.type }}: {{ id.id }}</div>
+            <pure-item-view-metadata-element [sub]="true">
+
+              <span label>{{ id.type }}:</span>
+              <span content>
+            @if(identifierUrl(id) | empty) {
+              <a href="{{identifierUrl(id)}}" target="_blank">{{id.id}}</a>
+            } @else {
+              {{ id.id }}
+            }
+             </span>
+              </pure-item-view-metadata-element>
           }
         </span>
     </pure-item-view-metadata-element>
@@ -289,16 +297,16 @@
         {{ source.title }}
       </span>
     </pure-item-view-metadata-element>
-    <pure-item-view-metadata-element [sub]="true" [condition]="(source.alternativeTitles  | empty)">
-      <span label>Abbreviation</span>
-      <span content>
+
           @for (altTitle of source.alternativeTitles; track altTitle) {
-            @if (altTitle.type === 'ABBREVIATION') {
-              {{ altTitle.value }}
-            }
+            <pure-item-view-metadata-element [sub]="true">
+              <span label>{{altTitle.type}}</span>
+              <span content>
+                {{ altTitle.value }}
+              </span>
+            </pure-item-view-metadata-element>
           }
-      </span>
-    </pure-item-view-metadata-element>
+
       <pure-item-view-metadata-element [sub]="true" [condition]="(source.genre | empty)">
       <span label>Genre</span>
       <span content>
@@ -312,9 +320,7 @@
     <pure-item-view-metadata-element [sub]="true" [condition]="(source.publishingInfo | empty)">
         <span label>Publishing Info</span>
         <span content>
-          {{ source.publishingInfo?.place }} :
-          {{ source.publishingInfo?.publisher }},
-          {{ source.publishingInfo?.edition }}
+          {{publishingInfoString(source.publishingInfo)}}
         </span>
     </pure-item-view-metadata-element>
     <pure-item-view-metadata-element [sub]="true" [condition]="(source.totalNumberOfPages | empty)">
@@ -326,7 +332,7 @@
     <pure-item-view-metadata-element [sub]="true" [condition]="(source.volume | empty) || (source.issue | empty)">
         <span label>Volume / Issue</span>
         <span content>
-          {{ source.volume }} ({{ source.issue }})
+          {{ source.volume }} {{(source.issue | empty) ? '(' + source.issue + ')' : ''}}
         </span>
     </pure-item-view-metadata-element>
      <pure-item-view-metadata-element [sub]="true" [condition]="(source.sequenceNumber | empty)">
@@ -338,14 +344,24 @@
      <pure-item-view-metadata-element [sub]="true" [condition]="(source.startPage | empty) || (source.endPage | empty)">
         <span label>Start / End Page</span>
         <span content>
-          {{ source.startPage }} - {{ source.endPage }}
+          {{ source.startPage }}{{ (source.endPage | empty) ? ' - ' + source.endPage : ''}}
         </span>
     </pure-item-view-metadata-element>
     <pure-item-view-metadata-element [sub]="true" [condition]="(source.identifiers | empty)">
       <span label>Identifiers</span>
         <span content>
           @for (id of source.identifiers; track id) {
-            <div>{{ id.type }}: {{ id.id }}</div>
+            <pure-item-view-metadata-element [sub]="true">
+
+              <span label>{{ id.type }}</span>
+              <span content>
+            @if(identifierUrl(id) | empty) {
+              <a href="{{identifierUrl(id)}}" target="_blank">{{id.id}}</a>
+            } @else {
+              {{ id.id }}
+            }
+             </span>
+              </pure-item-view-metadata-element>
           }
         </span>
     </pure-item-view-metadata-element>
