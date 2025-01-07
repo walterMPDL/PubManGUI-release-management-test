@@ -1,6 +1,6 @@
 import { signal, computed, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { catchError, tap, of, Observable, throwError, EMPTY } from 'rxjs';
+import { catchError, map, tap, of, Observable, throwError, EMPTY } from 'rxjs';
 import { inge_rest_uri } from 'src/assets/properties.json';
 
 import type * as params from '../interfaces/imports-params';
@@ -91,5 +91,23 @@ export class ImportsService {
     const headers = new HttpHeaders().set('Authorization', this.token!);
 
     return this.http.get<ImportLogItemDetailDbVO[]>(url, { headers });
+  }
+
+  getFormatConfiguration(format: string): Observable<any> {
+    const url = `${this.#baseUrl}/import/getFormatConfiguration`;
+    const headers = new HttpHeaders().set('Authorization', this.token!);
+    const query = `?format=${format}`;
+
+    return this.http.get<any>(url + query, { headers })
+  }
+
+  postImport(importParams: params.PostImportParams, file: any) {
+    const headers = new HttpHeaders()
+      .set('Authorization', this.token!)
+      .set('Content-Type', 'application/octet-stream');
+    const url = `${this.#baseUrl}/import/import`;
+    const query = `?contextId=${importParams.contextId}&importName=${importParams.importName}&format=${importParams.format}`;
+    const body = '{}'; // TO-DO upload file
+    return this.http.post<any>(url + query, body, { headers });
   }
 }
