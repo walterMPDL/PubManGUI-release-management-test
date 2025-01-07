@@ -9,8 +9,6 @@ import { ImportLogDbVO, ImportLogItemDbVO, ImportLogItemDetailDbVO } from 'src/a
 import { ItemVersionVO } from 'src/app/model/inge';
 
 import { AaService } from 'src/app/services/aa.service';
-import { MessageService } from 'src/app/shared/services/message.service';
-import { BatchService } from 'src/app/components/batch/services/batch.service';
 
 @Injectable({
   providedIn: 'root'
@@ -21,18 +19,17 @@ export class ImportsService {
 
   constructor(
     private http: HttpClient,
-    public aa: AaService,
-    private msgSvc: MessageService,
-    private batchSvc: BatchService) { } // Mock
+    public aa: AaService
+  ) { 
+    this.checkImports();
+  } 
 
   get token(): string {
     return this.aa.token || '';
   }
 
-  public haveImports = computed( () => this.batchSvc.areItemsSelected() ); // Mock
-
-  #importsCount = signal(666); // Mock
-  public getImportsCount = computed( () => this.#importsCount() );
+  #hasImports = signal(false);
+  public hasImports = computed( () => this.#hasImports()); 
 
   #importRunning = signal(false);
   public isImportRunning = computed( () => this.#importRunning() );
@@ -42,13 +39,21 @@ export class ImportsService {
     this.#lastFetch()
   );
 
+  checkImports() {
+    this.getImportLogs()
+      .subscribe(response => { 
+        this.#hasImports.set( response.length ? true : false );
+      } 
+    );  
+  }
+
   getCrossref(importParams: params.GetCrossrefParams): Observable<ItemVersionVO> {
     const headers = new HttpHeaders()
       .set('Authorization', this.token!);
     const url = `${this.#baseUrl}/dataFetch/getCrossref`;
     const query = `?contextId=${importParams.contextId}&identifier=${importParams.identifier}`;
 
-  return this.getDataFetch(url, query, headers);
+    return this.getDataFetch(url, query, headers);
   }
 
   getArxiv(importParams: params.GetArxivParams): Observable<ItemVersionVO> {
