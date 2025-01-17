@@ -616,7 +616,7 @@ export const enum ImportStatus {
     SUSPENDED = "SUSPENDED",
 }
 
-export const enum ImportErrorLevel {
+export enum ImportErrorLevel {
     ERROR = "ERROR",
     FATAL = "FATAL",
     FINE = "FINE",

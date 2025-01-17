@@ -98,6 +98,13 @@ export class ImportsService {
     return this.http.get<ImportLogItemDetailDbVO[]>(url, { headers });
   }
 
+  deleteImportLog(id: number): Observable<any> {
+    const url = `${this.#baseUrl}/import/importLog/${id}`;
+    const headers = new HttpHeaders().set('Authorization', this.token!);
+
+    return this.http.delete<any>(url, { headers });
+  }
+
   getFormatConfiguration(format: string): Observable<any> {
     const url = `${this.#baseUrl}/import/getFormatConfiguration`;
     const headers = new HttpHeaders().set('Authorization', this.token!);
@@ -116,4 +123,5 @@ export class ImportsService {
 
     return this.http.post<any>(url + query, data, { headers });
   }
+  
 }

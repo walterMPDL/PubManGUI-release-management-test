@@ -61,7 +61,7 @@ export default class DetailsComponent implements OnInit {
           const msg = `This item has no details available!\n`;
           this.msgSvc.info(msg);
   
-          return this.router.navigate(['/imports/myimports/', this.item?.parent.id], {state:{ import: this.item?.parent.name, started: this.item?.parent.startDate }});
+          return this.router.navigate(['/imports/myimports/', this.item?.parent.id], {state:{ import: this.item?.parent.name, started: this.item?.parent.startDate, format: this.item?.parent.format }});
         }
         importsResponse.sort((a, b) => a.id - b.id);
           

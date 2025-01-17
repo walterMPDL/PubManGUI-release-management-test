@@ -3,13 +3,13 @@ import { OnInit, Component, Inject, LOCALE_ID, HostListener} from '@angular/core
 import { RouterModule, Router, NavigationExtras  } from '@angular/router';
 
 import { ImportsService } from '../services/imports.service';
-import { ImportLogDbVO, ImportStatus } from 'src/app/model/inge';
+import { ImportLogDbVO, ImportStatus, ImportErrorLevel } from 'src/app/model/inge';
 import { MessageService } from 'src/app/shared/services/message.service';
 
 import { FormsModule } from '@angular/forms';
 
 import { PaginatorComponent } from "src/app/shared/components/paginator/paginator.component";
-
+import { NgbTooltip } from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: 'pure-import-logs',
@@ -18,7 +18,8 @@ import { PaginatorComponent } from "src/app/shared/components/paginator/paginato
     CommonModule,
     RouterModule,
     FormsModule,
-    PaginatorComponent
+    PaginatorComponent,
+    NgbTooltip
   ],
   templateUrl: './import-logs.component.html'
 })
@@ -31,6 +32,8 @@ export default class ListComponent implements OnInit {
   logs: ImportLogDbVO[] = [];
 
   importStatusTranslations = {};
+
+  importErrorLevel: typeof ImportErrorLevel = ImportErrorLevel;
 
   isScrolled = false;
 
@@ -101,6 +104,21 @@ export default class ListComponent implements OnInit {
       }             
       this.router.navigate(['/imports/myimports/' + id + '/datasets'], { state: { itemList: items }});
     }) 
+  }
+
+  deleteImportLog(log: any): void {
+    let element = document.getElementById(log.id) as HTMLElement;
+    element.remove();
+
+    this.logs = this.logs.filter(item => item.id != log.id);
+    this.collectionSize = this.logs.length;
+    this.refreshLogs();
+
+    this.importsSvc.deleteImportLog(log.id).subscribe(importsResponse => {
+      console.log(importsResponse);
+      return;
+    })
+
   }
 
   getImportStatusTranslation(txt: string):string {

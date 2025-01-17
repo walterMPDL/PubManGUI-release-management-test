@@ -40,6 +40,7 @@ export default class ItemsComponent implements OnInit {
 
   import: string | undefined;
   started: Date | undefined;
+  format: string | undefined;
   
   itemsCount: number = 0;
   itemsFine: number = 0;
@@ -115,6 +116,7 @@ export default class ItemsComponent implements OnInit {
 
     this.import = history.state.import;
     this.started = history.state.started;
+    this.format = history.state.format;
   }
 
   async loadTranslations(lang: string) {
