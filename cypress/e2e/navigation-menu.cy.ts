@@ -2,6 +2,7 @@ describe('Navigation Menu', () => {
 
   const userName = Cypress.env('testUser').userName
   const password = Cypress.env('testUser').password
+  const baseUrl = baseUrlWithoutTrailingSlashes()
 
   beforeEach(() => {
     cy.loginViaAPI(userName, password)
@@ -17,7 +18,7 @@ describe('Navigation Menu', () => {
     //When
     cy.get('[data-test="sidenav-entry"]').click()
     //Then
-    cy.url().should('eq', Cypress.config().baseUrl + 'edit')
+    cy.url().should('eq', baseUrl + '/edit')
   })
 
   it('My datasets', () => {
@@ -26,7 +27,7 @@ describe('Navigation Menu', () => {
     //When
     cy.get('[data-test="sidenav-my-datasets"]').click()
     //Then
-    cy.url().should('eq', Cypress.config().baseUrl + 'my')
+    cy.url().should('eq', baseUrl + '/my')
   })
 
   it('QA Area', () => {
@@ -35,7 +36,7 @@ describe('Navigation Menu', () => {
     //When
     cy.get('[data-test="sidenav-qa-area"]').click()
     //Then
-    cy.url().should('eq', Cypress.config().baseUrl + 'qa')
+    cy.url().should('eq', baseUrl + '/qa')
   })
 
   it('Imports', () => {
@@ -44,7 +45,7 @@ describe('Navigation Menu', () => {
     //When
     cy.get('[data-test="sidenav-qa-area"]').click()
     //Then
-    cy.url().should('eq', Cypress.config().baseUrl + 'qa')
+    cy.url().should('eq', baseUrl + '/qa')
   })
 
   //TODO: Add Tests for: New & My Imports
@@ -55,7 +56,7 @@ describe('Navigation Menu', () => {
     //When
     cy.get('[data-test="sidenav-batch"]').click()
     //Then
-    cy.url().should('eq', Cypress.config().baseUrl + 'batch/logs')
+    cy.url().should('eq', baseUrl + '/batch/logs')
   })
 
   //TODO: Add Tests for: Batch Datasets, Batch Actions & Batch Logs
@@ -66,7 +67,7 @@ describe('Navigation Menu', () => {
     //When
     cy.get('[data-test="sidenav-basket"]').click()
     //Then
-    cy.url().should('eq', Cypress.config().baseUrl + 'cart')
+    cy.url().should('eq', baseUrl + '/cart')
   })
 
   it('Organizational Units', () => {
@@ -75,7 +76,7 @@ describe('Navigation Menu', () => {
     //When
     cy.get('[data-test="sidenav-organizational-units"]').click()
     //Then
-    cy.url().should('eq', Cypress.config().baseUrl + 'ou_tree')
+    cy.url().should('eq', baseUrl + '/ou_tree')
   })
 
   //TODO: Edit this Test if "place" feature is implemented
@@ -85,7 +86,15 @@ describe('Navigation Menu', () => {
     //When
     cy.get('[data-test="sidenav-place"]').click()
     //Then
-    cy.url().should('eq', Cypress.config().baseUrl + 'home')
+    cy.url().should('eq', baseUrl + '/home')
   })
+
+  /**
+   * Remove trailing forward slashes from baseUrl (Angulars default baseUrl http://localhost:4200/ has a trailing slash)
+   */
+  function baseUrlWithoutTrailingSlashes() {
+    // @ts-ignore
+    return Cypress.config().baseUrl.replace(/\/+$/, '')
+  }
 
 })
