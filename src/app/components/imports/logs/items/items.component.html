@@ -30,8 +30,8 @@
     <div class="row">
       <div class="col-lg-10 col-sm-12 d-flex justify-content-between mt-5 mb-3 border-bottom">
         <div>
-          <span i18n="@@imports.list.details.for">Import</span>: <strong class="fw-bolder">{{ import }}
-          </strong>
+          <span i18n="@@imports.list.items.for">Import</span>: <strong class="fw-bolder">{{ import }}
+          </strong><span class="fw-light">( {{ format }} )</span>
         </div>
         <div class="fw-light">
           <span i18n="@@imports.list.started.on">started on</span><span> {{ started | date:'fullDate' }} </span><span
@@ -58,7 +58,7 @@
               @for (item of inPage | stateFilter:refreshFilters():'errorLevel' ; track item.id) {                
               <tr class="border-bottom">
                 <td class="col-2 text-nowrap">
-                  {{ item.status }}
+                  {{ getImportStatusTranslation(item.status) }}
                   @if(itemHasError(item.errorLevel)) {
                   <span class="material-symbols-outlined">error</span>
                   } @else if (itemHasWarning(item.errorLevel)) {
@@ -73,7 +73,7 @@
                   }
                 </td>
                 <td class="col-3">
-                  {{ item.errorLevel }}
+                  {{ getImportErrorLevelTranslation(item.errorLevel) }}
                 </td>
                 <td class="col-1">
                   <a [routerLink]="['log']"
