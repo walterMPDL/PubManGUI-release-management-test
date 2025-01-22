@@ -112,7 +112,7 @@
     "batch.actions.metadata.source.replaceId.default": "Typ",
     "batch.actions.metadata.source.replaceId.from": "Bisheriger Wert der ID",
     "batch.actions.metadata.source.replaceId.to": "Neuer Wert der ID",
-    "batch.logs.started.on": "gestarted am",
+    "batch.logs.started.on": "gestartet am",
     "batch.logs.header.date":"Datum",
     "batch.logs.header.details":"Details",
     "batch.logs.header.title":"Titel",
