@@ -91,12 +91,28 @@ export default class DetailsComponent implements OnInit {
     }
   }
 
-  formatXml(message: string):string {
+  formatLongMessage(message: string):string {
+    if (message.search("xml") >= 0) {
+      return this.formatFromXml(message.slice(message.indexOf('\n')+1));
+    } 
+    if (message.search(" - ") >= 0) {
+      return this.formatFromString(message.slice(message.indexOf('\n')+1));
+    }
+
+    return message.slice(message.indexOf('\n')+1);
+  }
+
+  formatFromXml(message: string):string {
     return xmlFormat(message, {
       indentation: '    ',
       collapseContent: true,
       throwOnFailure: false
     });
+  }
+
+  formatFromString(message: string):string {
+    if (message.lastIndexOf('\n') === message.length-1) message = message.slice(0, -1);
+    return message.replace("null", "");
   }
 
   refreshLogs() {
