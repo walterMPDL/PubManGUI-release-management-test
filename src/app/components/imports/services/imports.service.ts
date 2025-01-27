@@ -21,7 +21,7 @@ export class ImportsService {
     private http: HttpClient,
     public aa: AaService
   ) { 
-    this.checkImports();
+    //this.checkImports();
   } 
 
   get token(): string {
@@ -98,6 +98,13 @@ export class ImportsService {
     return this.http.get<ImportLogItemDetailDbVO[]>(url, { headers });
   }
 
+  deleteImportLog(id: number): Observable<any> {
+    const url = `${this.#baseUrl}/import/importLog/${id}`;
+    const headers = new HttpHeaders().set('Authorization', this.token!);
+
+    return this.http.delete<any>(url, { headers });
+  }
+
   getFormatConfiguration(format: string): Observable<any> {
     const url = `${this.#baseUrl}/import/getFormatConfiguration`;
     const headers = new HttpHeaders().set('Authorization', this.token!);
@@ -106,13 +113,15 @@ export class ImportsService {
     return this.http.get<any>(url + query, { headers })
   }
 
-  postImport(importParams: params.PostImportParams, file: any) {
+  postImport(importParams: params.PostImportParams, data: any): Observable<any> {
     const headers = new HttpHeaders()
       .set('Authorization', this.token!)
-      .set('Content-Type', 'application/octet-stream');
+      .set('Content-Type', 'application/octet-stream')
+      .set('Content-Disposition', 'attachment');
     const url = `${this.#baseUrl}/import/import`;
     const query = `?contextId=${importParams.contextId}&importName=${importParams.importName}&format=${importParams.format}`;
-    const body = '{}'; // TO-DO upload file
-    return this.http.post<any>(url + query, body, { headers });
+
+    return this.http.post<any>(url + query, data, { headers });
   }
+  
 }
