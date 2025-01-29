@@ -147,7 +147,7 @@ export default class LogItemListComponent implements OnInit, DoCheck {
     const toFill: string[] = [];
     this.detailLogs.forEach(element => { if (element.item.itemObjectId) toFill.push(element.item.itemObjectId) });
     this.batchSvc.items = toFill;
-    const msg = `${ toFill.length } items to batch!\n`;
+    const msg = `${ toFill.length } ` + $localize`:@@batch.datasets.filled:items to batch!`+'\n';
     this.msgSvc.info(msg);
   }
 
@@ -155,7 +155,7 @@ export default class LogItemListComponent implements OnInit, DoCheck {
     const toFill: string[] = [];
     this.detailLogs.forEach(element => { if (element.item.itemObjectId && element.item.state === resp.BatchProcessLogDetailState.ERROR) toFill.push(element.item.itemObjectId) });
     this.batchSvc.items = toFill;
-    const msg = `${ toFill.length } items to batch!\n`;
+    const msg = `${ toFill.length } ` + $localize`:@@batch.datasets.filled:items to batch!`+'\n';
     this.msgSvc.info(msg);
   }
 
