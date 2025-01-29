@@ -59,7 +59,7 @@ export class BatchNavComponent implements OnInit {
             this.router.navigate(['/batch'])
           })
         } else if (this.batchSvc.isProcessRunning()) {
-          this.msgSvc.warning(`Please wait, a process is runnig!\n`);
+          this.msgSvc.warning(`Please wait, a process is running!\n`);
           this.msgSvc.dialog.afterAllClosed.subscribe(result => {
             this.router.navigate(['/batch'])
           })
