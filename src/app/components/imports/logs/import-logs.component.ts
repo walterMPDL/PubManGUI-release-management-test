@@ -98,7 +98,7 @@ export default class ListComponent implements OnInit {
           }
         });
       if (items.length === 0) {
-        const msg = `This import has no items available!\n`;
+        const msg = $localize`:@@imports.list.items.empty:This import has no items available!` + '\n';
         this.msgSvc.info(msg);
         return;
       }
@@ -107,7 +107,7 @@ export default class ListComponent implements OnInit {
   }
 
   deleteImportLog(log: any): void {
-    let ref = this.msgSvc.displayConfirmation({ text: 'Do you really want to remove this import log?', confirm: 'Confirm', cancel: 'Cancel' });
+    let ref = this.msgSvc.displayConfirmation({ text: $localize`:@@imports.list.remove.confirmation:Do you really want to remove this import log?`, confirm: $localize`:@@confirm:Confirm`, cancel: $localize`:@@cancel:Cancel` });
     ref.closed.subscribe(confirmed => {
       if (confirmed) {
         this.importsSvc.deleteImportLog(log.id).subscribe(importsResponse => {

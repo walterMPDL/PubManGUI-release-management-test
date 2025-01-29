@@ -61,7 +61,7 @@ export default class DetailsComponent implements OnInit {
     this.importsSvc.getImportLogItemDetails(Number(this.item?.id))
       .subscribe(importsResponse => {
         if (importsResponse.length === 0) {
-          const msg = `This item has no details available!\n`;
+          const msg = $localize`:@@imports.list.details.empty:This detail has no logs available!` + '\n';
           this.msgSvc.info(msg);       
           return this.router.navigate(['/imports/myimports/', this.item?.parent.id]);
         }
