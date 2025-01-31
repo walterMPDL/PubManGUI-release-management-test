@@ -32,6 +32,7 @@ export default class ListComponent implements OnInit {
   logs: ImportLogDbVO[] = [];
 
   importStatusTranslations = {};
+  importFormatTranslations = {};
 
   importErrorLevel: typeof ImportErrorLevel = ImportErrorLevel;
 
@@ -60,10 +61,12 @@ export default class ListComponent implements OnInit {
     if (lang === 'de') {
       await import('src/assets/i18n/messages.de.json').then((msgs) => {
         this.importStatusTranslations = msgs.ImportStatus;
+        this.importFormatTranslations = msgs.ImportFormat;
       })
     } else {
       await import('src/assets/i18n/messages.json').then((msgs) => {
         this.importStatusTranslations = msgs.ImportStatus;
+        this.importFormatTranslations = msgs.ImportFormat;
       })
     }
   }
@@ -128,6 +131,11 @@ export default class ListComponent implements OnInit {
   getImportStatusTranslation(txt: string): string {
     let key = txt as keyof typeof this.importStatusTranslations;
     return this.importStatusTranslations[key];
+  }
+
+  getImportFormatTranslation(txt: string):string {
+    let key = txt as keyof typeof this.importFormatTranslations;
+    return this.importFormatTranslations[key];
   }
 
   @HostListener('window:scroll', ['$event'])

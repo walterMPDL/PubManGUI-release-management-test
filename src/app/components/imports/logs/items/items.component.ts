@@ -10,7 +10,6 @@ import { NgbTooltip } from "@ng-bootstrap/ng-bootstrap";
 
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { StateFilterPipe } from 'src/app/components/imports/pipes/stateFilter.pipe';
-import { SeparateFilterPipe } from 'src/app/components/imports/pipes/separateFilter.pipe';
 
 import { PaginatorComponent } from "src/app/shared/components/paginator/paginator.component";
 
@@ -25,7 +24,6 @@ import { PaginatorComponent } from "src/app/shared/components/paginator/paginato
     RouterLink,
     NgbTooltip,
     StateFilterPipe,
-    SeparateFilterPipe,
     PaginatorComponent
   ],
   templateUrl: './items.component.html'
