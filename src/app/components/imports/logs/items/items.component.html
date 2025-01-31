@@ -58,12 +58,7 @@
               @for (item of inPage | stateFilter:refreshFilters():'errorLevel' ; track item.id) {                
               <tr class="border-bottom">
                 <td class="col-2 text-nowrap">
-                  {{ getImportStatusTranslation(item.status) }}
-                  @if(itemHasError(item.errorLevel)) {
-                  <span class="material-symbols-outlined">error</span>
-                  } @else if (itemHasWarning(item.errorLevel)) {
-                  <span class="material-symbols-outlined">warning</span>
-                  } 
+                  {{ getImportStatusTranslation(item.status) }} 
                 </td>
                 <td class="col-5">
                   @if(item.itemId) {                 
@@ -73,7 +68,7 @@
                   }
                 </td>
                 <td class="col-3">
-                  {{ getImportErrorLevelTranslation(item.errorLevel) }}
+                  {{ getImportErrorLevelTranslation(getAssorted(item.errorLevel)) }}
                 </td>
                 <td class="col-1">
                   <a [routerLink]="['log']"
@@ -93,14 +88,8 @@
       <div class="col-lg-2 d-none d-lg-block mt-4">
         <div class="border rounded p-3 m-1">
           @if(collectionSize > 0) {
-          <span class="me-0"> {{ itemsFine }}/{{ itemsCount }} <span class="me-0" i18n="@@imports.list.details.count">
+          <span class="me-0"> {{ itemsImported }}/{{ itemsImported + itemsFailed }} <span class="me-0" i18n="@@imports.list.details.count">
             items imported</span>
-          </span>
-          }
-          @if((problem + error + fatal) > 0) {
-          <br>
-          <span class="fw-bold"> {{ warning + problem + error + fatal }} <span i18n="@@imports.list.details.notification">
-            Import notification</span>
           </span>
           }
         </div>

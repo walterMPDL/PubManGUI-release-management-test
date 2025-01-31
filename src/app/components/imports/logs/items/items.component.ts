@@ -42,8 +42,8 @@ export default class ItemsComponent implements OnInit {
   started: Date | undefined;
   format: string | undefined;
   
-  itemsCount: number = 0;
-  itemsFine: number = 0;
+  itemsFailed: number = 0;
+  itemsImported: number = 0;
   error: number = 0;
   fatal: number = 0;
   fine: number = 0;
@@ -82,10 +82,9 @@ export default class ItemsComponent implements OnInit {
         importsResponse.sort((a, b) => a.id - b.id)
           .forEach(element => {
             if (element.itemId) {
-              if (element.errorLevel === ImportErrorLevel.FINE) {
-                this.itemsFine++;
-              }
-              this.itemsCount++;
+              this.itemsImported++;
+            } else if (element.message.includes("item")) {
+              this.itemsFailed++;
             }
             switch (element.errorLevel) {
               case ImportErrorLevel.FINE:
@@ -183,6 +182,16 @@ export default class ItemsComponent implements OnInit {
   getImportErrorLevelTranslation(txt: string):string {
     let key = txt as keyof typeof this.importErrorLevelTranslations;
     return this.importErrorLevelTranslations[key];
+  }
+
+  getAssorted(txt: string):string {
+    switch(txt) {
+      case 'FINE':
+      case 'WARNING':
+        return txt;
+      default:
+        return 'ERROR';
+    }
   }
 
   @HostListener('window:scroll', ['$event'])
