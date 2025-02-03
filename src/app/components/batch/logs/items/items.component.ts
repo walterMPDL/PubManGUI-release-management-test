@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, DoCheck, Inject, LOCALE_ID, HostListener } from '@angular/core';
+import { Component, OnInit, DoCheck, Inject, LOCALE_ID, HostListener, inject } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { switchMap } from 'rxjs';
 
@@ -41,7 +41,10 @@ type detail = {
 })
 
 export default class LogItemListComponent implements OnInit, DoCheck {
-  page = 1;
+
+  batchSvc = inject(BatchService);
+
+  currentPage = this.batchSvc.lastPageNumFrom().details;
   pageSize = 25;
   collectionSize = 0;
   inPage: detail[] = [];
@@ -65,7 +68,6 @@ export default class LogItemListComponent implements OnInit, DoCheck {
   isScrolled = false;
 
   constructor(
-    private batchSvc: BatchService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private itemSvc: ItemsService,
@@ -123,9 +125,10 @@ export default class LogItemListComponent implements OnInit, DoCheck {
 
   refreshLogs() {
     this.inPage = this.detailLogs.map((log, i) => ({ id: i + 1, ...log })).slice(
-      (this.page - 1) * this.pageSize,
-      (this.page - 1) * this.pageSize + this.pageSize,
+      (this.currentPage - 1) * this.pageSize,
+      (this.currentPage - 1) * this.pageSize + this.pageSize,
     );
+    this.batchSvc.lastPageNumFrom().details = this.currentPage;
   }
 
   getProcessLogDetailStateTranslation(txt: string):string {

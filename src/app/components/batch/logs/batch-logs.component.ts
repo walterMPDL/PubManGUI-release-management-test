@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { OnInit, Component, Inject, LOCALE_ID, HostListener } from '@angular/core';
+import { OnInit, Component, Inject, LOCALE_ID, HostListener, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { BatchService } from 'src/app/components/batch/services/batch.service';
@@ -32,7 +32,9 @@ type detail = {
 })
 export default class LogProcessListComponent implements OnInit {
 
-  page = 1;
+  batchSvc = inject(BatchService);
+
+  currentPage = this.batchSvc.lastPageNumFrom().logs;
   pageSize = 25;
   collectionSize = 0;
   inPage: resp.BatchProcessLogHeaderDbVO[] = [];
@@ -46,7 +48,6 @@ export default class LogProcessListComponent implements OnInit {
   isScrolled = false;
 
   constructor(
-    public batchSvc: BatchService,
     private itemSvc: ItemsService,
     @Inject(LOCALE_ID) public locale: string) { }
 
@@ -80,9 +81,10 @@ export default class LogProcessListComponent implements OnInit {
 
   refreshLogs() {
     this.inPage = this.processLogs.map((log, i) => ({ _id: i + 1, ...log })).slice(
-      (this.page - 1) * this.pageSize,
-      (this.page - 1) * this.pageSize + (this.pageSize),
+      (this.currentPage - 1) * this.pageSize,
+      (this.currentPage - 1) * this.pageSize + (this.pageSize),
     );
+    this.batchSvc.lastPageNumFrom().logs = this.currentPage;
   }
 
   calculateProcessedStep(numberOfItems: number): number {

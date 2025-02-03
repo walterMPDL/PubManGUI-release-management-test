@@ -36,6 +36,8 @@ export class BatchService {
     return this.aa.principal.getValue().user?.objectId || '';
   }
 
+  lastPageNumFrom = signal({logs: 1, details: 1});
+
   addToBatchDatasets(selection: string[]): number {
     //const fromSelection = sessionStorage.getItem(selection);
     let datasets: string[] = this.items;
