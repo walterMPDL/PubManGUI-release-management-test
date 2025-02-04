@@ -68,7 +68,7 @@ export class ActionsGenreComponent {
     genreTo: ['Genre', [Validators.required]],
     degreeType: [{value: '', disabled: true}],
     }, 
-    // { validators: this.valSvc.notEqualsValidator('genreFrom','genreTo') }
+    { validators: this.valSvc.notEqualsValidator('genreFrom','genreTo') }
   );
 
   get changeGenreParams(): ChangeGenreParams {
