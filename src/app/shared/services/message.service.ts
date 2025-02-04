@@ -61,8 +61,12 @@ export class MessageService {
 
   error(message: string) {
     let title, msg = null;
-    if (message.lastIndexOf('\n')>=0) {
-      title = message.substring(message.lastIndexOf('\n'));
+    if (message.lastIndexOf('\n')>=0) { // Sie es una cadena de varias lineas, determinar titulo
+      if (message.substring(message.lastIndexOf('\n')).length < 3) {
+        title = message.substring(0,message.indexOf('\n'));
+      } else {
+        title = message.substring(message.lastIndexOf('\n'));
+      }
       const message_filtered = message.substring(0, message.lastIndexOf('\n'));
       msg = { type: 'danger', title: title, text: message_filtered };
       if (this.lastMessage().title && this.lastMessage().title === title) return;
