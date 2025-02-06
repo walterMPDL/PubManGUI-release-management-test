@@ -21,9 +21,9 @@ import { AaService } from 'src/app/services/aa.service';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    PureCtxsDirective,
-    OptionDirective,
-    SelectorComponent
+    //PureCtxsDirective,
+    //OptionDirective,
+    //SelectorComponent
   ],
   templateUrl: './change-context.component.html',
 })
@@ -47,10 +47,10 @@ export class ActionsContextComponent implements OnInit {
   }
 
   public changeContextForm: FormGroup = this.fb.group({
-    contextFrom: [$localize`:@@batch.actions.context:Context`, [Validators.required]],
-    contextTo: [$localize`:@@batch.actions.context:Context`, [Validators.required]]
+    contextFrom: [$localize`:@@batch.actions.context:Context`, Validators.required],
+    contextTo: [$localize`:@@batch.actions.context:Context`, Validators.required]
   }, 
-  //{ validators: this.validSvc.notEqualsValidator('contextFrom','contextTo') }
+  { validators: this.validSvc.notEqualsValidator('contextFrom','contextTo') }
   );
 
   get changeContextParams(): ChangeContextParams {
@@ -68,7 +68,6 @@ export class ActionsContextComponent implements OnInit {
       return;
     }
     this.batchSvc.changeContext(this.changeContextParams).subscribe(actionResponse => {
-      // console.log(actionResponse); 
       this.batchSvc.startProcess(actionResponse.batchLogHeaderId);
       setTimeout(() => {this.changeContextForm.reset();}, 500);
       this.router.navigate(['/batch']);

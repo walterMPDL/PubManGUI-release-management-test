@@ -4,7 +4,7 @@
       <div class="col-lg-12 col-sm-12 d-inline-flex justify-content-end">
 
         <div class="small d-inline-flex align-items-center">
-          <pure-paginator [totalNumberOfItems]="collectionSize" [(pageNumber)]="page" [(size)]="pageSize" (paginatorChanged)="refreshLogs()" />
+          <pure-paginator [totalNumberOfItems]="collectionSize" [(pageNumber)]="currentPage" [(size)]="pageSize" (paginatorChanged)="refreshLogs()" />
         </div>
       </div>
     </div>

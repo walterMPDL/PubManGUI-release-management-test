@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, Inject, LOCALE_ID, HostListener } from '@angular/core';
+import { Component, OnInit, Inject, LOCALE_ID, HostListener, inject } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { switchMap } from 'rxjs';
 
@@ -10,10 +10,8 @@ import { NgbTooltip } from "@ng-bootstrap/ng-bootstrap";
 
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { StateFilterPipe } from 'src/app/components/imports/pipes/stateFilter.pipe';
-import { SeparateFilterPipe } from 'src/app/components/imports/pipes/separateFilter.pipe';
 
 import { PaginatorComponent } from "src/app/shared/components/paginator/paginator.component";
-
 
 @Component({
   selector: 'pure-import-log-items',
@@ -25,14 +23,18 @@ import { PaginatorComponent } from "src/app/shared/components/paginator/paginato
     RouterLink,
     NgbTooltip,
     StateFilterPipe,
-    SeparateFilterPipe,
     PaginatorComponent
   ],
   templateUrl: './items.component.html'
 })
 export default class ItemsComponent implements OnInit {
 
-  currentPage = 1;
+  importsSvc = inject(ImportsService);
+  activatedRoute = inject(ActivatedRoute);
+  router = inject(Router);
+  fb = inject(FormBuilder);
+
+  currentPage = this.importsSvc.lastPageNumFrom().details;
   pageSize = 25;
   collectionSize = 0;
   inPage: ImportLogItemDbVO[] = [];
@@ -42,8 +44,8 @@ export default class ItemsComponent implements OnInit {
   started: Date | undefined;
   format: string | undefined;
   
-  itemsCount: number = 0;
-  itemsFine: number = 0;
+  itemsFailed: number = 0;
+  itemsImported: number = 0;
   error: number = 0;
   fatal: number = 0;
   fine: number = 0;
@@ -60,16 +62,12 @@ export default class ItemsComponent implements OnInit {
 
   importStatusTranslations = {};
   importErrorLevelTranslations = {};
+  importMessageTranslations = {};
 
   isScrolled = false;  
 
   constructor(
-    private importsSvc: ImportsService,
-    private activatedRoute: ActivatedRoute,
-    private router: Router, 
-    private fb: FormBuilder,
-    @Inject(LOCALE_ID) public locale: string) { }
-
+    @Inject(LOCALE_ID) public locale: string) {}
 
   ngOnInit(): void {
     this.activatedRoute.params
@@ -82,10 +80,9 @@ export default class ItemsComponent implements OnInit {
         importsResponse.sort((a, b) => a.id - b.id)
           .forEach(element => {
             if (element.itemId) {
-              if (element.errorLevel === ImportErrorLevel.FINE) {
-                this.itemsFine++;
-              }
-              this.itemsCount++;
+              this.itemsImported++;
+            } else if (element.message.includes("item")) {
+              this.itemsFailed++;
             }
             switch (element.errorLevel) {
               case ImportErrorLevel.FINE:
@@ -123,36 +120,40 @@ export default class ItemsComponent implements OnInit {
       await import('src/assets/i18n/messages.de.json').then((msgs) => {
         this.importStatusTranslations = msgs.ImportStatus;
         this.importErrorLevelTranslations = msgs.ImportErrorLevel;
+        this.importMessageTranslations = msgs.ImportMessage;
       })
     } else {
       await import('src/assets/i18n/messages.json').then((msgs) => {
         this.importStatusTranslations = msgs.ImportStatus;
         this.importErrorLevelTranslations = msgs.ImportErrorLevel;
+        this.importMessageTranslations = msgs.ImportMessage;
       })
     }
   }
 
-  itemHasError(errorLevel: ImportErrorLevel):boolean {
-    if( errorLevel === ImportErrorLevel.PROBLEM 
-      || errorLevel === ImportErrorLevel.ERROR 
-      || errorLevel === ImportErrorLevel.FATAL) {
-        return true;
-      }
-    return false;
-  }
-
-  itemHasWarning(errorLevel: ImportErrorLevel):boolean {
-    if( errorLevel === ImportErrorLevel.WARNING) {
-        return true;
-      }
-    return false;
+  getAssorted(txt: string):string {
+    switch(txt) {
+      case 'FINE':
+      case 'WARNING':
+        return txt;
+      default:
+        return 'ERROR';
+    }
   }
 
   refreshLogs() {
+    this.pageSize = this.getPreferredPageSize();
     this.inPage = this.logs.map((log, i) => ({ _id: i + 1, ...log })).slice(
       (this.currentPage - 1) * this.pageSize,
       (this.currentPage - 1) * this.pageSize + this.pageSize,
     );
+    this.importsSvc.lastPageNumFrom().details = this.currentPage;
+  }
+
+  getPreferredPageSize():number {
+    if (sessionStorage.getItem('preferredPageSize') && Number.isFinite(+sessionStorage.getItem('preferredPageSize')!)) {
+      return +sessionStorage.getItem('preferredPageSize')!;
+    } else return this.pageSize;
   }
 
   refreshFilters():ImportErrorLevel[] {
@@ -183,6 +184,11 @@ export default class ItemsComponent implements OnInit {
   getImportErrorLevelTranslation(txt: string):string {
     let key = txt as keyof typeof this.importErrorLevelTranslations;
     return this.importErrorLevelTranslations[key];
+  }
+
+  getImportMessageTranslation(txt: string):string {
+    let key = txt as keyof typeof this.importMessageTranslations;
+    return this.importMessageTranslations[key];
   }
 
   @HostListener('window:scroll', ['$event'])
