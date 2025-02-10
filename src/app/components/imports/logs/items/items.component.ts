@@ -72,7 +72,6 @@ export default class ItemsComponent implements OnInit {
     });
 
     if (this.import.id) {
-
       this.importsSvc.getImportLogItems(Number(this.import.id))
         .subscribe(importsResponse => {
           if (importsResponse.length === 0) return this.router.navigate(['/import/myimports']);
