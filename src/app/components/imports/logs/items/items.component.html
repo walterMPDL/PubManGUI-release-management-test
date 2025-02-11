@@ -28,7 +28,7 @@
     </div>
 
     <div class="row">
-      <div class="col-lg-10 col-sm-12 d-flex justify-content-between mt-5 mb-3 border-bottom">
+      <div class="col-lg-9 col-sm-12 d-flex justify-content-between mt-5 mb-3 border-bottom">
         <div>
           <span i18n="@@imports.list.items.for">Import</span>: <strong class="fw-bolder">{{ import.name }}
           </strong><span class="fw-light">(  {{ getImportFormatTranslation(import.format) }} )</span>
@@ -42,7 +42,7 @@
     </div>
 
     <div class="row">
-      <div class="col-lg-10 col-sm-12">
+      <div class="col-lg-9 col-sm-12">
         <table class="table table-responsive col-12 mt-1">
           <thead>
             <tr class="border-bottom">
@@ -87,7 +87,7 @@
         </table>
       </div>
 
-      <div class="col-lg-2 d-none d-lg-block mt-4">
+      <div class="col-lg-3 d-none d-lg-block mt-4">
         <div class="border rounded p-3 m-1">
           @if(collectionSize > 0) {
           <span class="me-0"> {{ itemsImported }}/{{ itemsImported + itemsFailed }} <span class="me-0" i18n="@@imports.list.details.count">

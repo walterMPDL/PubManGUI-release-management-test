@@ -29,7 +29,7 @@
     </div>
 
     <div class="row">
-      <div class="col-lg-10 col-sm-12 d-flex justify-content-between mt-5 mb-3 border-bottom">
+      <div class="col-lg-9 col-sm-12 d-flex justify-content-between mt-5 mb-3 border-bottom">
         <div>
           <span i18n="@@batch.logs.details.for">Action</span>: <strong class="fw-bolder"> {{ getProcessMethodTranslation(method!) }} </strong>
         </div>
@@ -41,7 +41,7 @@
     </div>
 
     <div class="row">
-      <div class="col-lg-10 col-sm-12">
+      <div class="col-lg-9 col-sm-12">
         <table class="table table-responsive col-12 mt-0" onChange="refreshInPageCount()">
           <thead>
             @if((inPage | stateFilter:refreshFilters():'state').length > 0) {
@@ -57,7 +57,7 @@
             @if(collectionSize > 0) {
               @for (log of inPage | stateFilter:refreshFilters():'state' ; track log.item.itemObjectId) {
               <tr class="border-bottom">
-                <td class="col-2">
+                <td class="col-1">
                   <span>{{ getProcessLogDetailStateTranslation(log.item.state) }}</span>
                 </td>
                 <td>
@@ -81,7 +81,7 @@
         </table>
       </div>
 
-      <div class="col-lg-2 d-none d-lg-block mt-4">
+      <div class="col-lg-3 d-none d-lg-block mt-4">
         <div class="border rounded p-3 m-1">
           @if(collectionSize > 0) {
           <span class="me-0"> {{ collectionSize-failed }}/{{ collectionSize }} <span class="me-0" i18n="@@succeded">
