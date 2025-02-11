@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { importLogResolver } from "./services/import-log.resolver";
+import { fetchItemResolver } from './services/fetch-item-resolver';
 
 const routes: Routes = [
   {
@@ -65,8 +66,8 @@ const routes: Routes = [
             },
           },
           {
-            path: 'view/:itemId',
-            loadComponent: () => import('src/app/components/item-view/item-view.component').then(c => c.ItemViewComponent), resolve: { item: importLogResolver },
+            path: 'view/:id',
+            loadComponent: () => import('src/app/components/item-view/item-view.component').then(c => c.ItemViewComponent),
             data: {
               breadcrumb: {
                 label: 'View',
