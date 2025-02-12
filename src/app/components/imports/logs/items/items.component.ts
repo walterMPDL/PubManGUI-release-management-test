@@ -36,6 +36,7 @@ export default class ItemsComponent implements OnInit {
   pageSize = 25;
   collectionSize = 0;
   inPage: ImportLogItemDbVO[] = [];
+  unfilteredLogs: ImportLogItemDbVO[] = [];
   logs: ImportLogItemDbVO[] = [];
 
   import!: ImportLogDbVO;
@@ -55,6 +56,8 @@ export default class ItemsComponent implements OnInit {
     error: [true, Validators.requiredTrue],
     fatal: [true, Validators.requiredTrue],
   });
+
+  executeOnceTimeout = false;
 
   importStatusTranslations = {};
   importErrorLevelTranslations = {};
@@ -101,7 +104,7 @@ export default class ItemsComponent implements OnInit {
                   break;
               }
             });
-          this.logs = importsResponse;
+          this.logs, this.unfilteredLogs = importsResponse;
           this.collectionSize = this.logs.length;
 
           this.refreshLogs();
@@ -130,7 +133,7 @@ export default class ItemsComponent implements OnInit {
     }
   }
 
-  getAssorted(txt: string): string {
+  getAssorted(txt: string): string { // para la agrupación antes de traducir
     switch (txt) {
       case 'FINE':
       case 'WARNING':
@@ -155,7 +158,7 @@ export default class ItemsComponent implements OnInit {
     } else return this.pageSize || 25;
   }
 
-  refreshFilters(): ImportErrorLevel[] {
+  refreshFilters(): ImportErrorLevel[] { // comprobamos que filtros están seleccionados
     const filteredStatus = [];
     if (this.filterForm.get('fine')?.value) {
       filteredStatus.push(ImportErrorLevel.FINE);
@@ -173,6 +176,20 @@ export default class ItemsComponent implements OnInit {
       filteredStatus.push(ImportErrorLevel.FATAL);
     }
     return filteredStatus;
+  }
+
+  onFilterChange(): void {
+    var activeFilters = this.refreshFilters();
+    if (!this.executeOnceTimeout) {
+      this.executeOnceTimeout = true;
+      setTimeout(() => {
+        this.logs = this.unfilteredLogs.filter(item => activeFilters.includes(item.errorLevel));
+        this.collectionSize = this.logs.length;
+        this.refreshLogs();
+
+        this.executeOnceTimeout = false;
+      }, 100); 
+    };
   }
 
   getImportStatusTranslation(txt: string): string {
@@ -197,14 +214,17 @@ export default class ItemsComponent implements OnInit {
 
   doDelete(): void {
     console.log('Delete done');
+    // TO DO
   }
 
   doSet(): void {
     console.log('Set done');
+    // TO DO
   }
 
   doRelease(): void {
     console.log('Release done');
+    // TO DO
   }
 
   @HostListener('window:scroll', ['$event'])
