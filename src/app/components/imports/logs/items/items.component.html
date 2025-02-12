@@ -22,7 +22,7 @@
         </div>
 
         <div class="small d-inline-flex justify-content-end align-items-center">
-          <pure-paginator [totalNumberOfItems]="collectionSize" [(pageNumber)]="currentPage" [(size)]="pageSize" (paginatorChanged)="refreshLogs()" />
+          <pure-paginator [totalNumberOfItems]="filteredSize" [(pageNumber)]="currentPage" [(size)]="pageSize" (paginatorChanged)="refreshLogs()" />
         </div>
       </div>
     </div>
@@ -54,7 +54,7 @@
           </thead>
 
           <tbody>
-            @if(collectionSize > 0) {
+            @if(unfilteredSize > 0) {
               <!--@for (item of inPage | stateFilter:refreshFilters():'errorLevel' ; track item.id) {--> 
               @for (item of inPage; track item.id) {                                
               <tr class="border-bottom" id="{{ item.id }}">
@@ -97,7 +97,7 @@
 
       <div class="col-lg-3 d-none d-lg-block mt-4">
         <div class="border rounded p-3 m-1">
-          @if(collectionSize > 0) {
+          @if(unfilteredSize > 0) {
           <span class="me-0"> {{ itemsImported }}/{{ itemsImported + itemsFailed }} <span class="me-0" i18n="@@imports.list.details.count">
             items imported</span>
           </span>

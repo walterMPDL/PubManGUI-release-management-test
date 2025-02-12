@@ -34,10 +34,11 @@ export default class ItemsComponent implements OnInit {
 
   currentPage = this.importsSvc.lastPageNumFrom().details;
   pageSize = 25;
-  collectionSize = 0;
+  unfilteredSize = 0;
+  filteredSize = 0;
   inPage: ImportLogItemDbVO[] = [];
   unfilteredLogs: ImportLogItemDbVO[] = [];
-  logs: ImportLogItemDbVO[] = [];
+  filteredLogs: ImportLogItemDbVO[] = [];
 
   import!: ImportLogDbVO;
 
@@ -104,8 +105,8 @@ export default class ItemsComponent implements OnInit {
                   break;
               }
             });
-          this.logs = this.unfilteredLogs = importsResponse;
-          this.collectionSize = this.logs.length;
+          this.filteredLogs = this.unfilteredLogs = importsResponse;
+          this.filteredSize = this.unfilteredSize = this.filteredLogs.length;
 
           this.refreshLogs();
           return;
@@ -145,7 +146,7 @@ export default class ItemsComponent implements OnInit {
 
   refreshLogs() {
     this.pageSize = this.getPreferredPageSize();
-    this.inPage = this.logs.map((log, i) => ({ _id: i + 1, ...log })).slice(
+    this.inPage = this.filteredLogs.map((log, i) => ({ _id: i + 1, ...log })).slice(
       (this.currentPage - 1) * this.pageSize,
       (this.currentPage - 1) * this.pageSize + this.pageSize,
     );
@@ -183,8 +184,8 @@ export default class ItemsComponent implements OnInit {
     if (!this.executeOnceTimeout) {
       this.executeOnceTimeout = true;
       setTimeout(() => {
-        this.logs = this.unfilteredLogs.filter(item => activeFilters.includes(item.errorLevel));
-        //this.collectionSize = this.logs.length;
+        this.filteredLogs = this.unfilteredLogs.filter(item => activeFilters.includes(item.errorLevel));
+        this.filteredSize = this.filteredLogs.length;
         this.refreshLogs();
 
         this.executeOnceTimeout = false;
