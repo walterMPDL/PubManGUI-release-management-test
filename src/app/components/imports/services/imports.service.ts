@@ -34,6 +34,8 @@ export class ImportsService {
   #importRunning = signal(false);
   public isImportRunning = computed( () => this.#importRunning() );
 
+  lastPageNumFrom = signal({myImports: 1, details: 1, log: 1});
+
   #lastFetch = signal<Observable<ItemVersionVO>>(of());
   public getLastFetch = computed( () => 
     this.#lastFetch()
@@ -75,6 +77,13 @@ export class ImportsService {
     );
 
     return importResponse;
+  }
+
+  getImportLog(id: number): Observable<ImportLogDbVO> {
+    const url = `${this.#baseUrl}/import/importLog/${id}`;
+    const headers = new HttpHeaders().set('Authorization', this.token!);
+
+    return this.http.get<ImportLogDbVO>(url, { headers });
   }
 
   getImportLogs(): Observable<ImportLogDbVO[]> {

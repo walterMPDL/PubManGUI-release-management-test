@@ -1,19 +1,16 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, Inject, LOCALE_ID, HostListener } from '@angular/core';
+import { Component, OnInit, Inject, LOCALE_ID, HostListener, inject } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { switchMap } from 'rxjs';
 
 import { ImportsService } from '../../services/imports.service';
-import { ImportLogItemDbVO, ImportErrorLevel } from 'src/app/model/inge';
+import { ImportLogItemDbVO, ImportErrorLevel, ImportLogDbVO } from 'src/app/model/inge';
 
 import { NgbTooltip } from "@ng-bootstrap/ng-bootstrap";
 
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { StateFilterPipe } from 'src/app/components/imports/pipes/stateFilter.pipe';
-import { SeparateFilterPipe } from 'src/app/components/imports/pipes/separateFilter.pipe';
 
 import { PaginatorComponent } from "src/app/shared/components/paginator/paginator.component";
-
 
 @Component({
   selector: 'pure-import-log-items',
@@ -25,25 +22,28 @@ import { PaginatorComponent } from "src/app/shared/components/paginator/paginato
     RouterLink,
     NgbTooltip,
     StateFilterPipe,
-    SeparateFilterPipe,
     PaginatorComponent
   ],
   templateUrl: './items.component.html'
 })
 export default class ItemsComponent implements OnInit {
+  importsSvc = inject(ImportsService);
+  activatedRoute = inject(ActivatedRoute);
+  router = inject(Router);
+  fb = inject(FormBuilder);
 
-  currentPage = 1;
+  currentPage = this.importsSvc.lastPageNumFrom().details;
   pageSize = 25;
-  collectionSize = 0;
+  unfilteredSize = 0;
+  filteredSize = 0;
   inPage: ImportLogItemDbVO[] = [];
-  logs: ImportLogItemDbVO[] = [];
+  unfilteredLogs: ImportLogItemDbVO[] = [];
+  filteredLogs: ImportLogItemDbVO[] = [];
 
-  import: string | undefined;
-  started: Date | undefined;
-  format: string | undefined;
-  
-  itemsCount: number = 0;
-  itemsFine: number = 0;
+  import!: ImportLogDbVO;
+
+  itemsFailed: number = 0;
+  itemsImported: number = 0;
   error: number = 0;
   fatal: number = 0;
   fine: number = 0;
@@ -55,68 +55,65 @@ export default class ItemsComponent implements OnInit {
     warning: [true, Validators.requiredTrue],
     problem: [true, Validators.requiredTrue],
     error: [true, Validators.requiredTrue],
-    fatal: [true, Validators.requiredTrue],  
+    fatal: [true, Validators.requiredTrue],
   });
+
+  executeOnceTimeout = false;
 
   importStatusTranslations = {};
   importErrorLevelTranslations = {};
+  importMessageTranslations = {};
+  importFormatTranslations = {};
 
-  isScrolled = false;  
+  isScrolled = false;
 
   constructor(
-    private importsSvc: ImportsService,
-    private activatedRoute: ActivatedRoute,
-    private router: Router, 
-    private fb: FormBuilder,
     @Inject(LOCALE_ID) public locale: string) { }
 
-
   ngOnInit(): void {
-    this.activatedRoute.params
-      .pipe(
-        switchMap(({ id }) => this.importsSvc.getImportLogItems(id)),
-      )
-      .subscribe(importsResponse => {
-        if (importsResponse.length === 0) return this.router.navigate(['/import/myimports']);
+    this.activatedRoute.data.subscribe(value => {
+      this.import = value['import'];
+    });
 
-        importsResponse.sort((a, b) => a.id - b.id)
-          .forEach(element => {
-            if (element.itemId) {
-              if (element.errorLevel === ImportErrorLevel.FINE) {
-                this.itemsFine++;
+    if (this.import.id) {
+      this.importsSvc.getImportLogItems(Number(this.import.id))
+        .subscribe(importsResponse => {
+          if (importsResponse.length === 0) return this.router.navigate(['/import/myimports']);
+
+          importsResponse.sort((a, b) => a.id - b.id)
+            .forEach(element => {
+              if (element.itemId) {
+                this.itemsImported++;
+              } else if (element.message.includes("item")) {
+                this.itemsFailed++;
               }
-              this.itemsCount++;
-            }
-            switch (element.errorLevel) {
-              case ImportErrorLevel.FINE:
-                this.fine++;
-                break;
-              case ImportErrorLevel.WARNING:
-                this.warning++;
-                break;
-              case ImportErrorLevel.PROBLEM:
-                this.problem++;
-                break;
-              case ImportErrorLevel.ERROR:
-                this.error++;
-                break;
-              case ImportErrorLevel.FATAL:
-                this.fatal++;
-                break;
-            }
-          });
-        this.logs = importsResponse;
-        this.collectionSize = this.logs.length;
-        this.refreshLogs();
-        return;
-      }
-    );
+              switch (element.errorLevel) {
+                case ImportErrorLevel.FINE:
+                  this.fine++;
+                  break;
+                case ImportErrorLevel.WARNING:
+                  this.warning++;
+                  break;
+                case ImportErrorLevel.PROBLEM:
+                  this.problem++;
+                  break;
+                case ImportErrorLevel.ERROR:
+                  this.error++;
+                  break;
+                case ImportErrorLevel.FATAL:
+                  this.fatal++;
+                  break;
+              }
+            });
+          this.filteredLogs = this.unfilteredLogs = importsResponse;
+          this.filteredSize = this.unfilteredSize = this.filteredLogs.length;
+
+          this.refreshLogs();
+          return;
+        });
+    }
 
     this.loadTranslations(this.locale);
-
-    this.import = history.state.import;
-    this.started = history.state.started;
-    this.format = history.state.format;
   }
 
   async loadTranslations(lang: string) {
@@ -124,48 +121,54 @@ export default class ItemsComponent implements OnInit {
       await import('src/assets/i18n/messages.de.json').then((msgs) => {
         this.importStatusTranslations = msgs.ImportStatus;
         this.importErrorLevelTranslations = msgs.ImportErrorLevel;
+        this.importMessageTranslations = msgs.ImportMessage;
+        this.importFormatTranslations = msgs.ImportFormat;
       })
     } else {
       await import('src/assets/i18n/messages.json').then((msgs) => {
         this.importStatusTranslations = msgs.ImportStatus;
         this.importErrorLevelTranslations = msgs.ImportErrorLevel;
+        this.importMessageTranslations = msgs.ImportMessage;
+        this.importFormatTranslations = msgs.ImportFormat;
       })
     }
   }
 
-  itemHasError(errorLevel: ImportErrorLevel):boolean {
-    if( errorLevel === ImportErrorLevel.PROBLEM 
-      || errorLevel === ImportErrorLevel.ERROR 
-      || errorLevel === ImportErrorLevel.FATAL) {
-        return true;
-      }
-    return false;
-  }
-
-  itemHasWarning(errorLevel: ImportErrorLevel):boolean {
-    if( errorLevel === ImportErrorLevel.WARNING) {
-        return true;
-      }
-    return false;
+  getAssorted(txt: string): string { // para la agrupación antes de traducir
+    switch (txt) {
+      case 'FINE':
+      case 'WARNING':
+        return txt;
+      default:
+        return 'ERROR';
+    }
   }
 
   refreshLogs() {
-    this.inPage = this.logs.map((log, i) => ({ _id: i + 1, ...log })).slice(
+    this.pageSize = this.getPreferredPageSize();
+    this.inPage = this.filteredLogs.map((log, i) => ({ _id: i + 1, ...log })).slice(
       (this.currentPage - 1) * this.pageSize,
       (this.currentPage - 1) * this.pageSize + this.pageSize,
     );
+    this.importsSvc.lastPageNumFrom().details = this.currentPage;
   }
 
-  refreshFilters():ImportErrorLevel[] {
+  getPreferredPageSize(): number {
+    if (sessionStorage.getItem('preferredPageSize') && Number.isFinite(+sessionStorage.getItem('preferredPageSize')!)) {
+      return +sessionStorage.getItem('preferredPageSize')!;
+    } else return this.pageSize || 25;
+  }
+
+  refreshFilters(): ImportErrorLevel[] { // comprobamos que filtros están seleccionados
     const filteredStatus = [];
     if (this.filterForm.get('fine')?.value) {
       filteredStatus.push(ImportErrorLevel.FINE);
-    } else 
-    if (this.filterForm.get('warning')?.value) {
-      filteredStatus.push(ImportErrorLevel.WARNING);
-    }
+    } else
+      if (this.filterForm.get('warning')?.value) {
+        filteredStatus.push(ImportErrorLevel.WARNING);
+      }
     if (this.filterForm.get('problem')?.value) {
-      filteredStatus.push(ImportErrorLevel.PROBLEM); 
+      filteredStatus.push(ImportErrorLevel.PROBLEM);
     }
     if (this.filterForm.get('error')?.value) {
       filteredStatus.push(ImportErrorLevel.ERROR);
@@ -176,14 +179,53 @@ export default class ItemsComponent implements OnInit {
     return filteredStatus;
   }
 
-  getImportStatusTranslation(txt: string):string {
+  onFilterChange(): void {
+    var activeFilters = this.refreshFilters();
+    if (!this.executeOnceTimeout) {
+      this.executeOnceTimeout = true;
+      setTimeout(() => {
+        this.filteredLogs = this.unfilteredLogs.filter(item => activeFilters.includes(item.errorLevel));
+        this.filteredSize = this.filteredLogs.length;
+        this.refreshLogs();
+
+        this.executeOnceTimeout = false;
+      }, 100); 
+    };
+  }
+
+  getImportStatusTranslation(txt: string): string {
     let key = txt as keyof typeof this.importStatusTranslations;
     return this.importStatusTranslations[key];
   }
 
-  getImportErrorLevelTranslation(txt: string):string {
+  getImportErrorLevelTranslation(txt: string): string {
     let key = txt as keyof typeof this.importErrorLevelTranslations;
     return this.importErrorLevelTranslations[key];
+  }
+
+  getImportMessageTranslation(txt: string): string {
+    let key = txt as keyof typeof this.importMessageTranslations;
+    return this.importMessageTranslations[key];
+  }
+
+  getImportFormatTranslation(txt: string): string {
+    let key = txt as keyof typeof this.importFormatTranslations;
+    return this.importFormatTranslations[key];
+  }
+
+  doDelete(): void {
+    console.log('Delete done');
+    // TO DO
+  }
+
+  doSet(): void {
+    console.log('Set done');
+    // TO DO
+  }
+
+  doRelease(): void {
+    console.log('Release done');
+    // TO DO
   }
 
   @HostListener('window:scroll', ['$event'])

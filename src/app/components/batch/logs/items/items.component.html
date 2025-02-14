@@ -23,13 +23,13 @@
         </div>
 
         <div class="small d-inline-flex justify-content-end align-items-center">
-          <pure-paginator [totalNumberOfItems]="collectionSize" [(pageNumber)]="page" [(size)]="pageSize" (paginatorChanged)="refreshLogs()" />
+          <pure-paginator [totalNumberOfItems]="collectionSize" [(pageNumber)]="currentPage" [(size)]="pageSize" (paginatorChanged)="refreshLogs()" />
       </div>
     </div>
     </div>
 
     <div class="row">
-      <div class="col-lg-10 col-sm-12 d-flex justify-content-between mt-5 mb-3 border-bottom">
+      <div class="col-lg-9 col-sm-12 d-flex justify-content-between mt-5 mb-3 border-bottom">
         <div>
           <span i18n="@@batch.logs.details.for">Action</span>: <strong class="fw-bolder"> {{ getProcessMethodTranslation(method!) }} </strong>
         </div>
@@ -41,7 +41,7 @@
     </div>
 
     <div class="row">
-      <div class="col-lg-10 col-sm-12">
+      <div class="col-lg-9 col-sm-12">
         <table class="table table-responsive col-12 mt-0" onChange="refreshInPageCount()">
           <thead>
             @if((inPage | stateFilter:refreshFilters():'state').length > 0) {
@@ -57,7 +57,7 @@
             @if(collectionSize > 0) {
               @for (log of inPage | stateFilter:refreshFilters():'state' ; track log.item.itemObjectId) {
               <tr class="border-bottom">
-                <td class="col-2">
+                <td class="col-1">
                   <span>{{ getProcessLogDetailStateTranslation(log.item.state) }}</span>
                 </td>
                 <td>
@@ -66,7 +66,6 @@
                 <td>
                   <span>{{ getProcessMessageTranslation(log.item.message) }}</span>
                 </td>
-                <hr>
               </tr>
               }
               @empty {
@@ -81,16 +80,16 @@
         </table>
       </div>
 
-      <div class="col-lg-2 d-none d-lg-block mt-4">
+      <div class="col-lg-3 d-none d-lg-block mt-4">
         <div class="border rounded p-3 m-1">
           @if(collectionSize > 0) {
-          <span class="me-0"> {{ collectionSize-failed }}/{{ collectionSize }} <span class="me-0" i18n="@@batch.logs.details.succeded">
+          <span class="me-0"> {{ collectionSize-failed }}/{{ collectionSize }} <span class="me-0" i18n="@@succeded">
               success</span>
           </span>
           }
           @if(failed > 0) {
           <br>
-          <span class="fw-bold"> {{ failed }} <span i18n="@@batch.logs.details.failed">
+          <span class="fw-bold"> {{ failed }} <span i18n="@@failed">
               failed</span>
           </span>
           }
@@ -101,7 +100,7 @@
           <div class="form-check">
             <input class="form-check-input" type="checkbox" id="success" formControlName="success" checked>
             <label class="form-check-label" for="success" i18n="@@batch.logs.details.filter.succeded">
-              success
+              Show successful items
             </label>
           </div>
           }
@@ -109,7 +108,7 @@
           <div class="form-check">
             <input class="form-check-input" type="checkbox" value="" id="fail" formControlName="fail" checked>
             <label class="form-check-label" for="fail" i18n="@@batch.logs.details.filter.failed">
-              failed
+              Show failed items
             </label>
           </div>
           }

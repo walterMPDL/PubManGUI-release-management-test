@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { OnInit, Component, Inject, LOCALE_ID } from '@angular/core';
+import { Component, Inject, LOCALE_ID } from '@angular/core';
 
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 
@@ -68,7 +68,7 @@ export class ActionsGenreComponent {
     genreTo: ['Genre', [Validators.required]],
     degreeType: [{value: '', disabled: true}],
     }, 
-    // { validators: this.valSvc.notEqualsValidator('genreFrom','genreTo') }
+    { validators: this.valSvc.notEqualsValidator('genreFrom','genreTo') }
   );
 
   get changeGenreParams(): ChangeGenreParams {
@@ -86,14 +86,11 @@ export class ActionsGenreComponent {
       this.changeGenreForm.markAllAsTouched();
       return;
     }
-    console.log("changeGenreParams: " + JSON.stringify(this.changeGenreParams));
 
     this.batchSvc.changeGenre(this.changeGenreParams).subscribe( actionResponse => {
-      // console.log(actionResponse); 
       this.batchSvc.startProcess(actionResponse.batchLogHeaderId);
       setTimeout(() => { this.changeGenreForm.reset(); }, 500);
-    });
-    
+    });   
   }
 
 }

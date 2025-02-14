@@ -4,17 +4,17 @@
       <div class="col-lg-12 col-sm-12 d-inline-flex justify-content-between">
 
         <div class="d-inline-flex justify-content-start align-items-center">
-          <a class="ms-3" i18n-ngbTooltip="@@imports.list.details.delete" ngbTooltip="Delete" placement="bottom-left">
+          <a class="ms-3" i18n-ngbTooltip="@@imports.list.details.delete" ngbTooltip="Delete" placement="bottom-left" (click)='doDelete();'>
             <span class="material-symbols-outlined">
               delete_forever
             </span>
           </a>
-          <a class="ms-3" i18n-ngbTooltip="@@imports.list.details.set" ngbTooltip="Set" placement="bottom-left">
+          <a class="ms-3" i18n-ngbTooltip="@@imports.list.details.set" ngbTooltip="Set" placement="bottom-left" (click)='doSet();'>
             <span class="material-symbols-outlined">
               workspace_premium
             </span>
           </a>
-          <a class="ms-3" i18n-ngbTooltip="@@imports.list.details.release" ngbTooltip="Release" placement="bottom-left">
+          <a class="ms-3" i18n-ngbTooltip="@@imports.list.details.release" ngbTooltip="Release" placement="bottom-left" (click)='doRelease();'>
             <span class="material-symbols-outlined">
               public
             </span>
@@ -22,27 +22,27 @@
         </div>
 
         <div class="small d-inline-flex justify-content-end align-items-center">
-          <pure-paginator [totalNumberOfItems]="collectionSize" [(pageNumber)]="currentPage" [(size)]="pageSize" (paginatorChanged)="refreshLogs()" />
+          <pure-paginator [totalNumberOfItems]="filteredSize" [(pageNumber)]="currentPage" [(size)]="pageSize" (paginatorChanged)="refreshLogs()" />
         </div>
       </div>
     </div>
 
     <div class="row">
-      <div class="col-lg-10 col-sm-12 d-flex justify-content-between mt-5 mb-3 border-bottom">
+      <div class="col-lg-9 col-sm-12 d-flex justify-content-between mt-5 mb-3 border-bottom">
         <div>
-          <span i18n="@@imports.list.items.for">Import</span>: <strong class="fw-bolder">{{ import }}
-          </strong><span class="fw-light">( {{ format }} )</span>
+          <span i18n="@@imports.list.items.for">Import</span>: <strong class="fw-bolder">{{ import.name }}
+          </strong><span class="fw-light">(  {{ getImportFormatTranslation(import.format) }} )</span>
         </div>
         <div class="fw-light">
-          <span i18n="@@imports.list.started.on">started on</span><span> {{ started | date:'fullDate' }} </span><span
+          <span i18n="@@imports.list.started.on">started on</span><span> {{ import.startDate | date:'fullDate'}} </span><span
             class="material-symbols-outlined" style="cursor: auto">
-            schedule</span><span> {{ started | date: "HH:mm" }}</span>
+            schedule</span><span> {{ import.startDate | date: "HH:mm" }}</span>
         </div>
       </div>
     </div>
 
     <div class="row">
-      <div class="col-lg-10 col-sm-12">
+      <div class="col-lg-9 col-sm-12">
         <table class="table table-responsive col-12 mt-1">
           <thead>
             <tr class="border-bottom">
@@ -54,58 +54,57 @@
           </thead>
 
           <tbody>
-            @if(collectionSize > 0) {
-              @for (item of inPage | stateFilter:refreshFilters():'errorLevel' ; track item.id) {                
-              <tr class="border-bottom">
+            @if(unfilteredSize > 0) {
+              <!--@for (item of inPage | stateFilter:refreshFilters():'errorLevel' ; track item.id) {--> 
+              @for (item of inPage; track item.id) {                                
+              <tr class="border-bottom" id="{{ item.id }}">
                 <td class="col-2 text-nowrap">
-                  {{ getImportStatusTranslation(item.status) }}
-                  @if(itemHasError(item.errorLevel)) {
-                  <span class="material-symbols-outlined">error</span>
-                  } @else if (itemHasWarning(item.errorLevel)) {
-                  <span class="material-symbols-outlined">warning</span>
-                  } 
+                  {{ getImportStatusTranslation(item.status) }} 
                 </td>
                 <td class="col-5">
                   @if(item.itemId) {                 
                     <span class="nav-link text-decoration-underline" [routerLink]="['view', item.itemId]">{{ item.itemId }} </span>
                   } @else {
-                    {{ item.message | separate | titlecase }}
+                    {{ getImportMessageTranslation(item.message) }}
                   }
                 </td>
                 <td class="col-3">
-                  {{ getImportErrorLevelTranslation(item.errorLevel) }}
+                  {{ getImportErrorLevelTranslation(getAssorted(item.errorLevel)) }}
                 </td>
                 <td class="col-1">
+                  @if(item.anzDetails) {
                   <a [routerLink]="['log']"
                     [state]="{ item: item }">     
-                      <span class="material-symbols-outlined my-0" >
+                      <span class="material-symbols-outlined my-0">
                         integration_instructions
                       </span>
                   </a>
+                  } 
                 </td>
               </tr>
               }
+              @empty {
+                <tr>
+                  <th colspan="4" class="text-center">
+                    <span class="text-center" i18n="@@batch.logs.details.empty">No details to show</span>
+                  </th>
+                </tr>
+                }
             }
           </tbody>
         </table>
       </div>
 
-      <div class="col-lg-2 d-none d-lg-block mt-4">
+      <div class="col-lg-3 d-none d-lg-block mt-4">
         <div class="border rounded p-3 m-1">
-          @if(collectionSize > 0) {
-          <span class="me-0"> {{ itemsFine }}/{{ itemsCount }} <span class="me-0" i18n="@@imports.list.details.count">
+          @if(unfilteredSize > 0) {
+          <span class="me-0"> {{ itemsImported }}/{{ itemsImported + itemsFailed }} <span class="me-0" i18n="@@imports.list.details.count">
             items imported</span>
-          </span>
-          }
-          @if((problem + error + fatal) > 0) {
-          <br>
-          <span class="fw-bold"> {{ warning + problem + error + fatal }} <span i18n="@@imports.list.details.notes">
-            import with notes</span>
           </span>
           }
         </div>
         <br>
-        <form [formGroup]="filterForm">
+        <form [formGroup]="filterForm" (change)="onFilterChange()">
           @if(fine > 0) {
           <div class="form-check">
             <input class="form-check-input" type="checkbox" id="fine" formControlName="fine" checked>

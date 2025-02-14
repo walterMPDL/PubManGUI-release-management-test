@@ -36,6 +36,8 @@ export class BatchService {
     return this.aa.principal.getValue().user?.objectId || '';
   }
 
+  lastPageNumFrom = signal({logs: 1, details: 1});
+
   addToBatchDatasets(selection: string[]): number {
     //const fromSelection = sessionStorage.getItem(selection);
     let datasets: string[] = this.items;
@@ -109,7 +111,7 @@ export class BatchService {
     this.#processRunning.set(true);
     this.items = [];
 
-    this.msgSvc.info(`Action started!\n`);
+    this.msgSvc.info($localize`:@@batch.actions.start:Action started!`+'\n');
     this.updateProcessProgress();
   }
 
@@ -117,7 +119,7 @@ export class BatchService {
     this.batchProcessLogHeaderId = -1;
     this.#processRunning.set(false);
 
-    this.msgSvc.success(`Action finished!\n`);
+    this.msgSvc.success($localize`:@@batch.actions.stop:Action finished!`+'\n');
   }
 
   #processRunning = signal(false);
