@@ -74,6 +74,7 @@ export default class ListComponent implements OnInit {
   }
 
   refreshLogs() {
+    this.currentPage = Math.ceil((this.currentPage * this.pageSize) / this.getPreferredPageSize());
     this.pageSize = this.getPreferredPageSize();
     this.inPage = this.logs.map((log, i) => ({ _id: i + 1, ...log })).slice(
       (this.currentPage - 1) * this.pageSize,

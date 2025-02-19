@@ -38,6 +38,14 @@ export class BatchService {
 
   lastPageNumFrom = signal({logs: 1, details: 1});
 
+    #logFilters = signal<resp.BatchProcessLogDetailState[]>([]);
+  
+    public setLogFilters(filter: resp.BatchProcessLogDetailState[]) {
+      this.#logFilters.set(filter);
+      console.log('set: ' + JSON.stringify(this.#logFilters()));
+    }
+    public getLogFilters = computed( () => this.#logFilters() );
+
   addToBatchDatasets(selection: string[]): number {
     //const fromSelection = sessionStorage.getItem(selection);
     let datasets: string[] = this.items;
@@ -207,6 +215,13 @@ export class BatchService {
     const headers = new HttpHeaders().set('Authorization', this.token!);
 
     return this.http.get<resp.BatchProcessLogDetailDbVO[]>(url, { headers });
+  }
+
+  getItem(itemId: string): Observable<ItemVersionVO> {
+    const url = `${this.#baseUrl}/items/${itemId}`;
+    const headers = new HttpHeaders().set('Authorization', this.token!);
+
+    return this.http.get<ItemVersionVO>(url, { headers });
   }
 
   // Actions

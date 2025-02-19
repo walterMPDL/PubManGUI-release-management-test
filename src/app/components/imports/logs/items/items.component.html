@@ -45,16 +45,18 @@
       <div class="col-lg-9 col-sm-12">
         <table class="table table-responsive col-12 mt-1">
           <thead>
+            @if(inPage.length > 0) {
             <tr class="border-bottom">
               <th scope="col" class="pe-2">Status</th>
               <th scope="col" class="pe-2" i18n="@@imports.list.header.title">Item ID</th>
               <th scope="col" class="pe-2" i18n="@@imports.list.header.message">Report</th>
               <th scope="col">Log</th>
             </tr>
+          }
           </thead>
 
           <tbody>
-            @if(unfilteredSize > 0) {
+            @if(inPage.length > 0) {
               <!--@for (item of inPage | stateFilter:refreshFilters():'errorLevel' ; track item.id) {--> 
               @for (item of inPage; track item.id) {                                
               <tr class="border-bottom" id="{{ item.id }}">
@@ -63,7 +65,7 @@
                 </td>
                 <td class="col-5">
                   @if(item.itemId) {                 
-                    <span class="nav-link text-decoration-underline" [routerLink]="['view', item.itemId]">{{ item.itemId }} </span>
+                    <span class="nav-link text-decoration-underline" [routerLink]="['view', item.itemId]" (click)="saveFilters();">{{ item.itemId }} </span>
                   } @else {
                     {{ getImportMessageTranslation(item.message) }}
                   }
@@ -74,7 +76,7 @@
                 <td class="col-1">
                   @if(item.anzDetails) {
                   <a [routerLink]="['log']"
-                    [state]="{ item: item }">     
+                    [state]="{ item: item }" (click)="saveFilters();">     
                       <span class="material-symbols-outlined my-0">
                         integration_instructions
                       </span>
@@ -107,7 +109,7 @@
         <form [formGroup]="filterForm" (change)="onFilterChange()">
           @if(fine > 0) {
           <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="fine" formControlName="fine" checked>
+            <input class="form-check-input" type="checkbox" id="fine" formControlName="fine">
             <label class="form-check-label" for="fine">
               {{ getImportErrorLevelTranslation('FINE') }}
             </label>
@@ -115,7 +117,7 @@
           }
           @if(warning > 0) {
           <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="" id="warning" formControlName="warning" checked>
+            <input class="form-check-input" type="checkbox" value="" id="warning" formControlName="warning">
             <label class="form-check-label" for="warning">
               {{ getImportErrorLevelTranslation('WARNING') }}
             </label>
@@ -123,7 +125,7 @@
           }
           @if(problem > 0) {
           <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="" id="problem" formControlName="problem" checked>
+            <input class="form-check-input" type="checkbox" value="" id="problem" formControlName="problem">
             <label class="form-check-label" for="problem">
               {{ getImportErrorLevelTranslation('PROBLEM') }}
             </label>
@@ -131,7 +133,7 @@
           }
           @if(error > 0) {
           <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="" id="error" formControlName="error" checked>
+            <input class="form-check-input" type="checkbox" value="" id="error" formControlName="error">
             <label class="form-check-label" for="error">
               {{ getImportErrorLevelTranslation('ERROR') }}
             </label>
@@ -139,7 +141,7 @@
           }
           @if(fatal > 0) {
           <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="" id="fatal" formControlName="fatal" checked>
+            <input class="form-check-input" type="checkbox" value="" id="fatal" formControlName="fatal">
             <label class="form-check-label" for="fatal">
               {{ getImportErrorLevelTranslation('FATAL') }}
             </label>

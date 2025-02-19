@@ -8,7 +8,7 @@ import { ImportLogItemDbVO, ImportErrorLevel, ImportLogDbVO } from 'src/app/mode
 import { NgbTooltip } from "@ng-bootstrap/ng-bootstrap";
 
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { StateFilterPipe } from 'src/app/components/imports/pipes/stateFilter.pipe';
+// import { StateFilterPipe } from 'src/app/components/imports/pipes/stateFilter.pipe';
 
 import { PaginatorComponent } from "src/app/shared/components/paginator/paginator.component";
 
@@ -21,7 +21,7 @@ import { PaginatorComponent } from "src/app/shared/components/paginator/paginato
     FormsModule,
     RouterLink,
     NgbTooltip,
-    StateFilterPipe,
+    // StateFilterPipe,
     PaginatorComponent
   ],
   templateUrl: './items.component.html'
@@ -34,9 +34,10 @@ export default class ItemsComponent implements OnInit {
 
   currentPage = this.importsSvc.lastPageNumFrom().details;
   pageSize = 25;
+  inPage: ImportLogItemDbVO[] = [];
+
   unfilteredSize = 0;
   filteredSize = 0;
-  inPage: ImportLogItemDbVO[] = [];
   unfilteredLogs: ImportLogItemDbVO[] = [];
   filteredLogs: ImportLogItemDbVO[] = [];
 
@@ -57,6 +58,14 @@ export default class ItemsComponent implements OnInit {
     error: [true, Validators.requiredTrue],
     fatal: [true, Validators.requiredTrue],
   });
+
+  activeFilters:ImportErrorLevel[] = [
+    ImportErrorLevel.FINE,
+    ImportErrorLevel.WARNING,
+    ImportErrorLevel.PROBLEM,
+    ImportErrorLevel.ERROR,
+    ImportErrorLevel.FATAL
+  ];
 
   executeOnceTimeout = false;
 
@@ -106,9 +115,19 @@ export default class ItemsComponent implements OnInit {
               }
             });
           this.filteredLogs = this.unfilteredLogs = importsResponse;
-          this.filteredSize = this.unfilteredSize = this.filteredLogs.length;
+          this.filteredSize = this.unfilteredSize = this.unfilteredLogs.length;
 
-          this.refreshLogs();
+          if(this.importsSvc.getLogFilters().length > 0) {
+            this.activeFilters = this.importsSvc.getLogFilters();
+            this.filterForm.patchValue({
+              fine: this.activeFilters.includes(ImportErrorLevel.FINE),
+              warning: this.activeFilters.includes(ImportErrorLevel.WARNING),
+              problem: this.activeFilters.includes(ImportErrorLevel.PROBLEM),
+              error: this.activeFilters.includes(ImportErrorLevel.ERROR),
+              fatal: this.activeFilters.includes(ImportErrorLevel.FATAL),
+            });
+            this.onFilterChange();
+          } else this.refreshLogs();
           return;
         });
     }
@@ -134,7 +153,7 @@ export default class ItemsComponent implements OnInit {
     }
   }
 
-  getAssorted(txt: string): string { // para la agrupación antes de traducir
+  getAssorted(txt: string): string {
     switch (txt) {
       case 'FINE':
       case 'WARNING':
@@ -145,6 +164,7 @@ export default class ItemsComponent implements OnInit {
   }
 
   refreshLogs() {
+    this.currentPage = Math.ceil((this.currentPage * this.pageSize) / this.getPreferredPageSize());
     this.pageSize = this.getPreferredPageSize();
     this.inPage = this.filteredLogs.map((log, i) => ({ _id: i + 1, ...log })).slice(
       (this.currentPage - 1) * this.pageSize,
@@ -159,33 +179,37 @@ export default class ItemsComponent implements OnInit {
     } else return this.pageSize || 25;
   }
 
-  refreshFilters(): ImportErrorLevel[] { // comprobamos que filtros están seleccionados
-    const filteredStatus = [];
+  refreshFilters(): void {
+    this.activeFilters = [];
     if (this.filterForm.get('fine')?.value) {
-      filteredStatus.push(ImportErrorLevel.FINE);
+      this.activeFilters.push(ImportErrorLevel.FINE);
     } else
       if (this.filterForm.get('warning')?.value) {
-        filteredStatus.push(ImportErrorLevel.WARNING);
+        this.activeFilters.push(ImportErrorLevel.WARNING);
       }
     if (this.filterForm.get('problem')?.value) {
-      filteredStatus.push(ImportErrorLevel.PROBLEM);
+      this.activeFilters.push(ImportErrorLevel.PROBLEM);
     }
     if (this.filterForm.get('error')?.value) {
-      filteredStatus.push(ImportErrorLevel.ERROR);
+      this.activeFilters.push(ImportErrorLevel.ERROR);
     }
     if (this.filterForm.get('fatal')?.value) {
-      filteredStatus.push(ImportErrorLevel.FATAL);
+      this.activeFilters.push(ImportErrorLevel.FATAL);
     }
-    return filteredStatus;
+  }
+
+  saveFilters(): void {
+    this.importsSvc.setLogFilters(this.activeFilters);
   }
 
   onFilterChange(): void {
-    var activeFilters = this.refreshFilters();
+    this.refreshFilters();
     if (!this.executeOnceTimeout) {
       this.executeOnceTimeout = true;
       setTimeout(() => {
-        this.filteredLogs = this.unfilteredLogs.filter(item => activeFilters.includes(item.errorLevel));
+        this.filteredLogs = this.unfilteredLogs.filter(item => this.activeFilters.includes(item.errorLevel));
         this.filteredSize = this.filteredLogs.length;
+        this.currentPage = 1;
         this.refreshLogs();
 
         this.executeOnceTimeout = false;

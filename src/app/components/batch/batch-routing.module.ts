@@ -38,15 +38,35 @@ const routes: Routes = [
           }
         },
       },
-      { 
-        path: ':id', 
-        loadComponent: () => import('./logs/items/items.component'),
+      {
+        path: ':id',
+        //loadComponent: () => import('./logs/items/items.component'),
         data: {
           breadcrumb: {
             label: $localize`:@@details:Log details`,
           }
-        }
-      }, 
+        },
+        children: [
+          {
+            path: '',
+            loadComponent: () => import('./logs/items/items.component'),
+            data: {
+              breadcrumb: {
+                //label: '',
+              }
+            },
+          },
+          {
+            path: 'view/:id',
+            loadComponent: () => import('src/app/components/item-view/item-view.component').then(c => c.ItemViewComponent),
+            data: {
+              breadcrumb: {
+                label: 'View',
+              }
+            },
+          },
+        ],
+      },
     ],
   },
   {
@@ -64,4 +84,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class BatchRoutingModule {}
+export class BatchRoutingModule { }

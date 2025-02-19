@@ -149,14 +149,14 @@ export default class ImportComponent implements OnInit {
     element.innerHTML = `<span class="material-symbols-outlined">description</span> <strong> ${file?.name} </strong>`;
 
     const reader = file.stream().getReader();
-    let result: any = null;
+    let result: any = '';
   
     reader.read().then(
       function processData({ done, value }):any {
         if (done) {
           return;
         }
-    
+
         const chunk = value;
         result += new TextDecoder().decode(chunk);
 
@@ -184,6 +184,5 @@ export default class ImportComponent implements OnInit {
     this.importSvc.postImport(this.getImportParams, this.data).subscribe(importResponse => {
       this.router.navigate(['/imports/myimports']);
     });
-
   }
 }

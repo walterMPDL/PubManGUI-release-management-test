@@ -1,11 +1,11 @@
-import { signal, computed, Injectable } from '@angular/core';
+import { signal, computed, effect, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map, tap, of, Observable, throwError, EMPTY } from 'rxjs';
 import { inge_rest_uri } from 'src/assets/properties.json';
 
 import type * as params from '../interfaces/imports-params';
 // import type * as resp from '../interfaces/imports-responses';
-import { ImportLogDbVO, ImportLogItemDbVO, ImportLogItemDetailDbVO } from 'src/app/model/inge';
+import { ImportLogDbVO, ImportLogItemDbVO, ImportLogItemDetailDbVO, ImportErrorLevel } from 'src/app/model/inge';
 import { ItemVersionVO } from 'src/app/model/inge';
 
 import { AaService } from 'src/app/services/aa.service';
@@ -37,9 +37,15 @@ export class ImportsService {
   lastPageNumFrom = signal({myImports: 1, details: 1, log: 1});
 
   #lastFetch = signal<Observable<ItemVersionVO>>(of());
-  public getLastFetch = computed( () => 
-    this.#lastFetch()
-  );
+  public getLastFetch = computed( () => this.#lastFetch() );
+
+  #logFilters = signal<ImportErrorLevel[]>([]);
+
+  public setLogFilters(filters: ImportErrorLevel[]) {
+    this.#logFilters.set(filters);
+    console.log('set: ' + JSON.stringify(this.#logFilters()));
+  }
+  public getLogFilters = computed( () => this.#logFilters() );
 
   checkImports() {
     this.getImportLogs()
