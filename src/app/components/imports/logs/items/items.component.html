@@ -57,7 +57,6 @@
 
           <tbody>
             @if(inPage.length > 0) {
-              <!--@for (item of inPage | stateFilter:refreshFilters():'errorLevel' ; track item.id) {--> 
               @for (item of inPage; track item.id) {                                
               <tr class="border-bottom" id="{{ item.id }}">
                 <td class="col-2 text-nowrap">
@@ -65,7 +64,7 @@
                 </td>
                 <td class="col-5">
                   @if(item.itemId) {                 
-                    <span class="nav-link text-decoration-underline" [routerLink]="['view', item.itemId]" (click)="saveFilters();">{{ item.itemId }} </span>
+                    <span class="nav-link text-decoration-underline" [routerLink]="['view', item.itemId]">{{ item.itemId }} </span>
                   } @else {
                     {{ getImportMessageTranslation(item.message) }}
                   }
@@ -76,7 +75,7 @@
                 <td class="col-1">
                   @if(item.anzDetails) {
                   <a [routerLink]="['log']"
-                    [state]="{ item: item }" (click)="saveFilters();">     
+                    [state]="{ item: item }">     
                       <span class="material-symbols-outlined my-0">
                         integration_instructions
                       </span>

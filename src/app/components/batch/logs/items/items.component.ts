@@ -62,7 +62,7 @@ export default class LogItemListComponent implements OnInit {
 
   items: ItemVersionVO[] = [];
 
-  batchLogHeader: resp.BatchProcessLogHeaderDbVO | undefined;
+  batchLogHeader!: resp.BatchProcessLogHeaderDbVO;
   failed: number = 0;
 
   public filterForm: FormGroup = this.fb.group({
@@ -85,49 +85,57 @@ export default class LogItemListComponent implements OnInit {
     @Inject(LOCALE_ID) public locale: string) { }
 
   ngOnInit(): void {
-    if (!history.state.batchLogHeader) history.back();
-    this.batchLogHeader = history.state.batchLogHeader!;
+    this.activatedRoute.data.subscribe(value => {
+      this.batchLogHeader = value['log'];
+    });
 
-    if (this.batchSvc.getLogFilters().length > 0) {
-      this.activeFilters = this.batchSvc.getLogFilters();
-      this.filterForm.patchValue({
-        success: this.activeFilters.includes(resp.BatchProcessLogDetailState.SUCCESS),
-        fail: this.activeFilters.includes(resp.BatchProcessLogDetailState.ERROR),
-      });
-      this.onFilterChange();
-    }
+    if (this.batchLogHeader.batchLogHeaderId) {
+      this.batchSvc.getBatchProcessLogDetails(Number(this.batchLogHeader.batchLogHeaderId))
+        .subscribe(batchResponse => {
+          if (batchResponse.length === 0) this.router.navigate(['/batch/logs']);
 
-    this.activatedRoute.params
-      .pipe(
-        switchMap(({ id }) => this.batchSvc.getBatchProcessLogDetails(id)),
-      )
-      .subscribe(batchResponse => {
-        if (batchResponse.length === 0) this.router.navigate(['/batch/logs']);
+          batchResponse.sort((a, b) => b.startDate.valueOf() - a.startDate.valueOf())
+            .forEach((element, index) => {
+              if (element.state === resp.BatchProcessLogDetailState.ERROR) this.failed++;
+              var title = '';
+              this.batchSvc.getItem(element.itemObjectId)
+                .subscribe({
+                  next: (value) => {
+                    title = value.metadata?.title;
+                  },
+                  error: () => {
+                    this.unfilteredLogs.push({ item: element, title: '404' });
+                  },
+                  complete: () => {
+                    this.unfilteredLogs.push({ item: element, title: title });
+                    if (index === batchResponse.length - 1) {
+                      this.filteredLogs = this.unfilteredLogs;
+                      this.filteredSize = this.unfilteredSize = this.unfilteredLogs.length;
 
-        batchResponse.sort((a, b) => b.startDate.valueOf() - a.startDate.valueOf())
-          .forEach((element, index) => {
-            if (element.state === resp.BatchProcessLogDetailState.ERROR) this.failed++;
-            var title = '';
-            this.batchSvc.getItem(element.itemObjectId)
-              .subscribe({
-                next: (value) => {
-                  title = value.metadata?.title;
-                },
-                error: () => {
-                  this.unfilteredLogs.push({ item: element, title: '404' });
-                },
-                complete: () => {
-                  this.unfilteredLogs.push({ item: element, title: title });
-                  if (index === batchResponse.length -1 ) {
-                    this.filteredLogs = this.unfilteredLogs;
-                    this.filteredSize = this.unfilteredSize = this.unfilteredLogs.length;
-                    
-                    this.refreshLogs();
+                      this.refreshLogs();
+                    }
                   }
-                }
-              })
-          })
-      });
+                })
+            })
+
+          if (this.batchSvc.getLogFilters().length > 0) {
+            if (this.activeFilters.length === this.batchSvc.getLogFilters().length
+              && (this.activeFilters.every((element_1) =>
+                this.batchSvc.getLogFilters().some((element_2) =>
+                  Object.keys(element_1).every((key: any) => element_1[key] === element_2[key])
+                )))) {
+            } else {
+              this.activeFilters = this.batchSvc.getLogFilters();
+              this.filterForm.patchValue({
+                success: this.activeFilters.includes(resp.BatchProcessLogDetailState.SUCCESS),
+                fail: this.activeFilters.includes(resp.BatchProcessLogDetailState.ERROR),
+              });
+              this.updateFilteredLogs();
+            }
+          }
+          //return;
+        });
+    }
 
     this.loadTranslations(this.locale);
   }
@@ -211,12 +219,16 @@ export default class LogItemListComponent implements OnInit {
 
   onFilterChange(): void {
     this.refreshFilters();
+    this.saveFilters();
 
+    this.updateFilteredLogs();
+    this.currentPage = 1;
+    this.refreshLogs();
+  }
+
+  updateFilteredLogs():void {
     this.filteredLogs = this.unfilteredLogs.filter(element => this.activeFilters.includes(element.item.state));
     this.filteredSize = this.filteredLogs.length;
-    this.currentPage = 1;
-
-    this.refreshLogs();
   }
 
   @HostListener('window:scroll', ['$event'])

@@ -7,14 +7,14 @@
           <a i18n-ngbTooltip="@@batch.logs.details.fill.all" ngbTooltip="Fill batch with all items from the log"
             placement="bottom-left" (click)="fillWithAll()">
             <span class="material-symbols-outlined">
-              list_alt <!--ist_alt_add-->
+              list_alt
             </span>
           </a>
           @if(failed > 0) {
           <a class="ms-3" i18n-ngbTooltip="@@batch.logs.details.fill.errors" ngbTooltip="Fill batch with errors only"
             placement="bottom-left" (click)="fillWithFailed()">
             <span class="material-symbols-outlined">
-              breaking_news_alt_1 <!--report_gmailerrorred-->
+              breaking_news_alt_1
             </span>
           </a>
           }
@@ -34,9 +34,9 @@
             getProcessMethodTranslation(batchLogHeader!.method) }} </strong>
         </div>
         <div class="fw-light">
-          <span i18n="@@batch.logs.started.on">started on</span><span> {{ batchLogHeader!.startDate | date:'fullDate' }} </span><span
+          <span i18n="@@batch.logs.started.on">started on</span><span> {{ batchLogHeader.startDate | date:'fullDate' }} </span><span
             class="material-symbols-outlined" style="cursor: auto">
-            schedule</span><span> {{ batchLogHeader!.startDate | date: "HH:mm" }}</span>
+            schedule</span><span> {{ batchLogHeader.startDate | date: "HH:mm" }}</span>
         </div>
       </div>
     </div>
@@ -56,7 +56,6 @@
 
           <tbody>
             @if(inPage.length > 0) {
-            <!--@for (log of inPage | stateFilter:refreshFilters():'state' ; track log.item.itemObjectId) {-->
             @for (log of inPage; track log.item.itemObjectId) {
             <tr class="border-bottom" id="{{ log.item.itemObjectId }}" [ngClass]="log.title === '404' ? 'text-secondary' : ''">
               <td class="col-1">
@@ -66,8 +65,7 @@
                 @if(log.title === '404') {
                   <span>NO ITEM FOUND. It may have been removed after performing the 'delete' action.</span>
                 } @else {
-                <!--span class="nav-link" routerLink="/view/{{log.item.itemObjectId}}" (click)="saveFilters();" [innerHTML]="log.title | sanitizeHtml"></span-->
-                <span class="nav-link" [routerLink]="['view', log.item.itemObjectId]" (click)="saveFilters();"
+                <span class="nav-link" [routerLink]="['view', log.item.itemObjectId]"
                   [innerHTML]="log.title | sanitizeHtml"></span>
                 }
               </td>

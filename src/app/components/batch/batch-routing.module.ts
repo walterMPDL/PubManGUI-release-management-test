@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { batchLogResolver } from "./services/batch-log.resolver";
 
 
 const routes: Routes = [
@@ -39,8 +40,7 @@ const routes: Routes = [
         },
       },
       {
-        path: ':id',
-        //loadComponent: () => import('./logs/items/items.component'),
+        path: ':logId',
         data: {
           breadcrumb: {
             label: $localize`:@@details:Log details`,
@@ -49,7 +49,7 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            loadComponent: () => import('./logs/items/items.component'),
+            loadComponent: () => import('./logs/items/items.component'), resolve: { log: batchLogResolver },
             data: {
               breadcrumb: {
                 //label: '',

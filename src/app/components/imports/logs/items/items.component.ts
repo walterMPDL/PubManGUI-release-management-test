@@ -59,7 +59,7 @@ export default class ItemsComponent implements OnInit {
     fatal: [true, Validators.requiredTrue],
   });
 
-  activeFilters:ImportErrorLevel[] = [
+  activeFilters: ImportErrorLevel[] = [
     ImportErrorLevel.FINE,
     ImportErrorLevel.WARNING,
     ImportErrorLevel.PROBLEM,
@@ -117,17 +117,25 @@ export default class ItemsComponent implements OnInit {
           this.filteredLogs = this.unfilteredLogs = importsResponse;
           this.filteredSize = this.unfilteredSize = this.unfilteredLogs.length;
 
-          if(this.importsSvc.getLogFilters().length > 0) {
-            this.activeFilters = this.importsSvc.getLogFilters();
-            this.filterForm.patchValue({
-              fine: this.activeFilters.includes(ImportErrorLevel.FINE),
-              warning: this.activeFilters.includes(ImportErrorLevel.WARNING),
-              problem: this.activeFilters.includes(ImportErrorLevel.PROBLEM),
-              error: this.activeFilters.includes(ImportErrorLevel.ERROR),
-              fatal: this.activeFilters.includes(ImportErrorLevel.FATAL),
-            });
-            this.onFilterChange();
-          } else this.refreshLogs();
+          if (this.importsSvc.getLogFilters().length > 0) {
+            if (this.activeFilters.length === this.importsSvc.getLogFilters().length
+              && (this.activeFilters.every((element_1) =>
+                this.importsSvc.getLogFilters().some((element_2) =>
+                  Object.keys(element_1).every((key: any) => element_1[key] === element_2[key])
+                )))) {
+            } else {
+              this.activeFilters = this.importsSvc.getLogFilters();
+              this.filterForm.patchValue({
+                fine: this.activeFilters.includes(ImportErrorLevel.FINE),
+                warning: this.activeFilters.includes(ImportErrorLevel.WARNING),
+                problem: this.activeFilters.includes(ImportErrorLevel.PROBLEM),
+                error: this.activeFilters.includes(ImportErrorLevel.ERROR),
+                fatal: this.activeFilters.includes(ImportErrorLevel.FATAL),
+              });
+              this.updateFilteredLogs();
+            }
+          }  
+          this.refreshLogs();
           return;
         });
     }
@@ -204,18 +212,25 @@ export default class ItemsComponent implements OnInit {
 
   onFilterChange(): void {
     this.refreshFilters();
+    this.saveFilters();
+
     if (!this.executeOnceTimeout) {
       this.executeOnceTimeout = true;
       setTimeout(() => {
-        this.filteredLogs = this.unfilteredLogs.filter(item => this.activeFilters.includes(item.errorLevel));
-        this.filteredSize = this.filteredLogs.length;
+
+        this.updateFilteredLogs();
         this.currentPage = 1;
         this.refreshLogs();
 
         this.executeOnceTimeout = false;
-      }, 100); 
+      }, 100);
     };
   }
+
+  updateFilteredLogs():void {
+    this.filteredLogs = this.unfilteredLogs.filter(item => this.activeFilters.includes(item.errorLevel));
+    this.filteredSize = this.filteredLogs.length;
+  } 
 
   getImportStatusTranslation(txt: string): string {
     let key = txt as keyof typeof this.importStatusTranslations;

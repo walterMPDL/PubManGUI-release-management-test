@@ -38,13 +38,13 @@ export class BatchService {
 
   lastPageNumFrom = signal({logs: 1, details: 1});
 
-    #logFilters = signal<resp.BatchProcessLogDetailState[]>([]);
+  #logFilters = signal<resp.BatchProcessLogDetailState[]>([]);
   
-    public setLogFilters(filter: resp.BatchProcessLogDetailState[]) {
-      this.#logFilters.set(filter);
-    }
+  public setLogFilters(filters: resp.BatchProcessLogDetailState[]) {
+      this.#logFilters.set(filters);
+  }
     
-    public getLogFilters = computed( () => this.#logFilters() );
+  public getLogFilters = computed( () => this.#logFilters() );
 
   addToBatchDatasets(selection: string[]): number {
     //const fromSelection = sessionStorage.getItem(selection);
