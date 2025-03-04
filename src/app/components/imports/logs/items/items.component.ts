@@ -205,10 +205,10 @@ export default class ItemsComponent implements OnInit {
     this.activeFilters = [];
     if (this.filterForm.get('fine')?.value) {
       this.activeFilters.push(ImportErrorLevel.FINE);
-    } else
-      if (this.filterForm.get('warning')?.value) {
-        this.activeFilters.push(ImportErrorLevel.WARNING);
-      }
+    }
+    if (this.filterForm.get('warning')?.value) {
+      this.activeFilters.push(ImportErrorLevel.WARNING);
+    }
     if (this.filterForm.get('error')?.value) {
       this.activeFilters.push(ImportErrorLevel.ERROR);
       this.activeFilters.push(ImportErrorLevel.PROBLEM);
