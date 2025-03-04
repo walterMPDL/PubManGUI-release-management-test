@@ -5,9 +5,9 @@ import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } 
 import { Router } from '@angular/router';
 
 import { ContextDbRO } from 'src/app/model/inge';
-import { PureCtxsDirective } from 'src/app/shared/components/selector/services/pure_ctxs/pure-ctxs.directive';
-import { OptionDirective } from "src/app/shared/components/selector/directives/option.directive";
-import { SelectorComponent } from "src/app/shared/components/selector/selector.component";
+//import { PureCtxsDirective } from 'src/app/shared/components/selector/services/pure_ctxs/pure-ctxs.directive';
+//import { OptionDirective } from "src/app/shared/components/selector/directives/option.directive";
+//import { SelectorComponent } from "src/app/shared/components/selector/selector.component";
 
 import { BatchValidatorsService } from 'src/app/components/batch/services/batch-validators.service';
 import { BatchService } from 'src/app/components/batch/services/batch.service';
@@ -69,8 +69,8 @@ export class ActionsContextComponent implements OnInit {
     }
     this.batchSvc.changeContext(this.changeContextParams).subscribe(actionResponse => {
       this.batchSvc.startProcess(actionResponse.batchLogHeaderId);
-      setTimeout(() => {this.changeContextForm.reset();}, 500);
-      this.router.navigate(['/batch']);
+      //this.changeContextForm.reset();
+      this.router.navigate(['/batch/logs']);
     });
   }
 

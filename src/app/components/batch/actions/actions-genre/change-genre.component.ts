@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, Inject, LOCALE_ID } from '@angular/core';
 
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 import { BatchValidatorsService } from 'src/app/components/batch/services/batch-validators.service';
 import { BatchService } from 'src/app/components/batch/services/batch.service';
@@ -25,6 +26,7 @@ export class ActionsGenreComponent {
     public valSvc: BatchValidatorsService, 
     private batchSvc: BatchService,
     private msgSvc: MessageService,
+    private router: Router,
     @Inject(LOCALE_ID) public locale: string) {}
 
   genres = Object.keys(MdsPublicationGenre).sort();
@@ -89,7 +91,8 @@ export class ActionsGenreComponent {
 
     this.batchSvc.changeGenre(this.changeGenreParams).subscribe( actionResponse => {
       this.batchSvc.startProcess(actionResponse.batchLogHeaderId);
-      setTimeout(() => { this.changeGenreForm.reset(); }, 500);
+      this.changeGenreForm.reset();
+      this.router.navigate(['/batch/logs']);
     });   
   }
 

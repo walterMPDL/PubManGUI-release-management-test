@@ -52,11 +52,10 @@ export class AddLocalTagsFormComponent {
     }
 
     this.batchSvc.addLocalTags(this.addLocalTagsParams).subscribe( actionResponse => {
-      // console.log(actionResponse); 
       this.batchSvc.startProcess(actionResponse.batchLogHeaderId);
-      this.addLocalTagsForm.reset();
-      ( this.addLocalTagsForm.controls['localTags'] as FormArray ) = this.fb.array([]);
-      this.router.navigate(['/batch']);
+      //this.addLocalTagsForm.reset();
+      //( this.addLocalTagsForm.controls['localTags'] as FormArray ) = this.fb.array([]);
+      this.router.navigate(['/batch/logs']);
     });
 
   }

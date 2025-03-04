@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 
 import { BatchValidatorsService } from 'src/app/components/batch/services/batch-validators.service';
 import { BatchService } from 'src/app/components/batch/services/batch.service';
-import { MessageService } from 'src/app/shared/services/message.service';
+//import { MessageService } from 'src/app/shared/services/message.service';
 import type { ChangeKeywordsParams } from 'src/app/components/batch/interfaces/batch-params';
 
 @Component({
@@ -20,10 +21,12 @@ import type { ChangeKeywordsParams } from 'src/app/components/batch/interfaces/b
 export class ChangeKeywordsFormComponent { 
 
   constructor(
+    private router: Router,
     private fb: FormBuilder, 
     public validSvc: BatchValidatorsService, 
     private batchSvc: BatchService,
-    private msgSvc: MessageService) { }
+    //private msgSvc: MessageService
+  ) { }
 
   public changeKeywordsForm: FormGroup = this.fb.group({
     keywordsFrom: ['', [ Validators.required ]],
@@ -51,8 +54,8 @@ export class ChangeKeywordsFormComponent {
     this.batchSvc.changeKeywords(this.changeKeywordsParams).subscribe( actionResponse => {
       //console.log(actionResponse); 
       this.batchSvc.startProcess(actionResponse.batchLogHeaderId);
-
-      setTimeout(() => {this.changeKeywordsForm.reset();}, 500);
+      //setTimeout(() => {this.changeKeywordsForm.reset();}, 500);
+      this.router.navigate(['/batch/logs']);
     });
   }
 }

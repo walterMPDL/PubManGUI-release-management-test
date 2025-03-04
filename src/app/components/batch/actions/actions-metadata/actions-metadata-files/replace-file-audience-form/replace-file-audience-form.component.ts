@@ -1,12 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { FormArray, FormBuilder, FormGroup, FormControl, Validators, ValidatorFn, ReactiveFormsModule } from '@angular/forms';
 
 import { BatchValidatorsService } from 'src/app/components/batch/services/batch-validators.service';
 import { BatchService } from 'src/app/components/batch/services/batch.service';
 import { MiscellaneousService, IpEntry } from 'src/app/services/pubman-rest-client/miscellaneous.service';
-import { MessageService } from 'src/app/shared/services/message.service';
+//import { MessageService } from 'src/app/shared/services/message.service';
 import type { ReplaceFileAudienceParams } from 'src/app/components/batch/interfaces/batch-params';
 
 import { AudienceFormComponent } from 'src/app/components/batch/actions/actions-metadata/actions-metadata-files/replace-file-audience-form/audience-form/audience-form.component'
@@ -31,11 +32,13 @@ export class ReplaceFileAudienceFormComponent implements OnInit {
   ous: IpEntry[] = [];
 
   constructor(
+    private router: Router,
     private fb: FormBuilder, 
     public validSvc: BatchValidatorsService,
     private batchSvc: BatchService,
     private miscSvc: MiscellaneousService,
-    private msgSvc: MessageService) { }
+    //private msgSvc: MessageService
+  ) { }
 
   ngOnInit(): void {
     this.miscSvc.retrieveIpList()
@@ -105,10 +108,10 @@ export class ReplaceFileAudienceFormComponent implements OnInit {
 
     this.batchSvc.replaceFileAudience(this.replaceFileAudienceParams).subscribe( actionResponse => {
       this.batchSvc.startProcess(actionResponse.batchLogHeaderId);
-      ( this.replaceFileAudienceForm.controls['allowedAudienceIds'] as FormArray ) = this.fb.array([]);
-      this.replaceFileAudienceForm.reset();
+      // ( this.replaceFileAudienceForm.controls['allowedAudienceIds'] as FormArray ) = this.fb.array([]);
+      //this.replaceFileAudienceForm.reset();
+      this.router.navigate(['/batch/logs']);
     } );
-
   }
 
 }
