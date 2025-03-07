@@ -24,7 +24,7 @@ export class ChangeExternalReferenceContentCategoryFormComponent {
   constructor(
     private router: Router,
     private fb: FormBuilder, 
-    public validSvc: BatchValidatorsService, 
+    public valSvc: BatchValidatorsService, 
     private batchSvc: BatchService,
     //private msgSvc: MessageService,
     @Inject(LOCALE_ID) public locale: string) {}
@@ -60,7 +60,7 @@ export class ChangeExternalReferenceContentCategoryFormComponent {
     externalReferenceContentCategoryFrom: [$localize`:@@batch.actions.metadata.extRef.contentCategory:Category`, [ Validators.required ]],
     externalReferenceContentCategoryTo: [$localize`:@@batch.actions.metadata.extRef.contentCategory:Category`, [ Validators.required ]],
   }, 
-  { validators: [this.validSvc.notEqualsValidator('externalReferenceContentCategoryFrom','externalReferenceContentCategoryTo'), this.validSvc.allRequiredValidator()] });
+  { validators: [this.valSvc.notEqualsValidator('externalReferenceContentCategoryFrom','externalReferenceContentCategoryTo'), this.valSvc.allRequiredValidator()] });
 
   get changeExternalReferenceContentCategoryParams(): ChangeExternalReferenceContentCategoryParams {
     const actionParams: ChangeExternalReferenceContentCategoryParams = {

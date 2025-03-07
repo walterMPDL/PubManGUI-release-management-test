@@ -24,7 +24,7 @@ export class ChangeReviewMethodFormComponent {
   constructor(
     private router: Router,
     private fb: FormBuilder, 
-    public validSvc: BatchValidatorsService, 
+    public valSvc: BatchValidatorsService, 
     private batchSvc: BatchService,
     //private msgSvc: MessageService,
     @Inject(LOCALE_ID) public locale: string) {}
@@ -59,7 +59,7 @@ export class ChangeReviewMethodFormComponent {
     reviewMethodFrom: [$localize`:@@batch.actions.metadata.publication.reviewType:Review type`, [ Validators.required ]],
     reviewMethodTo: [$localize`:@@batch.actions.metadata.publication.reviewType:Review type`, [ Validators.required ]],
   }, 
-  { validators: [this.validSvc.notEqualsValidator('reviewMethodFrom','reviewMethodTo'), this.validSvc.allRequiredValidator()] });
+  { validators: [this.valSvc.notEqualsValidator('reviewMethodFrom','reviewMethodTo'), this.valSvc.allRequiredValidator()] });
 
   get changeReviewMethodParams(): ChangeReviewMethodParams {
     const actionParams: ChangeReviewMethodParams = {

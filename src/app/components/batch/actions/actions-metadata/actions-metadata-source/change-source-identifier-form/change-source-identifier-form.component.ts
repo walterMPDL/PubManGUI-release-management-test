@@ -26,7 +26,7 @@ export class ChangeSourceIdentifierFormComponent {
   constructor(
     private router: Router,
     private fb: FormBuilder, 
-    public validSvc: BatchValidatorsService, 
+    public valSvc: BatchValidatorsService, 
     private batchSvc: BatchService,
     //private msgSvc: MessageService,
     @Inject(LOCALE_ID) public locale: string) { }
@@ -66,7 +66,7 @@ export class ChangeSourceIdentifierFormComponent {
     sourceIdentifierTo: ['', [ Validators.required ]], 
   },
   {
-    validators: [this.validSvc.notEqualsValidator('sourceIdentifierFrom', 'sourceIdentifierTo'), this.validSvc.allRequiredValidator()]
+    validators: [this.valSvc.notEqualsValidator('sourceIdentifierFrom', 'sourceIdentifierTo'), this.valSvc.allRequiredValidator()]
   });
 
   get changeSourceIdentifierParams(): ChangeSourceIdentifierParams {

@@ -34,7 +34,7 @@ export class ReplaceFileAudienceFormComponent implements OnInit {
   constructor(
     private router: Router,
     private fb: FormBuilder, 
-    public validSvc: BatchValidatorsService,
+    public valSvc: BatchValidatorsService,
     private batchSvc: BatchService,
     private miscSvc: MiscellaneousService,
     //private msgSvc: MessageService
@@ -55,7 +55,7 @@ export class ReplaceFileAudienceFormComponent implements OnInit {
     }])
   },
   {
-    //validators: this.validSvc.noDuplicatesValidator(this.allowedAudienceIds)
+    //validators: this.valSvc.noDuplicatesValidator(this.allowedAudienceIds)
   });
 
     

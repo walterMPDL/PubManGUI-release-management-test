@@ -25,7 +25,7 @@ export class ChangeFileVisibilityFormComponent {
   constructor(
     private router: Router,
     private fb: FormBuilder, 
-    public validSvc: BatchValidatorsService, 
+    public valSvc: BatchValidatorsService, 
     private batchSvc: BatchService,
     //private msgSvc: MessageService,
     @Inject(LOCALE_ID) public locale: string) {}
@@ -60,7 +60,7 @@ export class ChangeFileVisibilityFormComponent {
     fileVisibilityFrom: [$localize`:@@batch.actions.metadata.files.visibility:Visibility`, [Validators.required]],
     fileVisibilityTo: [$localize`:@@batch.actions.metadata.files.visibility:Visibility`, [Validators.required]],
   }, 
-  { validators: [this.validSvc.notEqualsValidator('fileVisibilityFrom','fileVisibilityTo'), this.validSvc.allRequiredValidator()] });
+  { validators: [this.valSvc.notEqualsValidator('fileVisibilityFrom','fileVisibilityTo'), this.valSvc.allRequiredValidator()] });
 
   get changeFileVisibilityParams(): ChangeFileVisibilityParams {
     const actionParams: ChangeFileVisibilityParams = {

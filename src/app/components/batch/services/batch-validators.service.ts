@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormGroup, FormArray, ValidatorFn, AbstractControl, ValidationErrors, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormArray, ValidatorFn, AbstractControl, ValidationErrors, Validators } from '@angular/forms';
 
 
 @Injectable({
@@ -127,6 +127,7 @@ export class BatchValidatorsService {
     }
   }
 
+  // Validator repeated on Batch and Imports. TO-DO: unique validators service on shared components
   allRequiredValidator(): ValidatorFn { 
     return (control: AbstractControl): ValidationErrors | null => {
       if (control instanceof FormGroup) {

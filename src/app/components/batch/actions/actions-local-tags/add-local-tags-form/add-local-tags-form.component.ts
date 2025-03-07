@@ -25,7 +25,7 @@ export class AddLocalTagsFormComponent {
 
   constructor(
     private fb: FormBuilder, 
-    public validSvc: BatchValidatorsService, 
+    public valSvc: BatchValidatorsService, 
     private batchSvc: BatchService,
     private router: Router) { }
 

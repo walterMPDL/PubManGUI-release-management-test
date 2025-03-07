@@ -24,7 +24,7 @@ export class ChangeFileContentCategoryFormComponent {
   constructor(
     private router: Router,
     private fb: FormBuilder, 
-    public validSvc: BatchValidatorsService, 
+    public valSvc: BatchValidatorsService, 
     private batchSvc: BatchService,
     //private msgSvc: MessageService,
     @Inject(LOCALE_ID) public locale: string) {}
@@ -59,7 +59,7 @@ export class ChangeFileContentCategoryFormComponent {
     fileContentCategoryFrom: [$localize`:@@batch.actions.metadata.files.contentCategory:Category`, [ Validators.required ]],
     fileContentCategoryTo: [$localize`:@@batch.actions.metadata.files.contentCategory:Category`, [ Validators.required ]],
   }, 
-  { validators: [this.validSvc.notEqualsValidator('fileContentCategoryFrom','fileContentCategoryTo'), this.validSvc.allRequiredValidator()] });
+  { validators: [this.valSvc.notEqualsValidator('fileContentCategoryFrom','fileContentCategoryTo'), this.valSvc.allRequiredValidator()] });
 
   get changeFileContentCategoryParams(): ChangeFileContentCategoryParams {
     const actionParams: ChangeFileContentCategoryParams = {

@@ -24,7 +24,7 @@ export class ChangeSourceGenreFormComponent {
   constructor(
     private router: Router,
     private fb: FormBuilder, 
-    public validSvc: BatchValidatorsService, 
+    public valSvc: BatchValidatorsService, 
     private batchSvc: BatchService,
     //private msgSvc: MessageService,
     @Inject(LOCALE_ID) public locale: string) {}
@@ -59,7 +59,7 @@ export class ChangeSourceGenreFormComponent {
     sourceGenreFrom: ['Genre', [Validators.required]],
     sourceGenreTo: ['Genre', [Validators.required]],
   },
-    { validators: [this.validSvc.notEqualsValidator('sourceGenreFrom', 'sourceGenreTo'), this.validSvc.allRequiredValidator()] });
+    { validators: [this.valSvc.notEqualsValidator('sourceGenreFrom', 'sourceGenreTo'), this.valSvc.allRequiredValidator()] });
 
   get changeSourceGenreParams(): ChangeSourceGenreParams {
     const actionParams: ChangeSourceGenreParams = {
