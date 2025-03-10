@@ -60,13 +60,13 @@ export class ChangeSourceIdentifierFormComponent {
   }
 
   public changeSourceIdentifierForm: FormGroup = this.fb.group({
-    sourceNumber: ['1', [ Validators.required ]],
-    sourceIdentifierType: [$localize`:@@batch.actions.metadata.source.replaceId.default:Type`, [ Validators.required ]],
-    sourceIdentifierFrom: ['', [ Validators.required ]],
-    sourceIdentifierTo: ['', [ Validators.required ]], 
+    sourceNumber: ['1'],
+    sourceIdentifierType: [$localize`:@@batch.actions.metadata.source.replaceId.default:Type`, Validators.required ],
+    sourceIdentifierFrom: ['', [ Validators.required, Validators.minLength(1) ]],
+    sourceIdentifierTo: [''], 
   },
   {
-    validators: [this.valSvc.notEqualsValidator('sourceIdentifierFrom', 'sourceIdentifierTo'), this.valSvc.allRequiredValidator()]
+    validators: [ this.valSvc.notEqualsValidator('sourceIdentifierFrom', 'sourceIdentifierTo'), this.valSvc.allRequiredValidator() ]
   });
 
   get changeSourceIdentifierParams(): ChangeSourceIdentifierParams {

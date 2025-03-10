@@ -99,12 +99,10 @@ export class ReplaceFileAudienceFormComponent implements OnInit {
   }
 
   onSubmit(): void {    
-    if (this.replaceFileAudienceForm.invalid) {
+    if (this.replaceFileAudienceForm.invalid || this.allowedAudienceIds.length <= 1) {
       this.replaceFileAudienceForm.markAllAsTouched();
       return;
     }
-
-    if (this.allowedAudienceIds.length === 0) return
 
     this.batchSvc.replaceFileAudience(this.replaceFileAudienceParams).subscribe( actionResponse => {
       this.batchSvc.startProcess(actionResponse.batchLogHeaderId);
