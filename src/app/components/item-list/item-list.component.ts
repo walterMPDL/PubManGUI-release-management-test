@@ -220,15 +220,6 @@ export class ItemListComponent implements AfterViewInit{
 
   }
 
-  checkAll() {
-
-  }
-
-  uncheckAll() {
-
-  }
-
-
 }
 
 export interface FilterEvent {
