@@ -1,7 +1,7 @@
 import {Component, HostListener, Input, TemplateRef} from '@angular/core';
 import {ItemsService} from "../../services/pubman-rest-client/items.service";
 import {AaService} from "../../services/aa.service";
-import {ItemVersionVO, Storage, Visibility} from "../../model/inge";
+import {FileDbVO, ItemVersionVO, Storage, Visibility} from "../../model/inge";
 import {ActivatedRoute, NavigationEnd, Router, RouterLink, RouterOutlet} from "@angular/router";
 import {TopnavComponent} from "../../shared/components/topnav/topnav.component";
 import {AsyncPipe, NgClass, ViewportScroller} from "@angular/common";
@@ -22,7 +22,6 @@ import {ExportItemsComponent} from "../../shared/components/export-items/export-
 import {PaginatorComponent} from "../../shared/components/paginator/paginator.component";
 import {TopnavBatchComponent} from "../../shared/components/topnav/topnav-batch/topnav-batch.component";
 import {TopnavCartComponent} from "../../shared/components/topnav/topnav-cart/topnav-cart.component";
-import {ThumbnailPdfComponent} from "../../shared/components/thumbnail-pdf/thumbnail-pdf.component";
 import {ItemListStateService} from "../item-list/item-list-state.service";
 
 @Component({
@@ -39,7 +38,6 @@ import {ItemListStateService} from "../item-list/item-list-state.service";
     ItemViewFileComponent,
     EmptyPipe,
     ExportItemsComponent,
-    ThumbnailPdfComponent,
     PaginatorComponent
   ],
   templateUrl: './item-view.component.html',
@@ -60,6 +58,9 @@ export class ItemViewComponent {
 
   citation: string | undefined
 
+  thumbnailUrl: string | undefined;
+  firstPublicPdfFile: FileDbVO | undefined;
+
   constructor(private itemsService: ItemsService, protected aaService: AaService, private route: ActivatedRoute, private router: Router,
   private scroller: ViewportScroller, private messageService: MessageService, private modalService: NgbModal, protected listStateService: ItemListStateService) {
 
@@ -76,17 +77,6 @@ export class ItemViewComponent {
       }
     })
 
-    /*
-    this.router.events.subscribe((event) => {
-      if(event instanceof NavigationEnd && event.url) {
-        console.log(event.url);
-      }
-    });
-
-    const id = this.route.snapshot.paramMap.get('id');
-    if(id)
-      this.init(id);
-   */
     const subMenu = sessionStorage.getItem('selectedSubMenuItemView');
     if(subMenu) {
       this.currentSubMenuSelection = subMenu;
@@ -123,6 +113,15 @@ export class ItemViewComponent {
         this.itemsService.retrieveSingleCitation(i.objectId + '_' + i.versionNumber, undefined,undefined,this.aaService.token).subscribe(citation => {
           this.citation = citation;
         })
+
+
+        this.firstPublicPdfFile = this.item?.files?.find(f => (f.storage === Storage.INTERNAL_MANAGED && f.visibility === Visibility.PUBLIC && f.mimeType==='application/pdf'));
+
+        if(this.firstPublicPdfFile) {
+          this.itemsService.thumbnailAvalilable(i.objectId, this.firstPublicPdfFile.objectId, this.aaService.token).subscribe(thumbAvailable => {
+              this.thumbnailUrl =  this.ingeUri + this.firstPublicPdfFile?.content.replace('/content', '/thumbnail')
+          })
+        }
       }
     })
   }
@@ -143,9 +142,8 @@ export class ItemViewComponent {
     return this.item?.files?.filter(f => f.storage === Storage.EXTERNAL_URL);
   }
 
-  get firstPublicPdfFile() {
-    return this.item?.files?.find(f => (f.storage === Storage.INTERNAL_MANAGED && f.visibility === Visibility.PUBLIC && f.mimeType==='application/pdf'));
-  }
+
+
 
 
   changeSubMenu(val: string) {
