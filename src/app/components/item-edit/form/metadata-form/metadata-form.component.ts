@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output,  inject } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ControlType, FormBuilderService } from '../../services/form-builder.service';
@@ -63,13 +63,13 @@ export class MetadataFormComponent implements OnInit {
 
   allowed_genre_types = Object.keys(MdsPublicationGenre);
   review_method_types = Object.keys(ReviewMethod);
-  
+
   multipleCreators = new FormControl<string>('');
   loading: boolean = false;
 
   constructor(
     private fb: FormBuilder,
-  ) { 
+  ) {
   }
 
   ngOnInit() {
@@ -93,7 +93,7 @@ export class MetadataFormComponent implements OnInit {
   get event() {
     return this.meta_form.get('event') as FormGroup<ControlType<EventVO>>;
   }
-  
+
   get identifiers() {
     return this.meta_form.get('identifiers') as FormArray<FormGroup<ControlType<IdentifierVO>>>;
   }
@@ -128,7 +128,7 @@ export class MetadataFormComponent implements OnInit {
 
   updateAllowedGenres() {
     if (this.context.value.objectId) {
-      this.contextService.retrieve(this.context.value.objectId, ).subscribe(completeContext => {
+      this.contextService.retrieve(this.context.value.objectId,).subscribe(completeContext => {
         if (completeContext.allowedGenres) {
           this.allowed_genre_types = completeContext.allowedGenres;
         }
@@ -140,24 +140,30 @@ export class MetadataFormComponent implements OnInit {
     this.miscellaneousService.selectedGenre.set(this.meta_form.get('genre')?.value);
   }
 
-  addMultipleCreators () {
+  addMultipleCreators() {
     console.log('Adding multiple creators');
     this.loading = true;
     if (this.multipleCreators?.value != null) {
-      this.miscellaneousService.getDecodedMultiplePersons(this.multipleCreators.value).subscribe(
-        (decodedCreators) => {
-          for (let creator of decodedCreators) {
-            let personVO : PersonVO = {completeName: creator.family + ', ' + creator.given, familyName: creator.family, givenName: creator.given, alternativeNames: [''], titles: [''], pseudonyms: [''], organizations: [], identifier: {id: '', type: IdType.OTHER}, orcid: ''};
-            let creatorVO : CreatorVO = {person: personVO, role: CreatorRole.AUTHOR, type: CreatorType.PERSON, organization: {identifier: '', name: ''}}; 
-            this.creators.push(this.fbs.creator_FG(creatorVO));
+      try {
+        this.miscellaneousService.getDecodedMultiplePersons(this.multipleCreators.value).subscribe(
+          (decodedCreators) => {
+            for (let creator of decodedCreators) {
+              let personVO: PersonVO = { completeName: creator.family + ', ' + creator.given, familyName: creator.family, givenName: creator.given, alternativeNames: [''], titles: [''], pseudonyms: [''], organizations: [], identifier: { id: '', type: IdType.OTHER }, orcid: '' };
+              let creatorVO: CreatorVO = { person: personVO, role: CreatorRole.AUTHOR, type: CreatorType.PERSON, organization: { identifier: '', name: '' } };
+              this.creators.push(this.fbs.creator_FG(creatorVO));
+            }
+            this.messageService.success('Adding multiple creators successful. Please review the list of creators.');
+            this.multipleCreators.setValue('');
+            this.loading = false;
           }
-          this.messageService.success('Adding multiple creators successful. Please review the list of creators.');
-          this.multipleCreators.setValue('');
-          this.loading = false;
-        }
-      );
+        );
+      } catch (error) {
+        this.messageService.error('Error decoding multiple creators. Please check the format and try again.');
+        this.loading = false;
+      }
     } else {
       this.messageService.error('Please enter multiple creators in the textfield.');
+      this.loading = false;
     }
   }
 

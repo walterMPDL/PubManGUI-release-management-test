@@ -1,6 +1,6 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { PubmanGenericRestClientService } from './pubman-generic-rest-client.service';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { AaService } from '../aa.service';
 import { MdsPublicationGenre } from 'src/app/model/inge';
 import { rxResource } from '@angular/core/rxjs-interop';
@@ -50,7 +50,11 @@ export class MiscellaneousService extends PubmanGenericRestClientService<any> {
   }
 
   getDecodedMultiplePersons(multiplePersonNameString: string): Observable<PersonName[]>{
-    return this.httpGet(this.subPath + '/' + aiPersonNamePath + '?data=' + multiplePersonNameString);// , this.aaService.token ? this.aaService.token : undefined);
+    if (this.aaService.token) {
+      return this.httpPost(this.subPath + '/' + aiPersonNamePath, multiplePersonNameString, this.aaService.token);
+    } else {
+      return throwError(() => new Error(`Authorization Error`));
+    }
   }
 
   retrieveIpList(): Observable<IpEntry[]> {
