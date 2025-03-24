@@ -14,7 +14,7 @@ import { PaginatorComponent } from "src/app/shared/components/paginator/paginato
 
 
 @Component({
-  selector: 'pure-import-log-item-details',
+  selector: 'pure-import-item-details',
   standalone: true,
   imports: [
     CommonModule,
@@ -22,9 +22,9 @@ import { PaginatorComponent } from "src/app/shared/components/paginator/paginato
     NgbCollapseModule,
     PaginatorComponent
   ],
-  templateUrl: './details.component.html'
+  templateUrl: './import-item-details.component.html'
 })
-export default class DetailsComponent implements OnInit {
+export default class ImportItemDetailsComponent implements OnInit {
 
   importsSvc = inject(ImportsService);
   msgSvc = inject(MessageService);

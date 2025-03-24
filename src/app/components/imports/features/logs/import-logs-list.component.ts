@@ -3,7 +3,7 @@ import { OnInit, Component, Inject, LOCALE_ID, HostListener, inject, viewChild }
 import { RouterModule, Router } from '@angular/router';
 
 
-import { ImportsService } from '../services/imports.service';
+import { ImportsService } from '../../services/imports.service';
 import { ImportLogDbVO, ImportStatus, ImportErrorLevel } from 'src/app/model/inge';
 import { MessageService } from 'src/app/shared/services/message.service';
 
@@ -14,7 +14,7 @@ import { NgbTooltip } from "@ng-bootstrap/ng-bootstrap";
 import { MatBadgeModule } from '@angular/material/badge';
 
 @Component({
-  selector: 'pure-import-logs',
+  selector: 'pure-import-logs-list',
   standalone: true,
   imports: [
     CommonModule,
@@ -24,9 +24,9 @@ import { MatBadgeModule } from '@angular/material/badge';
     NgbTooltip,
     MatBadgeModule
   ],
-  templateUrl: './import-logs.component.html'
+  templateUrl: './import-logs-list.component.html'
 })
-export default class ListComponent implements OnInit {
+export default class ImportLogsListComponent implements OnInit {
 
   importsSvc = inject(ImportsService);
   msgSvc = inject(MessageService);
