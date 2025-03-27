@@ -11,9 +11,7 @@ export const fetchItemResolver: ResolveFn<any> = (route: ActivatedRouteSnapshot)
 
     return importsSvc.getLastFetch().pipe(
         mergeMap(item => {
-            console.log(JSON.stringify(item));
             if (item) {
-                console.log(item.objectId);
                 return of(item);
             } else {
                 msgSvc.warning('Invalid import');
