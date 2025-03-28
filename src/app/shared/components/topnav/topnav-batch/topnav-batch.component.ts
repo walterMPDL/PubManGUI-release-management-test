@@ -49,7 +49,6 @@ export class TopnavBatchComponent {
     } else {
       this.message.warning($localize`:@@batch.datasets.empty:The batch processing is empty`+'!');
     }
-    // TODO Refresh dataset list
   }
 
   get isAdd() {
@@ -59,9 +58,8 @@ export class TopnavBatchComponent {
       return selected.some(id => !this.batchSvc.objectIds.includes(id))
     }
     return false;
-    //console.log("isAdd: " + isAdd)
-    //return isAdd
   }
+
   get isRemove() {
     const selected: string[] = this.itemSelectionService.selectedIds$.value;
     if(selected.length > 0) {

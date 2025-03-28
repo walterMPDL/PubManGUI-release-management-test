@@ -1,12 +1,13 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { PubmanGenericRestClientService } from './pubman-generic-rest-client.service';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { AaService } from '../aa.service';
 import { MdsPublicationGenre } from 'src/app/model/inge';
 import { rxResource } from '@angular/core/rxjs-interop';
 
 const ipListPath = 'getIpList';
 const genrePropertiesPath = 'getGenreProperties';
+const aiPersonNamePath = 'callAiApi';
 
 @Injectable({
   providedIn: 'root'
@@ -43,18 +44,34 @@ export class MiscellaneousService extends PubmanGenericRestClientService<any> {
     }
   }
 
-  retrieveIpList(): Observable<IpEntry[]> {
-    return this.httpGet(this.subPath + '/' + ipListPath, this.aaService.token ? this.aaService.token : undefined);
-  }
+
   getGenreProperties(genre: string): Observable<any> {
-    return this.httpGet(this.subPath + '/' + genrePropertiesPath + '?genre=' + genre, this.aaService.token ? this.aaService.token : undefined);
+    return this.httpGet(this.subPath + '/' + genrePropertiesPath + '?genre=' + genre);
   }
+
+  getDecodedMultiplePersons(multiplePersonNameString: string): Observable<PersonName[]>{
+    if (this.aaService.token) {
+      return this.httpPost(this.subPath + '/' + aiPersonNamePath, multiplePersonNameString);
+    } else {
+      return throwError(() => new Error(`Authorization Error`));
+    }
+  }
+
+  retrieveIpList(): Observable<IpEntry[]> {
+    return this.httpGet(this.subPath + '/' + ipListPath);
+  }
+
 }
 
 export interface IpEntry {
   name: string,
   id: string,
   ipRanges: string[];
+}
+
+export interface PersonName {
+  given: string;
+  family: string;
 }
 
 

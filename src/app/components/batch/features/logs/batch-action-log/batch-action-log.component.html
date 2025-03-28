@@ -1,0 +1,69 @@
+@if(log) {
+
+<tr class="border-bottom d-flex">
+    @if (log.state === state.RUNNING) {
+
+        <td class="col-2">
+            {{ batchSvc.getProcessLog().state | titlecase }}
+
+            @if (log.batchLogHeaderId === batchSvc.getProcessLog().batchLogHeaderId) {
+                @if (batchSvc.isProcessRunning()) {
+
+                    {{ batchSvc.getProcessLog().percentageOfProcessedItems -
+                    calculateProcessedStep(batchSvc.getProcessLog().numberOfItems) }}&percnt;
+
+                }
+            } @else {
+
+                <span class="material-symbols-outlined" title="Something gone wrong!" style="cursor: auto">
+                    error
+                </span>
+
+            }
+        </td>
+
+    } @else {
+
+        <td class="col-2">
+            {{ getProcessLogHeaderStateTranslation(log.state) }}
+            @if (log.state === state.FINISHED) {
+                <span class="material-symbols-outlined text-success" style="cursor: default">check_circle</span>
+            } @else {
+                <span class="material-symbols-outlined text-danger" style="cursor: default">cancel</span>
+            }
+        </td>
+
+    }
+    
+    <td class="col-6">
+        {{ getProcessMethodTranslation(log.method) }}
+    </td>
+
+    <td class="col-3">
+        <span>{{ log.endDate | date:'mediumDate' }}</span>
+        <div class="float-end">
+            <span class="material-symbols-outlined text-secondary" style="cursor: auto">schedule</span>&nbsp;
+            <span>{{ log.endDate | date: "HH:mm" }}</span>
+        </div>
+    </td>
+
+    <td class="d-flex justify-content-center">
+        @if (log.state === state.RUNNING
+            && log.batchLogHeaderId === batchSvc.getProcessLog().batchLogHeaderId
+            && batchSvc.isProcessRunning()) {
+
+            <span class="spinner-border spinner-border-sm text-secondary ms-3" aria-hidden="true"></span>
+
+        } @else {
+
+            <a [routerLink]="['/batch/logs/', log.batchLogHeaderId]">
+                <span class="material-symbols-outlined ms-3 my-0 matBadge" matBadge='{{ log.numberOfItems }}'>
+                    list
+                </span>
+            </a>
+
+        }
+    </td>
+</tr>
+
+}
