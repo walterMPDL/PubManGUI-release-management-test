@@ -24,7 +24,7 @@ export const appConfig: ApplicationConfig = {
       useClass: PureRrs
     },
     importProvidersFrom(DialogModule),
-    provideHttpClient(withInterceptorsFromDi()),
+    provideHttpClient(),
     provideLocale(),
     provideLocaleId()
   ]

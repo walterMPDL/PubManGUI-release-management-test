@@ -25,6 +25,7 @@ import {TopnavCartComponent} from "../../shared/components/topnav/topnav-cart/to
 import {ItemListStateService} from "../item-list/item-list-state.service";
 import {SanitizeHtmlCitationPipe} from "../../shared/services/pipes/sanitize-html-citation.pipe";
 import {ItemSelectionService} from "../../shared/services/item-selection.service";
+import {Title} from "@angular/platform-browser";
 
 @Component({
   selector: 'pure-item-view',
@@ -67,7 +68,8 @@ export class ItemViewComponent {
   firstPublicPdfFile: FileDbVO | undefined;
 
   constructor(private itemsService: ItemsService, protected aaService: AaService, private route: ActivatedRoute, private router: Router,
-  private scroller: ViewportScroller, private messageService: MessageService, private modalService: NgbModal, protected listStateService: ItemListStateService, private itemSelectionService: ItemSelectionService) {
+  private scroller: ViewportScroller, private messageService: MessageService, private modalService: NgbModal, protected listStateService: ItemListStateService, private itemSelectionService: ItemSelectionService,
+              private title: Title) {
 
   }
 
@@ -104,6 +106,7 @@ export class ItemViewComponent {
     this.item$.subscribe(i => {
       if (i && i.objectId) {
         this.item = i;
+        this.title.setTitle(i.metadata.title)
         this.listStateService.initItemId(i.objectId);
         this.itemSelectionService.addToSelection(i.objectId);
         this.versions$ = this.itemsService.retrieveHistory(i.objectId);
