@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {BehaviorSubject, catchError, EMPTY, forkJoin, map, Observable, switchMap, tap, throwError} from 'rxjs';
 import { MessageService } from 'src/app/shared/services/message.service';
-import * as props from 'src/assets/properties.json';
+import { environment } from 'src/environments/environment';
 import {AccountUserDbVO, ContextDbVO} from "../model/inge";
 import {ContextsService} from "./pubman-rest-client/contexts.service";
 import {Router} from "@angular/router";
@@ -26,8 +26,8 @@ export class AaService {
 
   static instance: AaService;
 
-  private loginUrl = props.inge_rest_uri.concat('/login');
-  private logoutUrl = props.inge_rest_uri.concat('/logout');
+  private loginUrl = environment.inge_rest_uri.concat('/login');
+  private logoutUrl = environment.inge_rest_uri.concat('/logout');
 
   principal: BehaviorSubject<Principal>;
 

@@ -1,7 +1,8 @@
 import { signal, computed, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, tap, Observable, throwError, BehaviorSubject } from 'rxjs';
-import { inge_rest_uri } from 'src/assets/properties.json';
+import { environment } from 'src/environments/environment';
+// import { properties } from 'src/assets/properties.json';
 
 import type * as params from '../interfaces/batch-params';
 import * as resp from '../interfaces/batch-responses';
@@ -17,7 +18,7 @@ import { MessageService } from 'src/app/shared/services/message.service';
 })
 export class BatchService {
 
-  readonly #baseUrl: string = inge_rest_uri;
+  readonly #baseUrl: string = environment.inge_rest_uri;
 
   objectIds$: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]);
 

@@ -1,7 +1,7 @@
 import {HttpClient, HttpHeaders, HttpParams, HttpRequest, HttpResponse} from '@angular/common/http';
 import {inject, Inject, Injectable} from '@angular/core';
 import {Observable, catchError, map, throwError, isObservable, lastValueFrom} from 'rxjs';
-import * as props from 'src/assets/properties.json';
+import { environment } from 'src/environments/environment';
 
 export interface SearchResult<Type> {
   numberOfRecords: number,
@@ -20,7 +20,7 @@ export abstract class PubmanGenericRestClientService<modelType> {
 
   // restUri = 'https://gui.inge.mpdl.mpg.de/rest';
   // restUri = 'https://qa.pure.mpdl.mpg.de/rest';
-  protected restUri = props.inge_rest_uri;
+  protected restUri = environment.inge_rest_uri;
   protected httpClient: HttpClient = inject(HttpClient);
   protected subPath:string;
 

@@ -1,7 +1,7 @@
 import { signal, computed, effect, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map, tap, of, Observable, throwError, EMPTY } from 'rxjs';
-import { inge_rest_uri } from 'src/assets/properties.json';
+import { environment } from 'src/environments/environment';
 
 import type * as params from '../interfaces/imports-params';
 // import type * as resp from '../interfaces/imports-responses';
@@ -16,7 +16,7 @@ import { bool_query } from 'src/app/model/pure_search';
 })
 export class ImportsService {
 
-  readonly #baseUrl: string = inge_rest_uri;
+  readonly #baseUrl: string = environment.inge_rest_uri;
 
   constructor(
     private http: HttpClient,

@@ -30,7 +30,7 @@ export class HomeComponent {
     // Fetch the latest released items from the backend or any other data source
     // For demonstration, let's assume we have a method to fetch this data
     this.fetchLatestReleasedItems();
-    //this.loadNewsItems();
+    this.loadNewsItems();
   }
 
   fetchLatestReleasedItems(): void {
@@ -74,7 +74,7 @@ export class HomeComponent {
 
 
     loadNewsItems() {
-      return this.httpClient.request('GET', 'https://blog.pure.mpdl.mpg.de/feed', {
+      return this.httpClient.request('GET', 'https://blog.pure.mpdl.mpg.de/json1', {
 
       }).pipe(
         //map((response: any) => response),

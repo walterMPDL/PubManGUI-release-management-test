@@ -1,7 +1,7 @@
 import {Component, Input} from '@angular/core';
 import {FileDbVO, ItemVersionVO, OA_STATUS, Storage, Visibility} from "../../../model/inge";
 import {NgbPopover, NgbTooltip} from "@ng-bootstrap/ng-bootstrap";
-import * as props from "../../../../assets/properties.json";
+import { environment } from 'src/environments/environment';
 import {EmptyPipe} from "../../../shared/services/pipes/empty.pipe";
 import {AaService} from "../../../services/aa.service";
 import {checkFileAccess, getFullItemId} from "../../../shared/services/item-utils";
@@ -20,7 +20,7 @@ import {ItemsService} from "../../../services/pubman-rest-client/items.service";
 })
 export class ItemViewFileComponent {
 
-  protected ingeUri = props.inge_uri;
+  protected ingeUri = environment.inge_uri;
   @Input({required: true}) files: FileDbVO[] | undefined = [];
   @Input({required: true}) item!: ItemVersionVO;
 

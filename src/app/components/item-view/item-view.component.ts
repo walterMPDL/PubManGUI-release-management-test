@@ -10,7 +10,7 @@ import {ItemBadgesComponent} from "../../shared/components/item-badges/item-badg
 import {NgbModal, NgbPopover, NgbTooltip} from "@ng-bootstrap/ng-bootstrap";
 import {ItemViewMetadataComponent} from "./item-view-metadata/item-view-metadata.component";
 import {BehaviorSubject, delay, map, Observable, pipe, tap, timeout} from "rxjs";
-import * as props from "../../../assets/properties.json";
+import { environment } from 'src/environments/environment';
 import {
   ItemViewMetadataElementComponent
 } from "./item-view-metadata/item-view-metadata-element/item-view-metadata-element.component";
@@ -49,7 +49,7 @@ import {ItemSelectionService} from "../../shared/services/item-selection.service
   styleUrl: './item-view.component.scss'
 })
 export class ItemViewComponent {
-  protected ingeUri = props.inge_uri;
+  protected ingeUri = environment.inge_uri;
   currentSubMenuSelection = "abstract";
 
   versions$!: Observable<any>;
