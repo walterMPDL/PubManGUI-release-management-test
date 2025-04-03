@@ -28,7 +28,7 @@ export class MiscellaneousService extends PubmanGenericRestClientService<any> {
     loader: ({ request: genre }) => { return this.getGenreProperties(genre) },
   });
 
-  constructor(aaService: AaService) {
+  constructor() {
     super('/miscellaneous');
     for (var i = 0; i < this.genre_types.length; i++) {
       let genre = this.genre_types.at(i);

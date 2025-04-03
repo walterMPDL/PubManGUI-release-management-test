@@ -69,4 +69,7 @@ button > .material-symbols-outlined {
   font-style: italic;
 }
 
+input.ng-invalid.ng-touched {
+  border: 1px solid red;
+}
 

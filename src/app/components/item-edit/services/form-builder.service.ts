@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AbstractVO, AlternativeTitleVO, ChecksumAlgorithm, ContextDbRO, CreatorType, CreatorVO, EventVO, FileDbVO, FormatVO, FundingInfoVO, FundingOrganizationVO, FundingProgramVO, IdentifierVO, InvitationStatus, ItemVersionState, ItemVersionVO, LegalCaseVO, MdsFileVO, MdsPublicationGenre, MdsPublicationVO, OA_STATUS, OrganizationVO, PersonVO, ProjectInfoVO, PublishingInfoVO, ReviewMethod, SourceVO, Storage, SubjectVO, Visibility } from 'src/app/model/inge';
 
@@ -147,7 +147,7 @@ export class FormBuilderService {
 
   metadata_FG(metadata: MdsPublicationVO | null) {
     const metadata_form = this.fb.group<ControlType<MdsPublicationVO>>({
-      title: this.fb.control(metadata?.title ? metadata.title : null, [Validators.required]),
+      title: this.fb.control(metadata?.title ? metadata.title : null, [Validators.required],),
       alternativeTitles: this.fb.array(metadata?.alternativeTitles ? metadata.alternativeTitles.map(at => this.alt_title_FG(at) as AbstractControl) : []),
       creators: this.fb.array(metadata?.creators ? metadata.creators.map(creator => this.creator_FG(creator) as AbstractControl) : []),
       dateAccepted: this.fb.control(metadata?.dateAccepted ? metadata.dateAccepted : null),
@@ -197,13 +197,14 @@ export class FormBuilderService {
   }
 
   event_FG(event: EventVO | null) {
-    const event_form = this.fb.group<ControlType<EventVO>>({
+    const event_form: any  = this.fb.group<ControlType<EventVO>>({
       endDate: this.fb.control(event?.endDate ? event.endDate : null),
       invitationStatus: this.fb.control(event?.invitationStatus ? event.invitationStatus : InvitationStatus.INVITED),
       place: this.fb.control(event?.place ? event.place : null),
       startDate: this.fb.control(event?.startDate ? event.startDate : null),
       title: this.fb.control(event?.title ? event.title : null)
-    });
+    }
+  );
     return event_form;
   }
 

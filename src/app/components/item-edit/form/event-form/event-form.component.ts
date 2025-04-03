@@ -1,8 +1,11 @@
 import { Component, inject, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { InvitationStatus } from 'src/app/model/inge';
+import { EventVO, InvitationStatus } from 'src/app/model/inge';
 import { MiscellaneousService } from 'src/app/services/pubman-rest-client/miscellaneous.service';
+import { ControlType } from '../../services/form-builder.service';
+import { validateEvent } from 'src/app/shared/directives/event-validation.directive';
+import { ValidationService } from 'src/app/services/pubman-rest-client/validation.service';
 
 @Component({
   selector: 'pure-event-form',
@@ -12,14 +15,17 @@ import { MiscellaneousService } from 'src/app/services/pubman-rest-client/miscel
   styleUrl: './event-form.component.scss'
 })
 export class EventFormComponent {
-  @Input() event_form!: FormGroup;
+  @Input() event_form!: FormGroup<ControlType<EventVO>>;
 
   miscellaneousService = inject(MiscellaneousService);
+  validationService = inject(ValidationService);
 
   invitationBoolean= new FormControl(true);
 
+
   ngOnInit() {
     this.invitationBoolean.setValue (this.event_form.get('invitationStatus')?.value == InvitationStatus.INVITED ? true : false);
+    this.event_form.addValidators(validateEvent(this.validationService));
   }
   
   get genreSpecificProperties() {
