@@ -5,7 +5,7 @@ import { importLogResolver } from "./services/import-log.resolver";
 const routes: Routes = [
   {
     path: 'new',
-    loadComponent: () => import('./new/new.component'),
+    loadComponent: () => import('./features/new/new.component'),
     data: {
       breadcrumb: {
         label: $localize`:@@new:New`,
@@ -22,7 +22,7 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        loadComponent: () => import('./logs/import-logs.component'),
+        loadComponent: () => import('./features/logs/import-logs-list.component'),
         data: {
           breadcrumb: {
             //label: '',
@@ -39,7 +39,7 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            loadComponent: () => import('./logs/items/items.component'), resolve: { import: importLogResolver },
+            loadComponent: () => import('./features/logs/import-log/import-details/import-details-list.component'), resolve: { import: importLogResolver },
             data: {
               breadcrumb: {              
                 //label: '',
@@ -48,7 +48,7 @@ const routes: Routes = [
           },
           {
             path: 'log',
-            loadComponent: () => import('./logs/items/details/details.component'), 
+            loadComponent: () => import('./features/logs/import-log/import-details/import-detail-log/import-item-details/import-item-details-list.component'), 
             data: {
               breadcrumb: {
                 label: 'Log', 
@@ -57,7 +57,7 @@ const routes: Routes = [
           },
           {
             path: 'datasets',
-            loadComponent: () => import('./datasets/datasets.component'),
+            loadComponent: () => import('./imports-datasets/datasets.component'),
             data: {
               breadcrumb: {
                 label: 'Datasets', 

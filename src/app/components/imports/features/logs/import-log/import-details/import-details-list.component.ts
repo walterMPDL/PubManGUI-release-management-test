@@ -1,33 +1,32 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, Inject, LOCALE_ID, HostListener, inject } from '@angular/core';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
-import { ImportsService } from '../../services/imports.service';
+import { ImportsService } from 'src/app/components/imports/services/imports.service';
 import { ImportLogItemDbVO, ImportErrorLevel, ImportLogDbVO } from 'src/app/model/inge';
 
 import { NgbTooltip } from "@ng-bootstrap/ng-bootstrap";
 
 import { MessageService } from 'src/app/shared/services/message.service';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
-// import { StateFilterPipe } from 'src/app/components/imports/pipes/stateFilter.pipe';
 
 import { PaginatorComponent } from "src/app/shared/components/paginator/paginator.component";
+import { ImportDetailLogComponent } from "./import-detail-log/import-detail-log.component";
 
 @Component({
-  selector: 'pure-import-log-items',
+  selector: 'pure-import-details-list',
   standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
     FormsModule,
-    RouterLink,
     NgbTooltip,
-    // StateFilterPipe,
-    PaginatorComponent
+    PaginatorComponent,
+    ImportDetailLogComponent
   ],
-  templateUrl: './items.component.html'
+  templateUrl: './import-details-list.component.html'
 })
-export default class ItemsComponent implements OnInit {
+export default class ImportDetailsListComponent implements OnInit {
   importsSvc = inject(ImportsService);
   activatedRoute = inject(ActivatedRoute);
   router = inject(Router);
@@ -71,9 +70,7 @@ export default class ItemsComponent implements OnInit {
 
   executeOnceTimeout = false;
 
-  importStatusTranslations = {};
   importErrorLevelTranslations = {};
-  importMessageTranslations = {};
   importFormatTranslations = {};
 
   isScrolled = false;
@@ -159,29 +156,14 @@ export default class ItemsComponent implements OnInit {
   async loadTranslations(lang: string) {
     if (lang === 'de') {
       await import('src/assets/i18n/messages.de.json').then((msgs) => {
-        this.importStatusTranslations = msgs.ImportStatus;
         this.importErrorLevelTranslations = msgs.ImportErrorLevel;
-        this.importMessageTranslations = msgs.ImportMessage;
         this.importFormatTranslations = msgs.ImportFormat;
       })
     } else {
       await import('src/assets/i18n/messages.json').then((msgs) => {
-        this.importStatusTranslations = msgs.ImportStatus;
         this.importErrorLevelTranslations = msgs.ImportErrorLevel;
-        this.importMessageTranslations = msgs.ImportMessage;
         this.importFormatTranslations = msgs.ImportFormat;
       })
-    }
-  }
-
-  getAssorted(txt: string): string {
-    switch (txt) {
-      case 'FINE':
-      case 'WARNING':
-      case 'FATAL':        
-        return txt;
-      default:
-        return 'ERROR';
     }
   }
 
@@ -244,19 +226,9 @@ export default class ItemsComponent implements OnInit {
     this.filteredSize = this.filteredLogs.length;
   }
 
-  getImportStatusTranslation(txt: string): string {
-    let key = txt as keyof typeof this.importStatusTranslations;
-    return this.importStatusTranslations[key];
-  }
-
   getImportErrorLevelTranslation(txt: string): string {
     let key = txt as keyof typeof this.importErrorLevelTranslations;
     return this.importErrorLevelTranslations[key];
-  }
-
-  getImportMessageTranslation(txt: string): string {
-    let key = txt as keyof typeof this.importMessageTranslations;
-    return this.importMessageTranslations[key];
   }
 
   getImportFormatTranslation(txt: string): string {
