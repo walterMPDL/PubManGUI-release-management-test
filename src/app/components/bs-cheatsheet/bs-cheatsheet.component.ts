@@ -4,7 +4,6 @@ import { Component } from '@angular/core';
   selector: 'pure-bs-cheatsheet',
   imports: [],
   templateUrl: './bs-cheatsheet.component.html',
-  styleUrl: './bs-cheatsheet.component.css'
 })
 export class BsCheatsheetComponent {
 
