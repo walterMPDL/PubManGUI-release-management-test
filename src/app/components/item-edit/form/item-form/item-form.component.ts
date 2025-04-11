@@ -291,7 +291,7 @@ export class ItemFormComponent implements OnInit {
     console.log('form.errors:', JSON.stringify(this.form.errors));
     */
     // submit form
-    if (this.aaService.isLoggedIn && this.aaService.token) {
+    if (this.aaService.isLoggedIn) {
       if (this.form_2_submit.objectId) {
         this.form.valid ? (this.itemService.update(this.form_2_submit.objectId, this.form_2_submit as ItemVersionVO)).subscribe(result => console.log('Updated Item:', JSON.stringify(result))) : alert('Validation Error when updating existing Publication: ' + JSON.stringify(this.form.errors) + JSON.stringify(this.form.errors));
       } else {
