@@ -5,6 +5,7 @@
             <div class="col-sm">
                 <label class="col-form-label">Title</label>
                 <input type="text" class="form-control" formControlName="title">
+                <span>Event valid: {{event_form.valid}} | Event errors: {{event_form.errors | json}} | Title errors: {{event_form.get('title')?.errors | json}} </span>
                 <span *ngIf="event_form.errors?.['invalidEvent']">
                     Event title is required.
                 </span>

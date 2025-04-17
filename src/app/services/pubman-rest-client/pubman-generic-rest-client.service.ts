@@ -124,6 +124,7 @@ export abstract class PubmanGenericRestClientService<modelType> {
 
   protected httpPost(path: string, resource: any, authenticate?: boolean): Observable<any> {
     const body = JSON.stringify(resource);
+    console.log('body', body);
     return this.httpRequest('POST', path, body, authenticate, this.addContentTypeHeader());
   }
 

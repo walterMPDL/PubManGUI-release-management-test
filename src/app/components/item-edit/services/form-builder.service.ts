@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AbstractVO, AlternativeTitleVO, ChecksumAlgorithm, ContextDbRO, CreatorType, CreatorVO, EventVO, FileDbVO, FormatVO, FundingInfoVO, FundingOrganizationVO, FundingProgramVO, IdentifierVO, InvitationStatus, ItemVersionState, ItemVersionVO, LegalCaseVO, MdsFileVO, MdsPublicationGenre, MdsPublicationVO, OA_STATUS, OrganizationVO, PersonVO, ProjectInfoVO, PublishingInfoVO, ReviewMethod, SourceVO, Storage, SubjectVO, Visibility } from 'src/app/model/inge';
+import { CreatorValidationDirective } from 'src/app/shared/directives/creator-validation.directive';
 import { EventValidationDirective } from 'src/app/shared/directives/event-validation.directive';
 
 type Unbox<T> = T extends Array<infer V> ? V : T;
@@ -24,6 +25,7 @@ export class FormBuilderService {
   constructor(
     private fb: FormBuilder,
     private eventValidatonDirective: EventValidationDirective,
+    private creatorValidationDirective: CreatorValidationDirective,
   ) { }
 
   item_FG(item: ItemVersionVO | null) {
@@ -109,6 +111,10 @@ export class FormBuilderService {
       person: creator?.person ? this.person_FG(creator.person) : this.person_FG(null),
       role: this.fb.control(creator?.role ? creator.role : null),
       type: this.fb.control(creator?.type ? creator.type : CreatorType.PERSON)
+    },
+    {
+      asyncValidators: [this.creatorValidationDirective.validate.bind(this.creatorValidationDirective)],
+      updateOn: 'blur' // 'blur' or 'change' or 'submit'
     });
     creator?.organization ? creator_form.get('person')?.disable() : creator_form.get('organization')?.disable();
     return creator_form;
@@ -208,9 +214,8 @@ export class FormBuilderService {
     },
     {
       asyncValidators: [this.eventValidatonDirective.validate.bind(this.eventValidatonDirective)],
-      updateOn: 'blur' // or 'change' or 'submit'
-    }
-  );
+      updateOn: 'blur' // 'blur' or 'change' or 'submit'
+    });
     return event_form;
   }
 

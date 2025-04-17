@@ -4,7 +4,7 @@
 
             <div class="d-sm-flex flex-sm-row gap-1 mb-1 align-items-end">
                 <div class="col-sm-auto">
-                  <label class="col-form-label text-end pe-2">&nbsp;</label>
+                    <label class="col-form-label text-end pe-2">&nbsp;</label>
                     <span class="material-symbols-outlined">
                         drag_indicator
                     </span>
@@ -56,20 +56,20 @@
                             [formForPersonsFamilyName]="$any(person.controls.familyName)"
                             [formForPersonOrganizations]="$any(person.controls.organizations)"
                             [formForPersonsIdValue]="$any(person.controls.identifier.controls.id)"
-                            [formForPersonsIdType]="$any(person.controls.identifier.controls.type)" data-test="familyname-autosuggest"/>
+                            [formForPersonsIdType]="$any(person.controls.identifier.controls.type)"
+                            data-test="familyname-autosuggest" />
                         <!--{{person.controls.identifier.value | json}}-->
                     </div>
                     <div class="col-sm-3">
                         <label for="givenName" class="col-form-label text-end pe-2">given</label>
-                        <input type="text" class="form-control" id="givenName"
-                            formControlName="givenName" data-test="givenname">
+                        <input type="text" class="form-control" id="givenName" formControlName="givenName"
+                            data-test="givenname">
                     </div>
                     @if(person.controls.identifier.controls.type.value == 'CONE') {
                     <div class="col-sm-auto">
-                        <span id="coneIcon" class="material-symbols-outlined"
-                            title="{{person.controls.identifier.controls.id.value}}">
-                            fingerprint
-                        </span>
+                        <svg fill="currentColor" height="24px" width="24px">
+                            <use href="/assets/icons/icons.svg#cone"></use>
+                        </svg>
                     </div>
                     }
                     @if(person.controls.orcid.value) {
@@ -136,12 +136,16 @@
                     } @empty {
                     <div class="col-sm offset-sm-1">
                         <pure-add-remove-buttons [index]="0" [del_val]="'hidden'" [add_val]="'add organization'"
-                            (notice)="add_remove_person_ou($event)" data-test="add-remove-organizations"></pure-add-remove-buttons>
+                            (notice)="add_remove_person_ou($event)"
+                            data-test="add-remove-organizations"></pure-add-remove-buttons>
                     </div>
                     }
                 </div>
             </ng-container>
             }
+            <div class="d-sm-flex flex-sm-row gap-1 mb-1 align-items-end">
+                <span>Creator valid: {{creator_form.valid}} | Creator errors: {{creator_form.errors | json}} </span>
+            </div>
         </div>
         <div class="col-sm-1">
             <pure-add-remove-buttons [index]="index" (notice)="add_remove_creator($event)"></pure-add-remove-buttons>

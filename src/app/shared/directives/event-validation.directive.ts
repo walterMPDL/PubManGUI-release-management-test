@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { AbstractControl, AsyncValidator, FormControl, FormGroup, ValidationErrors, Validator, ValidatorFn } from '@angular/forms';
-import { catchError, defaultIfEmpty, finalize, map, Observable, of, takeUntil} from 'rxjs';
+import { AbstractControl, AsyncValidator, FormGroup, ValidationErrors } from '@angular/forms';
+import { catchError, defaultIfEmpty, map, Observable, of, } from 'rxjs';
 import { ValidationService } from 'src/app/services/pubman-rest-client/validation.service';
 
 @Injectable({
@@ -13,7 +13,7 @@ export class EventValidationDirective implements AsyncValidator {
   validate(control: AbstractControl): Observable<ValidationErrors | null> {
     console.log('validating Event control');
     const formGroup = control as FormGroup;
-    console.log('this', this);
+    // console.log('this', this);
     return this.validationService.validateEvent(formGroup.value).pipe(
       map(response => {
         console.log('Mapping');
@@ -27,6 +27,7 @@ export class EventValidationDirective implements AsyncValidator {
           return { invalidEvent: true };
         } else {
           console.log('valid event');
+          formGroup.get('title')?.setErrors(null);
           return null;
         }
       }),

@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { PubmanGenericRestClientService } from './pubman-generic-rest-client.service';
 import { Observable } from 'rxjs';
 
-const validateEventTitleRequired = 'validateEventTitleRequired';
+const validateEvent = 'validateEvent';
+const validateCreator = 'validateCreator';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,7 @@ export class ValidationService extends PubmanGenericRestClientService<any> {
   validateEvent(eventJson: any): Observable<any> {
     console.log('validateEvent validationService');
     console.log('eventJson', eventJson);
-    return this.httpPost(this.subPath + '/' + validateEventTitleRequired, eventJson);/*.pipe(
+    return this.httpPost(this.subPath + '/' + validateEvent, eventJson);/*.pipe(
       map(response => {
         // Assuming the response contains a status code
         if (response.status >= 400) {
@@ -31,6 +32,12 @@ export class ValidationService extends PubmanGenericRestClientService<any> {
       }),
       defaultIfEmpty(null) // Ensures that the observable emits null if it completes without emitting any values
     );*/
+  }
+
+  validateCreator(creatorJson: any): Observable<any> {
+    console.log('validateCreator validationService');
+    console.log('creatorJson', creatorJson);
+    return this.httpPost(this.subPath + '/' + validateCreator, creatorJson);
   }
 }
 
