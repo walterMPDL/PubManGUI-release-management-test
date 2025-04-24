@@ -558,6 +558,20 @@ export enum SourceGenre {
     FESTSCHRIFT = "FESTSCHRIFT",
 }
 
+export enum SourceIdType {
+    BIBTEX_CITEKEY = "BIBTEX_CITEKEY",
+    CONE = "CONE",
+    DOI = "DOI",
+    ISBN = "ISBN",
+    ISI = "ISI",
+    ISSN = "ISSN",
+    OTHER = "OTHER",
+    PII = "PII",
+    URI = "URI",
+    URN = "URN",
+    ZDB = "ZDB",
+}
+
 export enum AlternativeTitleType {
     ABBREVIATION = "ABBREVIATION",
     HTML = "HTML",

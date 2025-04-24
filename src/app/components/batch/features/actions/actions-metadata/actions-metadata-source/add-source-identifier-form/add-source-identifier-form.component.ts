@@ -3,7 +3,7 @@ import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 
-import { IdType } from 'src/app/model/inge';
+import { SourceIdType } from 'src/app/model/inge';
 
 import { BatchValidatorsService } from 'src/app/components/batch/services/batch-validators.service';
 import { BatchService } from 'src/app/components/batch/services/batch.service';
@@ -30,7 +30,7 @@ export class AddSourceIdentifierFormComponent {
   batchSvc = inject(BatchService);
   translate = inject(TranslateService);
 
-  sourceIdTypes = Object.keys(IdType);
+  sourceIdTypes = Object.keys(SourceIdType);
 
   public addSourceIdentifierForm: FormGroup = this.fb.group({
     sourceNumber: ['1'],
