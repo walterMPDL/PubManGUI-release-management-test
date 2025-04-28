@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { OnInit, Component, signal } from '@angular/core';
+import { OnInit, Component, signal, inject } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 
 import { AaService } from 'src/app/services/aa.service';
@@ -7,6 +7,7 @@ import { MessageService } from 'src/app/shared/services/message.service';
 import { ImportsService } from 'src/app/components/imports/services/imports.service';
 
 import { TranslatePipe } from "@ngx-translate/core";
+import { TranslateService, _ } from '@ngx-translate/core';
 
 interface NavOption {
   route: string;
@@ -25,17 +26,16 @@ interface NavOption {
 })
 export class ImportsNavComponent implements OnInit {
 
+  router = inject(Router);
+  msgSvc = inject(MessageService);
+  importsSvc = inject(ImportsService);
+  aaSvc = inject(AaService);
+  translate = inject(TranslateService);
+
   public navList = signal<NavOption[]>([
     { route: '/imports/new', label: 'new', disabled: false },
     { route: '/imports/myimports', label: 'myimports', disabled: false },
   ]);
-
-  constructor(
-    public aaSvc: AaService,
-    private importsSvc: ImportsService,
-    private msgSvc: MessageService,
-    private router: Router
-  ) { }
 
   ngOnInit(): void {
     this.navList()[0].disabled = !this.importsSvc.hasImports();
@@ -46,7 +46,7 @@ export class ImportsNavComponent implements OnInit {
     switch (option) {
       case '/imports/myimports':
         if (!this.importsSvc.hasImports()) {
-          this.msgSvc.warning($localize`:@@imports.list.empty:No imports available!`+'\n');
+          this.msgSvc.warning(this.translate.instant(_('imports.list.empty'))+'\n');
           this.msgSvc.dialog.afterAllClosed.subscribe(result => {
             this.router.navigate(['/imports'])
           })
@@ -54,7 +54,7 @@ export class ImportsNavComponent implements OnInit {
         break;
       case '/imports/new':
         if (this.importsSvc.isImportRunning()) {
-          this.msgSvc.warning($localize`:@@imports.fileImport.running:Please wait, an import is running!`+'\n');
+          this.msgSvc.warning(this.translate.instant(_('imports.fileImport.running'))+'\n');
           this.msgSvc.dialog.afterAllClosed.subscribe(result => {
             this.router.navigate(['/imports'])
           })

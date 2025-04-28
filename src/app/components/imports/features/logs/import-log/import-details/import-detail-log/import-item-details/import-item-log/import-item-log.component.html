@@ -10,8 +10,7 @@
   </td>
 
   <td class="col-9 align-text-top d-table-cell">
-    @if(getImportMessageTranslation(detail.message.substr(0,60))) {
-
+    @if(hasTranslation(detail.message.substr(0,50))) {
       <span>{{ 'ImportMessage.' + detail.message | translate }}</span>
 
     } @else {
