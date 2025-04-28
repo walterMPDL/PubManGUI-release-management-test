@@ -52,14 +52,10 @@ export class ImportItemLogComponent implements OnInit {
   async loadTranslations(lang: string) {
     if (lang === 'de') {
       await import('src/assets/i18n/messages.de.json').then((msgs) => {
-        this.importStatusTranslations = msgs.ImportStatus;
-        this.importErrorLevelTranslations = msgs.ImportErrorLevel;
         this.importMessageTranslations = msgs.ImportMessage;
       })
     } else {
       await import('src/assets/i18n/messages.json').then((msgs) => {
-        this.importStatusTranslations = msgs.ImportStatus;
-        this.importErrorLevelTranslations = msgs.ImportErrorLevel;
         this.importMessageTranslations = msgs.ImportMessage;
       })
     }
@@ -113,16 +109,6 @@ export class ImportItemLogComponent implements OnInit {
     return readableMessage;
     */
     return message.replaceAll(',', ', ');
-  }
-
-  getImportStatusTranslation(txt: string): string {
-    let key = txt as keyof typeof this.importStatusTranslations;
-    return this.importStatusTranslations[key];
-  }
-
-  getImportErrorLevelTranslation(txt: string): string {
-    let key = txt as keyof typeof this.importErrorLevelTranslations;
-    return this.importErrorLevelTranslations[key];
   }
 
   getImportMessageTranslation(txt: string): string {
