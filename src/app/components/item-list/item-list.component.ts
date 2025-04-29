@@ -27,6 +27,8 @@ import {NgbModal, NgbTooltip} from "@ng-bootstrap/ng-bootstrap";
 import {ExportItemsComponent} from "../../shared/components/export-items/export-items.component";
 import {ItemSelectionService} from "../../shared/services/item-selection.service";
 
+import { TranslatePipe } from "@ngx-translate/core";
+
 
 @Component({
   selector: 'pure-item-list',
@@ -43,7 +45,8 @@ import {ItemSelectionService} from "../../shared/services/item-selection.service
     TopnavCartComponent,
     TopnavBatchComponent,
     LoadingComponent,
-    NgbTooltip
+    NgbTooltip,
+    TranslatePipe
   ],
   templateUrl: './item-list.component.html',
   styleUrl: './item-list.component.scss'
@@ -67,9 +70,6 @@ export class ItemListComponent implements AfterViewInit{
   protected size:number = 25;
   //currentPaginatorEvent!: PaginatorChangeEvent;
   select_all = new FormControl(false);
-
-  selectAll = $localize`:@@selectAll:select all`;
-  deselectAll = $localize`:@@deselectAll:deselect all`;
 
   currentSortQuery: any;
   currentQuery: any;

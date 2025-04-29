@@ -1,16 +1,15 @@
 {
 	"common": {
 		"actions": "Actions",
-		"advancedSearch": "Advanced Search",
 		"basket": "Basket",
 		"cancel": "Cancel",
 		"completed": "completed",
 		"confirm": "Confirm",
 		"datasets": "Datasets",
 		"deselectAll": "deselect all",
-		"details": "Log details",
 		"edit": "Entry",
 		"failed": "failed",
+		"home": "Home",
 		"logs": "Logs",
 		"my": "My datasets",
 		"myimports": "My imports",
@@ -20,23 +19,25 @@
 		"pagination.page": "Page",
 		"qa": "QA Area",
 		"selectAll": "select all",
-		"succeded": "succeded"
+		"succeded": "succeded",
+		"view": "View"
 	},
 	"chips.localTags.placeholder": "Add local tag",
 	"validation": {
-        "required": "value is required!",
-        "minlength":"at least {{minLength}} characters required!",
-        "singleWord": "can't contain multiple words!",
-        "notEquals": "cannot be the same!",
-        "equals": "do not match!",
-        "notDuplicates": "duplicate!",
-        "allRequired": "not all required values!"
+        "required": "value is required",
+        "minlength":"at least {{minLength}} characters required",
+        "singleWord": "can't contain multiple words",
+        "notEquals": "cannot be the same",
+        "equals": "do not match",
+        "notDuplicates": "duplicate",
+        "allRequired": "not all required values"
 	},
 	"header": {
 		"brand": {
 			"name": "MPG.PuRe"
 		},
-		"search": "Search"
+		"search": "Search",
+		"advancedSearch": "Advanced Search"
 	},
 	"footer": {
 		"cookies": "Cookie settings",
@@ -154,6 +155,7 @@
 		"datasets.remove": "Remove checked items from Batch",
 		"datasets.removed": "item/items removed from batch processing",
 		"datasets.selected": "item/items selected",
+		"logs.details": "Log details",
 		"logs.details.back": "Back to Logs",
 		"logs.details.empty": "No details to show",
 		"logs.details.fill.all": "Fill batch with all items from the log",
@@ -171,6 +173,7 @@
 	"imports": {
 		"name": "Import",
 		"context": "Context",
+		"edit":"Edit import",
 		"fetch": "ID Fetch",
 		"fetch.id.error": "Invalid input: The identifier must not be a URL.",
 		"fetch.source": "Source",
@@ -186,7 +189,6 @@
 		"list.details.release": "Release",
 		"list.details.remove": "Remove from 'My Imports'",
 		"list.details.submit": "Submit",
-		"list.details.view": "View",
 		"list.empty": "No imports available!",
 		"list.header.date": "Started",
 		"list.header.details": "Items",

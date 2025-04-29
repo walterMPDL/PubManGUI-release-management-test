@@ -1,16 +1,15 @@
 {
 	"common": {
 		"actions": "Aktionen",
-		"advancedSearch": "Erweiterte Suche",
 		"basket": "Ablage",
 		"cancel": "Abbrechen",
 		"completed": "abgeschlossen",
 		"confirm": "Bestätigen",
 		"datasets": "Datensätze",
 		"deselectAll": "alles abwählen",
-		"details": "Details",
 		"edit": "Eingabe",
 		"failed": "fehlgeschlagen",
+		"home": "Home",
 		"logs": "Protokolle",
 		"my": "Meine Datensätze",
 		"myimports": "Meine Importe",
@@ -20,23 +19,25 @@
 		"pagination.page": "Seite",
 		"qa": "QA-Bereich",
 		"selectAll": "alles auswählen",
-		"succeded": "erfolgreich"
+		"succeded": "erfolgreich",
+		"view": "Sicht"
 	},
 	"chips.localTags.placeholder": "Lokalen Tag hinzufügen",
 	"validation": {
-        "required": "Wert ist erforderlich!",
-        "minlength":"midestens {{minLength}} Zeichen erforderlich!",
-        "singleWord": "kann nicht mehrere Wörter enthalten!",
-        "notEquals": "können nicht dasselbe sein!",
-        "equals": "stimmen nicht überein!",
-        "notDuplicates": "dupliziert!",
-        "allRequired": "nicht alle erforderlichen Werte!"
+        "required": "Wert ist erforderlich",
+        "minlength":"mindestens {{minLength}} Zeichen erforderlich",
+        "singleWord": "kann nicht mehrere Wörter enthalten",
+        "notEquals": "müssen sich unterscheiden",
+        "equals": "stimmen nicht überein",
+        "notDuplicates": "dupliziert",
+        "allRequired": "nicht alle erforderlichen Werte"
 	},
 	"header": {
 		"brand": {
 			"name": "MPG.PuRe"
 		},
-		"search": "Suche"
+		"search": "Suche",
+		"advancedSearch": "Erweiterte Suche"
 	},
 	"footer": {
 		"cookies": "Cookie Einstellungen",
@@ -101,7 +102,7 @@
 		"actions.metadata.files.visibility.from": "Bisherige Sichtbarkeit",
 		"actions.metadata.files.visibility.info": "Bei Dateien wird die Sichtbarkeit wie folgt verändert:",
 		"actions.metadata.files.visibility.to": "Neue Sichtbarkeit",
-		"actions.metadata.files.visibility.invalid": "Bisherige und neue Dateien Sichtbarkeit",		
+		"actions.metadata.files.visibility.invalid": "Bisherige und neue Dateiensichtbarkeit",		
 		"actions.metadata.orcid.add": "ORCID Hinzufügen",
 		"actions.metadata.orcid.add.info": "Bei den Datensätzen wird für die ausgewählte Person deren in CONE hinterlegte ORCID ID eingetragen. Vorhandene Werte werden überschrieben.",
 		"actions.metadata.publication": "Publikation",
@@ -142,7 +143,7 @@
 		"actions.metadata.source.replaceId.info": "Die Werte einzelner Identifikatoren aus den Quellen werden ersetzt.",
 		"actions.metadata.source.replaceId.to": "Neuer Wert der ID",
 		"actions.metadata.source.replaceId.type": "Typ der ID",
-		"actions.metadata.source.replaceId.invalid": "Bisheriges und neues ID",
+		"actions.metadata.source.replaceId.invalid": "Bisherige und neue ID",
 		"actions.running": "Bitte warten, es läuft ein Vorgang",
 		"actions.start": "Aktion gestarted!",
 		"actions.stop": "Aktion beendet!",
@@ -154,6 +155,7 @@
 		"datasets.remove": "Aus der Batchverarbeitung entfernen",
 		"datasets.removed": "Datensatz/Datensätze wird/wurden der Batchverarbeitung entfernt",
 		"datasets.selected": "Datensatz/Datensätze ausgewählt",
+		"logs.details": "Details",
 		"logs.details.back": "Zurück zu den Protokollen",
 		"logs.details.empty": "Keine Details zum Anzeigen",
 		"logs.details.fill.all": "Alle Datensätze übernehmen",
@@ -171,6 +173,7 @@
 	"imports": {
 		"name": "Import",
 		"context": "Kontext",
+		"edit": "Import Eingabe",
 		"fetch": "ID holen",
 		"fetch.id.error": "Ungültige Eingabe: Der Identifier darf keine URL sein.",
 		"fetch.source": "Quelle",
@@ -186,7 +189,6 @@
 		"list.details.release": "Freigeben",
 		"list.details.remove": "Aus 'Meine Importe' entfernen",
 		"list.details.submit": "Einstellen",
-		"list.details.view": "Sicht",
 		"list.empty": "Keine Importe verfügbar!",
 		"list.header.date": "Datum",
 		"list.header.details": "Details",
@@ -353,7 +355,7 @@
 		"import_process_finished": "Der Importprozess ist nun abgeschlossen",
 		"import_process_format_available": "Das Importformat ist vorhanden",
 		"import_process_format_error": "Während der Einstellung des Formats trat ein Fehler auf",
-		"import_process_format_invalid": "Das Importformat ist nicht valide",
+		"import_process_format_invalid": "Das Importformat ist ungültig",
 		"import_process_format_unavailable": "Das Importformat steht nicht zur Verfügung",
 		"import_process_format_valid": "Das Importformat ist valide",
 		"import_process_generate_item": "Erzeuge PubMan Datensatz",
