@@ -79,7 +79,7 @@
         <div class="d-flex flex-sm-row align-items-start" [ngbTooltip]="file.metadata.title">
             <i class="bi-file-earmark-text"></i>
           <a class="btn btn-sm" href="{{ingeUri + file.content}}" target="_blank"
-             style="overflow-wrap: break-word;"> {{file.metadata.contentCategory}}</a>
+             style="overflow-wrap: break-word;"> {{'ContentCategories.' + file.metadata.contentCategory | translate}}</a>
         </div>
       }
         @if(files.length > 2 || (publicFiles.length < files.length)) {
@@ -95,7 +95,7 @@
         <div class="d-flex flex-sm-row align-items-start" [ngbTooltip]="file.metadata.title">
             <i class="bi-link"></i>
           <a class="btn btn-sm" href="{{file.content}}" target="_blank"
-             style="overflow-wrap: break-word;"> {{file.metadata.contentCategory}}</a>
+             style="overflow-wrap: break-word;"> {{'ContentCategories.' + file.metadata.contentCategory | translate}}</a>
         </div>
 
       }

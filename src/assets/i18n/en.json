@@ -1,6 +1,7 @@
 {
 	"common": {
 		"actions": "Actions",
+    "all": "All",
 		"basket": "Basket",
 		"cancel": "Cancel",
 		"completed": "completed",
@@ -19,6 +20,7 @@
 		"pagination.page": "Page",
 		"qa": "QA Area",
 		"selectAll": "select all",
+    "sort": "Sort",
 		"succeded": "succeded",
 		"view": "View"
 	},
@@ -116,7 +118,7 @@
 		"actions.metadata.publication.keywordsReplace.method.all": "All",
 		"actions.metadata.publication.keywordsReplace.method.specific": "Specific value",
 		"actions.metadata.publication.keywordsReplace.to": "Replacing keywords",
-		"actions.metadata.publication.keywordsReplace.invalid": "Previous and new keywords",		
+		"actions.metadata.publication.keywordsReplace.invalid": "Previous and new keywords",
 		"actions.metadata.publication.reviewType": "Review Type",
 		"actions.metadata.publication.reviewType.from": "Review types to be replaced",
 		"actions.metadata.publication.reviewType.info": "The review type in all items will be changed as follows",
@@ -263,17 +265,17 @@
 	},
 	"ContentCategories": {
 		"abstract": "Abstract",
-		"any_fulltext": "Any fulltext",
+		"any-fulltext": "Any fulltext",
 		"code": "Code",
-		"copyright_transfer_agreement": "Copyright transfer agreement",
+		"copyright-transfer-agreement": "Copyright transfer agreement",
 		"correspondence": "Correspondence",
 		"multimedia": "Multimedia",
-		"post_print": "Postprint",
-		"pre_print": "Preprint",
-		"publisher_version": "Publisher version",
-		"research_data": "Research data",
-		"supplementary_material": "Supplementary material",
-		"table_of_contents": "Table of contents"
+		"post-print": "Postprint",
+		"pre-print": "Preprint",
+		"publisher-version": "Publisher version",
+		"research-data": "Research data",
+		"supplementary-material": "Supplementary material",
+		"table-of-contents": "Table of contents"
 	},
 	"DegreeType": {
 		"BACHELOR": "Bachelor",
@@ -544,5 +546,34 @@
 		"AUDIENCE": "Audience",
 		"PRIVATE": "Private",
 		"PUBLIC": "Public"
-	}
+	},
+  "ItemState" : {
+    "PENDING" : "Pending",
+    "SUBMITTED" : "Submitted",
+    "RELEASED" : "Released",
+    "WITHDRAWN" : "Discarded",
+    "IN_REVISION" : "In Rework"
+  },
+  "PublicationState" : {
+    "published-in-print": "Issued",
+    "published-online": "Published online",
+    "accepted": "Accepted / In Press",
+    "submitted": "Submitted",
+    "not-specified": "Not specified"
+  },
+  "MetadataFields" : {
+    "state" : "State",
+    "context" : "Context",
+    "modificationDate" : "Modification Date",
+    "creationDate" : "Creation Date",
+    "date" : "Date",
+    "genre" : "Genre",
+    "title" : "Title",
+    "creators" : "Creator",
+    "publishingInfo" : "Publishing Info",
+    "eventTitle": "Event Title",
+    "reviewMethod": "Review Method",
+    "source" : "Source",
+    "sourceTitle" : "Source Title"
+  }
 }
