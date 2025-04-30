@@ -62,7 +62,7 @@
       @if (sourceCitation) {
         <div class="row my-3">
           <div class="col">
-            Published in: {{ sourceCitation }}
+            {{ 'ItemList.publishedIn' | translate }}: {{ sourceCitation }}
           </div>
         </div>
       }
@@ -72,7 +72,7 @@
 
       @if(files.length > 0) {
       <div class="d-flex flex-sm-row align-items-start mt-2">
-        {{files.length}} file(s)
+        {{files.length}} {{ 'ItemList.files' | translate }}
       </div>
 
       @for (file of publicFiles.slice(0,2); track file) {
@@ -83,13 +83,13 @@
         </div>
       }
         @if(files.length > 2 || (publicFiles.length < files.length)) {
-          <i><small><a class="nav-link" routerLink="/view/{{item?.objectId}}">see more...</a></small></i>
+          <i><small><a class="nav-link" routerLink="/view/{{item?.objectId}}">{{ 'ItemList.showAll' | translate }}...</a></small></i>
         }
       }
 
       @if(locators.length > 0) {
         <div class="d-flex flex-sm-row align-items-start  mt-3">
-          {{locators.length}} link(s)
+          {{locators.length}} {{ 'ItemList.links' | translate }}
         </div>
       @for (file of locators.slice(0,2); track file) {
         <div class="d-flex flex-sm-row align-items-start" [ngbTooltip]="file.metadata.title">
@@ -100,7 +100,7 @@
 
       }
         @if(locators.length > 2) {
-          <i><small><a class="nav-link" routerLink="/view/{{item?.objectId}}">see more...</a></small></i>
+          <i><small><a class="nav-link" routerLink="/view/{{item?.objectId}}">{{ 'ItemList.showAll' | translate }}...</a></small></i>
         }
       }
 

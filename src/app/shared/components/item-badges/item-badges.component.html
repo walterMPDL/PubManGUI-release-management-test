@@ -16,7 +16,7 @@
     <span class="badge bg-dark me-2">v{{item?.versionNumber}}</span>
     }
     @if(aaService.principal.value.loggedIn || state==='WITHDRAWN') {
-  <span class="badge {{state==='WITHDRAWN' ? 'badge-red' : 'bg-dark' }} me-2">{{'ItemState.' + state | translate}}</span>
+  <span class="badge {{state==='WITHDRAWN' ? 'bg-danger' : 'bg-dark' }} me-2">{{'ItemState.' + state | translate}}</span>
     }
 </div>
 

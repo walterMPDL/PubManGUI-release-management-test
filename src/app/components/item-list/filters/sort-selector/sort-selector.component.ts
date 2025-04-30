@@ -120,13 +120,13 @@ export const sortOptions: SortOptionsType = {
     index: ['modificationDate'],
     order: 'desc',
     loggedIn: false,
-    label: 'MetadataFields.modificationDate'
+    label: 'MetadataFields.dateModified'
   },
   "creationDate" : {
     index: ['creationDate'],
     order: 'desc',
     loggedIn: false,
-    label: 'MetadataFields.creationDate'
+    label: 'MetadataFields.dateCreated'
   },
   "title" : {
     index: ['metadata.title'],
