@@ -25,10 +25,6 @@ export class ImportsService {
     //this.checkImports();
   }
 
-  get token(): string {
-    return this.aaSvc.token || '';
-  }
-
   get isDepositor(): boolean {
     return this.aaSvc.principal.value.isDepositor;
   }

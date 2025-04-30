@@ -39,10 +39,6 @@ export class BatchService {
       this.objectIds$.next(this.objectIds);
     }
 
-  get token(): string {
-    return this.aaSvc.token || '';
-  }
-
   get user(): string {
     return this.aaSvc.principal.getValue().user?.objectId || '';
   }
