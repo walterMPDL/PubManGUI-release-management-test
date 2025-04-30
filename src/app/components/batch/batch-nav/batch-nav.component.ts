@@ -30,7 +30,7 @@ export class BatchNavComponent implements OnInit {
   msgSvc = inject(MessageService);
   batchSvc = inject(BatchService);
   aaSvc = inject(AaService);
-  translate = inject(TranslateService);
+  translateSvc = inject(TranslateService);
 
   public navList = signal<NavOption[]>([
     { route: '/batch/datasets', label: 'datasets', disabled: false },
@@ -50,7 +50,7 @@ export class BatchNavComponent implements OnInit {
     switch (option) {
       case '/batch/datasets':
         if (!this.batchSvc.areItemsSelected()) {
-          this.msgSvc.warning(this.translate.instant(_('batch.datasets.empty')) + '!\n');
+          this.msgSvc.warning(this.translateSvc.instant(_('batch.datasets.empty')) + '!\n');
           this.msgSvc.dialog.afterAllClosed.subscribe(result => {
             this.router.navigate(['/batch'])
           })
@@ -58,12 +58,12 @@ export class BatchNavComponent implements OnInit {
         break;
       case '/batch/actions':
         if (!this.batchSvc.areItemsSelected()) {
-          this.msgSvc.warning(this.translate.instant(_('batch.datasets.empty')) + '!\n');
+          this.msgSvc.warning(this.translateSvc.instant(_('batch.datasets.empty')) + '!\n');
           this.msgSvc.dialog.afterAllClosed.subscribe(result => {
             this.router.navigate(['/batch'])
           })
         } else if (this.batchSvc.isProcessRunning()) {
-          this.msgSvc.warning(this.translate.instant(_('batch.actions.running')) + '!\n');
+          this.msgSvc.warning(this.translateSvc.instant(_('batch.actions.running')) + '!\n');
           this.msgSvc.dialog.afterAllClosed.subscribe(result => {
             this.router.navigate(['/batch'])
           })

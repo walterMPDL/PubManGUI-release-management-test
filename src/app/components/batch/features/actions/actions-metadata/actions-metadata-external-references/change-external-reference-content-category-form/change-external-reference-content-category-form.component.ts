@@ -27,13 +27,13 @@ export class ChangeExternalReferenceContentCategoryFormComponent {
   router = inject(Router);
   valSvc = inject(BatchValidatorsService);
   batchSvc = inject(BatchService);
-  translate = inject(TranslateService);
+  translateSvc = inject(TranslateService);
 
   contentCategories = Object.keys(ContentCategories).sort();
 
   public changeExternalReferenceContentCategoryForm: FormGroup = this.fb.group({
-    externalReferenceContentCategoryFrom: [this.translate.instant(_('batch.actions.metadata.extRef.contentCategory')), [ Validators.required ]],
-    externalReferenceContentCategoryTo: [this.translate.instant(_('batch.actions.metadata.extRef.contentCategory')), [ Validators.required ]],
+    externalReferenceContentCategoryFrom: [this.translateSvc.instant(_('batch.actions.metadata.extRef.contentCategory')), [ Validators.required ]],
+    externalReferenceContentCategoryTo: [this.translateSvc.instant(_('batch.actions.metadata.extRef.contentCategory')), [ Validators.required ]],
   }, 
   { validators: [this.valSvc.notEqualsValidator('externalReferenceContentCategoryFrom','externalReferenceContentCategoryTo'), this.valSvc.allRequiredValidator()] });
 

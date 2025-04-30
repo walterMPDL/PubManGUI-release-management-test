@@ -27,13 +27,13 @@ export class ChangeReviewMethodFormComponent {
   router = inject(Router);
   valSvc = inject(BatchValidatorsService);
   batchSvc = inject(BatchService);
-  translate = inject(TranslateService);
+  translateSvc = inject(TranslateService);
 
   reviewMethods = Object.keys(ReviewMethod);
 
   public changeReviewMethodForm: FormGroup = this.fb.group({
-    reviewMethodFrom: [this.translate.instant(_('batch.actions.metadata.publication.reviewType')), [Validators.required]],
-    reviewMethodTo: [this.translate.instant(_('batch.actions.metadata.publication.reviewType')), [Validators.required]],
+    reviewMethodFrom: [this.translateSvc.instant(_('batch.actions.metadata.publication.reviewType')), [Validators.required]],
+    reviewMethodTo: [this.translateSvc.instant(_('batch.actions.metadata.publication.reviewType')), [Validators.required]],
   },
     { validators: [this.valSvc.notEqualsValidator('reviewMethodFrom', 'reviewMethodTo'), this.valSvc.allRequiredValidator()] });
 

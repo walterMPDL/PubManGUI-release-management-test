@@ -7,7 +7,7 @@ import { TranslateService, _} from '@ngx-translate/core'
 })
 export class BatchValidatorsService {
 
-  translate = inject(TranslateService);
+  translateSvc = inject(TranslateService);
 
   notValidField(control: AbstractControl): boolean | null {
     return control.errors
@@ -26,25 +26,25 @@ export class BatchValidatorsService {
     for (const key of Object.keys(errors)) {
       switch (key) {
         case 'required':
-          return this.translate.instant(_('validation.required'))
+          return this.translateSvc.instant(_('validation.required'))
 
         case 'minlength':
-          return this.translate.instant(_('validation.minlength'), { minLength: errors['minlength'].requiredLength })
+          return this.translateSvc.instant(_('validation.minlength'), { minLength: errors['minlength'].requiredLength })
 
         case 'singleWord':
-          return this.translate.instant(_('validation.singleWord'))
+          return this.translateSvc.instant(_('validation.singleWord'))
 
         case 'notEquals':
-          return this.translate.instant(_('validation.notEquals'))
+          return this.translateSvc.instant(_('validation.notEquals'))
 
         case 'equals':
-          return this.translate.instant(_('validation.equals')) 
+          return this.translateSvc.instant(_('validation.equals')) 
 
         case 'notDuplicates':
-          return this.translate.instant(_('validation.notDuplicates'))
+          return this.translateSvc.instant(_('validation.notDuplicates'))
 
         case 'allRequired':
-          return this.translate.instant(_('validation.allRequired'))
+          return this.translateSvc.instant(_('validation.allRequired'))
       }
     }
     return null;

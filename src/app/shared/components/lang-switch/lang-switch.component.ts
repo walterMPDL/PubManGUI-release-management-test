@@ -15,21 +15,29 @@ import { TranslateService } from "@ngx-translate/core";
 export class LangSwitchComponent {
 
   svc = inject(I18nService);
-  translate = inject(TranslateService);
+  translateSvc = inject(TranslateService);
 
+  /*
   switch_lang() {
     const loc = this.svc.locale();
     if (loc?.localeCompare('de') === 0) {
       localStorage.setItem('locale', 'en');
       this.svc.setLocale();
-      this.translate.use('en');
     } else {
       localStorage.setItem('locale', 'de');
       this.svc.setLocale();
-      this.translate.use('de');
     }
-    //console.log(this.svc.locale());
-    //location.reload();
+    console.log(this.svc.locale());
+    location.reload();
   }
+  */
+
+  switchLang(lang: string) {
+      this.translateSvc.use(lang);
+  }
+
+  public get currentLang(): string {
+    return this.translateSvc.currentLang;
+   }
 
 }

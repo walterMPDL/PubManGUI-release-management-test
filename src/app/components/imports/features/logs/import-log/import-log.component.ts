@@ -37,7 +37,7 @@ export class ImportLogComponent {
   importsSvc = inject(ImportsService);
   msgSvc = inject(MessageService);
   router = inject(Router);
-  translate = inject(TranslateService);
+  translateSvc = inject(TranslateService);
 
   importStatus: typeof ImportStatus = ImportStatus;
   importErrorLevel: typeof ImportErrorLevel = ImportErrorLevel;
@@ -74,7 +74,7 @@ export class ImportLogComponent {
           }
         });
       if (items.length === 0) {
-        const msg = this.translate.instant(_('imports.list.items.empty')) + '\n';
+        const msg = this.translateSvc.instant(_('imports.list.items.empty')) + '\n';
         this.msgSvc.info(msg);
         return;
       }
@@ -83,7 +83,7 @@ export class ImportLogComponent {
   }
 
   deleteImportLog(log: any): void {
-    let ref = this.msgSvc.displayConfirmation({ text: this.translate.instant(_('imports.list.remove.confirmation')), confirm: this.translate.instant(_('common.confirm')), cancel: this.translate.instant(_('common.cancel')) });
+    let ref = this.msgSvc.displayConfirmation({ text: this.translateSvc.instant(_('imports.list.remove.confirmation')), confirm: this.translateSvc.instant(_('common.confirm')), cancel: this.translateSvc.instant(_('common.cancel')) });
     ref.closed.subscribe(confirmed => {
       if (confirmed) {
         this.deleteImportLogEvent.emit(log);

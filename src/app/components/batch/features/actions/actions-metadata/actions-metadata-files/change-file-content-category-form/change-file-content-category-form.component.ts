@@ -27,13 +27,13 @@ export class ChangeFileContentCategoryFormComponent {
   router = inject(Router);
   valSvc = inject(BatchValidatorsService);
   batchSvc = inject(BatchService);
-  translate = inject(TranslateService);
+  translateSvc = inject(TranslateService);
 
   contentCategories = Object.keys(ContentCategories).sort();
 
   public changeFileContentCategoryForm: FormGroup = this.fb.group({
-    fileContentCategoryFrom: [this.translate.instant(_('batch.actions.metadata.files.contentCategory')), [Validators.required]],
-    fileContentCategoryTo: [this.translate.instant(_('batch.actions.metadata.files.contentCategory')), [Validators.required]],
+    fileContentCategoryFrom: [this.translateSvc.instant(_('batch.actions.metadata.files.contentCategory')), [Validators.required]],
+    fileContentCategoryTo: [this.translateSvc.instant(_('batch.actions.metadata.files.contentCategory')), [Validators.required]],
   },
     { validators: [this.valSvc.notEqualsValidator('fileContentCategoryFrom', 'fileContentCategoryTo'), this.valSvc.allRequiredValidator()] });
 

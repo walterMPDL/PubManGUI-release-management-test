@@ -30,7 +30,7 @@ export class ImportsNavComponent implements OnInit {
   msgSvc = inject(MessageService);
   importsSvc = inject(ImportsService);
   aaSvc = inject(AaService);
-  translate = inject(TranslateService);
+  translateSvc = inject(TranslateService);
 
   public navList = signal<NavOption[]>([
     { route: '/imports/new', label: 'new', disabled: false },
@@ -46,7 +46,7 @@ export class ImportsNavComponent implements OnInit {
     switch (option) {
       case '/imports/myimports':
         if (!this.importsSvc.hasImports()) {
-          this.msgSvc.warning(this.translate.instant(_('imports.list.empty'))+'\n');
+          this.msgSvc.warning(this.translateSvc.instant(_('imports.list.empty'))+'\n');
           this.msgSvc.dialog.afterAllClosed.subscribe(result => {
             this.router.navigate(['/imports'])
           })
@@ -54,7 +54,7 @@ export class ImportsNavComponent implements OnInit {
         break;
       case '/imports/new':
         if (this.importsSvc.isImportRunning()) {
-          this.msgSvc.warning(this.translate.instant(_('imports.fileImport.running'))+'\n');
+          this.msgSvc.warning(this.translateSvc.instant(_('imports.fileImport.running'))+'\n');
           this.msgSvc.dialog.afterAllClosed.subscribe(result => {
             this.router.navigate(['/imports'])
           })

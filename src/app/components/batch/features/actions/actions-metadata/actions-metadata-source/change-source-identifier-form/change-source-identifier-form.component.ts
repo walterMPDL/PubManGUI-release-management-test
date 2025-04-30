@@ -28,13 +28,13 @@ export class ChangeSourceIdentifierFormComponent {
   fb = inject(FormBuilder);
   valSvc = inject(BatchValidatorsService);
   batchSvc = inject(BatchService);
-  translate = inject(TranslateService);
+  translateSvc = inject(TranslateService);
 
   sourceIdTypes = Object.keys(SourceIdType);
 
   public changeSourceIdentifierForm: FormGroup = this.fb.group({
     sourceNumber: ['1'],
-    sourceIdentifierType: [this.translate.instant(_('batch.actions.metadata.source.replaceId.default')), Validators.required],
+    sourceIdentifierType: [this.translateSvc.instant(_('batch.actions.metadata.source.replaceId.default')), Validators.required],
     sourceIdentifierFrom: ['', [Validators.required, Validators.minLength(1)]],
     sourceIdentifierTo: [''],
   },

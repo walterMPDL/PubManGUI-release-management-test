@@ -28,11 +28,11 @@ export class AudienceFormComponent {
   @Input() index_length!: number;
   @Output() notice = new EventEmitter();
 
-  translate = inject(TranslateService);
+  translateSvc = inject(TranslateService);
 
   ngOnInit() {
     if(this.audienceId.value.name === '') {
-      this.audienceId.setValue(this.translate.instant(_('batch.actions.metadata.files.ipRanges.singular')));
+      this.audienceId.setValue(this.translateSvc.instant(_('batch.actions.metadata.files.ipRanges.singular')));
     }
   }
   

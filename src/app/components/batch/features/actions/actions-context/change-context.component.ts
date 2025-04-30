@@ -31,7 +31,7 @@ export class ActionsContextComponent implements OnInit {
   valSvc = inject(BatchValidatorsService);
   batchSvc = inject(BatchService);
   aaSvc = inject(AaService);
-  translate = inject(TranslateService);
+  translateSvc = inject(TranslateService);
 
   user_contexts?: ContextDbRO[] = [];
 
@@ -44,8 +44,8 @@ export class ActionsContextComponent implements OnInit {
   }
 
   public changeContextForm: FormGroup = this.fb.group({
-    contextFrom: [this.translate.instant(_('batch.actions.context')), Validators.required],
-    contextTo: [this.translate.instant(_('batch.actions.context')), Validators.required]
+    contextFrom: [this.translateSvc.instant(_('batch.actions.context')), Validators.required],
+    contextTo: [this.translateSvc.instant(_('batch.actions.context')), Validators.required]
   }, 
   { validators: [this.valSvc.notEqualsValidator('contextFrom','contextTo'), this.valSvc.allRequiredValidator()] }
   );

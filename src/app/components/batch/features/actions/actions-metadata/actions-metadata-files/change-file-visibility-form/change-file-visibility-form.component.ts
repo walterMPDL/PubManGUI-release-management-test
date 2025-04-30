@@ -27,13 +27,13 @@ export class ChangeFileVisibilityFormComponent {
   router = inject(Router);
   valSvc = inject(BatchValidatorsService);
   batchSvc = inject(BatchService);
-  translate = inject(TranslateService);
+  translateSvc = inject(TranslateService);
 
   visibility = Object.keys(Visibility);
 
   public changeFileVisibilityForm: FormGroup = this.fb.group({
-    fileVisibilityFrom: [this.translate.instant(_('batch.actions.metadata.files.visibility')), [Validators.required]],
-    fileVisibilityTo: [this.translate.instant(_('batch.actions.metadata.files.visibility')), [Validators.required]],
+    fileVisibilityFrom: [this.translateSvc.instant(_('batch.actions.metadata.files.visibility')), [Validators.required]],
+    fileVisibilityTo: [this.translateSvc.instant(_('batch.actions.metadata.files.visibility')), [Validators.required]],
   }, 
   { validators: [this.valSvc.notEqualsValidator('fileVisibilityFrom','fileVisibilityTo'), this.valSvc.allRequiredValidator()] });
 

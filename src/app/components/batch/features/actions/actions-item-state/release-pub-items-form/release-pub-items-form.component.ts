@@ -22,7 +22,7 @@ export class ReleasePubItemsFormComponent {
   batchSvc = inject(BatchService);
   msgSvc = inject(MessageService);
   router = inject(Router);
-  translate = inject(TranslateService);
+  translateSvc = inject(TranslateService);
 
   get releasePubItemsParams(): ReleasePubItemsParams {
     const actionParams: ReleasePubItemsParams = {
@@ -32,7 +32,7 @@ export class ReleasePubItemsFormComponent {
   }
 
   onSubmit(): void {
-    let ref = this.msgSvc.displayConfirmation({ text: this.translate.instant(_('batch.actions.item.state.release.confirmation')), confirm: this.translate.instant(_('common.confirm')), cancel: this.translate.instant(_('common.cancel')) });
+    let ref = this.msgSvc.displayConfirmation({ text: this.translateSvc.instant(_('batch.actions.item.state.release.confirmation')), confirm: this.translateSvc.instant(_('common.confirm')), cancel: this.translateSvc.instant(_('common.cancel')) });
     ref.closed.subscribe(confirmed => {
       if (confirmed) {
         this.batchSvc.releasePubItems(this.releasePubItemsParams).subscribe(actionResponse => {

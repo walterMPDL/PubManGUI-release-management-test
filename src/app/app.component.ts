@@ -23,11 +23,12 @@ export class AppComponent {
 
   constructor(
     private navigation: NavigationService,
-    private translate: TranslateService
+    private translateSvc: TranslateService
   ) {
-    this.translate.addLangs(['de', 'en']);
-    this.translate.setDefaultLang('de');
-    const browserLang = translate.getBrowserLang();
-    translate.use(browserLang?.match(/en|de/) ? browserLang : 'en');
+    this.translateSvc.addLangs(['de', 'en']);
+    this.translateSvc.setDefaultLang('de');
+
+    const browserLang = translateSvc.getBrowserLang() || 'en';
+    translateSvc.use(browserLang?.match(/en|de/) ? browserLang : 'en');
    }
 }

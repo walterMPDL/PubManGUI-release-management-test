@@ -24,7 +24,7 @@ export class TopnavBatchComponent {
   msgSvc = inject(MessageService);
   aaService = inject(AaService);
   itemSelectionService = inject(ItemSelectionService);
-  translate = inject(TranslateService);
+  translateSvc = inject(TranslateService);
 
   addToBatchDatasets() {
     const selected: string[] = this.itemSelectionService.selectedIds$.value;
@@ -33,13 +33,13 @@ export class TopnavBatchComponent {
       if (this.resetSelectionAfterAction)
         this.itemSelectionService.resetList();
       this.msgSvc.success(selected.length + ' ' 
-        + this.translate.instant(_('batch.datasets.selected')) + '\n' + added + ' ' 
-        + this.translate.instant(_('batch.datasets.filled')) 
+        + this.translateSvc.instant(_('batch.datasets.selected')) + '\n' + added + ' ' 
+        + this.translateSvc.instant(_('batch.datasets.filled')) 
         + ((selected.length! - added) > 0 ? ", " + `${selected.length! - added} ` 
-        + this.translate.instant(_('batch.datasets.duplicated'))  + "." : '')
+        + this.translateSvc.instant(_('batch.datasets.duplicated'))  + "." : '')
       );
     } else {
-      this.msgSvc.warning(this.translate.instant(_('batch.datasets.empty')) + '!');
+      this.msgSvc.warning(this.translateSvc.instant(_('batch.datasets.empty')) + '!');
     }
   }
 
@@ -50,13 +50,13 @@ export class TopnavBatchComponent {
       if (this.resetSelectionAfterAction)
         this.itemSelectionService.resetList();
       this.msgSvc.success(selected.length + ' ' 
-        + this.translate.instant(_('batch.datasets.selected')) + '\n' + removed + ' ' 
-        + this.translate.instant(_('batch.datasets.removed')) 
+        + this.translateSvc.instant(_('batch.datasets.selected')) + '\n' + removed + ' ' 
+        + this.translateSvc.instant(_('batch.datasets.removed')) 
         + ((selected.length! - removed) > 0 ? ", " + `${selected.length! - removed} ` 
-        + this.translate.instant(_('batch.datasets.missing')) + "." : '')
+        + this.translateSvc.instant(_('batch.datasets.missing')) + "." : '')
       );
     } else {
-      this.msgSvc.warning(this.translate.instant(_('batch.datasets.empty')) + '!');
+      this.msgSvc.warning(this.translateSvc.instant(_('batch.datasets.empty')) + '!');
     }
   }
 

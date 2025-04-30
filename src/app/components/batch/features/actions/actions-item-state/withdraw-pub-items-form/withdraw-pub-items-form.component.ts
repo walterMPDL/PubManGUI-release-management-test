@@ -22,7 +22,7 @@ export class WithdrawPubItemsFormComponent {
   batchSvc = inject(BatchService);
   msgSvc = inject(MessageService);
   router = inject(Router);
-  translate = inject(TranslateService);
+  translateSvc = inject(TranslateService);
 
   get withdrawPubItemsParams(): WithdrawPubItemsParams {
     const actionParams: WithdrawPubItemsParams = {
@@ -33,9 +33,9 @@ export class WithdrawPubItemsFormComponent {
 
   onSubmit(): void {
     let ref = this.msgSvc.displayConfirmation({
-      text: this.translate.instant(_('batch.actions.item.state.withdraw.confirmation')),
-      confirm: this.translate.instant(_('common.confirm')),
-      cancel: this.translate.instant(_('common.cancel'))
+      text: this.translateSvc.instant(_('batch.actions.item.state.withdraw.confirmation')),
+      confirm: this.translateSvc.instant(_('common.confirm')),
+      cancel: this.translateSvc.instant(_('common.cancel'))
     });
     ref.closed.subscribe(confirmed => {
       if (confirmed) {

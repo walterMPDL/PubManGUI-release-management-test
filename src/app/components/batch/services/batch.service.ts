@@ -35,7 +35,7 @@ export class BatchService {
     public aaSvc: AaService,
     private itemSvc: ItemsService,
     private msgSvc: MessageService,
-    private translate: TranslateService) {
+    private translateSvc: TranslateService) {
       this.objectIds$.next(this.objectIds);
     }
 
@@ -129,7 +129,7 @@ export class BatchService {
     this.#processRunning.set(true);
     this.items = [];
 
-    this.msgSvc.info(this.translate.instant(_('batch.actions.start')) + '\n');
+    this.msgSvc.info(this.translateSvc.instant(_('batch.actions.start')) + '\n');
     this.updateProcessProgress();
   }
 
@@ -137,7 +137,7 @@ export class BatchService {
     this.batchProcessLogHeaderId = -1;
     this.#processRunning.set(false);
 
-    this.msgSvc.success(this.translate.instant(_('batch.actions.stop')) + '\n');
+    this.msgSvc.success(this.translateSvc.instant(_('batch.actions.stop')) + '\n');
   }
 
   #processRunning = signal(false);

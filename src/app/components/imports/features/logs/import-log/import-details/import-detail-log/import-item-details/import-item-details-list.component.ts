@@ -35,7 +35,7 @@ export default class ImportItemDetailsListComponent implements OnInit {
   importsSvc = inject(ImportsService);
   msgSvc = inject(MessageService);
   router = inject(Router);
-  translate = inject(TranslateService);
+  translateSvc = inject(TranslateService);
   
   currentPage = this.importsSvc.lastPageNumFrom().log;
 
@@ -61,7 +61,7 @@ export default class ImportItemDetailsListComponent implements OnInit {
     this.importsSvc.getImportLogItemDetails(Number(this.item?.id))
       .subscribe(importsResponse => {
         if (importsResponse.length === 0) {
-          const msg = this.translate.instant(_('imports.list.details.empty')) + '\n';
+          const msg = this.translateSvc.instant(_('imports.list.details.empty')) + '\n';
           this.msgSvc.info(msg);       
           return this.router.navigate(['/imports/myimports/', this.item?.parent.id]);
         }

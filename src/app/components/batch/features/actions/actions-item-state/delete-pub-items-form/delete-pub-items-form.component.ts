@@ -22,7 +22,7 @@ export class DeletePubItemsFormComponent {
   batchSvc = inject(BatchService);
   msgSvc = inject(MessageService);
   router = inject(Router);
-  translate = inject(TranslateService);
+  translateSvc = inject(TranslateService);
 
   get deletePubItemsParams(): DeletePubItemsParams {
     const actionParams: DeletePubItemsParams = {
@@ -33,9 +33,9 @@ export class DeletePubItemsFormComponent {
 
   onSubmit(): void {
     let ref = this.msgSvc.displayConfirmation({
-      text: this.translate.instant(_('batch.actions.item.state.delete.confirmation')),
-      confirm: this.translate.instant(_('common.confirm')),
-      cancel: this.translate.instant(_('common.cancel'))
+      text: this.translateSvc.instant(_('batch.actions.item.state.delete.confirmation')),
+      confirm: this.translateSvc.instant(_('common.confirm')),
+      cancel: this.translateSvc.instant(_('common.cancel'))
     }); ref.closed.subscribe(confirmed => {
       if (confirmed) {
         this.batchSvc.deletePubItems(this.deletePubItemsParams).subscribe(actionResponse => {
