@@ -23,10 +23,10 @@
             <div>
               @if(oaStatusIcon(file)) {
               <img alt="OA logo"
-                   src="/assets/images/{{oaStatusIcon(file)}}"
+                   src="assets/images/{{oaStatusIcon(file)}}"
                    width="16" height="16" [ngbTooltip]="'Open Access: ' + (file.metadata.oaStatus ?file.metadata.oaStatus : 'NOT_SPECIFIED')"/>
               }
-              ({{ file.metadata.contentCategory }})
+              ({{ 'ContentCategories.' + file.metadata.contentCategory | translate }})
             </div>
 
 
@@ -101,7 +101,7 @@
               <div>
                 @if(oaStatusIcon(file)) {
                   <img alt="OA logo"
-                       src="/assets/images/{{oaStatusIcon(file)}}"
+                       src="assets/images/{{oaStatusIcon(file)}}"
                        width="16" height="16"/>
                 }
                 {{ file.metadata.oaStatus }}
