@@ -17,21 +17,7 @@ export class ValidationService extends PubmanGenericRestClientService<any> {
   validateEvent(eventJson: any): Observable<any> {
     console.log('validateEvent validationService');
     console.log('eventJson', eventJson);
-    return this.httpPost(this.subPath + '/' + validateEvent, eventJson);/*.pipe(
-      map(response => {
-        // Assuming the response contains a status code
-        if (response.status >= 400) {
-          return { invalidEvent: true };
-        } else {
-          return null;
-        }
-      }),
-      catchError(error => {
-        console.error('Validation error:', error);
-        return of({ invalidEvent: true });
-      }),
-      defaultIfEmpty(null) // Ensures that the observable emits null if it completes without emitting any values
-    );*/
+    return this.httpPost(this.subPath + '/' + validateEvent, eventJson);
   }
 
   validateCreator(creatorJson: any): Observable<any> {
