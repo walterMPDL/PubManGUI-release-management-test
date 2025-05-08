@@ -15,6 +15,8 @@
     "files": "Files",
 		"home": "Home",
     "item": "Dataset",
+    "link": "Link",
+    "links": "Links",
 		"logs": "Logs",
     "metadata" : "Metadata",
 		"my": "My datasets",
@@ -40,7 +42,10 @@
     "useAsTemplate": "Use as template",
     "addDoi": "Add DOI",
     "comment": "Comment",
-    "actionWarning": "This action is irreversible. Are you sure?"
+    "actionWarning": "This action is irreversible. Are you sure?",
+    "dateFormat": "YYYY-MM-DD",
+    "from": "from",
+    "to": "to"
 	},
 	"chips.localTags.placeholder": "Add local tag",
 	"validation": {
@@ -500,6 +505,7 @@
 		"INTERVIEW": "Interview",
 		"ISSUE": "Issue",
 		"JOURNAL": "Journal",
+    "MAGAZINE_ARTICLE" : "Magazine article",
 		"MANUAL": "Manual",
 		"MANUSCRIPT": "Manuscript",
 		"MEETING_ABSTRACT": "Meeting abstract",
@@ -633,7 +639,17 @@
     "startPage" : "Start page",
     "endPage" : "End page",
     "sequenceNumber" : "Sequence number",
-    "totalNumberOfPages" : "Total no. of pages"
+    "totalNumberOfPages" : "Total no. of pages",
+    "localTags": "Local Tags",
+    "organization": "Organization",
+    "person": "Person",
+    "classification": "Classification"
+  },
+  "FileMetadataFields" : {
+    "visibility" : "Visibility",
+    "contentCategory" : "Content Category",
+    "embargoDate" : "Embargo Date",
+    "oaStatus" : "Open Access Status"
   },
   "CreatorRoles" : {
     "ARTIST" : "Artist",
@@ -660,11 +676,40 @@
     "CINEMATOGRAPHER" : "Cinematographer",
     "SOUND_DESIGNER" : "Sound engineer"
   },
+  "Thesis" : {
+    "BACHELOR" : "Bachelor",
+    "DIPLOMA" : "Diplom",
+    "HABILITATION": "Habilitation",
+    "MAGISTER": "Magister",
+    "MASTER": "Master",
+    "PHD": "PhD",
+    "STAATSEXAMEN" : "Staatsexamen"
+  },
+  "OAStatus" : {
+    "NOT_SPECIFIED" : "Not specified",
+    "GOLD" : "Gold",
+    "HYBRID" : "Hybrid",
+    "GREEN" : "Green",
+    "MISCELLANEOUS" : "Miscellaneous",
+    "CLOSED_ACCESS" : "Closed Access"
+  },
   "ItemList" : {
     "files" : "file(s)",
     "links" : "link(s)",
     "showAll" : "show all",
     "moreCreators" : "more creators",
     "publishedIn" : "Published in"
+  },
+  "Search": {
+    "AND" : "AND",
+    "OR" : "OR",
+    "NOT" : "NOT",
+    "searchTerms" : "Search terms",
+    "includePresAndSuccs" : "Include predecessors and successors",
+    "fulltext" : "Fulltext",
+    "anyField" : "Any field",
+    "YES" : "Yes",
+    "NO" : "No",
+    "WHATEVER" : "-"
   }
 }
