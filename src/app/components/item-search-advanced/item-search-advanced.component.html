@@ -338,7 +338,7 @@
                   <div class="form-check">
                     <input id="pubStateName{{i}}" class="form-check-input" type="checkbox"
                            [formControl]="$any(itemStateListSearchCriterion.publicationStatesFormGroup).get(pubState)"/>
-                    <label class="form-check-label" for="pubStateName{{i}}">{{ pubState }}</label>
+                    <label class="form-check-label" for="pubStateName{{i}}">{{ 'ItemState.' + pubState | translate }}</label>
                   </div>
                 </div>
               }
