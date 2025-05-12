@@ -36,7 +36,7 @@ export default class FetchComponent implements OnInit {
 
   user_contexts?: ContextDbRO[] = [];
 
-  dinamicPlaceholder = "Identifier";
+  dinamicPlaceholder = "10.1000/1000xyz";
 
   ngOnInit(): void {
     this.aaSvc.principal.subscribe(
