@@ -14,8 +14,6 @@ export class SortByLabelPipe implements PipeTransform {
   }
 
   transform(value: string[] | undefined, ...args: any[]): any {
-
-    console.log("Sort by label")
     let prefix = "";
     if(args && args.length > 0) {
       prefix = args[0]
