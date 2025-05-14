@@ -46,6 +46,8 @@ export default class ImportComponent implements OnInit {
   importFormat = Object.keys(ImportFormat);
   user_contexts?: ContextDbRO[] = [];
 
+  REGEXP=/_STRING/gi
+  
   public importForm: FormGroup = this.fb.group({
     contextId: [this.translateService.instant(_('imports.context')), [Validators.required]],
     importName: ['', [Validators.required]],
