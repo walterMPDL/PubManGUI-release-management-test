@@ -4,21 +4,25 @@
 
 
     <div class="navbar-nav" start>
+      @let buttonExists = false;
       @if(authorizationInfo && authorizationInfo.actions['EDIT'] && isLatestVersion) {
         <a [routerLink]="['/edit/'+ item.objectId]" class="nav-link px-2" ngbTooltip="{{'common.edit' | translate}}" placement="bottom-left">
           <span class="material-symbols-outlined">edit</span>
         </a>
+        @let buttonExists = true;
       }
       @if(authorizationInfo && authorizationInfo.actions['RELEASE'] && isLatestVersion) {
         <button class="nav-link" (click)="openActionsModal('release')" ngbTooltip="{{'common.release' | translate}}" placement="bottom-left">
           <span class="material-symbols-outlined">public</span>
         </button>
+        @let buttonExists = true;
 
       }
       @if(authorizationInfo && authorizationInfo.actions['SUBMIT'] && isLatestVersion) {
         <button class="nav-link" (click)="openActionsModal('submit')" ngbTooltip="{{'common.submit' | translate}}" placement="bottom-left">
           <span class="material-symbols-outlined">workspace_premium</span>
         </button>
+        @let buttonExists = true;
 
       }
       @if(authorizationInfo && authorizationInfo.actions['REVISE'] && isLatestVersion) {
@@ -27,18 +31,21 @@
             <use href="assets/icons/icons.svg#revise"></use>
           </svg>
         </button>
+        @let buttonExists = true;
 
       }
       @if(authorizationInfo && authorizationInfo.actions['WITHDRAW'] && isLatestVersion) {
         <button class="nav-link" (click)="openActionsModal('withdraw')" ngbTooltip="{{'common.withdraw' | translate}}" placement="bottom-left">
           <span class="material-symbols-outlined">public_off</span>
         </button>
+        @let buttonExists = true;
       }
 
       @if(authorizationInfo && authorizationInfo.actions['DELETE'] && isLatestVersion) {
         <button class="nav-link" (click)="openActionsModal('delete')" ngbTooltip="{{'common.delete' | translate}}" placement="bottom-left">
           <span class="material-symbols-outlined">delete_forever</span>
         </button>
+        @let buttonExists = true;
 
       }
 
@@ -48,6 +55,7 @@
             <use href="assets/icons/icons.svg#doi"></use>
           </svg>
         </button>
+        @let buttonExists = true;
 
       }
 
@@ -55,10 +63,14 @@
         <button class="nav-link" (click)="useAsTemplate()" ngbTooltip="{{'common.useAsTemplate' | translate}}" placement="bottom-left">
           <span class="material-symbols-outlined">copy_all</span>
         </button>
+        @let buttonExists = true;
 
       }
 
-      <div start class="vr"></div>
+      @if (buttonExists) {
+        <div start class="vr"></div>
+      }
+
       <button class="nav-link" (click)="openExportModal()" ngbTooltip="{{'common.export' | translate}}" placement="bottom-left">
         <span class="material-symbols-outlined">upload</span>
       </button>
