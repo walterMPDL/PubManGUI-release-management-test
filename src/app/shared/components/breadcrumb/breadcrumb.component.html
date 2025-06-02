@@ -1,6 +1,6 @@
 <nav>
   <a [routerLink]="['/home']">
-    <span class="material-symbols-outlined">Home</span>
+    <span class="material-symbols-outlined">home</span>
   </a>
   @for(breadcrumb of breadcrumbs$ | async; track breadcrumb.labelKey; let last = $last) {
     @if(breadcrumb.labelKey) {

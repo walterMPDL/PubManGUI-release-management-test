@@ -17,12 +17,11 @@ export abstract class PubmanSearchableGenericRestClientService<modelType> extend
         ...from && {from: from}
       }});
 
-      return this.getSearchResults('GET', this.subPath, null, authenticate, this.addContentTypeHeader(), params);
-
+    return this.httpGet(this.subPath, authenticate, params);
   }
 
   search(elasticBody: any, authenticate?:boolean): Observable<SearchResult<modelType>> {
-    return this.getSearchResults('POST', this.subPath.concat('/search'), elasticBody, authenticate, this.addContentTypeHeader());
+    return this.getSearchResults(this.subPath.concat('/search'), elasticBody, authenticate, this.addContentTypeHeader());
   }
 
   elasticSearch(elasticBody: any, authenticate?:boolean): Observable<any> {
@@ -35,10 +34,10 @@ export abstract class PubmanSearchableGenericRestClientService<modelType> extend
       .set('citation', citation ? citation : 'APA6');
     if(cslConeId) params=params.set('cslConeId', cslConeId);
 
-    return this.getSearchResults('POST', this.subPath.concat('/search'), elasticBody, authenticate, this.addContentTypeHeader(), params, "blob", "response");
+    return this.getSearchResults(this.subPath.concat('/search'), elasticBody, authenticate, this.addContentTypeHeader(), params, "blob", "response");
   }
 
-  private getSearchResults(method: string, path: string, body?: any, authenticate:boolean =true, headers?: HttpHeaders, params?: HttpParams, respType?: "arraybuffer" | "blob" | "text" | "json" | undefined, observe?:"body" | "events" | "response" | undefined): Observable<any> {
+  private getSearchResults(path: string, body?: any, authenticate:boolean =true, headers?: HttpHeaders, params?: HttpParams, respType?: "arraybuffer" | "blob" | "text" | "json" | undefined, observe?:"body" | "events" | "response" | undefined): Observable<any> {
     return this.httpPost(path, body, authenticate, params, respType, observe);
   }
 

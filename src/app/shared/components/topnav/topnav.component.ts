@@ -15,11 +15,6 @@ import {NgClass} from "@angular/common";
   selector: 'pure-topnav',
   standalone: true,
   imports: [
-    RouterLink,
-    NgbTooltip,
-    TopnavCartComponent,
-    TopnavBatchComponent,
-    PaginatorComponent,
     NgClass
   ],
   templateUrl: './topnav.component.html'
@@ -43,7 +38,7 @@ export class TopnavComponent {
   @HostListener('window:scroll', ['$event'])
   onWindowScroll() {
     const scrollPosition = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
-    this.isScrolled = scrollPosition > 50 ? true : false;
+    this.isScrolled = scrollPosition > 20 ? true : false;
   }
 
 

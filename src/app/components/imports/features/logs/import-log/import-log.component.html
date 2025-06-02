@@ -43,14 +43,14 @@
   <td class="col-4">
     @if( isFinished(log.status) ) {
 
-      <span class="nav-link text-decoration-underline text-nowrap" (click)='toDatasets(log.id);'>
+      <span class="nav-link text-decoration-underline text-nowrap" style="cursor: pointer" (click)='toDatasets(log.id);'>
         {{ log.name }}
       </span>
 
     } @else {
       {{ log.name }}
     }
-    
+
   </td>
 
   <td class="col-2">
@@ -61,7 +61,7 @@
     <span>{{ log.startDate | localizeDate }}</span>
     <div class="pe-3">
       <span class="material-symbols-outlined text-secondary" style="cursor: auto">schedule</span>&nbsp;
-      <span>{{ log.startDate | date: "HH:mm" }}</span>
+      <span>{{ log.startDate | date: 'HH:mm'}}</span>
     </div>
   </td>
 
@@ -75,7 +75,7 @@
   </td>
 
   <td class="col-1">
-      <span class="material-symbols-outlined my-0 float-end" 
+      <span class="material-symbols-outlined my-0 float-end me-3"
         ngbTooltip="{{ 'imports.list.remove' | translate }}" placement="bottom-left" style="cursor: pointer" (click)="deleteImportLog(log)">
         delete
       </span>

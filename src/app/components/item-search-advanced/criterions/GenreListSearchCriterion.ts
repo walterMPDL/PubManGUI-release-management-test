@@ -1,17 +1,19 @@
 import {SearchCriterion} from "./SearchCriterion";
-import {Observable, of} from "rxjs";
+import {forkJoin, Observable, of} from "rxjs";
 import {StandardSearchCriterion} from "./StandardSearchCriterion";
 import {FormArray, FormControl, FormGroup} from "@angular/forms";
 import {DegreeType, MdsPublicationGenre} from "../../../model/inge";
 import {baseElasticSearchQueryBuilder} from "../../../shared/services/search-utils";
+import {TranslateService} from "@ngx-translate/core";
 
 export class GenreListSearchCriterion extends SearchCriterion {
 
   genreOptions = Object.keys(MdsPublicationGenre);
+  genreOptions_ = this.genreOptions.filter(key => key !== 'THESIS');
 
   degreeOptions = Object.keys(DegreeType);
 
-  constructor() {
+  constructor(private translateService: TranslateService) {
     super("genreList");
 
     this.content.addControl("genres", new FormGroup({}));
