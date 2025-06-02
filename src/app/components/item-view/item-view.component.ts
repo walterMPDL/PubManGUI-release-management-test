@@ -4,7 +4,7 @@ import {AaService} from "../../services/aa.service";
 import {AuditDbVO, FileDbVO, ItemVersionVO, Storage, Visibility} from "../../model/inge";
 import {ActivatedRoute, NavigationEnd, Router, RouterLink, RouterOutlet} from "@angular/router";
 import {TopnavComponent} from "../../shared/components/topnav/topnav.component";
-import {AsyncPipe, NgClass, ViewportScroller} from "@angular/common";
+import {AsyncPipe, DatePipe, NgClass, ViewportScroller} from "@angular/common";
 import {DateToYearPipe} from "../../shared/services/pipes/date-to-year.pipe";
 import {ItemBadgesComponent} from "../../shared/components/item-badges/item-badges.component";
 import {NgbModal, NgbPopover, NgbTooltip} from "@ng-bootstrap/ng-bootstrap";
@@ -51,7 +51,8 @@ import {itemToVersionId} from "../../shared/services/utils";
     SanitizeHtmlCitationPipe,
     NgbTooltip,
     LoadingComponent,
-    TranslatePipe
+    TranslatePipe,
+    DatePipe
   ],
   templateUrl: './item-view.component.html',
   styleUrl: './item-view.component.scss'
