@@ -191,6 +191,12 @@ export class ItemViewComponent {
     return this.item?.files?.filter(f => f.storage === Storage.EXTERNAL_URL);
   }
 
+  get isModeratorOrDepositor() {
+    return this.item && this.aaService.isLoggedIn &&
+    ((this.item?.creator?.objectId === this.aaService.principal.value.user?.objectId)
+      || (this.aaService.principal.value.moderatorContexts.map(c => c.objectId).includes(this.item.context.objectId)));
+  }
+
 
 
 
