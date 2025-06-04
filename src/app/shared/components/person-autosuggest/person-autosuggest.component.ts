@@ -6,7 +6,7 @@ import {
   catchError,
   debounceTime,
   distinctUntilChanged,
-  filter,
+  filter, finalize,
   Observable,
   of,
   OperatorFunction,
@@ -50,29 +50,29 @@ export class PersonAutosuggestComponent {
   suggestPersons: OperatorFunction<string, readonly string[]> = (text$: Observable<string>) =>
     text$.pipe(
       filter(typed => (typed != null && typed.length >= 3)),
+      tap(() => {
+        this.searching = true
+      }),
       debounceTime(500),
       distinctUntilChanged(),
-      tap(() => (this.searching = true)),
+
       switchMap((term) => {
+        console.log('searching');
         const params = new HttpParams().set('q', term).set('format', 'json');
         return this.coneService.find('/persons/query', params).pipe(
-          /*
-          map(response => {
-              return response.map((hit: any) => hit.value);
-            }
-          ),
-
-           */
-
-          //tap(() => (this.searchFailed = false)),
           catchError(() => {
             //this.searchFailed = true;
-            this.searching = false;
+            console.log('search failed');
             return of([]);
           }),
         )
       }),
-      tap(() => (this.searching = false)),
+      tap(() => {
+        this.searching = false;
+      }),
+      finalize(() => {
+        this.searching = false;
+      })
     );
 
 

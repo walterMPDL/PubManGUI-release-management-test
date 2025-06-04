@@ -2,7 +2,7 @@ import {Component, Input} from '@angular/core';
 import {
   catchError,
   debounceTime,
-  distinctUntilChanged,
+  distinctUntilChanged, finalize,
   map,
   Observable,
   of,
@@ -51,6 +51,9 @@ export class OuAutosuggestComponent {
         ),
       ),
       tap(() => (this.searching = false)),
+      finalize(() => {
+        this.searching = false;
+      })
     );
 
   suggestOusFormatter= (ou: any) => {
