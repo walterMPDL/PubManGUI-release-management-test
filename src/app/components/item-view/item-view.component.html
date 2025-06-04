@@ -2,103 +2,116 @@
 
   <pure-topnav>
 
-
-    <div class="navbar-nav" start>
-      @let buttonExists = false;
-      @if(authorizationInfo && authorizationInfo.actions['EDIT'] && isLatestVersion) {
-        <a [routerLink]="['/edit/'+ item.objectId]" class="nav-link px-2" ngbTooltip="{{'common.edit' | translate}}" placement="bottom-left">
+    @if (item.publicState !== 'WITHDRAWN') {
+      <div class="navbar-nav" start>
+      @if (authorizationInfo && authorizationInfo.actions['EDIT'] && isLatestVersion) {
+        <a [routerLink]="['/edit/'+ item.objectId]" class="nav-link px-2" ngbTooltip="{{'common.edit' | translate}}"
+           placement="bottom-left">
           <span class="material-symbols-outlined">edit</span>
         </a>
-        @let buttonExists = true;
       }
-      @if(authorizationInfo && authorizationInfo.actions['RELEASE'] && isLatestVersion) {
-        <button class="nav-link" (click)="openActionsModal('release')" ngbTooltip="{{'common.release' | translate}}" placement="bottom-left">
+
+      @if (authorizationInfo && authorizationInfo.actions['RELEASE'] && isLatestVersion) {
+        <button class="nav-link" (click)="openActionsModal('release')" ngbTooltip="{{'common.release' | translate}}"
+                placement="bottom-left">
           <span class="material-symbols-outlined">public</span>
         </button>
-        @let buttonExists = true;
-
       }
-      @if(authorizationInfo && authorizationInfo.actions['SUBMIT'] && isLatestVersion) {
-        <button class="nav-link" (click)="openActionsModal('submit')" ngbTooltip="{{'common.submit' | translate}}" placement="bottom-left">
+
+      @if (authorizationInfo && authorizationInfo.actions['SUBMIT'] && isLatestVersion) {
+        <button class="nav-link" (click)="openActionsModal('submit')" ngbTooltip="{{'common.submit' | translate}}"
+                placement="bottom-left">
           <span class="material-symbols-outlined">workspace_premium</span>
         </button>
-        @let buttonExists = true;
-
       }
-      @if(authorizationInfo && authorizationInfo.actions['REVISE'] && isLatestVersion) {
-        <button class="nav-link" (click)="openActionsModal('revise')" ngbTooltip="{{'common.revise' | translate}}" placement="bottom-left">
+
+      @if (authorizationInfo && authorizationInfo.actions['REVISE'] && isLatestVersion) {
+        <button class="nav-link" (click)="openActionsModal('revise')" ngbTooltip="{{'common.revise' | translate}}"
+                placement="bottom-left">
           <svg fill="currentColor" height="24px" width="24px">
             <use href="assets/icons/icons.svg#revise"></use>
           </svg>
         </button>
-        @let buttonExists = true;
-
       }
-      @if(authorizationInfo && authorizationInfo.actions['WITHDRAW'] && isLatestVersion) {
-        <button class="nav-link" (click)="openActionsModal('withdraw')" ngbTooltip="{{'common.withdraw' | translate}}" placement="bottom-left">
+
+      @if (authorizationInfo && authorizationInfo.actions['WITHDRAW'] && isLatestVersion) {
+        <button class="nav-link" (click)="openActionsModal('withdraw')" ngbTooltip="{{'common.withdraw' | translate}}"
+                placement="bottom-left">
           <span class="material-symbols-outlined">public_off</span>
         </button>
-        @let buttonExists = true;
       }
 
-      @if(authorizationInfo && authorizationInfo.actions['DELETE'] && isLatestVersion) {
-        <button class="nav-link" (click)="openActionsModal('delete')" ngbTooltip="{{'common.delete' | translate}}" placement="bottom-left">
+      @if (authorizationInfo && authorizationInfo.actions['DELETE'] && isLatestVersion) {
+        <button class="nav-link" (click)="openActionsModal('delete')" ngbTooltip="{{'common.delete' | translate}}"
+                placement="bottom-left">
           <span class="material-symbols-outlined">delete_forever</span>
         </button>
-        @let buttonExists = true;
-
       }
 
-      @if(authorizationInfo && authorizationInfo.actions['ADD_NEW_DOI'] && isLatestVersion) {
-        <button class="nav-link svg-icon" (click)="openActionsModal('addDoi')" ngbTooltip="{{'common.addDoi' | translate}}" placement="bottom-left">
+      @if (authorizationInfo && authorizationInfo.actions['ADD_NEW_DOI'] && isLatestVersion) {
+        <button class="nav-link svg-icon" (click)="openActionsModal('addDoi')"
+                ngbTooltip="{{'common.addDoi' | translate}}" placement="bottom-left">
           <svg fill="currentColor" height="24px" width="24px">
             <use href="assets/icons/icons.svg#doi"></use>
           </svg>
         </button>
-        @let buttonExists = true;
-
       }
 
-      @if(aaService.principal.value.isDepositor) {
-        <button class="nav-link" (click)="useAsTemplate()" ngbTooltip="{{'common.useAsTemplate' | translate}}" placement="bottom-left">
+      <div  class="vr"></div>
+
+      @if (aaService.principal.value.isDepositor) {
+        <button  class="nav-link" (click)="useAsTemplate()" ngbTooltip="{{'common.useAsTemplate' | translate}}"
+                placement="bottom-left">
           <span class="material-symbols-outlined">copy_all</span>
         </button>
-        @let buttonExists = true;
-
       }
 
-      @if (buttonExists) {
-        <div start class="vr"></div>
-      }
-
-      <button class="nav-link" (click)="openExportModal()" ngbTooltip="{{'common.export' | translate}}" placement="bottom-left">
+      <button  class="nav-link" (click)="openExportModal()" ngbTooltip="{{'common.export' | translate}}"
+              placement="bottom-left">
         <span class="material-symbols-outlined">upload</span>
       </button>
-      <div start class="vr"></div>
-      <pure-topnav-cart [resetSelectionAfterAction]="false" start/>
-      <div start class="vr"></div>
-      <pure-topnav-batch [resetSelectionAfterAction]="false" start/>
 
+      <div  class="vr"></div>
 
-    </div>
+      <pure-topnav-cart [resetSelectionAfterAction]="false" />
 
-    @if(listStateService.currentFullQuery && listStateService.page > 0) {
-      <pure-paginator end [totalNumberOfItems]="listStateService.currentNumberOfRecords" [size]=1 [(pageNumber)]="listStateService.page" (paginatorChanged)="listStateService.paginatorChanged()"/>
+      <div class="vr"></div>
+
+      <pure-topnav-batch [resetSelectionAfterAction]="false" />
+
+</div>
+    }
+
+    @if (listStateService.currentFullQuery && listStateService.page > 0) {
+      <pure-paginator end [totalNumberOfItems]="listStateService.currentNumberOfRecords" [size]=1
+                      [(pageNumber)]="listStateService.page" (paginatorChanged)="listStateService.paginatorChanged()"/>
     }
   </pure-topnav>
 
 
   <div class="row mt-5">
+    @if (isModeratorOrDepositor && item.message && item.publicState !== 'WITHDRAWN') {
+      <div class="alert alert-light">
+        <b>{{ 'common.comment' | translate }}:</b> {{ item.message }}
+      </div>
+    }
+    @if (item.publicState === 'WITHDRAWN') {
+      <div class="alert alert-danger">
+        <b>{{ 'ItemState.WITHDRAWN' | translate }} ({{ item.modificationDate | date: 'shortDate' }}):</b> {{ item.message }}
+      </div>
+    }
+
+
     <div class="col-lg-9 col-sm-12 p-3 bg-light rounded">
+
       <div class="row">
         <div class="col-2 text-center">
 
-          @if(thumbnailUrl) {
+          @if (thumbnailUrl) {
             <a href="{{ingeUri + firstPublicPdfFile?.content}}" target="_blank">
               <img id="thumbnail" src="{{thumbnailUrl}}" class="img-thumbnail">
             </a>
-          }
-          @else {
+          } @else {
             <img id="thumbnail" src="assets/images/DefaultMPGv2.png" class="img-thumbnail">
           }
 
@@ -152,11 +165,13 @@
           </div>
 
           <!--citation-->
-          <div class="mt-4">
-            <p><i class="bi bi-quote"></i>
-              <span [innerHTML]="citation | sanitizeHtmlCitation"></span>
-            </p>
-          </div>
+          @if (item.publicState !== 'WITHDRAWN') {
+            <div class="mt-4">
+              <p><i class="bi bi-quote"></i>
+                <span [innerHTML]="citation | sanitizeHtmlCitation"></span>
+              </p>
+            </div>
+          }
 
 
         </div>
@@ -167,17 +182,17 @@
           <ul class="nav nav-pills nav-fill">
             <li class="nav-item">
               <button type="button" class="nav-link {{currentSubMenuSelection === 'abstract' ? 'active' : ''}}" href="#"
-                      (click)="changeSubMenu('abstract')">{{'MetadataFields.abstract' | translate }}
+                      (click)="changeSubMenu('abstract')">{{ 'MetadataFields.abstract' | translate }}
               </button>
             </li>
             <li class="nav-item">
               <button type="button" class="nav-link {{currentSubMenuSelection === 'metadata' ? 'active' : ''}}"
-                      (click)="changeSubMenu('metadata')">{{'common.metadata' | translate }}
+                      (click)="changeSubMenu('metadata')">{{ 'common.metadata' | translate }}
               </button>
             </li>
             <li class="nav-item">
               <button type="button" class="nav-link {{currentSubMenuSelection === 'versions' ? 'active' : ''}}" href="#"
-                      (click)="changeSubMenu('versions')">{{'common.versions' | translate }}
+                      (click)="changeSubMenu('versions')">{{ 'common.versions' | translate }}
               </button>
             </li>
             @if (aaService.principal.value.loggedIn) {
@@ -197,24 +212,30 @@
 
         <!--Sub content-->
         @if (currentSubMenuSelection === 'metadata') {
+          @if (item.publicState !== 'WITHDRAWN') {
+            <pure-item-view-metadata [item]="item"/>
+          } @else {
+            <p class="text-danger">{{ 'ItemState.WITHDRAWN' | translate }}</p>
+          }
 
-          <pure-item-view-metadata [item]="item"/>
-        }
-        @else if (currentSubMenuSelection === 'abstract') {
-          @if (item.metadata.abstracts) {
-            @for (abs of item.metadata.abstracts; track abs; ) {
+        } @else if (currentSubMenuSelection === 'abstract') {
+          @if (item.publicState !== 'WITHDRAWN') {
+            @if (item.metadata.abstracts) {
+              @for (abs of item.metadata.abstracts; track abs; ) {
+                <pure-item-view-metadata-element>
+                  <span
+                    label>{{ 'MetadataFields.abstract' | translate }} {{ abs.language ? '(' + abs.language + ')' : '' }}</span>
+                  <span content [innerHTML]="abs.value | sanitizeHtml"></span>
+                </pure-item-view-metadata-element>
+              }
+            } @else {
               <pure-item-view-metadata-element>
-                <span label>{{'MetadataFields.abstract' | translate }} {{ abs.language ? '(' + abs.language + ')' : '' }}</span>
-                <span content [innerHTML]="abs.value | sanitizeHtml">
-
-        </span>
+                <span label>{{ 'MetadataFields.abstract' | translate }}</span>
+                <span content>-</span>
               </pure-item-view-metadata-element>
             }
           } @else {
-            <pure-item-view-metadata-element>
-              <span label>{{'MetadataFields.abstract' | translate }}</span>
-              <span content>-</span>
-            </pure-item-view-metadata-element>
+            <p class="text-danger">{{ 'ItemState.WITHDRAWN' | translate }}</p>
           }
 
         } @else if (currentSubMenuSelection === 'versions') {
@@ -225,30 +246,34 @@
               <pure-item-view-metadata-element>
                 <span label>
                   <a
-                  [routerLink]="'/view/' + vm[1][0].pubItem.objectId + '_' + vm[0]">Version {{ vm[0] }}</a></span>
+                    [routerLink]="'/view/' + vm[1][0].pubItem.objectId + '_' + vm[0]">Version {{ vm[0] }}</a></span>
                 <span content>
-                  @for(auditEntry of vm[1]; track auditEntry; let last = $last) {
+                  @for (auditEntry of vm[1]; track auditEntry; let last = $last) {
                     <pure-item-view-metadata-element [sub]="true">
-                 <span label>{{ 'MetadataFields.date' | translate }}</span>
-                 <span content>{{auditEntry.modificationDate | date:'medium'}}</span>
-               </pure-item-view-metadata-element>
+                       <span label>{{ 'MetadataFields.date' | translate }}</span>
+                       <span content>{{ auditEntry.modificationDate | date:'medium' }}</span>
+                     </pure-item-view-metadata-element>
                     <pure-item-view-metadata-element [sub]="true">
-                 <span label>{{ 'common.actions' | translate }}</span>
-                 <span content>{{auditEntry.event }}</span>
-               </pure-item-view-metadata-element>
-                    <pure-item-view-metadata-element [sub]="true" [hl]="!last">
-                 <span label>{{ 'common.comment' | translate }}</span>
-                 <span content>{{ auditEntry.comment }}</span>
-               </pure-item-view-metadata-element>
+                       <span label>{{ 'common.actions' | translate }}</span>
+                       <span content>{{ auditEntry.event }}</span>
+                     </pure-item-view-metadata-element>
+                    @if (isModeratorOrDepositor) {
+                      <pure-item-view-metadata-element [sub]="true">
+                         <span label>{{ 'common.comment' | translate }}</span>
+                         <span content>{{ auditEntry.comment }}</span>
+                       </pure-item-view-metadata-element>
+                    }
+                    @if(!last) {
+                      <hr/>
+                    }
                   }
 
              </span>
               </pure-item-view-metadata-element>
 
             }
-          }
-          @else {
-          <pure-loading/>
+          } @else {
+            <pure-loading/>
           }
         } @else if (currentSubMenuSelection === 'admin') {
           <pure-item-view-metadata-element [sub]="true" [hl]="true">
@@ -262,35 +287,51 @@
             <span content>
             {{ item.context.name }}
           </span>
-          </pure-item-view-metadata-element >
+          </pure-item-view-metadata-element>
           <pure-item-view-metadata-element [sub]="true" [hl]="true">
-            <span label>{{ 'MetadataFields.dateCreated' | translate}}</span>
+            <span label>{{ 'MetadataFields.dateCreated' | translate }}</span>
             <span content>
-            {{ item.creationDate  | date:'medium'}}
+            {{ item.creationDate  | date:'medium' }}
           </span>
           </pure-item-view-metadata-element>
           <pure-item-view-metadata-element [sub]="true" [hl]="true">
-            <span label>{{ 'MetadataFields.creator' | translate}}</span>
+            <span label>{{ 'MetadataFields.creator' | translate }}</span>
             <span content>
-            {{ item.creator?.name }}
+            @if(isModeratorOrDepositor) {
+              {{ (itemCreator$ | async)?.name }}
+            }
+               ({{item.creator?.objectId}})
           </span>
           </pure-item-view-metadata-element>
           <pure-item-view-metadata-element [sub]="true" [hl]="true">
-            <span label>{{ 'MetadataFields.dateModified' | translate}}</span>
+            <span label>{{ 'MetadataFields.dateModified' | translate }}</span>
             <span content>
-            {{ item.modificationDate  | date:'medium'}}
+            {{ item.modificationDate  | date:'medium' }}
           </span>
           </pure-item-view-metadata-element>
           <pure-item-view-metadata-element [sub]="true" [hl]="true">
-            <span label>{{ 'MetadataFields.modifier' | translate}}</span>
+            <span label>{{ 'MetadataFields.modifier' | translate }}</span>
             <span content>
-            {{ item.modifier?.name }}
+               @if(isModeratorOrDepositor) {
+                 {{ (itemModifier$ | async)?.name }}
+              }
+              ({{item.modifier?.objectId}})
           </span>
           </pure-item-view-metadata-element>
-          <pure-item-view-metadata-element [sub]="true" [hl]="false">
-            <span label>{{ 'common.comment' | translate }}</span>
+          @if(isModeratorOrDepositor) {
+            <pure-item-view-metadata-element [sub]="true" [hl]="true">
+              <span label>{{ 'common.comment' | translate }}</span>
+              <span content>
+              {{ item.message }}
+            </span>
+            </pure-item-view-metadata-element>
+            }
+          <pure-item-view-metadata-element [sub]="true" [hl]="true">
+            <span label>{{ 'MetadataFields.localTags' | translate }}</span>
             <span content>
-            {{ item.message }}
+              @for(localTag of item.localTags; track localTag) {
+                <span class="badge bg-secondary me-2">{{localTag}}</span>
+                }
           </span>
           </pure-item-view-metadata-element>
 
@@ -316,69 +357,72 @@
 
 
       <div class="container mt-5">
-      <h5>{{ 'common.item' | translate }} Information</h5>
+        <h5>{{ 'common.item' | translate }} Information</h5>
+        @if (item.publicState !== 'WITHDRAWN') {
+          @if (item.objectPid | empty) {
+            <div class="mt-3">
+              <h6>{{ 'common.item' | translate }} {{ 'common.handle' | translate }}</h6>
+              <div class="row">
+                <a class="icon-link" href="https://hdl.handle.net/{{item.objectPid?.substring(4)}}" target="_blank">
+                  <i class="bi-link"></i>
+                  <span class="text-truncate">{{ item.objectPid }}</span>
+                </a>
+              </div>
+            </div>
+          }
 
-      @if(item.objectPid | empty) {
-      <div class="mt-3">
-        <h6>{{ 'common.item' | translate }} {{'common.handle' | translate}}</h6>
-        <div class="row">
-          <a class="icon-link" href="https://hdl.handle.net/{{item.objectPid?.substring(4)}}" target="_blank">
-            <i class="bi-link"></i>
-            <span class="text-truncate">{{ item.objectPid }}</span>
-          </a>
-        </div>
+          @if (item.versionPid | empty) {
+            <div class="mt-3">
+
+              <h6>{{ 'common.version' | translate }} {{ item.versionNumber }} {{ 'common.handle' | translate }}</h6>
+              <div class="row">
+                <a class="icon-link" href="https://hdl.handle.net/{{item.versionPid?.substring(4)}}" target="_blank">
+                  <i class="bi-link"></i>
+                  <span class="text-truncate">{{ item.versionPid }}</span>
+                </a>
+              </div>
+
+            </div>
+          }
+
+
+          @if ((item.latestRelease | empty) && item.versionNumber !== item.latestRelease?.versionNumber) {
+            <div class="mt-3">
+              <h6>{{ 'common.latestRelease' | translate }}</h6>
+              <div>
+                <a class="icon-link" href="/view/{{item.objectId +'_' + item.latestRelease?.versionNumber}}"
+                   target="_blank">
+                  <i class="bi-link"></i>
+                  <span class="text-truncate">Version {{ item.latestRelease?.versionNumber }}</span>
+                </a>
+              </div>
+
+            </div>
+          }
+
+          @if ((item.latestVersion | empty) && item.versionNumber !== item.latestVersion?.versionNumber &&
+          latestVersionAuthorizationInfo && latestVersionAuthorizationInfo.actions['GET'] &&
+          !((item.latestRelease | empty) && item.latestVersion?.versionNumber === item.latestRelease?.versionNumber)) {
+            <div class="mt-3">
+              <h6>{{ 'common.latestVersion' | translate }}</h6>
+              <div>
+                <a class="icon-link" href="/view/{{item.objectId +'_' + item.latestVersion?.versionNumber}}"
+                   target="_blank">
+                  <i class="bi-link"></i>
+                  <span class="text-truncate">Version {{ item.latestVersion?.versionNumber }}</span>
+                </a>
+              </div>
+
+            </div>
+          }
+
+        }
       </div>
-      }
 
-      @if(item.versionPid | empty) {
-      <div class="mt-3">
-
-        <h6>{{ 'common.version' | translate }} {{ item.versionNumber }} {{'common.handle' | translate}}</h6>
-        <div class="row">
-        <a class="icon-link" href="https://hdl.handle.net/{{item.versionPid?.substring(4)}}" target="_blank">
-          <i class="bi-link"></i>
-          <span class="text-truncate">{{ item.versionPid }}</span>
-        </a>
-      </div>
-
-      </div>
-      }
-
-
-      @if((item.latestRelease | empty) && item.versionNumber !== item.latestRelease?.versionNumber) {
-      <div class="mt-3">
-        <h6>{{ 'common.latestRelease' | translate}}</h6>
-        <div>
-          <a class="icon-link" href="/view/{{item.objectId +'_' + item.latestRelease?.versionNumber}}" target="_blank">
-            <i class="bi-link"></i>
-            <span class="text-truncate">Version {{item.latestRelease?.versionNumber}}</span>
-          </a>
-        </div>
-
-      </div>
-      }
-
-      @if((item.latestVersion | empty) && item.versionNumber !== item.latestVersion?.versionNumber &&
-      latestVersionAuthorizationInfo && latestVersionAuthorizationInfo.actions['GET'] &&
-      !((item.latestRelease | empty) && item.latestVersion?.versionNumber === item.latestRelease?.versionNumber)  ) {
-        <div class="mt-3">
-          <h6>{{ 'common.latestVersion' | translate}}</h6>
-          <div>
-            <a class="icon-link" href="/view/{{item.objectId +'_' + item.latestVersion?.versionNumber}}" target="_blank">
-              <i class="bi-link"></i>
-              <span class="text-truncate">Version {{item.latestVersion?.versionNumber}}</span>
-            </a>
-          </div>
-
-        </div>
-      }
-
-    </div>
     </div>
   </div>
 
-}
-@else {
+} @else {
   <pure-loading/>
 }
 

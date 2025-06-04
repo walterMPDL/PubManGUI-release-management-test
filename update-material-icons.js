@@ -4,6 +4,7 @@ const icons = [
   "apps",
   "cancel",
   "check_circle",
+  "close",
   "copy_all",
   "delete",
   "delete_forever",
@@ -16,8 +17,10 @@ const icons = [
   "help",
   "home",
   "info",
+  "integration_instructions",
   "last_page",
   "list",
+  "list_alt",
   "navigate_before",
   "navigate_next",
   "note_add",
@@ -38,8 +41,9 @@ updateMaterialIcons();
 
 /**
  * Gets the list of icons from google server and saves it as a font under /assets/fonts/material-icons/material_icon_subset.woff
+ * run with 'node update-material-icons.js'
 
- The following link contains the requiered icons in the icon_names parameter and will return a CSS file form Google, which contains a URL to the required font WOFF file.
+ The following link contains the required icons in the icon_names parameter and will return a CSS file from Google, which contains a URL to the required font WOFF file.
  This WOFF file must be downloaded and added to assets/material-icons.
  BEWARE: The list of icon names in the URL must be 100% correct and sorted alphanumerically!!!
  https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,500,0,0&icon_names=account_tree,apps,cancel,check_circle,copy_all,delete,delete_forever,edit,error,first_page,folder_shared,get_app,help,home,info,last_page,list,navigate_before,navigate_next,note_add,place,public_off,schedule,search,task_alt,tune,upload,warning,web_stories,workspace_premium"

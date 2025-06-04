@@ -29,9 +29,9 @@
               @for (visibility of fileSectionSearchCriterion.componentVisibilitySearchCriterion.visibilityOptions; track visibility; let i = $index; ) {
                 <div class="col-md-6 col-xxl-4">
                   <div class="form-check">
-                    <input id="fileVisibility{{i}}" class="form-check-input" type="checkbox"
+                    <input id="{{fileSectionSearchCriterion.type}}fileVisibility{{i}}" class="form-check-input" type="checkbox"
                            [formControl]="$any(fileSectionSearchCriterion.componentVisibilitySearchCriterion.componentVisibilityFormGroup).get(visibility)"/>
-                    <label class="form-check-label" for="fileVisibility{{i}}">{{ 'Visibility.' + visibility | translate}}</label>
+                    <label class="form-check-label" for="{{fileSectionSearchCriterion.type}}fileVisibility{{i}}">{{ 'Visibility.' + visibility | translate}}</label>
                   </div>
                 </div>
               }
@@ -63,9 +63,9 @@
             @for (cc of fileSectionSearchCriterion.componentContentCategorySearchCriterion.contentCategoryOptions; track cc; let i = $index; ) {
 
               <div class="form-check">
-                <input id="fileCcName{{i}}" class="form-check-input" type="checkbox"
+                <input id="{{fileSectionSearchCriterion.type}}fileCcName{{i}}" class="form-check-input" type="checkbox"
                        [formControl]="$any(fileSectionSearchCriterion.componentContentCategorySearchCriterion.contentCategoryFormGroup).get(cc)"/>
-                <label class="form-check-label" for="fileCcName{{i}}">{{ 'ContentCategories.' + cc | translate }}</label>
+                <label class="form-check-label" for="{{fileSectionSearchCriterion.type}}fileCcName{{i}}">{{ 'ContentCategories.' + cc | translate }}</label>
               </div>
             }
           </div>
@@ -74,9 +74,9 @@
             @for (cc of fileSectionSearchCriterion.oaStatusSearchCriterion.oaStatusOptions; track cc; let i = $index; ) {
 
               <div class="form-check">
-                <input id="oaStatus{{i}}" class="form-check-input" type="checkbox"
+                <input id="{{fileSectionSearchCriterion.type}}oaStatus{{i}}" class="form-check-input" type="checkbox"
                        [formControl]="$any(fileSectionSearchCriterion.oaStatusSearchCriterion.oaStatusFormGroup).get(cc)"/>
-                <label class="form-check-label" for="oaStatus{{i}}">{{ 'OAStatus.' + cc | translate }}</label>
+                <label class="form-check-label" for="{{fileSectionSearchCriterion.type}}oaStatus{{i}}">{{ 'OAStatus.' + cc | translate }}</label>
               </div>
             }
           </div>

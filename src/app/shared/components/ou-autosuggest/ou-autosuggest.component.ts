@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import {
   catchError,
   debounceTime,
-  distinctUntilChanged,
+  distinctUntilChanged, finalize,
   map,
   Observable,
   of,
@@ -55,6 +55,9 @@ export class OuAutosuggestComponent {
         ),
       ),
       tap(() => (this.searching = false)),
+      finalize(() => {
+        this.searching = false;
+      })
     );
 
   suggestOusFormatter= (ou: any) => {

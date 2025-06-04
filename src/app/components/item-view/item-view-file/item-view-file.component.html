@@ -1,7 +1,6 @@
 
 
-
-  @if (files && files.length) {
+ @if (files && files.length && item.publicState !== 'WITHDRAWN') {
     @for (file of files; track file; let i = $index) {
       <div class="accordion mt-3" >
         <div class="accordion-item border-0 bg-transparent">
