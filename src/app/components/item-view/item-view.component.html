@@ -263,7 +263,9 @@
                          <span content>{{ auditEntry.comment }}</span>
                        </pure-item-view-metadata-element>
                     }
-                    <hr/>
+                    @if(!last) {
+                      <hr/>
+                    }
                   }
 
              </span>

@@ -17,6 +17,7 @@ const icons = [
   "help",
   "home",
   "info",
+  "integration_instructions",
   "last_page",
   "list",
   "navigate_before",
