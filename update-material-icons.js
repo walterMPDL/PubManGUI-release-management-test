@@ -20,6 +20,7 @@ const icons = [
   "integration_instructions",
   "last_page",
   "list",
+  "list_alt",
   "navigate_before",
   "navigate_next",
   "note_add",
