@@ -297,7 +297,10 @@
           <pure-item-view-metadata-element [sub]="true" [hl]="true">
             <span label>{{ 'MetadataFields.creator' | translate }}</span>
             <span content>
-            {{ item.creator?.name }}
+            @if(isModeratorOrDepositor) {
+              {{ (itemCreator$ | async)?.name }}
+            }
+               ({{item.creator?.objectId}})
           </span>
           </pure-item-view-metadata-element>
           <pure-item-view-metadata-element [sub]="true" [hl]="true">
@@ -309,7 +312,10 @@
           <pure-item-view-metadata-element [sub]="true" [hl]="true">
             <span label>{{ 'MetadataFields.modifier' | translate }}</span>
             <span content>
-            {{ item.modifier?.name }}
+               @if(isModeratorOrDepositor) {
+                 {{ (itemModifier$ | async)?.name }}
+              }
+              ({{item.modifier?.objectId}})
           </span>
           </pure-item-view-metadata-element>
           @if(isModeratorOrDepositor) {

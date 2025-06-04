@@ -1,7 +1,7 @@
 import {Component, HostListener, Input, TemplateRef} from '@angular/core';
 import {ItemsService} from "../../services/pubman-rest-client/items.service";
 import {AaService} from "../../services/aa.service";
-import {AuditDbVO, FileDbVO, ItemVersionVO, Storage, Visibility} from "../../model/inge";
+import {AccountUserDbVO, AuditDbVO, FileDbVO, ItemVersionVO, Storage, Visibility} from "../../model/inge";
 import {ActivatedRoute, NavigationEnd, Router, RouterLink, RouterOutlet} from "@angular/router";
 import {TopnavComponent} from "../../shared/components/topnav/topnav.component";
 import {AsyncPipe, DatePipe, NgClass, ViewportScroller} from "@angular/common";
@@ -9,7 +9,7 @@ import {DateToYearPipe} from "../../shared/services/pipes/date-to-year.pipe";
 import {ItemBadgesComponent} from "../../shared/components/item-badges/item-badges.component";
 import {NgbModal, NgbPopover, NgbTooltip} from "@ng-bootstrap/ng-bootstrap";
 import {ItemViewMetadataComponent} from "./item-view-metadata/item-view-metadata.component";
-import {BehaviorSubject, delay, map, Observable, pipe, tap, timeout} from "rxjs";
+import {BehaviorSubject, catchError, delay, map, Observable, pipe, tap, timeout} from "rxjs";
 import { environment } from 'src/environments/environment';
 import {
   ItemViewMetadataElementComponent
@@ -30,6 +30,7 @@ import {ItemActionsModalComponent} from "../../shared/components/item-actions-mo
 import {LoadingComponent} from "../../shared/components/loading/loading.component";
 import {TranslatePipe} from "@ngx-translate/core";
 import {itemToVersionId} from "../../shared/services/utils";
+import {UsersService} from "../../services/pubman-rest-client/users.service";
 
 @Component({
   selector: 'pure-item-view',
@@ -76,7 +77,10 @@ export class ItemViewComponent {
   thumbnailUrl: string | undefined;
   firstPublicPdfFile: FileDbVO | undefined;
 
-  constructor(private itemsService: ItemsService, protected aaService: AaService, private route: ActivatedRoute, private router: Router,
+  itemModifier$!: Observable<AccountUserDbVO>;
+  itemCreator$!: Observable<AccountUserDbVO>;
+
+  constructor(private itemsService: ItemsService, private usersService: UsersService, protected aaService: AaService, private route: ActivatedRoute, private router: Router,
   private scroller: ViewportScroller, private messageService: MessageService, private modalService: NgbModal, protected listStateService: ItemListStateService, private itemSelectionService: ItemSelectionService,
               private title: Title) {
 
@@ -141,6 +145,9 @@ export class ItemViewComponent {
             })
             return vMap;
         }))
+
+        this.itemCreator$ = this.usersService.retrieve(i!.creator!.objectId);
+        this.itemModifier$ = this.usersService.retrieve(i!.modifier!.objectId);
 
         //retrieve authorization information for item (for relase, submit, etc...)
         this.itemsService.retrieveAuthorizationInfo(itemToVersionId(i)).subscribe(authInfo => {
