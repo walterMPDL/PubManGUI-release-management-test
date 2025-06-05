@@ -72,7 +72,7 @@ export class FormBuilderService {
 
   mds_file_FG(fileMetadata: MdsFileVO | null) {
     const mdsFile_form = this.fb.group<ControlType<MdsFileVO>>({
-      title: this.fb.control(fileMetadata?.title ? fileMetadata.title : null),
+      title: this.fb.control(fileMetadata?.title ? fileMetadata.title : null, [Validators.required]),
       contentCategory: this.fb.control(fileMetadata?.contentCategory ? fileMetadata.contentCategory : null),
       description: this.fb.control(fileMetadata?.description ? fileMetadata.description : null),
       identifiers: this.fb.array(fileMetadata?.identifiers ? fileMetadata.identifiers.map(id => this.identifier_FG(id) as AbstractControl) : []),
