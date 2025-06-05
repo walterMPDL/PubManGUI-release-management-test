@@ -2,6 +2,7 @@ const fs = require('node:fs');
 const icons = [
   "account_tree",
   "apps",
+  "breaking_news_alt_1",
   "cancel",
   "check_circle",
   "close",
@@ -11,7 +12,7 @@ const icons = [
   "drag_indicator",
   "edit",
   "error",
-  "first_page",
+  "first_page", 
   "folder_shared",
   "get_app",
   "help",
