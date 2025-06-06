@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { AbstractControl, AsyncValidator, FormControl, FormGroup, ValidationErrors, Validator, ValidatorFn } from '@angular/forms';
-import { catchError, defaultIfEmpty, finalize, map, Observable, of, takeUntil} from 'rxjs';
+import { AbstractControl, AsyncValidator, FormGroup, ValidationErrors } from '@angular/forms';
+import { catchError, defaultIfEmpty, map, Observable, of, } from 'rxjs';
 import { ValidationService } from 'src/app/services/pubman-rest-client/validation.service';
 
 @Injectable({
@@ -13,20 +13,17 @@ export class EventValidationDirective implements AsyncValidator {
   validate(control: AbstractControl): Observable<ValidationErrors | null> {
     console.log('validating Event control');
     const formGroup = control as FormGroup;
-    console.log('this', this);
     return this.validationService.validateEvent(formGroup.value).pipe(
       map(response => {
-        console.log('Mapping');
-        console.log('Response', JSON.stringify(response));
-        console.log('Response validity: ', JSON.stringify(response.valid));
+        let  validationErrors: ValidationErrors = {};
         if (response.valid == false) {
-          console.log('invalid event');
-          formGroup.get('title')?.setErrors({ titleMissing: true});
-          // do not add: formGroup.updateValueAndValidity(); 
-          // this will prevent the validity from being updated after the return value
-          return { invalidEvent: true };
+          if (response.items != null && response.items.length > 0) {
+            response.items.forEach((item: any) => {
+              validationErrors[item.content as string] = true;
+            });
+          }
+          return validationErrors;
         } else {
-          console.log('valid event');
           return null;
         }
       }),
@@ -38,24 +35,3 @@ export class EventValidationDirective implements AsyncValidator {
     );
   }
 }
-
-/*
-export function validateEvent(validationService: ValidationService): AsyncValidatorFn {
-  console.log('validating Event control');
-    const formGroup = control as FormGroup;
-    console.log('this', this);
-    return this.validationService.validateEvent(formGroup.value).pipe(
-      map(response => {
-        if (response.status >= 400) {
-          return { invalidEvent: true };
-        } else {
-          return null;
-        }
-      }),
-      catchError(error => {
-        return of({ invalidEvent: true });
-      }),
-      defaultIfEmpty(null),
-    );
-}
-  */

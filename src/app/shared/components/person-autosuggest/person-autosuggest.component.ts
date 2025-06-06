@@ -16,7 +16,6 @@ import {ConeService, PersonResource} from "../../../services/cone.service";
 import { HttpParams } from "@angular/common/http";
 import { FormBuilderService } from 'src/app/components/item-edit/services/form-builder.service';
 import { IdType, OrganizationVO } from 'src/app/model/inge';
-import {TranslatePipe} from "@ngx-translate/core";
 
 @Component({
   selector: 'pure-person-autosuggest',
@@ -26,7 +25,6 @@ import {TranslatePipe} from "@ngx-translate/core";
     ReactiveFormsModule,
     NgbHighlight,
     CommonModule,
-    TranslatePipe
   ],
   templateUrl: './person-autosuggest.component.html',
   styleUrl: './person-autosuggest.component.scss'
@@ -41,6 +39,9 @@ export class PersonAutosuggestComponent {
 
   @Input() formForPersonsIdValue! : FormControl;
   @Input() formForPersonsIdType? : FormControl;
+
+  @Input() validationError!: boolean;
+
 
   searching: boolean = false;
 
