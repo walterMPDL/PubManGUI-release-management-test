@@ -1,6 +1,7 @@
 const fs = require('node:fs');
 const icons = [
   "account_tree",
+  "add_circle",
   "apps",
   "breaking_news_alt_1",
   "cancel",
@@ -9,10 +10,11 @@ const icons = [
   "copy_all",
   "delete",
   "delete_forever",
+  "do_not_disturb_on",
   "drag_indicator",
   "edit",
   "error",
-  "first_page", 
+  "first_page",
   "folder_shared",
   "get_app",
   "help",
@@ -32,6 +34,7 @@ const icons = [
   "search",
   "task_alt",
   "tune",
+  "unarchive",
   "unfold_more",
   "upload",
   "warning",

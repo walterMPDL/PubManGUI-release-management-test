@@ -61,7 +61,7 @@ export const routes: Routes = [
     data: {
       saveComponent: true,
       breadcrumb: {
-        labelKey: 'header.search',
+        labelKey: 'common.searchResult',
       }
     },
   },

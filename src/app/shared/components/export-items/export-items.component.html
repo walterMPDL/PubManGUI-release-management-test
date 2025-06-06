@@ -1,6 +1,11 @@
 <div class="modal-header">
-  <h4 class="modal-title" id="modal-basic-title">{{ 'common.export' | translate }}</h4>
-  <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.dismiss('Cross click')"></button>
+  <h4 class="modal-title" id="modal-basic-title">
+    @if(type === 'exportAll') {
+      {{ 'common.searchResult' | translate }}:
+    }
+    {{ 'common.export' | translate }}
+  </h4>
+  <button type="button" class="btn-close" aria-label="Close" (click)="closeModal()"></button>
 </div>
 
 <div class="modal-body">
@@ -75,6 +80,7 @@
       </select>
     </div>
 
+
       @if(selectedCitationType===citationTypes.CSL) {
         <div class="mb-3">
           <pure-csl-autosuggest (selectedEvent)="selectCsl($event)" [selectedCslId]="selectedCslId" [selectedCslName]="selectedCslName"/>
@@ -85,6 +91,32 @@
       <h6>Citation Example</h6>
       <p [innerHTML]="currentCitation"></p>
     }
+  @if(type === 'exportAll') {
+    <div class="mb-3">
+      <label for="sizeInput">Size</label>
+      <input class="form-control" id="sizeInput" type="number" [(ngModel)]="selectedSize" (change)="handleSizeChange($event)"/>
+
+      <label for="sizeInput">Offset</label>
+      <input class="form-control" id="offsetInput" type="number" [(ngModel)]="selectedFrom" (change)="handleFromChange($event)"/>
+
+    </div>
+
+    <div>
+      <button type="button" class="btn btn-link" data-bs-toggle="collapse"
+              [attr.data-bs-target]="'#collapseSearchQuery'" aria-expanded="true" aria-controls="collapseOne">show query</button>
+
+      <div id="collapseSearchQuery" class="accordion-collapse collapse bg-light" aria-labelledby="headingOne">
+        <textarea class="form-control form-control-sm" [value]="completeQuery | json" rows="25" readonly="true"></textarea>
+      </div>
+    </div>
+
+
+
+
+
+
+
+  }
 </div>
 
 @if(errorMessage) {

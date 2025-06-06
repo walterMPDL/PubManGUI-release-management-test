@@ -28,12 +28,17 @@
               <span class="material-symbols-outlined">search</span>
             </a>
           </div>
+          <!--
           <input id="text" class="form-control border-0" type="search" formControlName="text"
             [placeholder]="'header.search'| translate" aria-label="Search"
                  [ngbTypeahead]="suggestSearchValues"
                  (selectItem)="suggestSelected($event)"
                  [resultTemplate]="rt"
                  [focusFirst]="false"
+          >
+          -->
+          <input id="text" class="form-control border-0" type="search" formControlName="text"
+                 [placeholder]="'header.search'| translate" aria-label="Search"
           >
           <div class="input-group-text border-0 p-0">
             <a class="btn" role="button" [ngbTooltip]="'header.advancedSearch' | translate"
