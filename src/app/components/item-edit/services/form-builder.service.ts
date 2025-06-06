@@ -94,7 +94,7 @@ export class FormBuilderService {
     });
     return format_form;
   }
-  
+
 
   alt_title_FG(at: AlternativeTitleVO | null) {
     const atf = this.fb.group<ControlType<AlternativeTitleVO>>({
@@ -114,7 +114,7 @@ export class FormBuilderService {
     },
     {
       asyncValidators: [this.creatorValidationDirective.validate.bind(this.creatorValidationDirective)],
-      updateOn: 'blur' // 'blur' or 'change' or 'submit'
+      updateOn: 'blur', // 'blur' or 'change' or 'submit'
     });
     creator?.organization ? creator_form.get('person')?.disable() : creator_form.get('organization')?.disable();
     return creator_form;

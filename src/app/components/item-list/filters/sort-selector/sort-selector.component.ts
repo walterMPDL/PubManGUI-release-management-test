@@ -25,12 +25,15 @@ export class SortSelectorComponent {
   //@Input() defaultSortOrder:string = "desc";
   //sortOptionNames = Object.keys(sortOptions);
   //@Output() sortChanged = new EventEmitter<any>();
-  selectedSort!:string;
-  selectedSortOrder!:string;
+
+  sortEntries: {sort:string, sortOrder:string}[] = [];
+  //selectedSort!:string;
+  //selectedSortOrder!:string;
 
   constructor(private route: ActivatedRoute, private router: Router) {
-    this.selectedSort = this.defaultSort;
-    this.selectedSortOrder = sortOptions[this.selectedSort].order;
+    this.sortEntries.push({sort: this.defaultSort, sortOrder: sortOptions[this.defaultSort].order})
+    //this.selectedSort = this.defaultSort;
+    //this.selectedSortOrder = sortOptions[this.selectedSort].order;
     //this.selectedSort=route.snapshot.queryParamMap.get('sort') || this.defaultSort;
     //this.selectedSortOrder = route.snapshot.queryParamMap.get('sortOrder' )|| sortOptions[this.selectedSort].order;
 
@@ -38,7 +41,9 @@ export class SortSelectorComponent {
 
   ngOnInit(){
     //this.selectedSort = this.defaultSort;
-    this.itemList.registerSort(this.getSortQuery(this.selectedSort))
+    //console.log(this.getCurrentSortQuery())
+    //console.log(this.sortEntries)
+    this.itemList.registerSort(this.getCurrentSortQuery())
 
   }
 
@@ -67,35 +72,50 @@ export class SortSelectorComponent {
 
 
   getCurrentSortQuery(){
-    return baseElasticSearchSortBuilder(sortOptions[this.selectedSort].index[0], this.selectedSortOrder);
+    return this.sortEntries.map(entry => {
+      //console.log("Building query for " + JSON.stringify(entry))
+      return baseElasticSearchSortBuilder(sortOptions[entry.sort].index[0], entry.sortOrder)
+    })
+    //return baseElasticSearchSortBuilder(sortOptions[this.selectedSort].index[0], this.selectedSortOrder);
 
   }
-  handleInputChange($event: any){
+  handleInputChange($event: any, index:number){
     const targetVal:string = $event.target.value;
-    this.selectedSort = targetVal;
-    this.selectedSortOrder = sortOptions[targetVal].order;
+
+    this.sortEntries[index].sort = targetVal;
+    this.sortEntries[index].sortOrder = sortOptions[targetVal].order;
+    //this.selectedSort = targetVal;
+    //this.selectedSortOrder = sortOptions[targetVal].order;
     const sortQuery = this.getCurrentSortQuery()
 
-    console.log(this.selectedSort + ' / '+ this.selectedSortOrder)
+    //console.log(this.selectedSort + ' / '+ this.selectedSortOrder)
     this.itemList.updateSort(sortQuery);
     //this.updateQueryParams()
   }
 
-  switchSortOrder() {
-    if(this.selectedSortOrder==='asc')
-      this.selectedSortOrder = 'desc'
+  switchSortOrder(index: number) {
+
+    if(this.sortEntries[index].sortOrder==='asc')
+      this.sortEntries[index].sortOrder = 'desc'
     else
-      this.selectedSortOrder = 'asc';
+      this.sortEntries[index].sortOrder = 'asc';
     const sortQuery = this.getCurrentSortQuery()
-    console.log(this.selectedSort + ' / '+ this.selectedSortOrder)
+    //console.log(this.selectedSort + ' / '+ this.selectedSortOrder)
     this.itemList.updateSort(sortQuery);
     //this.updateQueryParams()
   }
 
-  getSortQuery(sortOption: string)
-  {
-    return baseElasticSearchSortBuilder(sortOptions[sortOption].index[0], sortOptions[sortOption].order);
+  addSortCriterion(index:number) {
+    const selectedSortEntry = this.sortEntries[index];
+    this.sortEntries.push({sort: selectedSortEntry.sort, sortOrder: selectedSortEntry.sortOrder});
+    this.itemList.updateSort(this.getCurrentSortQuery());
   }
+
+  removeSortCriterion(index:number) {
+    this.sortEntries.splice(index,1);
+    this.itemList.updateSort(this.getCurrentSortQuery());
+    }
+
 
 }
 export interface SortOptionsType {
@@ -117,7 +137,7 @@ export const sortOptions: SortOptionsType = {
   },
 
   "modificationDate" : {
-    index: ['modificationDate'],
+    index: ['lastModificationDate'],
     order: 'desc',
     loggedIn: false,
     label: 'MetadataFields.dateModified'
@@ -129,7 +149,7 @@ export const sortOptions: SortOptionsType = {
     label: 'MetadataFields.dateCreated'
   },
   "title" : {
-    index: ['metadata.title'],
+    index: ['metadata.title.keyword'],
     order: 'asc',
     loggedIn: false,
     label: 'MetadataFields.title'
@@ -142,15 +162,27 @@ export const sortOptions: SortOptionsType = {
   },
   "date" : {
     index: ['sort-metadata-dates-by-category'],
-    order: 'asc',
+    order: 'desc',
     loggedIn: false,
     label: 'MetadataFields.date'
+  },
+  "dateYearOnly" : {
+    index: ['sort-metadata-dates-by-category-year'],
+    order: 'desc',
+    loggedIn: false,
+    label: 'MetadataFields.dateYearOnly'
   },
   "creators" : {
     index: ['sort-metadata-creators-compound'],
     order: 'asc',
     loggedIn: false,
     label: 'MetadataFields.creators'
+  },
+  "creatorsFirst" : {
+    index: ['sort-metadata-creators-first'],
+    order: 'asc',
+    loggedIn: false,
+    label: 'MetadataFields.creatorsFirst'
   },
   "publishingInfo" : {
     index: ['metadata.publishingInfo.publisher', 'metadata.publishingInfo.place', 'metadata.publishingInfo.edition'],
@@ -159,13 +191,13 @@ export const sortOptions: SortOptionsType = {
     label: 'MetadataFields.publishingInfo'
   },
   "eventTitle" : {
-    index: ['metadata.event.title'],
+    index: ['metadata.event.title.keyword'],
     order: 'asc',
     loggedIn: false,
     label: 'MetadataFields.eventTitle'
   },
   "sourceTitle" : {
-    index: ['metadata.sources.title'],
+    index: ['metadata.sources.title.keyword'],
     order: 'asc',
     loggedIn: false,
     label: 'MetadataFields.sourceTitle'
@@ -175,7 +207,62 @@ export const sortOptions: SortOptionsType = {
     order: 'asc',
     loggedIn: false,
     label: 'MetadataFields.reviewMethod'
-  }
+  },
+  "datePublishedInPrint" : {
+    index: ['metadata.datePublishedInPrint'],
+    order: 'desc',
+    loggedIn: false,
+    label: 'MetadataFields.datePublishedInPrint'
+  },
+  "dateAccepted" : {
+    index: ['metadata.dateAccepted'],
+    order: 'desc',
+    loggedIn: false,
+    label: 'MetadataFields.dateAccepted'
+  },
+  "datePublishedOnline" : {
+    index: ['metadata.datePublishedOnline'],
+    order: 'desc',
+    loggedIn: false,
+    label: 'MetadataFields.datePublishedOnline'
+  },
+  "degree" : {
+    index: ['metadata.degree'],
+    order: 'asc',
+    loggedIn: false,
+    label: 'MetadataFields.degree'
+  },
+  "eventStartDate" : {
+    index: ['metadata.event.startDate'],
+    order: 'desc',
+    loggedIn: false,
+    label: 'MetadataFields.eventStartDate'
+  },
+  "freeKeywords" : {
+    index: ['metadata.freeKeywords.keyword'],
+    order: 'asc',
+    loggedIn: false,
+    label: 'MetadataFields.keywords'
+  },
+  "subjectType" : {
+    index: ['metadata.subjects.type'],
+    order: 'asc',
+    loggedIn: false,
+    label: 'MetadataFields.subjectType'
+  },
+  "subjectValue" : {
+    index: ['metadata.subjects.value.keyword'],
+    order: 'asc',
+    loggedIn: false,
+    label: 'MetadataFields.subjectValue'
+  },
+  "localTags" : {
+    index: ['localTags.keyword'],
+    order: 'asc',
+    loggedIn: false,
+    label: 'MetadataFields.localTags'
+  },
+
 
 }
 /*

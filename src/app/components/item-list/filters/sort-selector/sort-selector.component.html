@@ -1,21 +1,40 @@
 <div class="container pb-4">
 <h6>{{'common.sort' | translate}}</h6>
-<div class="row">
-  <div class="col">
-    <select class="form-select" (change)="handleInputChange($event)">
-      @for (val of sortOptionEntries; track val) {
-        <option [value]="val[0]" [selected]="val[0] === selectedSort">
-          {{ val[1].label | translate}}
-        </option>
-      }
-    </select>
-  </div>
-  <div class="col-3">
-    <button type="button" class="btn btn-secondary btn-sm" (click)="switchSortOrder()">
-      <i class="bi {{selectedSortOrder==='asc' ? 'bi-arrow-up' : 'bi-arrow-down'}}"></i>
-    </button>
+  @for(sortEntry of sortEntries; track sortEntry.sort; let index = $index) {
+    <div class="row mt-2">
+      <div class="col-1">
+        {{index +1 }}:
+      </div>
+      <div class="col">
+        <select class="form-select" (change)="handleInputChange($event, index)">
+          @for (val of sortOptionEntries; track val) {
+            <option [value]="val[0]" [selected]="val[0] === sortEntry.sort">
+              {{ val[1].label | translate}}
+            </option>
+          }
+        </select>
+      </div>
+      <div class="col-3">
+        <button type="button" class="btn btn-secondary btn-sm" (click)="switchSortOrder(index)">
+          <i class="bi {{sortEntry.sortOrder ==='asc' ? 'bi-arrow-up' : 'bi-arrow-down'}}"></i>
+        </button>
 
+      </div>
+    </div>
+    }
+
+  <div class="row me-auto">
+    <div class="col">
+  <button type="button" class="btn btn-sm p-0" (click)="addSortCriterion(0)">
+    <span class="material-symbols-outlined">add_circle</span>
+  </button>
+      @if(sortEntries.length > 1) {
+      <button type="button" class="btn btn-sm" (click)="removeSortCriterion(sortEntries.length -1)">
+        <span class="material-symbols-outlined">do_not_disturb_on</span>
+      </button>
+      }
+    </div>
   </div>
-</div>
+
 </div>
 

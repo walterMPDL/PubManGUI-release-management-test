@@ -10,11 +10,12 @@ import {SanitizeHtmlPipe} from "../../services/pipes/sanitize-html.pipe";
 import {environment} from 'src/environments/environment';
 import {NgbActiveModal} from "@ng-bootstrap/ng-bootstrap";
 import {ItemSelectionService} from "../../services/item-selection.service";
-import {map} from "rxjs";
+import {map, Subscription} from "rxjs";
 import {baseElasticSearchQueryBuilder} from "../../services/search-utils";
 import {LoadingComponent} from "../loading/loading.component";
 import {contentDispositionParser} from "../../services/utils";
 import {TranslatePipe} from "@ngx-translate/core";
+import {JsonPipe} from "@angular/common";
 
 
 @Component({
@@ -27,7 +28,8 @@ import {TranslatePipe} from "@ngx-translate/core";
     CslAutosuggestComponent,
     SanitizeHtmlPipe,
     LoadingComponent,
-    TranslatePipe
+    TranslatePipe,
+    JsonPipe
   ],
   templateUrl: './export-items.component.html',
   styleUrl: './export-items.component.scss'
@@ -38,6 +40,8 @@ export class ExportItemsComponent {
   //@Input() item: ItemVersionVO|undefined = undefined;
 
   @Input() sortQuery: any;
+  @Input() completeQuery: any;
+  @Input() type: 'exportSelected' | 'exportAll' = 'exportSelected';
   //@ViewChildren(CslAutosuggestComponent) cslAutosuggestComponent!: CslAutosuggestComponent;
 
   protected readonly exportTypes = exportTypes;
@@ -51,13 +55,17 @@ export class ExportItemsComponent {
   selectedCitationType: string = citationTypes.APA;
   selectedCslId = "";
   selectedCslName = "";
+  selectedSize = 500;
+  selectedFrom = 0;
 
   currentCitation: string = '';
 
   protected loading = false;
   protected errorMessage: string = "";
+  private exportSubscription?: Subscription;
 
   constructor(private itemService: ItemsService, protected activeModal: NgbActiveModal, private selectionService: ItemSelectionService) {
+
   }
 
   ngOnInit() {
@@ -72,7 +80,12 @@ export class ExportItemsComponent {
       this.selectedCslName = expType.cslName;
     }
 
-    this.itemIds = this.selectionService.selectedIds$.value;
+    if(this.type === 'exportSelected') {
+      this.itemIds = this.selectionService.selectedIds$.value;
+    }
+
+
+
     this.loadCitation();
   }
 
@@ -89,6 +102,8 @@ export class ExportItemsComponent {
 
   loadCitation() {
     if (!this.isFormat && this.isValid()) {
+
+
       this.itemService.retrieveSingleCitation(this.itemIds[0], this.selectedCitationType, this.selectedCslId).subscribe({
         next: (cit) => {
           //console.log('Citation: ' +cit)
@@ -120,6 +135,15 @@ export class ExportItemsComponent {
     this.updateStoredExportInfo();
   }
 
+  handleSizeChange($event: Event) {
+    console.log("handleSizeChange", $event,  this.selectedSize);
+    this.completeQuery.size = this.selectedSize;
+  }
+
+  handleFromChange($event: Event) {
+    this.completeQuery.from = this.selectedFrom;
+  }
+
   selectCsl(event: any) {
     this.selectedCslId = event.id;
     this.selectedCslName = event.value;
@@ -141,6 +165,13 @@ export class ExportItemsComponent {
 
   }
 
+  closeModal() {
+    if(this.exportSubscription) {
+      this.exportSubscription.unsubscribe();
+    }
+    this.activeModal.dismiss();
+  }
+
   get downloadLink() {
     return this.restUri + '/items/' + this.itemIds[0]
       + '/export?format=' + this.selectedExportType
@@ -150,15 +181,24 @@ export class ExportItemsComponent {
 
   download() {
     this.loading = true;
-    const searchQuery = {
-      query: {
-        terms : {"_id" : this.itemIds}
-      },
-      size: this.itemIds.length,
-      ...this.sortQuery && {sort: [this.sortQuery]},
+    let searchQuery: any = {};
+
+    if(this.type === 'exportSelected') {
+      searchQuery = {
+        query: {
+          terms: {"_id": this.itemIds}
+        },
+        size: this.itemIds.length,
+        ...this.sortQuery && {sort: [this.sortQuery]},
+      }
+    }
+    else {
+      searchQuery = this.completeQuery;
+      searchQuery.size = this.selectedSize;
+      searchQuery.from = this.selectedFrom;
     }
 
-    this.itemService.searchAndExport(searchQuery, this.selectedExportType, this.selectedCitationType, this.selectedCitationType === citationTypes.CSL ? this.selectedCslId : undefined, true).subscribe({
+    this.exportSubscription = this.itemService.searchAndExport(searchQuery, this.selectedExportType, this.selectedCitationType, this.selectedCitationType === citationTypes.CSL ? this.selectedCslId : undefined, true).subscribe({
       next: result => {
         if (result.body) {
           const blob: Blob = result.body;
