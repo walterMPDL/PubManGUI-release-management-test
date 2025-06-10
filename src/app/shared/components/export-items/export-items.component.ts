@@ -85,13 +85,6 @@ export class ExportItemsComponent {
     if(this.type === 'exportSelected') {
       this.itemIds = this.selectionService.selectedIds$.value;
     }
-    else {
-
-      const query = this.completeQuery.query;
-      console.log(encodeURI(JSON.stringify(query)));
-      this.atomFeedUrl = environment.inge_rest_uri + '/feed/search?q=' + encodeURI(JSON.stringify(query));
-    }
-
 
 
     this.loadCitation();
