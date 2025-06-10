@@ -20,7 +20,7 @@
     </button>
 
     <!-- d-lg-flex reqired! correspondent to navbar-expand-lg -->
-    <div class="collapse navbar-collapse d-lg-flex" id="header_nav">
+    <div class="collapse navbar-collapse d-none d-lg-flex" id="header_nav">
       <form id="search" class="col-6 d-flex justify-content-center align-items-center" role="search" [formGroup]="search_form"
         (ngSubmit)="search()">
         <div class="input-group input-group-sm rounded border border-2 w-50">
@@ -74,6 +74,7 @@
   </div>
 </nav>
 
+<!--
 <ng-template #rt let-r="result" let-t="term">
   @if(r.type === 'person') {
     <i class="bi bi-person-fill me-1"></i>
@@ -86,3 +87,4 @@
   }
   <span [innerHTML]="r.value | sanitizeHtmlCitation"></span>
 </ng-template>
+-->
