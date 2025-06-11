@@ -29,6 +29,8 @@ import {SanitizeHtmlCitationPipe} from "../../shared/services/pipes/sanitize-htm
 import sanitizeHtml from "sanitize-html";
 import {filter} from "rxjs/operators";
 
+import {MainnavComponent} from 'src/app/shared/components/mainnav/mainnav.component';
+
 
 @Component({
   selector: 'pure-header',
@@ -47,7 +49,8 @@ import {filter} from "rxjs/operators";
     TranslatePipe,
     NgbTooltip,
     NgbTypeahead,
-    SanitizeHtmlCitationPipe
+    SanitizeHtmlCitationPipe,
+    MainnavComponent,
   ]
 })
 export class HeaderComponent {
