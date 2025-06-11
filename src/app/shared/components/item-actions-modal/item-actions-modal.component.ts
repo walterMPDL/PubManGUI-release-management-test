@@ -22,7 +22,8 @@ import {LoadingComponent} from "../loading/loading.component";
 export class ItemActionsModalComponent {
 
   @Input() item!: ItemVersionVO;
-  @Input() action!: 'release' | 'submit' | 'revise' | 'withdraw' | 'delete' | 'addDoi';
+  @Input() action!: 'release' | 'submit' | 'revise' | 'withdraw' | 'delete' | 'addDoi' | 'rollback';
+  @Input() rollbackVersion?: number;
   @Output() successfullyDone: EventEmitter<string> = new EventEmitter();
 
   protected comment : string = '';
@@ -71,6 +72,10 @@ export class ItemActionsModalComponent {
         obs = this.addDoi();
         break;
       }
+      case "rollback": {
+        obs = this.rollback();
+        break;
+      }
     }
     if(obs) {
       this.subscription = obs.subscribe({
@@ -116,6 +121,10 @@ export class ItemActionsModalComponent {
 
   addDoi() {
     return this.itemsService.addDoi(this.item!.objectId!);
+  }
+
+  rollback() {
+    return this.itemsService.rollback(this.item!.objectId!, this.rollbackVersion!);
   }
 
 }
