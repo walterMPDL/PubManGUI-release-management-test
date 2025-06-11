@@ -1,5 +1,12 @@
 import Chainable = Cypress.Chainable;
 
+// Utility function to extract domain from baseUrl
+function getBaseDomain(): string {
+  const baseUrl = Cypress.config().baseUrl;
+  // @ts-ignore
+  return baseUrl.replace(/^https?:\/\//, '').replace(/:.*/, '');
+}
+
 Cypress.Commands.add('setLanguage', (locale: string) => {
   window.localStorage.setItem('locale', locale)
 })
@@ -14,9 +21,11 @@ Cypress.Commands.add('loginViaAPI', (userName, password) => {
     let responseToken = response.headers['token'] as string
     expect(responseToken).to.exist
 
-    //Cookies from the response are automatically used for further requests
-    //For a successful authentication the response token must be set as 'token' in the Local Storage
-    window.localStorage.setItem('token', responseToken)
+    //Cookies from the response are automatically used for further requests (but have the restUrl as domain)
+    //Set an additional login-cookie with baseUrl as domain (because the restUrl may be different to the baseUrl)
+    cy.setCookie('inge_auth_token', responseToken, {
+      domain: getBaseDomain()
+    })
   })
 })
 
