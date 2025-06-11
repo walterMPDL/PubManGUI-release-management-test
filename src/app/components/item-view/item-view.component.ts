@@ -9,7 +9,7 @@ import {DateToYearPipe} from "../../shared/services/pipes/date-to-year.pipe";
 import {ItemBadgesComponent} from "../../shared/components/item-badges/item-badges.component";
 import {NgbModal, NgbPopover, NgbTooltip} from "@ng-bootstrap/ng-bootstrap";
 import {ItemViewMetadataComponent} from "./item-view-metadata/item-view-metadata.component";
-import {BehaviorSubject, catchError, delay, map, Observable, pipe, tap, timeout} from "rxjs";
+import {BehaviorSubject, catchError, delay, forkJoin, map, Observable, pipe, tap, timeout} from "rxjs";
 import { environment } from 'src/environments/environment';
 import {
   ItemViewMetadataElementComponent
@@ -25,12 +25,13 @@ import {TopnavCartComponent} from "../../shared/components/topnav/topnav-cart/to
 import {ItemListStateService} from "../item-list/item-list-state.service";
 import {SanitizeHtmlCitationPipe} from "../../shared/services/pipes/sanitize-html-citation.pipe";
 import {ItemSelectionService} from "../../shared/services/item-selection.service";
-import {Title} from "@angular/platform-browser";
+import {DomSanitizer, Meta, Title} from "@angular/platform-browser";
 import {ItemActionsModalComponent} from "../../shared/components/item-actions-modal/item-actions-modal.component";
 import {LoadingComponent} from "../../shared/components/loading/loading.component";
 import {TranslatePipe} from "@ngx-translate/core";
 import {itemToVersionId} from "../../shared/services/utils";
 import {UsersService} from "../../services/pubman-rest-client/users.service";
+import sanitizeHtml from "sanitize-html";
 
 @Component({
   selector: 'pure-item-view',
@@ -80,9 +81,12 @@ export class ItemViewComponent {
   itemModifier$!: Observable<AccountUserDbVO>;
   itemCreator$!: Observable<AccountUserDbVO>;
 
+  metaTagElements: Element[] = [];
+
+
   constructor(private itemsService: ItemsService, private usersService: UsersService, protected aaService: AaService, private route: ActivatedRoute, private router: Router,
   private scroller: ViewportScroller, private messageService: MessageService, private modalService: NgbModal, protected listStateService: ItemListStateService, private itemSelectionService: ItemSelectionService,
-              private title: Title) {
+              private title: Title, private meta: Meta, private domSanitizer: DomSanitizer) {
 
   }
 
@@ -121,8 +125,10 @@ export class ItemViewComponent {
 
         //set HTMl title
         if(i.metadata?.title) {
-          this.title.setTitle(i.metadata.title)
+          const sanitizedTitle = sanitizeHtml(i.metadata.title, {allowedTags: []}) + ' | ' + this.title.getTitle();
+          this.title.setTitle(sanitizedTitle);
         }
+
 
         //init item in selection and state (for export, basket, batch, pagination etc)
         this.listStateService.initItemId(i.objectId);
@@ -178,13 +184,40 @@ export class ItemViewComponent {
           })
         }
 
+        this.addMetaTags(itemToVersionId(i));
+
         //Set item
         this.item = i;
       }
     })
   }
 
+  ngOnDestroy() {
+    //Remove meta tags from DOM
+    this.metaTagElements.forEach(element => {
+      document.head.removeChild(element);
+    });
+  }
 
+
+  addMetaTags(id: string) {
+
+    forkJoin({
+      dc: this.itemsService.retrieveSingleExport(id, "Html_Metatags_Dc_Xml", undefined, undefined, true, "text"),
+      highwire: this.itemsService.retrieveSingleExport(id, "Html_Metatags_Highwirepress_Cit_Xml", undefined, undefined, true, "text")
+    })
+    .subscribe(
+      res => {
+        const div = document.createElement('div');
+        div.innerHTML = res.dc + res.highwire;
+        Array.from(div.children).forEach(child => {
+          this.metaTagElements.push(child);
+          document.head.append(child)
+        })
+      }
+    );
+
+  }
 
   get firstAuthors() {
     return this.item?.metadata.creators.slice(0,10);
