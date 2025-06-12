@@ -76,13 +76,14 @@ Cypress.Commands.add('createItemViaAPI', (itemMetadata):  Chainable<Cypress.Resp
   })
 })
 
-Cypress.Commands.add('repeatedWait', (alias, responseBodyKey, responseBodyValue, waitTimeout, maxNumberOfWaits): Chainable<Cypress.Response<any>> => {
+Cypress.Commands.add('repeatedWait', (alias, responseBodyKey, responseBodyValues: string[], waitTimeout, maxNumberOfWaits): Chainable<Cypress.Response<any>> => {
   // @ts-ignore
   function recursiveWait () {
     maxNumberOfWaits--
     return cy.wait(alias, {timeout: waitTimeout}).then((interception): any => {
       // @ts-ignore
-      if (interception.response.body[responseBodyKey] === responseBodyValue || maxNumberOfWaits <= 0) {
+      const value = interception.response.body[responseBodyKey];
+      if (responseBodyValues.includes(value) || maxNumberOfWaits <= 0) {
         return interception.response;
       } else {
         return recursiveWait();
