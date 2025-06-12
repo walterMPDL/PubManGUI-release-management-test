@@ -6,7 +6,7 @@ import {ItemsService} from "../../../services/pubman-rest-client/items.service";
 import {MessageService} from "../../services/message.service";
 import {Router} from "@angular/router";
 import {Observable, Subscription} from "rxjs";
-import {TranslatePipe} from "@ngx-translate/core";
+import {TranslatePipe, TranslateService} from "@ngx-translate/core";
 import {LoadingComponent} from "../loading/loading.component";
 
 @Component({
@@ -34,7 +34,7 @@ export class ItemActionsModalComponent {
 
   private subscription?: Subscription;
 
-  constructor(protected activeModal: NgbActiveModal, private itemsService: ItemsService, private messageService: MessageService, private router: Router) {
+  constructor(protected activeModal: NgbActiveModal, private itemsService: ItemsService, private messageService: MessageService, private router: Router, private translateService: TranslateService) {
   }
 
   closeModal() {
@@ -80,7 +80,7 @@ export class ItemActionsModalComponent {
     if(obs) {
       this.subscription = obs.subscribe({
           next: (data: any) => {
-            this.messageService.success(this.action + " successful");
+            this.messageService.success(this.translateService.instant('common.' + this.action) + " successful");
             this.activeModal.close();
             this.successfullyDone.emit(data);
           },

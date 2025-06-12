@@ -59,7 +59,7 @@
 
         @if(isModeratorOrDepositor && item.latestVersion?.versionNumber !== item.versionNumber) {
 
-          <button class="nav-link" (click)="openActionsModal('rollback', item?.versionNumber)" ngbTooltip="Version {{item.versionNumber + ' ' + ('common.rollback' | translate)}}"
+          <button class="nav-link" (click)="openActionsModal('rollback', item?.versionNumber)" ngbTooltip="{{'common.rollback' | translate}} (Version {{item?.versionNumber}})"
                   placement="bottom-left">
             <i class="bi bi-skip-backward-fill"></i>
           </button>

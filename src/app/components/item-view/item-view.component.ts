@@ -292,6 +292,7 @@ export class ItemViewComponent {
       comp.rollbackVersion = rollbackVersion;
     }
     comp.successfullyDone.subscribe(data => {
+      this.listStateService.itemUpdated.next(this.item?.objectId);
       if(type !== 'delete') {
         this.init(this.item?.objectId!)
       }
