@@ -1,11 +1,11 @@
 <nav id="header" class="navbar navbar-light navbar-expand-xxl p-0 fixed-top header bg-light"
   [ngClass]="{ 'scrolled': isScrolled }">
   <div class="container-fluid d-flex justify-content-start" id="header_container">
-    <div class="d-block d-xxl-none">
+    <div class="d-block d-xxl-none align-middle">
       <pure-sidenav [mobile]="true"></pure-sidenav>
     </div>
 
-    <div id="brand" class="offset-0 offset-xxl-1 col-2 col-xxl-3 navbar-brand d-flex align-items-xxl-center">
+    <div id="brand" class="offset-0 offset-xxl-1 col-2 col-xxl-4 navbar-brand d-flex align-items-xxl-center">
       <div>
         <a [routerLink]="['/']">
           <img id="logo" src="assets/images/mpg_blue.svg" />
@@ -19,7 +19,7 @@
     </div>
 
     <div class="d-none d-xxl-flex row col-7">
-      <div class="col-8 d-flex align-items-center">
+      <div class="col-7 d-flex align-items-center">
         <pure-search></pure-search>
       </div>
 
