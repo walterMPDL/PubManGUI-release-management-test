@@ -89,7 +89,11 @@
 
 
       <h6>Citation Example</h6>
-      <p [innerHTML]="currentCitation"></p>
+      @if(currentCitation) {
+        <p [innerHTML]="currentCitation"></p>
+      } @else {
+        <pure-loading></pure-loading>
+      }
     }
   @if(type === 'exportAll') {
     <div class="mb-3">
@@ -102,19 +106,13 @@
     </div>
 
     <div>
-      <button type="button" class="btn btn-link" data-bs-toggle="collapse"
-              [attr.data-bs-target]="'#collapseSearchQuery'" aria-expanded="true" aria-controls="collapseOne">show query</button>
+      <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="collapse"
+              [attr.data-bs-target]="'#collapseSearchQuery'" aria-expanded="true" aria-controls="collapseOne"><i class="bi bi-chevron-down"></i> Show query</button>
 
       <div id="collapseSearchQuery" class="accordion-collapse collapse bg-light" aria-labelledby="headingOne">
         <textarea class="form-control form-control-sm" [value]="completeQuery | json" rows="25" readonly="true"></textarea>
       </div>
     </div>
-
-
-
-
-
-
 
   }
 </div>
@@ -126,11 +124,14 @@
 }
 
 <div class="modal-footer">
-  @if(!loading) {
-    <button type="button" class="btn btn-primary" (click)="download()" [disabled]="!isValid()">Download</button>
-  } @else {
-    <pure-loading></pure-loading>
-  }
+
+    <button type="button" class="btn btn-primary" (click)="download()" [disabled]="loading || !isValid()">Download
+      @if(loading)
+      {
+        <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+        <span class="visually-hidden" role="status">Loading...</span>
+      }
+    </button>
 
 
   <!--<button type="button" class="btn btn-outline-secondary" (click)="modal.close('Save click')">Download</button>-->

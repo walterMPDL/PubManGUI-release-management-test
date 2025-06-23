@@ -5,6 +5,7 @@ import {ItemVersionState} from "../../../../model/inge";
 import {baseElasticSearchSortBuilder} from "../../../../shared/services/search-utils";
 import {ActivatedRoute, Params, Router} from "@angular/router";
 import {TranslatePipe} from "@ngx-translate/core";
+import {NgbTooltip} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: 'pure-sort-selector',
@@ -12,7 +13,8 @@ import {TranslatePipe} from "@ngx-translate/core";
   imports: [
     FormsModule,
     ReactiveFormsModule,
-    TranslatePipe
+    TranslatePipe,
+    NgbTooltip
   ],
   templateUrl: './sort-selector.component.html',
   styleUrl: './sort-selector.component.scss'
@@ -172,6 +174,24 @@ export const sortOptions: SortOptionsType = {
     loggedIn: false,
     label: 'MetadataFields.dateYearOnly'
   },
+  "datePublishedInPrint" : {
+    index: ['metadata.datePublishedInPrint'],
+    order: 'desc',
+    loggedIn: false,
+    label: 'MetadataFields.datePublishedInPrint'
+  },
+  "dateAccepted" : {
+    index: ['metadata.dateAccepted'],
+    order: 'desc',
+    loggedIn: false,
+    label: 'MetadataFields.dateAccepted'
+  },
+  "datePublishedOnline" : {
+    index: ['metadata.datePublishedOnline'],
+    order: 'desc',
+    loggedIn: false,
+    label: 'MetadataFields.datePublishedOnline'
+  },
   "creators" : {
     index: ['sort-metadata-creators-compound'],
     order: 'asc',
@@ -196,6 +216,12 @@ export const sortOptions: SortOptionsType = {
     loggedIn: false,
     label: 'MetadataFields.eventTitle'
   },
+  "eventStartDate" : {
+    index: ['metadata.event.startDate'],
+    order: 'desc',
+    loggedIn: false,
+    label: 'MetadataFields.eventStartDate'
+  },
   "sourceTitle" : {
     index: ['metadata.sources.title.keyword'],
     order: 'asc',
@@ -208,36 +234,14 @@ export const sortOptions: SortOptionsType = {
     loggedIn: false,
     label: 'MetadataFields.reviewMethod'
   },
-  "datePublishedInPrint" : {
-    index: ['metadata.datePublishedInPrint'],
-    order: 'desc',
-    loggedIn: false,
-    label: 'MetadataFields.datePublishedInPrint'
-  },
-  "dateAccepted" : {
-    index: ['metadata.dateAccepted'],
-    order: 'desc',
-    loggedIn: false,
-    label: 'MetadataFields.dateAccepted'
-  },
-  "datePublishedOnline" : {
-    index: ['metadata.datePublishedOnline'],
-    order: 'desc',
-    loggedIn: false,
-    label: 'MetadataFields.datePublishedOnline'
-  },
+
   "degree" : {
     index: ['metadata.degree'],
     order: 'asc',
     loggedIn: false,
     label: 'MetadataFields.degree'
   },
-  "eventStartDate" : {
-    index: ['metadata.event.startDate'],
-    order: 'desc',
-    loggedIn: false,
-    label: 'MetadataFields.eventStartDate'
-  },
+
   "freeKeywords" : {
     index: ['metadata.freeKeywords.keyword'],
     order: 'asc',

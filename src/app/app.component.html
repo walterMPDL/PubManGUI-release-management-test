@@ -8,12 +8,12 @@
 
     alternative: use navbar-expand-lg (requires navbar-toggler and collapse navbar-collapse d-lg-flex)
     -->
-    <div class="col-2 d-none d-lg-block">
+    <div class="col-2 d-none d-xxl-block">
       <pure-sidenav [mobile]="false"></pure-sidenav>
     </div>
-    <div class="col-lg-10 col-sm-12 mt-5">
+    <div class="col-12 col-xxl-10 mt-5">
       <div class="container-fluid">
-        <div class="col-lg-10 col-sm-12">
+        <div id="content" class="col-12 col-xxl-10 mt-xxl-0">
           <router-outlet></router-outlet>
         </div>
       </div>

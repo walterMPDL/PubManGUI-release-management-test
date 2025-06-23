@@ -1,79 +1,102 @@
-<nav id="header" class="navbar navbar-light navbar-expand-lg p-0 fixed-top header bg-light" [ngClass]="{ 'scrolled': isScrolled }">
-  <div class="container-fluid">
-    <div class="d-sm-block d-md-block d-lg-none">
+<nav id="header" class="navbar navbar-light navbar-expand-xxl p-0 fixed-top header bg-light"
+  [ngClass]="{ 'scrolled': isScrolled }">
+  <div class="container-fluid d-flex justify-content-start" id="header_container">
+    <div class="d-block d-xxl-none align-middle">
       <pure-sidenav [mobile]="true"></pure-sidenav>
     </div>
 
-    <div class="offset-1 navbar-brand d-flex align-items-center">
-      <div class="d-none d-lg-block">
+    <div id="brand" class="offset-0 offset-xxl-1 col-2 col-xxl-4 navbar-brand d-flex align-items-xxl-center">
+      <div>
         <a [routerLink]="['/']">
           <img id="logo" src="assets/images/mpg_blue.svg" />
         </a>
       </div>
-      <a id="brand" [routerLink]="['/']">
-        <span class="ms-3">{{'header.brand.name'| translate}}</span>
-      </a>
+      <div>
+        <a id="brand_name" [routerLink]="['/']">
+          <span class="ms-3 mt-3">{{'header.brand.name'| translate}}</span>
+        </a>
+      </div>
     </div>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#header_nav"
-      aria-controls="header_nav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
 
-    <!-- d-lg-flex reqired! correspondent to navbar-expand-lg -->
-    <div class="collapse navbar-collapse d-lg-flex" id="header_nav">
-      <form id="search" class="col-6 d-flex justify-content-center align-items-center" role="search" [formGroup]="search_form"
-        (ngSubmit)="search()">
-        <div class="input-group input-group-sm rounded border border-2 w-50">
-          <div class="input-group-text border-0 p-0"><a role="button" class="btn" (click)="search()" [ngbTooltip]="'header.search' | translate">
-              <span class="material-symbols-outlined">search</span>
-            </a>
-          </div>
-          <!--
-          <input id="text" class="form-control border-0" type="search" formControlName="text"
-            [placeholder]="'header.search'| translate" aria-label="Search"
-                 [ngbTypeahead]="suggestSearchValues"
-                 (selectItem)="suggestSelected($event)"
-                 [resultTemplate]="rt"
-                 [focusFirst]="false"
-          >
-          -->
-          <input id="text" class="form-control border-0" type="search" formControlName="text"
-                 [placeholder]="'header.search'| translate" aria-label="Search"
-          >
-          <div class="input-group-text border-0 p-0">
-            <a class="btn" role="button" [ngbTooltip]="'header.advancedSearch' | translate"
-              [routerLink]="['/advanced-search']">
-              <span class="material-symbols-outlined">tune</span>
-            </a>
-          </div>
-        </div>
-      </form>
-      <div class="col-4 d-flex justify-content-end align-items-end">
+    <div class="d-none d-xxl-flex row col-7">
+      <div class="col-7 d-flex align-items-center">
+        <pure-search></pure-search>
+      </div>
+
+      <div class="col-4 d-flex justify-content-end align-items-center">
         <!--<pure-switch-bs-theme class="me-4"></pure-switch-bs-theme>-->
         <div class="me-4">
-          <a ngbTooltip="{{ 'common.help' | translate }}"
-            placement="bottom-left" [routerLink]="['/help']" class="nav-link">
+          <a ngbTooltip="{{ 'common.help' | translate }}" placement="bottom-left" [routerLink]="['/help']"
+            class="nav-link">
             <span class="material-symbols-outlined">help</span>
           </a>
         </div>
+
         <div class="me-4">
           <a [routerLink]="[]" class="nav-link" (click)="tools()">
             <span class="material-symbols-outlined">apps</span>
           </a>
         </div>
+
         <pure-aa class="me-4"></pure-aa>
+
         <pure-lang-switch></pure-lang-switch>
-        <!--
-        <div>
-          <a [routerLink]="[]" class="nav-link" (click)="switch_lang()"><img class="" height="16px" width="auto"
-              src="assets/images/flag_gb.svg" /></a>
-        </div>
-      -->
+
       </div>
     </div>
+
+    <div class="colspan-1"></div>
+
+    <!--div class="d-block d-xxl-none">
+      <pure-mainnav></pure-mainnav>
+    </div-->
+
+    <!--
+    <div class="d-block d-xxl-none">
+      <button class="navbar-toggler d-flex" type="button" data-bs-toggle="collapse"
+        data-bs-target="#main_nav_mobile" aria-controls="main_nav_mobile" aria-expanded="false" 
+        aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+-->
+      <!--div class="collapse navbar-collapse">
+        <nav class="nav flex-column py-2">
+          <ng-container>
+            <pure-mainnav></pure-mainnav>
+          </ng-container>
+        </nav>
+      </div-->
+
+    <!--/div-->
+
+    <!-- d-lg-flex reqired! correspondent to navbar-expand-lg -->
+
+    <!--div class="collapse navbar-collapse d-xxl-none" id="main_nav_mobile"-->
+
+    <!--
+    <div class="d-block d-xxl-none">
+
+      <button class="navbar-toggler d-flex" type="button" data-bs-toggle="collapse" data-bs-target="#side_nav_mobile"
+        aria-controls="side_nav_mobile" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse">
+        <nav class="nav flex-column py-2">
+          <ng-container>
+            <pure-mainnav></pure-mainnav>
+          </ng-container>
+        </nav>
+      </div>
+
+    </div>
+    -->
+    <!--/div-->
+
   </div>
 </nav>
 
+<!--
 <ng-template #rt let-r="result" let-t="term">
   @if(r.type === 'person') {
     <i class="bi bi-person-fill me-1"></i>
@@ -86,3 +109,4 @@
   }
   <span [innerHTML]="r.value | sanitizeHtmlCitation"></span>
 </ng-template>
+-->

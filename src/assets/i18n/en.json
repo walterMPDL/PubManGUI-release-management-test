@@ -10,6 +10,7 @@
 		"cancel": "Cancel",
 		"completed": "completed",
 		"confirm": "Confirm",
+    "copyToClipboard": "Copy to clipboard",
 		"datasets": "Datasets",
 		"deselectAll": "deselect all",
 		"entry": "Entry",
@@ -19,6 +20,7 @@
 		"help": "Help",
 		"home": "Home",
 		"item": "Dataset",
+    "items": "Datasets",
 		"link": "Link",
 		"links": "Links",
 		"logs": "Logs",
@@ -32,6 +34,7 @@
 		"qa": "QA Area",
     "searchResult": "Search Result",
 		"selectAll": "select all",
+    "selection": "Selection",
 		"sort": "Sort",
 		"succeded": "succeeded",
 		"version": "Version",
@@ -46,6 +49,7 @@
 		"revise": "Send back",
 		"useAsTemplate": "Use as template",
 		"addDoi": "Add DOI",
+    "rollback": "Revert",
 		"comment": "Comment",
 		"actionWarning": "This action is irreversible. Are you sure?",
 		"dateFormat": "YYYY-MM-DD",
@@ -602,15 +606,17 @@
     "dateCreated": "Creation Date",
 		"dateModified": "Modification Date",
 		"date": "Date",
+    "dateYearOnly" : "Date (year only)",
 		"genre": "Genre",
 		"title": "Title",
 		"creators": "Creator",
+    "creatorsFirst": "Creator (first only)",
 		"publishingInfo": "Publishing Info",
 		"event": "Event",
 		"eventTitle": "Event Title",
 		"eventPlace": "Place of event",
-		"eventStartDate": "Start date",
-		"eventEndDate": "End date",
+		"eventStartDate": "Event start date",
+		"eventEndDate": "Event end date",
 		"eventInvited": "Invited",
 		"degree": "Degree",
 		"reviewMethod": "Review Method",
@@ -656,7 +662,10 @@
 		"person": "Person",
 		"classification": "Classification",
     "creator": "Creator",
-    "modifier": "Modifier"
+    "modifier": "Modifier",
+    "subjectType": "Classification type",
+    "subjectValue" : "Classification value",
+    "journal" : "Journal"
 	},
 	"FileMetadataFields": {
 		"visibility": "Visibility",
@@ -731,6 +740,8 @@
 		"NO": "No",
 		"WHATEVER": "-",
 		"searchButton": "Search",
-		"saveSearchButton": "Open/Save Search"
+		"saveSearchButton": "Open/Save Search",
+    "asc": "ascending",
+    "desc" : "descending"
 	}
 }

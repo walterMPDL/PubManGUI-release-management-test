@@ -29,6 +29,7 @@ import {ItemSelectionService} from "../../shared/services/item-selection.service
 
 import { TranslatePipe } from "@ngx-translate/core";
 import {itemToVersionId} from "../../shared/services/utils";
+import {FeedModalComponent} from "../../shared/components/feed-modal/feed-modal.component";
 
 
 @Component({
@@ -55,6 +56,7 @@ import {itemToVersionId} from "../../shared/services/utils";
 export class ItemListComponent implements AfterViewInit{
 
   @Input() searchQuery: Observable<any> = of({});
+  @Input() searchResultType = false;
   //@Input() filterSectionTemplate?: TemplateRef<any> | undefined;
   @ViewChildren(ItemListElementComponent) list_items!: QueryList<ItemListElementComponent>;
   //@ViewChild(PaginatorComponent) paginator!: PaginatorComponent
@@ -78,6 +80,8 @@ export class ItemListComponent implements AfterViewInit{
 
   queryParamSubscription!: Subscription;
 
+  itemUpdatedSubscription!: Subscription;
+
 
   constructor(
     private service: ItemsService,
@@ -90,6 +94,12 @@ export class ItemListComponent implements AfterViewInit{
     protected selectionService: ItemSelectionService
   )
   {
+
+    this.itemUpdatedSubscription = this.listStateService.itemUpdated.subscribe(itemId => {
+      if(itemId) {
+        this.updateList();
+      }
+    })
 
     this.queryParamSubscription =
       this.activatedRoute.queryParamMap.subscribe((paramMap) => {
@@ -129,6 +139,7 @@ export class ItemListComponent implements AfterViewInit{
   ngOnDestroy() {
     this.searchQuerySubscription.unsubscribe();
     this.queryParamSubscription.unsubscribe()
+    this.itemUpdatedSubscription.unsubscribe();
   }
 
   ngAfterViewInit(): void {
@@ -289,7 +300,7 @@ export class ItemListComponent implements AfterViewInit{
   }
 
   openExportModal() {
-    const comp: ExportItemsComponent = this.modalService.open(ExportItemsComponent).componentInstance;
+    const comp: ExportItemsComponent = this.modalService.open(ExportItemsComponent, {size: "lg"}).componentInstance;
     comp.type = 'exportSelected';
     comp.sortQuery = this.currentSortQuery;
   }
@@ -306,6 +317,12 @@ export class ItemListComponent implements AfterViewInit{
       comp.itemIds = [itemToVersionId(item)];
     }
 
+
+  }
+
+  openFeedModal() {
+    const comp: FeedModalComponent = this.modalService.open(FeedModalComponent).componentInstance;
+    comp.searchQuery = this.currentCompleteQuery.query;
 
   }
 
