@@ -30,11 +30,12 @@
 
     <div class="collapse mt-4" id="side_nav_mobile">
       <div class="d-flex flex-column py-2 px-4">
+        <pure-aa class="d-flex justify-content-end d-sm-none"></pure-aa>
         <div class="row col-12 d-flex justify-content-between">
           <div class="col-8 d-flex align-items-center">
             <pure-search></pure-search>
           </div>
-          <pure-aa class="col-3"></pure-aa>
+          <pure-aa class="col-3 d-none d-sm-flex justify-content-end"></pure-aa>
         </div>
         <ng-container *ngTemplateOutlet="options"></ng-container>
         <pure-lang-switch class="d-flex justify-content-center"></pure-lang-switch>

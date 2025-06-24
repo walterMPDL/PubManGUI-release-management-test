@@ -14,7 +14,7 @@ export class en { }
 export class de { }
 
 @Component({
-  selector: 'pure-help',
+  selector: 'pure-disclaimer',
   imports: [],
   template: ``,
   changeDetection: ChangeDetectionStrategy.OnPush,

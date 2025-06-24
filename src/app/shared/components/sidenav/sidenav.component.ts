@@ -46,7 +46,6 @@ export class SidenavComponent implements AfterViewInit {
     this.batchSvc.items;
     this.content = this.document.getElementById('content');
     this.messaging = this.document.getElementById('messaging');
-    this.mobileElements = this.document.getElementsByClassName('pure-mobile-content');
   }
 
   /*
@@ -67,20 +66,10 @@ export class SidenavComponent implements AfterViewInit {
         if (this.nav_mobile) {
           this.content.style.marginTop = '30.5em';
           this.messaging!.style.marginTop = '31.5em';
-          if (this.mobileElements) {
-            for (let i = 0; i < this.mobileElements.length; i++) {
-              this.mobileElements[i].classList.add('pure-mobile-content-active');
-            }
-          }
         }
         else {
           this.content.style.marginTop = '0';
           this.messaging!.style.marginTop = '0';
-          if (this.mobileElements) {
-            for (let i = 0; i < this.mobileElements.length; i++) {
-              this.mobileElements[i].classList.remove('pure-mobile-content-active');
-            }
-          }
         }
       }
     } else {
@@ -91,15 +80,10 @@ export class SidenavComponent implements AfterViewInit {
   collapse() {
     if (!this.mobile) {
       this.renderer.addClass(this.nav.nativeElement, 'collapsed');
-      if (this.content) {
-        this.content.style.marginTop = '0';
+      //if (this.content) {
+        this.content!.style.marginTop = '0';
         this.messaging!.style.marginTop = '0';
-        if (this.mobileElements) {
-          for (let i = 0; i < this.mobileElements.length; i++) {
-            this.mobileElements[i].classList.remove('pure-mobile-content-active');
-          }
-        }
-      }
+      //}
     }
   }
 
