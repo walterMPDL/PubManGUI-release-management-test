@@ -381,15 +381,12 @@
         <h5>{{ 'common.item' | translate }} Information</h5>
         @if (item.publicState !== 'WITHDRAWN') {
 
-
-
-
           @if ((item.latestRelease | empty) && item.versionNumber !== item.latestRelease?.versionNumber) {
             <div class="mt-3">
               <h6 class="">{{ 'common.latestRelease' | translate }}</h6>
               <div>
                 <a class="icon-link fw-bold" routerLink="/view/{{item.objectId +'_' + item.latestRelease?.versionNumber}}"
-                   target="_blank">
+                   >
                   <i class="bi-link"></i>
                   <span class="text-truncate">Version {{ item.latestRelease?.versionNumber }}</span>
                 </a>
@@ -405,7 +402,7 @@
               <h6>{{ 'common.latestVersion' | translate }}</h6>
               <div>
                 <a class="icon-link fw-bold" routerLink="/view/{{item.objectId +'_' + item.latestVersion?.versionNumber}}"
-                   target="_blank">
+                   >
                   <i class="bi-link"></i>
                   <span class="text-truncate">Version {{ item.latestVersion?.versionNumber }}</span>
                 </a>
@@ -419,7 +416,7 @@
               <h6>{{ 'common.item' | translate }} {{ 'common.handle' | translate }}</h6>
               <div class="row">
                 <div class="col-11">
-                <a class="icon-link" href="https://hdl.handle.net/{{item.objectPid?.substring(4)}}" target="_blank">
+                <a class="icon-link" href="https://hdl.handle.net/{{item.objectPid?.substring(4)}}" >
                   <i class="bi-link"></i>
                   <span class="text-truncate">{{ item.objectPid }}</span>
                 </a>
@@ -437,7 +434,7 @@
               <h6>{{ 'common.version' | translate }} {{ item.versionNumber }} {{ 'common.handle' | translate }}</h6>
               <div class="row">
                 <div class="col">
-                <a class="icon-link" href="https://hdl.handle.net/{{item.versionPid?.substring(4)}}" target="_blank">
+                <a class="icon-link" href="https://hdl.handle.net/{{item.versionPid?.substring(4)}}" >
                   <i class="bi-link"></i>
                   <span class="text-truncate">{{ item.versionPid }}</span>
                 </a>
