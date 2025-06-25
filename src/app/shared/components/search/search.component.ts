@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostListener, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 
@@ -22,6 +22,7 @@ import {
 import { ItemsService } from "src/app/services/pubman-rest-client/items.service";
 import sanitizeHtml from "sanitize-html";
 import { filter } from "rxjs/operators";
+import { DOCUMENT } from '@angular/common';
 
 @Component({
   selector: 'pure-search',
@@ -35,7 +36,7 @@ import { filter } from "rxjs/operators";
   templateUrl: './search.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SearchComponent {
+export class SearchComponent implements OnInit{
 
   search_form = this.form_builder.group({
     text: '',
@@ -47,6 +48,16 @@ export class SearchComponent {
     private searchState: SearchStateService,
     private itemsService: ItemsService
   ) {
+  }
+
+  private document = inject(DOCUMENT);
+
+  mobile: boolean | null = null;
+  mobile_options: HTMLElement | null = null;
+
+  ngOnInit(): void {
+    const viewWidth = document.documentElement.offsetWidth || 0;
+    this.mobile = viewWidth < 1400 ? true : false;
   }
 
 
@@ -185,6 +196,20 @@ export class SearchComponent {
     this.router.navigateByUrl('/search');
     event.preventDefault();
     this.search_form.controls['text'].patchValue(searchTerm);
+  }
+
+  collapse() {
+    console.log('collapse ', this.mobile);
+    if (this.mobile) {
+      if (!this.mobile_options) this.mobile_options = this.document.getElementById('side_nav_mobile_options');
+      if (this.mobile_options?.classList.contains('show')) this.mobile_options!.classList.remove('show');
+    }
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onWindowResize() {
+    const viewWidth = document.documentElement.offsetWidth || 0;
+    this.mobile = viewWidth < 1400 ? true : false;
   }
 
 
