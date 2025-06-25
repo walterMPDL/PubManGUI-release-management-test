@@ -17,27 +17,32 @@
   </div>
 </nav>
 } @else {
-<div class="side_nav_mobile" (click)="expand()" (mouseleave)="collapse()">
+<div class="side_nav_mobile" #sidenav (mouseenter)="expand()" (mouseleave)="collapse()">
   <div class="container-fluid">
 
     <nav class="d-flex flex-column align-items-end mt-3">
       <button class="navbar-toggler border border-0" type="button" data-bs-toggle="collapse"
-        data-bs-target="#side_nav_mobile" aria-controls="side_nav_mobile" aria-expanded="false"
+        data-bs-target="#side_nav_mobile_options" aria-controls="side_nav_mobile_options" aria-expanded="false"
         aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
     </nav>
 
-    <div class="collapse mt-4" id="side_nav_mobile">
+    <div id="side_nav_mobile_options" class="collapse">
       <div class="d-flex flex-column py-2 px-4">
-        <pure-aa class="d-flex justify-content-end d-sm-none"></pure-aa>
-        <div class="row col-12 d-flex justify-content-between">
-          <div class="col-8 d-flex align-items-center">
+
+        <pure-aa class="d-flex justify-content-end mb-2 d-sm-none"></pure-aa>
+
+        <div class="row d-flex justify-content-sm-between">
+          <div class="col-12 col-sm-8 d-sm-flex align-items-sm-center">
             <pure-search></pure-search>
           </div>
-          <pure-aa class="col-3 d-none d-sm-flex justify-content-end"></pure-aa>
+
+          <pure-aa class="col-sm-3 d-none d-sm-flex"></pure-aa>
         </div>
+
         <ng-container *ngTemplateOutlet="options"></ng-container>
+
         <pure-lang-switch class="d-flex justify-content-center"></pure-lang-switch>
 
         <!--

@@ -1,5 +1,5 @@
-import { CommonModule } from '@angular/common';
-import { OnInit, Component, signal, inject } from '@angular/core';
+import { CommonModule, DOCUMENT } from '@angular/common';
+import { OnInit, Component, signal, inject, HostListener } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 
 import { AaService } from 'src/app/services/aa.service';
@@ -31,6 +31,10 @@ export class ImportsNavComponent implements OnInit {
   importsSvc = inject(ImportsService);
   aaSvc = inject(AaService);
   translateSvc = inject(TranslateService);
+  private document = inject(DOCUMENT);
+
+  mobile: boolean | null = null;
+  mobile_options: HTMLElement | null = null;
 
   public navList = signal<NavOption[]>([
     { route: '/imports/new', label: 'new', disabled: false },
@@ -40,13 +44,16 @@ export class ImportsNavComponent implements OnInit {
   ngOnInit(): void {
     this.navList()[0].disabled = !this.importsSvc.hasImports();
     this.navList()[1].disabled = !this.importsSvc.hasImports();
+
+    const viewWidth = document.documentElement.offsetWidth || 0;
+    this.mobile = viewWidth < 1400 ? true : false;
   }
 
   warning(option: string) {
     switch (option) {
       case '/imports/myimports':
         if (!this.importsSvc.hasImports()) {
-          this.msgSvc.warning(this.translateSvc.instant(_('imports.list.empty'))+'\n');
+          this.msgSvc.warning(this.translateSvc.instant(_('imports.list.empty')) + '\n');
           this.msgSvc.dialog.afterAllClosed.subscribe(result => {
             this.router.navigate(['/imports'])
           })
@@ -54,13 +61,28 @@ export class ImportsNavComponent implements OnInit {
         break;
       case '/imports/new':
         if (this.importsSvc.isImportRunning()) {
-          this.msgSvc.warning(this.translateSvc.instant(_('imports.fileImport.running'))+'\n');
+          this.msgSvc.warning(this.translateSvc.instant(_('imports.fileImport.running')) + '\n');
           this.msgSvc.dialog.afterAllClosed.subscribe(result => {
             this.router.navigate(['/imports'])
           })
         }
         break;
     }
+    this.collapse();
+  }
+
+  collapse() {
+    console.log('collapse ', this.mobile);
+    if (this.mobile) {
+      if (!this.mobile_options) this.mobile_options = this.document.getElementById('side_nav_mobile_options');
+      if (this.mobile_options?.classList.contains('show')) this.mobile_options!.classList.remove('show');
+    }
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onWindowResize() {
+    const viewWidth = document.documentElement.offsetWidth || 0;
+    this.mobile = viewWidth < 1400 ? true : false;
   }
 
 }

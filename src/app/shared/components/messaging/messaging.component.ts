@@ -44,8 +44,8 @@ export class MessagingComponent {
         this.bg_color = `bg-success-subtle`;
         this.severity_icon = 'task_alt';
         setTimeout(() => {
-          //this.close();
-        }, 15000);
+          this.close();
+        }, 20000);
         break;
       case 'info':
         this.fg_color = 'text-info-emphasis';
