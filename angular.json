@@ -89,7 +89,6 @@
             },
             "development": {
               "buildTarget": "PubManGUI:build:development",
-              //Use proxy for CoNE requests
               "proxyConfig": "src/proxy.conf.json"
             }
           },

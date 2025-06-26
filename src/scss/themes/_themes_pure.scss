@@ -68,17 +68,6 @@
     background-color: $body-tertiary-bg;
   }
 
-  .material-symbols-outlined {
-    //color: $link-color;
-  }
-  /*
-      a {
-        color : $link-color;
-      }
-      a:hover {
-          color: $link-hover-color;
-      }
-  */
   .nav-link {
     color: $link-color;
   }
@@ -240,10 +229,6 @@
 
   .list-group-item:hover {
     background-color: $body-tertiary-bg-dark;
-  }
-
-  .material-symbols-outlined {
-    //color: $link-color-dark;
   }
 
   .mat-mdc-chip.mat-mdc-standard-chip {
