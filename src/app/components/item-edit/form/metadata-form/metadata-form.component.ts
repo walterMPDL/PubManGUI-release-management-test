@@ -22,6 +22,10 @@ import { ContextsService } from 'src/app/services/pubman-rest-client/contexts.se
 import { AaService } from 'src/app/services/aa.service';
 import { MessageService } from 'src/app/shared/services/message.service';
 
+enum ErrorsEnum {
+  DATE_NOT_PROVIDED = "DateNotProvided",
+}
+
 @Component({
   selector: 'pure-metadata-form',
   standalone: true,
@@ -63,6 +67,7 @@ export class MetadataFormComponent implements OnInit {
 
   allowed_genre_types = Object.keys(MdsPublicationGenre);
   review_method_types = Object.keys(ReviewMethod);
+  error_types = ErrorsEnum;
 
   multipleCreators = new FormControl<string>('');
   loading: boolean = false;
