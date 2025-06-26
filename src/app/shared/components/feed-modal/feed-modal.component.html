@@ -1,0 +1,26 @@
+
+<div class="modal-header">
+  <h4 class="modal-title" id="modal-basic-title">Atom Feed URL</h4>
+  <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.dismiss('Cross click')"></button>
+</div>
+
+
+
+  <div class="modal-body">
+    <div class="input-group mb-3">
+
+      <textarea class="form-control form-control-sm" rows="3" readonly [value]="atomFeedUrl"></textarea>
+
+      <button class="btn btn-primary" type="button" id="button-addon1" pureCopyButton
+              [textToCopy]="atomFeedUrl">
+      </button>
+    </div>
+
+  </div>
+
+
+
+
+
+
+

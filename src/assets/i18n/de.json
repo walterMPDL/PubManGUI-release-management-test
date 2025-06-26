@@ -10,6 +10,7 @@
 		"cancel": "Abbrechen",
 		"completed": "abgeschlossen",
 		"confirm": "Bestätigen",
+    "copyToClipboard": "In die Zwischenablage kopieren",
 		"datasets": "Datensätze",
 		"deselectAll": "Alles abwählen",
 		"entry": "Eingabe",
@@ -19,6 +20,7 @@
 		"help": "Hilfe",
 		"home": "Home",
 		"item": "Datensatz",
+    "items": "Datensätze",
 		"link": "Link",
 		"links": "Links",
 		"logs": "Protokolle",
@@ -30,7 +32,9 @@
 		"pagination.of": "von",
 		"pagination.page": "Seite",
 		"qa": "QA-Bereich",
+    "searchResult": "Suchergebnis",
 		"selectAll": "Alles auswählen",
+    "selection": "Auswahl",
 		"sort": "Sortierung",
 		"succeded": "erfolgreich",
 		"version": "Version",
@@ -45,6 +49,7 @@
 		"revise": "Zurücksenden",
 		"useAsTemplate": "Als Vorlage verwenden",
 		"addDoi": "DOI hinzufügen",
+    "rollback": "Wiederherstellen",
 		"comment": "Kommentar",
 		"actionWarning": "Diese Aktion ist nicht umkehrbar. Sind sie sicher?",
 		"dateFormat": "JJJJ-MM-TT",
@@ -74,7 +79,9 @@
 	},
 	"footer": {
 		"cookies": "Cookie Einstellungen",
-		"privacy": "Datenschutzerklärung"
+		"privacy": "Datenschutzerklärung",
+		"disclaimer": "Impressum"
+
 	},
 	"batch": {
 		"name": "Batchverarbeitung",
@@ -600,17 +607,19 @@
 		"dateCreated": "Erstellungsdatum",
 		"dateModified": "Änderungssdatum",
 		"date": "Datum",
+    "dateYearOnly" : "Datum (nur Jahr)",
 		"genre": "Genre",
 		"title": "Titel",
 		"creators": "Urheber",
+    "creatorsFirst": "Urheber (nur 1.)",
 		"publishingInfo": "Verlag, Ort, Ausgabe",
 		"event": "Veranstaltung",
 		"eventTitle": "Titel der Veranstaltung",
 		"eventPlace": "Veranstaltungsort",
-		"eventStartDate": "Beginndatum",
-		"eventEndDate": "Enddatum",
+		"eventStartDate": "Veranstaltungsbeginn",
+		"eventEndDate": "Veranstaltungsende",
 		"eventInvited": "Eingeladen",
-		"degree": "Hoschschulabschluss",
+		"degree": "Hochschulabschluss",
 		"reviewMethod": "Begutachtung",
 		"source": "Quelle",
 		"sourceTitle": "Titel der Quelle",
@@ -654,7 +663,10 @@
 		"person": "Person",
 		"classification": "Klassifikation",
     "creator": "Ersteller",
-    "modifier": "Bearbeiter"
+    "modifier": "Bearbeiter",
+    "subjectType": "Klassifikation Typ",
+    "subjectValue" : "Klassifikation Wert",
+    "journal" : "Zeitschrift"
 	},
 	"FileMetadataFields": {
 		"visibility": "Sichtbarkeit",
@@ -729,6 +741,8 @@
 		"NO": "Nein",
 		"WHATEVER": "-",
 		"searchButton": "Suche",
-		"saveSearchButton": "Suche öffnen/speichern"
+		"saveSearchButton": "Suche öffnen/speichern",
+    "asc": "aufsteigend",
+    "desc" : "absteigend"
 	}
 }

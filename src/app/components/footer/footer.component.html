@@ -1,28 +1,31 @@
 <div class='footer-wrapper no-index mt-1'>
     <footer class="container-full-width hidden-print">
         <div class="footer trngl-footer">
-            <svg viewBox="0 0 1 1"
-                preserveAspectRatio="none">
+            <svg viewBox="0 0 1 1" preserveAspectRatio="none">
                 <path class="footer-triangle" d="M 0 1 L 1 0 L 1 1.1 L 0 1.1"></path>
             </svg>
         </div>
         <div class="subfooter">
             <div class="container d-flex flex-wrap-reverse p-0">
-                <div class="d-flex justify-content-center">
-                    <img class="mpdl-logo" src="assets/footer/logo-mpdl-singlecolor-white.svg" alt="MPDL"
-                        aria-hidden="true" (click)="openLink(linkHomepage)" height="100">
-                    <img class="pubman-logo" src="assets/footer/logo-pubman.svg" alt="PubMan" aria-hidden="true"
-                        (click)="openLink(linkPubman)">
+                <div class="d-flex justify-content-center flex-column flex-sm-row">
+                
+                        <img class="mpdl-logo" src="assets/footer/logo-mpdl-singlecolor-white.svg" alt="MPDL"
+                            aria-hidden="true" (click)="openLink(linkHome)" height="100">
+
+                        <img class="pubman-logo" src="assets/footer/logo-pubman.svg" alt="PubMan" aria-hidden="true"
+                            (click)="openLink(linkPubman)">
+
+
                 </div>
 
                 <div class="d-flex flex-sm-grow-1"></div>
 
-                <div class="d-flex align-items-start align-items-sm-center flex-column flex-sm-row mt-1">
-                    <div (click)="openLink(linkImpressum)">
-                        <span class="align-middle" >Impressum</span>
+                <div class="d-flex align-items-start align-items-sm-center flex-column flex-sm-row me-5 mt-5 mt-sm-1">
+                    <div (click)="openLink(linkDisclaimer)">
+                        <span class="align-middle">{{'footer.disclaimer' | translate}}</span>
                     </div>
 
-                    <div (click)="openLink(linkDatenschutz)">
+                    <div (click)="openLink(linkPrivacy)">
                         <span class="align-middle">{{'footer.privacy' | translate}}</span>
                     </div>
 

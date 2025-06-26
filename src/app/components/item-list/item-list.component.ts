@@ -28,6 +28,8 @@ import {ExportItemsComponent} from "../../shared/components/export-items/export-
 import {ItemSelectionService} from "../../shared/services/item-selection.service";
 
 import { TranslatePipe } from "@ngx-translate/core";
+import {itemToVersionId} from "../../shared/services/utils";
+import {FeedModalComponent} from "../../shared/components/feed-modal/feed-modal.component";
 
 
 @Component({
@@ -54,6 +56,7 @@ import { TranslatePipe } from "@ngx-translate/core";
 export class ItemListComponent implements AfterViewInit{
 
   @Input() searchQuery: Observable<any> = of({});
+  @Input() searchResultType = false;
   //@Input() filterSectionTemplate?: TemplateRef<any> | undefined;
   @ViewChildren(ItemListElementComponent) list_items!: QueryList<ItemListElementComponent>;
   //@ViewChild(PaginatorComponent) paginator!: PaginatorComponent
@@ -73,8 +76,11 @@ export class ItemListComponent implements AfterViewInit{
 
   currentSortQuery: any;
   currentQuery: any;
+  currentCompleteQuery: any;
 
   queryParamSubscription!: Subscription;
+
+  itemUpdatedSubscription!: Subscription;
 
 
   constructor(
@@ -88,6 +94,12 @@ export class ItemListComponent implements AfterViewInit{
     protected selectionService: ItemSelectionService
   )
   {
+
+    this.itemUpdatedSubscription = this.listStateService.itemUpdated.subscribe(itemId => {
+      if(itemId) {
+        this.updateList();
+      }
+    })
 
     this.queryParamSubscription =
       this.activatedRoute.queryParamMap.subscribe((paramMap) => {
@@ -127,6 +139,7 @@ export class ItemListComponent implements AfterViewInit{
   ngOnDestroy() {
     this.searchQuerySubscription.unsubscribe();
     this.queryParamSubscription.unsubscribe()
+    this.itemUpdatedSubscription.unsubscribe();
   }
 
   ngAfterViewInit(): void {
@@ -189,12 +202,14 @@ export class ItemListComponent implements AfterViewInit{
       query: query,
       size: this.size,
       from: (this.currentPage-1)*this.size,
-      ...this.currentSortQuery && {sort: [this.currentSortQuery
-      ]},
+      ...this.currentSortQuery && {sort: this.currentSortQuery
+      },
       ...runtimeMappings && {runtime_mappings: runtimeMappings},
       ...aggQueries && {aggs: aggQueries}
     }
-    //console.log(JSON.stringify(completeQuery))
+    console.log(JSON.stringify(completeQuery))
+
+    this.currentCompleteQuery = completeQuery;
     this.search(completeQuery);
     this.updateQueryParams()
   }
@@ -285,8 +300,30 @@ export class ItemListComponent implements AfterViewInit{
   }
 
   openExportModal() {
-    const comp = this.modalService.open(ExportItemsComponent).componentInstance;
+    const comp: ExportItemsComponent = this.modalService.open(ExportItemsComponent, {size: "lg"}).componentInstance;
+    comp.type = 'exportSelected';
     comp.sortQuery = this.currentSortQuery;
+  }
+
+  openExportAllModal() {
+    const comp: ExportItemsComponent = this.modalService.open(ExportItemsComponent, {size: "lg"}).componentInstance;
+    comp.type = 'exportAll';
+    comp.sortQuery = this.currentSortQuery;
+    const queryWithoutAggs = this.currentCompleteQuery;
+    delete queryWithoutAggs.aggs;
+    comp.completeQuery = queryWithoutAggs;
+    if(this.listStateService.currentResultList.at(0)) {
+      const item = this.listStateService.currentResultList.at(0)!;
+      comp.itemIds = [itemToVersionId(item)];
+    }
+
+
+  }
+
+  openFeedModal() {
+    const comp: FeedModalComponent = this.modalService.open(FeedModalComponent).componentInstance;
+    comp.searchQuery = this.currentCompleteQuery.query;
+
   }
 
 }

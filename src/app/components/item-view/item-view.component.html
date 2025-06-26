@@ -57,6 +57,14 @@
         </button>
       }
 
+        @if(authorizationInfo && authorizationInfo.actions['EDIT']  && item.latestVersion?.versionNumber !== item.versionNumber) {
+
+          <button class="nav-link" (click)="openActionsModal('rollback', item?.versionNumber)" ngbTooltip="{{'common.rollback' | translate}} (Version {{item?.versionNumber}})"
+                  placement="bottom-left">
+            <span class="material-symbols-outlined">history</span>
+          </button>
+        }
+
       <div  class="vr"></div>
 
       @if (aaService.principal.value.isDepositor) {
@@ -105,7 +113,7 @@
     <div class="col-lg-9 col-sm-12 p-3 bg-light rounded">
 
       <div class="row">
-        <div class="col-2 text-center">
+        <div class="col-2  text-center mb-3">
 
           @if (thumbnailUrl) {
             <a href="{{ingeUri + firstPublicPdfFile?.content}}" target="_blank">
@@ -118,7 +126,7 @@
         </div>
         <div class="col-10">
           <!-- badges -->
-          <pure-item-badges [item]="item" [showVersion]="true"/>
+          <pure-item-badges [item]="item" [showVersion]="true" [showPublicStatusIcon]="true"/>
           <!-- title -->
           <h3 class="mt-3" [innerHTML]="item.metadata.title | sanitizeHtml">{{ item.metadata.title }}</h3>
           <!-- alternative titles -->
@@ -167,9 +175,8 @@
           <!--citation-->
           @if (item.publicState !== 'WITHDRAWN') {
             <div class="mt-4">
-              <p><i class="bi bi-quote"></i>
-                <span [innerHTML]="citation | sanitizeHtmlCitation"></span>
-              </p>
+              <i class="bi bi-quote me-2"></i>
+              <span [innerHTML]="citation | sanitizeHtmlCitation"></span>
             </div>
           }
 
@@ -245,8 +252,21 @@
             @for (vm of versionMap; track vm[0]; ) {
               <pure-item-view-metadata-element>
                 <span label>
+                  @if (vm[0] !== item.versionNumber) {
                   <a
-                    [routerLink]="'/view/' + vm[1][0].pubItem.objectId + '_' + vm[0]">Version {{ vm[0] }}</a></span>
+                    [routerLink]="'/view/' + vm[1][0].pubItem.objectId + '_' + vm[0]">Version {{ vm[0] }}</a>
+                  }
+                  @else {
+                    Version {{ vm[0] }}
+                  }
+                  @if(authorizationInfo && authorizationInfo.actions['EDIT'] && item.latestVersion?.versionNumber !== vm[0]) {
+                    <div class="mt-2">
+                      <button type="button" class="btn btn-secondary btn-sm" (click)="openActionsModal('rollback', vm[0])"><i class="material-symbols-outlined">history</i> {{'common.rollback'| translate}}</button>
+                    </div>
+                  }
+
+
+                </span>
                 <span content>
                   @for (auditEntry of vm[1]; track auditEntry; let last = $last) {
                     <pure-item-view-metadata-element [sub]="true">
@@ -359,39 +379,13 @@
       <div class="container mt-5">
         <h5>{{ 'common.item' | translate }} Information</h5>
         @if (item.publicState !== 'WITHDRAWN') {
-          @if (item.objectPid | empty) {
-            <div class="mt-3">
-              <h6>{{ 'common.item' | translate }} {{ 'common.handle' | translate }}</h6>
-              <div class="row">
-                <a class="icon-link" href="https://hdl.handle.net/{{item.objectPid?.substring(4)}}" target="_blank">
-                  <i class="bi-link"></i>
-                  <span class="text-truncate">{{ item.objectPid }}</span>
-                </a>
-              </div>
-            </div>
-          }
-
-          @if (item.versionPid | empty) {
-            <div class="mt-3">
-
-              <h6>{{ 'common.version' | translate }} {{ item.versionNumber }} {{ 'common.handle' | translate }}</h6>
-              <div class="row">
-                <a class="icon-link" href="https://hdl.handle.net/{{item.versionPid?.substring(4)}}" target="_blank">
-                  <i class="bi-link"></i>
-                  <span class="text-truncate">{{ item.versionPid }}</span>
-                </a>
-              </div>
-
-            </div>
-          }
-
 
           @if ((item.latestRelease | empty) && item.versionNumber !== item.latestRelease?.versionNumber) {
             <div class="mt-3">
-              <h6>{{ 'common.latestRelease' | translate }}</h6>
+              <h6 class="">{{ 'common.latestRelease' | translate }}</h6>
               <div>
-                <a class="icon-link" href="/view/{{item.objectId +'_' + item.latestRelease?.versionNumber}}"
-                   target="_blank">
+                <a class="icon-link fw-bold" routerLink="/view/{{item.objectId +'_' + item.latestRelease?.versionNumber}}"
+                   >
                   <i class="bi-link"></i>
                   <span class="text-truncate">Version {{ item.latestRelease?.versionNumber }}</span>
                 </a>
@@ -406,11 +400,48 @@
             <div class="mt-3">
               <h6>{{ 'common.latestVersion' | translate }}</h6>
               <div>
-                <a class="icon-link" href="/view/{{item.objectId +'_' + item.latestVersion?.versionNumber}}"
-                   target="_blank">
+                <a class="icon-link fw-bold" routerLink="/view/{{item.objectId +'_' + item.latestVersion?.versionNumber}}"
+                   >
                   <i class="bi-link"></i>
                   <span class="text-truncate">Version {{ item.latestVersion?.versionNumber }}</span>
                 </a>
+              </div>
+
+            </div>
+          }
+
+          @if (item.objectPid | empty) {
+            <div class="mt-3">
+              <h6>{{ 'common.item' | translate }} {{ 'common.handle' | translate }}</h6>
+              <div class="row">
+
+                <div class="col-11 text-truncate">
+                <a href="https://hdl.handle.net/{{item.objectPid?.substring(4)}}" >
+                  <i class="bi-link"></i>
+                  {{ item.objectPid }}
+                </a>
+                </div>
+                <div class="col-1 p-0">
+                <button class="btn btn-sm border-0 p-0" pureCopyButton [textToCopy]="'https://hdl.handle.net/' + item.objectPid?.substring(4)"></button>
+                </div>
+              </div>
+            </div>
+          }
+
+          @if (item.versionPid | empty) {
+            <div class="mt-3">
+
+              <h6>{{ 'common.version' | translate }} {{ item.versionNumber }} {{ 'common.handle' | translate }}</h6>
+              <div class="row">
+                <div class="col text-truncate">
+                <a href="https://hdl.handle.net/{{item.versionPid?.substring(4)}}" >
+                  <i class="bi-link"></i>
+                  {{ item.versionPid }}
+                </a>
+                </div>
+                <div class="col-1 p-0">
+                  <button class="btn btn-sm border-0 p-0" pureCopyButton [textToCopy]="'https://hdl.handle.net/' + item.versionPid?.substring(4)"></button>
+                </div>
               </div>
 
             </div>

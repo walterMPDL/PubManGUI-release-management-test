@@ -1,5 +1,5 @@
-import { CommonModule } from '@angular/common';
-import { OnInit, Component, signal, inject } from '@angular/core';
+import { CommonModule, DOCUMENT } from '@angular/common';
+import { OnInit, Component, signal, inject, HostListener } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 
 import { AaService } from 'src/app/services/aa.service';
@@ -31,6 +31,10 @@ export class BatchNavComponent implements OnInit {
   batchSvc = inject(BatchService);
   aaSvc = inject(AaService);
   translateSvc = inject(TranslateService);
+  private document = inject(DOCUMENT);
+
+  mobile: boolean | null = null;
+  mobile_options: HTMLElement | null = null;
 
   public navList = signal<NavOption[]>([
     { route: '/batch/datasets', label: 'datasets', disabled: false },
@@ -43,6 +47,9 @@ export class BatchNavComponent implements OnInit {
     this.batchSvc.items;
     this.navList()[0].disabled = !this.batchSvc.areItemsSelected();
     this.navList()[1].disabled = !this.batchSvc.areItemsSelected() || this.batchSvc.isProcessRunning();
+
+    const viewWidth = document.documentElement.offsetWidth || 0;
+    this.mobile = viewWidth < 1400 ? true : false;
   }
 
   // TO-DO ???
@@ -70,6 +77,21 @@ export class BatchNavComponent implements OnInit {
         }
         break;
     }
+
+    this.collapse();
+  }
+
+  collapse() {
+    if (this.mobile) {
+      if (!this.mobile_options) this.mobile_options = this.document.getElementById('side_nav_mobile_options');
+      if (this.mobile_options?.classList.contains('show')) this.mobile_options!.classList.remove('show');
+    }
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onWindowResize() {
+    const viewWidth = document.documentElement.offsetWidth || 0;
+    this.mobile = viewWidth < 1400 ? true : false;
   }
 
 }

@@ -5,22 +5,27 @@ import {ItemVersionVO} from "../../../model/inge";
 import {ItemsService} from "../../../services/pubman-rest-client/items.service";
 import {MessageService} from "../../services/message.service";
 import {Router} from "@angular/router";
-import {Observable} from "rxjs";
-import {TranslatePipe} from "@ngx-translate/core";
+import {Observable, Subscription} from "rxjs";
+import {TranslatePipe, TranslateService} from "@ngx-translate/core";
+import {LoadingComponent} from "../loading/loading.component";
+import {SanitizeHtmlPipe} from "../../services/pipes/sanitize-html.pipe";
 
 @Component({
   selector: 'pure-item-actions-modal',
   imports: [
     FormsModule,
     ReactiveFormsModule,
-    TranslatePipe
+    TranslatePipe,
+    LoadingComponent,
+    SanitizeHtmlPipe
   ],
   templateUrl: './item-actions-modal.component.html'
 })
 export class ItemActionsModalComponent {
 
   @Input() item!: ItemVersionVO;
-  @Input() action!: 'release' | 'submit' | 'revise' | 'withdraw' | 'delete' | 'addDoi';
+  @Input() action!: 'release' | 'submit' | 'revise' | 'withdraw' | 'delete' | 'addDoi' | 'rollback';
+  @Input() rollbackVersion?: number;
   @Output() successfullyDone: EventEmitter<string> = new EventEmitter();
 
   protected comment : string = '';
@@ -29,7 +34,16 @@ export class ItemActionsModalComponent {
 
   protected loading = false;
 
-  constructor(protected activeModal: NgbActiveModal, private itemsService: ItemsService, private messageService: MessageService, private router: Router) {
+  private subscription?: Subscription;
+
+  constructor(protected activeModal: NgbActiveModal, private itemsService: ItemsService, private messageService: MessageService, private router: Router, private translateService: TranslateService) {
+  }
+
+  closeModal() {
+    if(this.subscription) {
+      this.subscription.unsubscribe();
+    }
+    this.activeModal.dismiss();
   }
 
   go() {
@@ -60,11 +74,15 @@ export class ItemActionsModalComponent {
         obs = this.addDoi();
         break;
       }
+      case "rollback": {
+        obs = this.rollback();
+        break;
+      }
     }
     if(obs) {
-      obs.subscribe({
+      this.subscription = obs.subscribe({
           next: (data: any) => {
-            this.messageService.success(this.action + " successful");
+            this.messageService.success(this.translateService.instant('common.' + this.action) + " successful");
             this.activeModal.close();
             this.successfullyDone.emit(data);
           },
@@ -72,8 +90,8 @@ export class ItemActionsModalComponent {
             this.errorMessage = error;
           }
         }
-      )
-        .add(
+      );
+        this.subscription.add(
           () => {
             console.log("completed")
             this.loading = false;
@@ -105,6 +123,10 @@ export class ItemActionsModalComponent {
 
   addDoi() {
     return this.itemsService.addDoi(this.item!.objectId!);
+  }
+
+  rollback() {
+    return this.itemsService.rollback(this.item!.objectId!, this.rollbackVersion!);
   }
 
 }
