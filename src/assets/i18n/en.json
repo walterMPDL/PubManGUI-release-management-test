@@ -333,13 +333,13 @@
 	},
 	"ImportFormat": {
 		"BIBTEX_STRING": "BibTeX",
-		"BMC_XML": "BMC_Xml",
-		"EDOC_XML": "eDoc_Xml",
+		"BMC_XML": "BMC Xml",
+		"EDOC_XML": "eDoc Xml",
 		"ENDNOTE_STRING": "EndNote",
-		"ESCIDOC_ITEM_V3_XML": "eSciDoc_Item_Xml",
+		"ESCIDOC_ITEM_V3_XML": "eSciDoc Item Xml",
 		"MAB_STRING": "MAB",
-		"MARC_21_STRING": "MARC_21",
-		"MARC_XML": "MARC_Xml",
+		"MARC_21_STRING": "MARC 21",
+		"MARC_XML": "MARC Xml",
 		"RIS_STRING": "RIS",
 		"WOS_STRING": "WOS"
 	},

@@ -13,25 +13,25 @@
 
   } @else {
 
-    <td class="col-2 px-1 d-flex justify-content-between">
-      <span>{{ 'ImportStatus.' + log.status | translate }}</span>
-      <div class="my-0">
+    <td class="col-1 col-sm-2 d-flex flex-column flex-xl-row justify-content-md-between ps-1">
+      <span class="d-flex d-none d-lg-inline">{{ 'ImportStatus.' + log.status | translate }}</span>
+      <div class="my-0 pe-xl-2">
 
         @switch (log.errorLevel) {
           @case (importErrorLevel.FINE) {
-            <span class="material-symbols-outlined text-success pe-1" style="cursor: default"
+            <span class="material-symbols-outlined text-success" style="cursor: default"
               ngbTooltip="{{ 'ImportErrorLevel.' + getAssorted(log.errorLevel)| translate }}"
               placement="bottom-left">check_circle</span>
           }
           @case (importErrorLevel.WARNING) {
-            <span class="material-symbols-outlined text-black-50 pe-1" style="cursor: default"
+            <span class="material-symbols-outlined text-black-50" style="cursor: default"
               ngbTooltip="{{ 'ImportErrorLevel.' + getAssorted(log.errorLevel)| translate }}"
               placement="bottom-left">error</span>
           }
           @default {
-          <span class="material-symbols-outlined text-danger pe-1" style="cursor: default"
-            ngbTooltip="{{ 'ImportErrorLevel.' + getAssorted(log.errorLevel)| translate }}"
-            placement="bottom-left">cancel</span>
+            <span class="material-symbols-outlined text-danger" style="cursor: default"
+              ngbTooltip="{{ 'ImportErrorLevel.' + getAssorted(log.errorLevel)| translate }}"
+              placement="bottom-left">cancel</span>
           }
         }
 
@@ -40,11 +40,14 @@
 
   }
 
-  <td class="col-4">
+  <td class="d-flex flex-column col-8 col-sm-6 col-xl-4 pe-xxl-2">
     @if( isFinished(log.status) ) {
 
-      <span class="nav-link text-decoration-underline text-nowrap" style="cursor: pointer" (click)='toDatasets(log.id);'>
+      <span class="nav-link text-decoration-underline text-nowrap text-truncate" style="cursor: pointer" (click)='toDatasets(log.id);'>
         {{ log.name }}
+      </span>
+      <span class="d-flex d-inline d-xl-none">
+        {{ 'ImportFormat.' + log.format | translate }}
       </span>
 
     } @else {
@@ -53,19 +56,19 @@
 
   </td>
 
-  <td class="col-2">
+  <td class="d-flex d-none col-0 d-xl-table-cell col-xl-2 text-nowrap text-truncate">
     {{ 'ImportFormat.' + log.format | translate }}
   </td>
 
-  <td class="col-2 d-flex justify-content-between">
+  <td class="d-flex flex-column flex-xl-row col-2 col-xl-3 justify-content-lg-between">
     <span>{{ log.startDate | localizeDate }}</span>
-    <div class="pe-3">
-      <span class="material-symbols-outlined text-secondary" style="cursor: auto">schedule</span>&nbsp;
+    <div class="ps-lg-1 pe-lg-5 d-flex flex-nowrap">
+      <span class="material-symbols-outlined text-secondary pt-1" style="cursor: auto">schedule</span>&nbsp;
       <span>{{ log.startDate | date: 'HH:mm'}}</span>
     </div>
   </td>
 
-  <td class="col-1 d-flex justify-content-center">
+  <td class="d-flex d-none col-0 col-sm-1 d-sm-table-cell justify-content-center">
     <a [routerLink]="['/imports/myimports/', log.id]">
       <span class="material-symbols-outlined ms-2 my-0 matBadge"
         matBadge='{{ log.anzImportedItems > 0 ? log.anzImportedItems : null }}'>
@@ -74,8 +77,8 @@
     </a>
   </td>
 
-  <td class="col-1">
-      <span class="material-symbols-outlined my-0 float-end me-3"
+  <td class="d-flex d-none col-0 col-xxl-1 d-xxl-table-cell">
+      <span class="material-symbols-outlined my-0 ms-4"
         ngbTooltip="{{ 'imports.list.remove' | translate }}" placement="bottom-left" style="cursor: pointer" (click)="deleteImportLog(log)">
         delete
       </span>

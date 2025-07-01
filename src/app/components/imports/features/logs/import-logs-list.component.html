@@ -16,16 +16,19 @@
     </div>
 
     <div class="row">
-      <div class="col-lg-12 col-sm-12">
-        <table class="table table-responsive col-12 mt-1">
+      <div class="col-12">
+        <table class="table-responsive col-12 mt-1">
           <thead>
             <tr>
-              <th scope="col" class="col-2 ps-1">Status</th>
-              <th scope="col" class="col-4">Import</th>
-              <th scope="col" class="col-2">Format</th>
-              <th scope="col" class="col-2">{{ 'imports.list.header.date' | translate }}</th>
-              <th scope="col" class="col-1 text-center">{{ 'imports.list.header.details' | translate }}</th>
-              <th scope="col"></th>
+              <th scope="col" class="d-flex d-none d-sm-table-cell col-sm-2 ps-1">Status</th>
+              <th scope="col" class="d-flex d-none d-sm-flex col-sm-6 col-xl-4">
+                <span>Import</span> 
+                <span class="d-flex d-xl-none">&nbsp;/&nbsp;Format</span>
+              </th>
+              <th scope="col" class="d-flex d-none col-0 d-xl-table-cell col-xl-2">Format</th>
+              <th scope="col" class="d-flex d-none d-sm-table-cell col-sm-2 col-xl-3">{{ 'imports.list.header.date' | translate }}</th>
+              <th scope="col" class="d-flex d-none d-sm-table-cell col-sm-2 col-xl-1 ps-xl-2">{{ 'imports.list.header.details' | translate }}</th>
+              <th scope="col" class="d-flex d-none col-0 col-xxl-1"></th>
             </tr>
           </thead>
         </table>
