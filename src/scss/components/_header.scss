@@ -49,45 +49,29 @@
       margin-top: -10px;
     }
 
-  /*
-    @media (max-width: 1400px) {
-      #header_container {
-        transform: translateY(-15px);
-      }
-
-      .side_nav_mobile {
-        transform: translateY(-13px);
-      }
-    }
-  */
-
   }
 
   #header_nav {
     z-index: 99;
   }
 
-  @media (max-width: 1400px) {
+  @media (max-width: 1399.98px) {
     height: 50px;
 
     #logo {
       width: 80px;
       height: 80px;
       margin-left: 30px;
-      margin-right: 0;
+      margin-right: 30px;
       margin-top: -10px;
     }
 
     #header_container {
-      transform: translateY(-15px);
-    }
-
-    .side_nav_mobile {
       transform: translateY(-12px);
     }
 
-    &.scrolled #logo {
-      margin-right: 0;
+    .side_nav_mobile {
+      transform: translateY(-20px);
     }
   }
 }

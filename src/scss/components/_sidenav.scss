@@ -41,8 +41,9 @@
   }
 
   .matBadge {
-    top: -1.5rem;
+    top: -1.5em;
   }
+
 }
 
 .navbar-toggler:focus {
@@ -68,28 +69,18 @@
   width: 100%;
   z-index: 16;
   overflow: hidden;
-  //margin-left: 0px;
-  //background-color: $body-secondary-bg; 
-
-  /*
-    -webkit-transition: all 0.25s ease-in-out;
-    -moz-transition: all 0.25s ease-in-out;
-    transition: all 0.25s ease-in-out;
-    */
-  /*
-  .material-symbols-outlined {
-    vertical-align: middle;
-    // font-variation-settings: 'FILL' 0, 'wght' 100, 'GRAD' 0, 'opsz' 48;
-    font-variation-settings: 'wght' 500, 'GRAD' 0, 'opsz' 48;
-  }
-
-   */
 
   .mat-badge {
     top: -1.5rem;
   }
-}
 
+  @media (max-width: 1399.98px) {
+    .matBadge {
+      top: -1em;
+      left: -1em;
+    }
+  }
+}
 
 .show-more {
   &:not(:hover) {

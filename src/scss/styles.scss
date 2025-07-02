@@ -1,8 +1,6 @@
-@import 'abstract';
+@import './abstract';
 //@import '../../node_modules/material-symbols/index.css';
-@import 'vendor';
-@import 'themes/themes_pure';
-@import 'base';
-@import 'components';
-
-
+@import './vendor';
+@import './themes/themes_pure';
+@import './base';
+@import './components';
