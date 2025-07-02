@@ -4,16 +4,16 @@
       <div class="col-lg-12 col-sm-12 d-inline-flex justify-content-between">
 
         <div class="d-inline-flex justify-content-start align-items-center">
-          <a ngbTooltip="{{ 'batch.logs.details.fill.all' | translate }}"
-            placement="bottom-left" (click)="fillWithAll()">
+          <a ngbTooltip="{{ 'batch.logs.details.fill.all' | translate }}" placement="bottom-left"
+            (click)="fillWithAll()">
             <span class="material-symbols-outlined" style="cursor:pointer">
               list_alt
             </span>
           </a>
           @if(failed > 0) {
 
-          <a class="ms-3" ngbTooltip="{{ 'batch.logs.details.fill.errors' | translate }}"
-            placement="bottom-left" (click)="fillWithFailed()">
+          <a class="ms-3" ngbTooltip="{{ 'batch.logs.details.fill.errors' | translate }}" placement="bottom-left"
+            (click)="fillWithFailed()">
             <span class="material-symbols-outlined" style="cursor:pointer">
               breaking_news_alt_1
             </span>
@@ -50,25 +50,27 @@
     </div>
 
     <div class="row">
-    <div class="col-12 col-xl-9">
-      <table class="table table-responsive col-12 mt-0">
-        <thead>
-          @if(inPage.length > 0) {
+      <div class="col-12 col-xl-9">
+        <table class="table table-responsive col-12 mt-0">
+          <thead>
+            @if(inPage.length > 0) {
 
-          <tr>
-            <th scope="col" class="d-flex d-none d-md-table-cell col-1 col-lg-2 text-nowrap text-truncate">Status</th>
-            <th scope="col" class="d-flex d-none d-md-table-cell col-sm-6">{{ 'batch.logs.header.title' | translate }}</th>
-            <th scope="col" class="d-flex d-none d-md-table-cell col-sm-5 col-lg-4">{{ 'batch.logs.header.message' | translate }}</th>
-          </tr>
+            <tr>
+              <th scope="col" class="d-flex d-none d-md-table-cell col-1 col-lg-2 text-nowrap text-truncate">Status</th>
+              <th scope="col" class="d-flex d-none d-md-table-cell col-sm-6">{{ 'batch.logs.header.title' | translate }}
+              </th>
+              <th scope="col" class="d-flex d-none d-md-table-cell col-sm-5 col-lg-4">{{ 'batch.logs.header.message' |
+                translate }}</th>
+            </tr>
 
-          }
-        </thead>
-      </table>
-      <table class="table table-responsive col-12" onChange="refreshInPageCount()">
-        <tbody>
-          @if(inPage.length > 0) {
-          <ng-container>
-            @for (log of inPage; track log.itemObjectId) {
+            }
+          </thead>
+        </table>
+        <table class="table table-responsive col-12" onChange="refreshInPageCount()">
+          <tbody>
+            @if(inPage.length > 0) {
+            <ng-container>
+              @for (log of inPage; track log.itemObjectId) {
               @defer (on viewport) {
 
               <pure-batch-action-dataset-log [log]="log"></pure-batch-action-dataset-log>
@@ -77,35 +79,35 @@
               @placeholder {
               <div>...</div>
               }
+              }
+              @empty {
+
+              <tr>
+                <th colspan="3" class="text-center col-19">
+                  <span class="text-center">{{ 'batch.logs.details.empty' | translate }}</span>
+                </th>
+              </tr>
+
+              }
+            </ng-container>
             }
-            @empty {
+          </tbody>
+        </table>
+      </div>
 
-            <tr>
-              <th colspan="3" class="text-center col-19">
-                <span class="text-center">{{ 'batch.logs.details.empty' | translate }}</span>
-              </th>
-            </tr>
-
-            }
-          </ng-container>
-          }
-        </tbody>
-      </table>
-    </div>
-
-    <div class="d-flex d-none col-0 col-xl-3 d-xl-block mt-4">
-      @if(unfilteredSize > 0) {
+      <div class="d-flex d-none col-0 col-xl-3 d-xl-block mt-4">
+        @if(unfilteredSize > 0) {
 
         <div class="border rounded p-3 m-1">
-          <span class="me-0"> {{ batchLogHeader!.numberOfItems - failed }}/{{ batchLogHeader!.numberOfItems }} 
+          <span class="me-0"> {{ batchLogHeader!.numberOfItems - failed }}/{{ batchLogHeader!.numberOfItems }}
             <span class="me-0">{{ 'common.succeded' | translate }}</span>
           </span>
         </div>
 
-      }
-      <br>
-      <form [formGroup]="filterForm" (change)="onFilterChange()">
-        @if((unfilteredSize - failed) > 0) {
+        }
+        <br>
+        <form [formGroup]="filterForm" (change)="onFilterChange()">
+          @if((unfilteredSize - failed) > 0) {
 
           <div class="form-check">
             <input class="form-check-input" type="checkbox" id="success" formControlName="success" checked>
@@ -114,8 +116,8 @@
             </label>
           </div>
 
-        }
-        @if(failed > 0) {
+          }
+          @if(failed > 0) {
 
           <div class="form-check">
             <input class="form-check-input" type="checkbox" value="" id="fail" formControlName="fail" checked>
@@ -124,9 +126,9 @@
             </label>
           </div>
 
-        }
-      </form>
-    </div>
+          }
+        </form>
+      </div>
     </div>
   </div>
 </div>
