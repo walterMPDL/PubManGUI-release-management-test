@@ -28,7 +28,7 @@
                         }
                     </select>
                     @if(creator_form.errors?.[error_types.CREATOR_ROLE_NOT_PROVIDED]) {
-                        <div class="text-danger">Creator role is required</div>
+                    <div class="text-danger">Creator role is required</div>
                     }
                 </div>
                 @if (type.value === 'ORGANIZATION') {
@@ -61,9 +61,12 @@
                             [formForPersonOrganizations]="$any(person.controls.organizations)"
                             [formForPersonsIdValue]="$any(person.controls.identifier.controls.id)"
                             [formForPersonsIdType]="$any(person.controls.identifier.controls.type)"
+                            [formForPersonsOrcid]="$any(person.controls.orcid)"
                             [validationError]="creator_form.errors?.[error_types.CREATOR_FAMILY_NAME_NOT_PROVIDED] ? true : false"
                             data-test="familyname-autosuggest" />
-                        <!--{{person.controls.identifier.value | json}}-->
+                        @if(creator_form.errors?.[error_types.CREATOR_ORGANIZATION_NAME_NOT_PROVIDED]) {
+                        <div class="text-danger">Creator organization is required</div>
+                        }
                     </div>
                     <div class="col-sm-3">
                         <label for="givenName" class="col-form-label pe-2">given</label>
@@ -71,18 +74,25 @@
                             data-test="givenname">
                     </div>
                     @if(person.controls.identifier.controls.type.value == 'CONE') {
-                    <div class="col-sm-auto row align-items-end">
+                    <div class="col-sm-autoalign-items-start">
+                        <p>&nbsp;</p>
                         <svg fill="currentColor" height="24px" width="24px">
                             <use href="/assets/icons/icons.svg#cone"></use>
                         </svg>
                     </div>
                     }
                     @if(person.controls.orcid.value) {
-                    <div class="svg-bg-icon col-sm-auto row align-items-end">
+                    <div class="col-sm-autoalign-items-start">
+                        @if(creator_form.errors?.[error_types.CREATOR_ORCID_INVALID]) {
+                        <div class="text-danger">Orcid invalid. Please change in change in CoNE</div>
+                        } @else {
+                        <p>&nbsp;</p>
+                        }
                         <svg fill="currentColor" height="24px" width="24px">
                             <use href="/assets/icons/icons.svg#doi"></use>
                         </svg>
                     </div>
+
                     }
                     <!-- Just in case
                         <label for="orcid" class="col-sm-1 col-form-label text-end pe-2">orcid</label>

@@ -2,6 +2,9 @@ import { AbstractControl, FormArray, ValidationErrors, ValidatorFn } from '@angu
 import { Errors } from 'src/app/model/errors';
 import { CreatorType } from 'src/app/model/inge';
 
+const ORCID_HTTPS = 'https://orcid.org/';
+const ORCID_REGEX = /^\d{4}-\d{4}-\d{4}-(\d{3}X|\d{4})$/;
+
 export const creatorValidator: ValidatorFn = (control: AbstractControl,): ValidationErrors | null => {
   const error_types = Errors;
   const creator = control;
@@ -17,21 +20,33 @@ export const creatorValidator: ValidatorFn = (control: AbstractControl,): Valida
         }
         break;
       case CreatorType.PERSON:
-        const p = creator.get('person');
-        if (p !== null) {
-          if (p.get('familyName')?.value ||
-            p.get('givenName')?.value) {
+        const person = creator.get('person');
+        if (person !== null) {
+          if (person.get('familyName')?.value ||
+            person.get('givenName')?.value) {
             return { [error_types.CREATOR_ROLE_NOT_PROVIDED]: true };
           }
-          const personOrgs = p.get('organizations') as FormArray;
-          if (personOrgs) {
+          const orcid = person.get('orcid');
+          if (orcid !== null && orcid.value !== null) {
+            if (!orcid.value.startsWith(ORCID_HTTPS)) {
+              return { [error_types.CREATOR_ORCID_INVALID]: true };
+            } else if ((!orcid.value.substring(ORCID_HTTPS.length).matches(ORCID_REGEX))) {
+              return { [error_types.CREATOR_ORCID_INVALID]: true };
+            }
+          } // if
+          const personOrganizations = person.get('organizations') as FormArray;
+          if (personOrganizations) {
             let j = 1;
-            for (const organization of personOrgs.controls) {
+            for (const organization of personOrganizations.controls) {
               if (organization !== null) {
                 if (organization.get('name')?.value ||
                   organization.get('adress')?.value) {
                   return { [error_types.CREATOR_ROLE_NOT_PROVIDED]: true };
                 } // if
+                else if (organization.get('name')?.value === null &&
+                  organization.get('adress')?.value) {
+                  return { [error_types.CREATOR_ORGANIZATION_NAME_NOT_PROVIDED]: true };
+                }
               } // if
               j++;
             } // for
