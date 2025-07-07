@@ -112,6 +112,11 @@
                                     value="addCreators" (click)="addMultipleCreators()"
                                     [ngClass]="{'disabled': loading}">ADD Creators</button>
                             </div>
+                            @if(meta_form.errors?.[error_types.ORGANIZATIONAL_METADATA_NOT_PROVIDED]) {
+                            <div class="d-sm-flex flex-sm-row gap-1 mb-1">
+                                <div class="text-danger">At least one creator needs an organizational unit.</div>
+                            </div>
+                            }
                             <ng-container formArrayName="creators">
                                 <div cdkDropList class="drag-list" (cdkDropListDropped)="dropCreator($event)">
                                     @for (creature of creators.controls; track creature; let ci = $index) {
