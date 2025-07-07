@@ -4,7 +4,7 @@ import { AbstractVO, AlternativeTitleVO, ChecksumAlgorithm, ContextDbRO, Creator
 import { creatorValidator } from 'src/app/shared/directives/creator-validation.directive';
 import { CreatorsOrganizationsValidator } from 'src/app/shared/directives/creators-organizations-validation.directive';
 import { datesValidator } from 'src/app/shared/directives/dates-validation.directive';
-import { EventValidationDirective } from 'src/app/shared/directives/event-validation.directive';
+import { EventValidator } from 'src/app/shared/directives/event-validation.directive';
 
 type Unbox<T> = T extends Array<infer V> ? V : T;
 
@@ -27,7 +27,6 @@ export class FormBuilderService {
 
   constructor(
     private fb: FormBuilder,
-    private eventValidatonDirective: EventValidationDirective,
   ) { }
 
   item_FG(item: ItemVersionVO | null) {
@@ -215,7 +214,7 @@ export class FormBuilderService {
       title: this.fb.control(event?.title ? event.title : null)
     },
     {
-      asyncValidators: [this.eventValidatonDirective.validate.bind(this.eventValidatonDirective)],
+      validators: [EventValidator],
       updateOn: 'blur' // 'blur' or 'change' or 'submit'
     });
     return event_form;
