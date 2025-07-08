@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, OnInit, AfterViewInit } from "@angular/core";
 import {ItemListComponent} from "../item-list/item-list.component";
 import {baseElasticSearchQueryBuilder} from "../../shared/services/search-utils";
 import {catchError, map, Observable, of, tap, throwError} from "rxjs";
@@ -10,6 +10,10 @@ import {SanitizeHtmlPipe} from "../../shared/services/pipes/sanitize-html.pipe";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../../environments/environment";
 import {LoadingComponent} from "../../shared/components/loading/loading.component";
+
+//My Imports
+import { Chart } from 'chart.js/auto';
+import { CountUp } from 'countup.js';
 
 @Component({
   selector: 'pure-home',
@@ -27,15 +31,56 @@ import {LoadingComponent} from "../../shared/components/loading/loading.componen
     LoadingComponent
   ],
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit, AfterViewInit {
   latestReleasedItems: Observable<ItemVersionVO[]> = of([]);
-  newsItems: Observable<PuReBlogEntry[]> = of([])
+  newsItems: Observable<PuReBlogEntry[]> = of([]);
+
+  publications: number = 0;
+
+  // Dummy value for layout/demo phase: later will be fetched to the rel
+  targetNumber: number = 500000;
+
+  formattedPublications: string = '';
+
+  documentTypes: { [key: string]: number } = {
+
+  };
+
+  chart: Chart | undefined;
 
   constructor(private itemsService: ItemsService, private httpClient: HttpClient) {
-    // Fetch the latest released items from the backend or any other data source
-    // For demonstration, let's assume we have a method to fetch this data
     this.fetchLatestReleasedItems();
     this.loadNewsItems();
+  }
+
+ngOnInit(): void {
+  this.loadGenreAggs(); // new method to fetch real chart data
+}
+
+
+  ngAfterViewInit(): void {
+    this.animateCounter();
+  }
+
+  animateCounter() {
+    const counter = new CountUp('pubCounter', this.targetNumber, {
+      duration: 2.5,
+      separator: ','
+    });
+
+    if (!counter.error) {
+      counter.start(() => {
+        this.publications = this.targetNumber;
+        this.updateFormattedPublications();
+      });
+    } else {
+      console.error('CountUp error:', counter.error);
+    }
+  }
+
+  updateFormattedPublications() {
+    const numberFormat = new Intl.NumberFormat('en-US');
+    this.formattedPublications = numberFormat.format(this.publications);
   }
 
   fetchLatestReleasedItems(): void {
@@ -44,11 +89,11 @@ export class HomeComponent {
         bool: {
           must: [
             {
-              "nested": {
-                "path": "files",
-                "query": {
-                  "bool": {
-                    "must": [
+              nested: {
+                path: "files",
+                query: {
+                  bool: {
+                    must: [
                       baseElasticSearchQueryBuilder("files.storage", "INTERNAL_MANAGED"),
                       baseElasticSearchQueryBuilder("files.visibility", "PUBLIC"),
                       baseElasticSearchQueryBuilder("files.mimeType", "application/pdf"),
@@ -63,25 +108,90 @@ export class HomeComponent {
         }
       },
       sort: {
-        "latestRelease.modificationDate": "desc" // Sort by the latest upload date
+        "latestRelease.modificationDate": "desc"
       },
-      size: 8 // Fetch the top 10 latest released items
+      size: 8
     };
 
     this.latestReleasedItems = this.itemsService.elasticSearch(query).pipe(
-      map(result => result.hits.hits.map((record:any) => record._source as ItemVersionVO)),
+      map(result => result.hits.hits.map((record: any) => record._source as ItemVersionVO)),
     );
-    }
+  }
 
-    getFirstPublicThumbnail(item: ItemVersionVO) {
-      return item.files?.find(f => f.visibility === 'PUBLIC' && f.mimeType === 'application/pdf')
-    }
+  getFirstPublicThumbnail(item: ItemVersionVO) {
+    return item.files?.find(f => f.visibility === 'PUBLIC' && f.mimeType === 'application/pdf');
+  }
 
+  loadNewsItems() {
+    this.newsItems = this.httpClient.request<PuReBlogEntry[]>('GET', environment.pure_blog_feed_url);
+  }
 
-    loadNewsItems() {
-      this.newsItems = this.httpClient.request<PuReBlogEntry[]>('GET', environment.pure_blog_feed_url);
-    }
+  loadGenreAggs(): void {
+  const agg = {
+    aggs: {
+      publications_by_genre: {
+        terms: {
+          field: "metadata.genre",
+          size: 7
+        }
+      }
+    },
+    size: 0
+  };
 
+  this.itemsService.elasticSearch(agg).subscribe(result => {
+    const buckets = result.aggregations['sterms#publications_by_genre'].buckets;
+    this.documentTypes = {};
+
+    buckets.forEach((bucket: any) => {
+      this.documentTypes[bucket.key] = bucket.doc_count;
+    });
+
+    // Now draw the chart with real data
+    setTimeout(() => this.createChart(), 0);
+  });
+}
+
+  createChart(): void {
+    const canvas = document.getElementById('documentChart') as HTMLCanvasElement;
+    const ctx = canvas?.getContext('2d');
+    if (!ctx) return;
+
+    const labels = Object.keys(this.documentTypes);
+    const data = Object.values(this.documentTypes);
+
+    this.chart = new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels,
+        datasets: [{
+          data,
+            backgroundColor: ['#00C2FF', '#FAD02E', '#7FFFD4', '#FF6B6B', '#A26EFF', '#1F75FE', '#FFA07A'],
+            hoverBackgroundColor: ['#00A0D6', '#E5BA1E ', '#5FEFD0', '#E14C4C', '#8C57E0', '#165EBE', '#FF8C65']
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            labels: {
+              color: '#FFF',
+              font: { family: 'Poppins', size: 14 }
+            }
+          },
+          tooltip: {
+            callbacks: {
+              label: (tooltipItem) => {
+                const total = data.reduce((sum, val) => sum + val, 0);
+                const val = data[tooltipItem.dataIndex];
+                return `${labels[tooltipItem.dataIndex]}: ${(val / total * 100).toFixed(2)}%`;
+              }
+            }
+          }
+        }
+      }
+    });
+  }
 }
 
 export interface PuReBlogEntry {
