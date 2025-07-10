@@ -35,16 +35,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
   latestReleasedItems: Observable<ItemVersionVO[]> = of([]);
   newsItems: Observable<PuReBlogEntry[]> = of([]);
 
-  publications: number = 0;
-
-  // Dummy value for layout/demo phase: later will be fetched to the rel
+  publications: number = 0;   //Soll diese Hardcode immernoch hier bleiben - nach fetch? (Nein)
   targetNumber: number = 500000;
 
   formattedPublications: string = '';
 
-  documentTypes: { [key: string]: number } = {
-
-  };
+  documentTypes: { [key: string]: number } = {};
 
   chart: Chart | undefined;
 
@@ -176,7 +172,7 @@ ngOnInit(): void {
           legend: {
             labels: {
               color: '#FFF',
-              font: { family: 'Poppins', size: 14 }
+            //  font: { family: 'Poppins', size: 14 }
             }
           },
           tooltip: {

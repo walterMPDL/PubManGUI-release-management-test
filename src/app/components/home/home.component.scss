@@ -1,54 +1,46 @@
+//Teil1
 .jumbotron {
   position: relative;
   overflow: hidden;
   padding: 4rem 2rem;
   margin-bottom: 3rem;
   border-radius: 0.5rem;
-  background-image: url("/assets/images/Backgrounddesign1.jpeg");
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  z-index: 1;
+}
+
+
+.jumbotron::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 110%; /* zoom out a bit */
+  height: 110%;
+  background-image: url("/assets/images/newminback3.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  min-height: 70vh; 
-  display: flex; 
-  align-items: center;
-}
- 
-
-/* Wrap the welcome and search bar */
-.welcome-search-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem; /* Space between welcome and search */
+  filter: blur(2px) brightness(0.9); /* add blur and darken a bit oder mann das hier auch nutzen  background-color: rgba(0, 0, 0, 0.3);*/
+  z-index: -1;
 }
 
 .infobox {
   text-align: left;
   padding: 2rem;
   border-radius: 1rem;
-  background-color: rgba(255, 255, 255, 0.8);
-  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+  background-color: rgba(255, 255, 255, 0.85); /* slightly less transparent */
+  box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.2); /* deeper shadow for more contrast */
   color: #032032;
-}
-
-.infobox h1 {
-  font-size: 2.5rem;
-  font-weight: bold;
-  margin-bottom: 1rem;
+  backdrop-filter: blur(3px); /* subtle glass effect */
+  border: 1px solid rgba(0, 68, 95, 0.2); /* soft border with theme color */
 }
 
 .infobox p {
   font-size: 1.2rem;
   margin-bottom: 0.5rem;
-}
-
-.infobox span {
-  font-size: 1.2rem;
-  color: #032032;
-  font-weight: bold;
-}
-
-.search-wrapper {
-  width: 100%;
 }
 
 .search {
@@ -67,7 +59,6 @@
 
 .search-input {
   font-size: 16px;
-  font-family: Poppins, sans-serif;
   color: #032032;
   margin-left: 14px;
   outline: none;
@@ -77,39 +68,7 @@
   min-width: 0; /* Fix flexbox shrinking issue */
 }
 
-h4 {
-  font-family: 'Poppins', sans-serif;
-  font-size: 2rem;
-  font-weight: 600;
-  color: whitesmoke;
-  text-align: left;
-  margin-bottom: 1.5rem;
-}
-
-.card-img-top {
-  height: 12vw;
-  min-height: 150px;
-  object-fit: cover;
-  object-position: top;
-}
-
-.news-section .card,
-.releases-section .card {
-  background-color: #e3e8ed;
-  color: #000;
-  font-family: Poppins;
-  min-height: 22rem; /* ✅ statt height: 26rem */
-  border-radius: 14px;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  padding: 0;
-  backdrop-filter: blur(6px);
-}
-
+//Teil2
 .dual-section-wrapper {
   background-color: #00445f;
   padding: 40px;
@@ -119,27 +78,9 @@ h4 {
 
 .news-section .card,
 .releases-section .card {
-  color: #000;
-  height: 26rem;
-  border-radius: 10px;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.releases-section .card-img-top {
-  max-height: 140px;
-  object-fit: cover;
-  width: 100%;
-}
-
-.news-section .card,
-.releases-section .card {
   background-color: #e3e8ed;
-  color: #000;
-  font-family: Poppins;
-  height: 26rem;
+
+  min-height: 22rem;
   border-radius: 14px;
   overflow: hidden;
   display: flex;
@@ -147,7 +88,6 @@ h4 {
   justify-content: space-between;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  padding: 0;
   backdrop-filter: blur(6px);
 }
 
@@ -162,10 +102,16 @@ h4 {
   font-size: 1rem;
   color: #032032;
 }
-
 .card-header,
 .card-body {
   padding: 1rem 1.25rem;
+}
+
+.card-img-top {
+  height: 12vw;
+  min-height: 150px;
+  object-fit: cover;
+  object-position: top;
 }
 
 .news-section .card-header {
@@ -185,13 +131,8 @@ h4 {
 }
 
 .card {
-  max-width: 100%; 
-  height: auto;     
-}
-
-.card-img-top {
-  width: 100%;      
-  height: auto;     
+  max-width: 100%;
+  height: auto;
 }
 
 .document-chart-section {
@@ -217,7 +158,6 @@ h4 {
   }
 }
 
-
 @media (max-width: 576px) {
   .card {
     max-width: 100%;
@@ -235,43 +175,40 @@ h4 {
 @media (max-width: 768px) {
   .dual-section-wrapper,
   .document-chart-section {
-    padding: 20px; 
+    padding: 20px;
   }
 
   .infobox {
     padding: 1.5rem;
-    text-align: center; 
+    text-align: center;
   }
 
   .infobox h1 {
-    font-size: 1.8rem; 
+    font-size: 1.8rem;
   }
 
   .infobox p,
   .infobox span {
-    font-size: 1rem; 
+    font-size: 1rem;
   }
 
   .card-header,
   .card-body {
-    padding: 0.75rem; 
+    padding: 0.75rem;
   }
 
   .row {
-    margin: 0 !important; 
+    margin: 0 !important;
   }
 }
 @media (max-width: 1024px) {
   .infobox {
     margin-top: 2rem;
     margin-bottom: 2rem;
-    
   }
 }
 @media (min-width: 1600px) {
   .infobox {
     padding: 5rem;
-    
-    
   }
 }
