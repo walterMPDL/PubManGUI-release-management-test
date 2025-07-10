@@ -14,7 +14,7 @@ import { RouteReuseStrategy, provideRouter, withInMemoryScrolling, withRouterCon
 import { routes } from './app.routes';
 import { PureRrs } from './services/pure-rrs';
 import { DialogModule } from '@angular/cdk/dialog';
-import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import {HTTP_INTERCEPTORS, provideHttpClient, withInterceptors, withInterceptorsFromDi} from '@angular/common/http';
 import { HttpErrorInterceptor } from "./services/interceptors/http-error.interceptor";
 import { WithCredentialsInterceptor } from "./services/interceptors/with-credentials.interceptor";
 
@@ -32,6 +32,17 @@ const httpLoaderFactory: (http: HttpClient) => TranslateHttpLoader = (http: Http
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes, withInMemoryScrolling({ scrollPositionRestoration: 'enabled' }), withComponentInputBinding()),
+
+    {
+      provide: RouteReuseStrategy,
+      useClass: PureRrs
+    },
+
+    importProvidersFrom(DialogModule),
+
+    provideHttpClient(
+      withInterceptorsFromDi()
+    ),
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpErrorInterceptor, multi: true
@@ -40,14 +51,6 @@ export const appConfig: ApplicationConfig = {
       provide: HTTP_INTERCEPTORS,
       useClass: WithCredentialsInterceptor, multi: true
     },
-    {
-      provide: RouteReuseStrategy,
-      useClass: PureRrs
-    },
-
-    importProvidersFrom(DialogModule),
-
-    provideHttpClient(),
 
     provideZoneChangeDetection({ eventCoalescing: true }),
 
