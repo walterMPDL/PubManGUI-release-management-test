@@ -6,6 +6,7 @@ import { CreatorsOrganizationsValidator } from 'src/app/shared/directives/creato
 import { datesValidator } from 'src/app/shared/directives/dates-validation.directive';
 import { EventValidator } from 'src/app/shared/directives/event-validation.directive';
 import { IdentifierValidator } from 'src/app/shared/directives/identifier-validation.directive';
+import { SourceRequiredValidator } from 'src/app/shared/directives/source-required-validation.directive';
 import { Utf8Validator } from 'src/app/shared/directives/utf8-validation.directive';
 
 type Unbox<T> = T extends Array<infer V> ? V : T;
@@ -183,7 +184,7 @@ export class FormBuilderService {
       abstracts: this.fb.array(metadata?.abstracts ? metadata.abstracts.map(a => this.abstract_FG(a) as AbstractControl) : []),
       projectInfo: this.fb.array(metadata?.projectInfo ? metadata.projectInfo.map(pi => this.project_info_FG(pi) as AbstractControl) : []),
     },
-      { validators: [datesValidator, CreatorsOrganizationsValidator], updateOn: 'blur' }
+      { validators: [datesValidator, CreatorsOrganizationsValidator, SourceRequiredValidator], updateOn: 'blur' }
     );
     return metadata_form;
   }

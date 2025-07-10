@@ -55,10 +55,13 @@
                             <div class="d-sm-flex flex-sm-row gap-1 mb-1 align-items-center">
                                 <div class="col-sm">
                                     <input type="text" class="form-control" id="title" name="title"
-                                        formControlName="title" data-test="title" [ngClass]="meta_form.get('title')?.errors ? 'is-invalid' : ''">
+                                        formControlName="title" data-test="title"
+                                        [ngClass]="meta_form.get('title')?.errors ? 'is-invalid' : ''">
                                     @if (meta_form.get('title')?.hasError('required')) {
                                     <div class="text-danger">Title is required</div>
-                                    } @else if (meta_form.get('title')?.hasError(error_types.NO_UTF8_CHAR_IN_ABSTRACT.toString())) {
+                                    } @else if
+                                    (meta_form.get('title')?.hasError(error_types.NO_UTF8_CHAR_IN_ABSTRACT.toString()))
+                                    {
                                     <div class="text-danger">Invalid UTF-8 Character</div>
                                     }
                                 </div>
@@ -511,6 +514,13 @@
                 </button>
             </h2>
             <div id="accordionBodySourcesGroup" class="accordion-collapse collapse">
+                @if(meta_form.hasError(error_types.SOURCE_NOT_PROVIDED.toString())) {
+                <div class="d-sm-flex flex-sm-row gap-1 mb-1">
+                    <div class="col-auto">
+                        <div class="text-danger p-3">Source required for current publication genre</div>
+                    </div>
+                </div>
+                }
                 <ng-container formArrayName="sources">
                     @for (source of sources.controls; track source; let sourcesIndex = $index) {
                     <div class="accordion-body mt-3 mb-3">
