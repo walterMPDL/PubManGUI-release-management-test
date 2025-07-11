@@ -7,6 +7,7 @@ import { datesValidator } from 'src/app/shared/directives/dates-validation.direc
 import { EventValidator } from 'src/app/shared/directives/event-validation.directive';
 import { IdentifierValidator } from 'src/app/shared/directives/identifier-validation.directive';
 import { SourceRequiredValidator } from 'src/app/shared/directives/source-required-validation.directive';
+import { SourceValidator } from 'src/app/shared/directives/source-validation.directive';
 import { Utf8Validator } from 'src/app/shared/directives/utf8-validation.directive';
 
 type Unbox<T> = T extends Array<infer V> ? V : T;
@@ -205,7 +206,8 @@ export class FormBuilderService {
       // sources: this.fb.array(source?.sources ? source.sources.map(s => this.source_FG(s) as any) : [this.source_FG(null)]),
       genre: this.fb.control(source?.genre ? source.genre : null),
       totalNumberOfPages: this.fb.control(source?.totalNumberOfPages ? source.totalNumberOfPages : null),
-    });
+    },
+  {validators : [SourceValidator], updateOn: 'blur'});
     return source_form;
   }
 

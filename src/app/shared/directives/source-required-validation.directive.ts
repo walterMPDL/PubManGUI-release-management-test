@@ -11,7 +11,7 @@ export const SourceRequiredValidator: ValidatorFn = (control: AbstractControl,):
     genre === genre_types.BOOK_ITEM || 
     genre === genre_types.CONFERENCE_PAPER || 
     genre === genre_types.MAGAZINE_ARTICLE) {
-      if (metadata.get('source') == null)  {
+      if ( metadata.get('sources')?.value.length < 1)  {
         return { [error_types.SOURCE_NOT_PROVIDED]: true };
       }
   }
