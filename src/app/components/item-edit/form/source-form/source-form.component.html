@@ -22,6 +22,9 @@
         <div class="col-sm">
             <label for="source_title" class="col-sm-2 col-form-label">Title</label>
             <input type="text" class="form-control" id="source_title" name="title" formControlName="title">
+            @if (source_form.get('title')?.hasError('required')) {
+            <div class="text-danger">Title is required</div>
+            }
         </div>
         <div class="col-sm-1"><!--NEEDED to keep the layout including one last collumn for add-remove buttons-->
         </div>

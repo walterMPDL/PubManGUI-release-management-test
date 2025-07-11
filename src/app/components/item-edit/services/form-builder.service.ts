@@ -193,7 +193,7 @@ export class FormBuilderService {
   source_FG(source: SourceVO | null) {
     const source_form = this.fb.group<ControlType<SourceVO>>({
       alternativeTitles: this.fb.array(source?.alternativeTitles ? source.alternativeTitles.map(at => this.alt_title_FG(at) as AbstractControl) : []),
-      title: this.fb.control(source?.title ? source.title : null),
+      title: this.fb.control(source?.title ? source.title : null, {validators : [Validators.required], updateOn : 'blur'}),
       creators: this.fb.array(source?.creators ? source.creators.map(c => this.creator_FG(c) as AbstractControl) : []),
       volume: this.fb.control(source?.volume ? source.volume : null),
       issue: this.fb.control(source?.issue ? source.issue : null),
