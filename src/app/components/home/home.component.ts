@@ -31,6 +31,7 @@ import { CountUp } from 'countup.js';
 export class HomeComponent implements OnInit, AfterViewInit {
   latestReleasedItems: Observable<ItemVersionVO[]> = of([]);
   newsItems: Observable<PuReBlogEntry[]> = of([]);
+  newsItemError: boolean = false;
 
   publications: number = 0;   //Soll diese Hardcode immernoch hier bleiben - nach fetch? (Nein)
   targetNumber: number = 500000;
@@ -116,7 +117,12 @@ ngOnInit(): void {
   }
 
   loadNewsItems() {
-    this.newsItems = this.httpClient.request<PuReBlogEntry[]>('GET', environment.pure_blog_feed_url);
+    this.newsItems = this.httpClient.request<PuReBlogEntry[]>('GET', 'abc').pipe(
+      catchError(err => {
+        this.newsItemError = true;
+        return of([]);
+      })
+    );
   }
 
   loadGenreAggs(): void {
