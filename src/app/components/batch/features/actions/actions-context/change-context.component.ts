@@ -1,17 +1,17 @@
-import {CommonModule} from '@angular/common';
-import {Component, inject, OnInit} from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, inject, OnInit } from '@angular/core';
 
-import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {Router} from '@angular/router';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
-import {ContextDbRO} from 'src/app/model/inge';
+import { ContextDbRO } from 'src/app/model/inge';
 
-import {BatchValidatorsService} from 'src/app/components/batch/services/batch-validators.service';
-import {BatchService} from 'src/app/components/batch/services/batch.service';
-import type {ChangeContextParams} from 'src/app/components/batch/interfaces/batch-params';
-import {AaService} from 'src/app/services/aa.service';
+import { BatchValidatorsService } from 'src/app/components/batch/services/batch-validators.service';
+import { BatchService } from 'src/app/components/batch/services/batch.service';
+import type { ChangeContextParams } from 'src/app/components/batch/interfaces/batch-params';
+import { AaService } from 'src/app/services/aa.service';
 
-import {_, TranslatePipe, TranslateService} from "@ngx-translate/core";
+import { _, TranslatePipe, TranslateService } from "@ngx-translate/core";
 
 @Component({
   selector: 'pure-batch-change-context',

@@ -1,19 +1,19 @@
-import {Routes} from '@angular/router';
-import {HomeComponent} from './components/home/home.component';
-import {HelpComponent} from './pages/help/help.component';
-import {DisclaimerComponent} from './pages/disclaimer/disclaimer.component';
-import {PrivacyComponent} from './pages/privacy-policy/privacy.component';
-import {OuTreeComponent} from './components/ou-tree/ou-tree.component';
-import {ItemFormComponent} from './components/item-edit/form/item-form/item-form.component';
-import {PageNotFoundComponent} from './shared/components/page-not-found/page-not-found.component';
-import {ItemSearchAdvancedComponent} from "./components/item-search-advanced/item-search-advanced.component";
-import {itemResolver} from "./services/pubman-rest-client/item-resolver";
-import {MyItemsComponent} from "./components/my-items/my-items.component";
-import {QaWorkspaceComponent} from "./components/qa-workspace/qa-workspace.component";
-import {SearchResultListComponent} from "./components/search-result-list/search-result-list.component";
-import {fetchItemResolver} from "./components/imports/services/fetch-item-resolver";
-import {ItemViewComponent} from "./components/item-view/item-view.component";
-import {CartListComponent} from "./components/cart-list/cart-list.component";
+import { Routes } from '@angular/router';
+import { HomeComponent } from './components/home/home.component';
+import { HelpComponent } from './pages/help/help.component';
+import { DisclaimerComponent } from './pages/disclaimer/disclaimer.component';
+import { PrivacyComponent } from './pages/privacy-policy/privacy.component';
+import { OuTreeComponent } from './components/ou-tree/ou-tree.component';
+import { ItemFormComponent } from './components/item-edit/form/item-form/item-form.component';
+import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
+import { ItemSearchAdvancedComponent } from "./components/item-search-advanced/item-search-advanced.component";
+import { itemResolver } from "./services/pubman-rest-client/item-resolver";
+import { MyItemsComponent } from "./components/my-items/my-items.component";
+import { QaWorkspaceComponent } from "./components/qa-workspace/qa-workspace.component";
+import { SearchResultListComponent } from "./components/search-result-list/search-result-list.component";
+import { fetchItemResolver } from "./components/imports/services/fetch-item-resolver";
+import { ItemViewComponent } from "./components/item-view/item-view.component";
+import { CartListComponent } from "./components/cart-list/cart-list.component";
 
 
 export const routes: Routes = [

@@ -1,7 +1,7 @@
-import {CommonModule} from '@angular/common';
-import {Component, HostListener} from '@angular/core';
-import {BreadcrumbComponent} from '../breadcrumb/breadcrumb.component';
-import {MessagingComponent} from '../messaging/messaging.component';
+import { CommonModule } from '@angular/common';
+import { Component, HostListener } from '@angular/core';
+import { BreadcrumbComponent } from '../breadcrumb/breadcrumb.component';
+import { MessagingComponent } from '../messaging/messaging.component';
 
 @Component({
   selector: 'pure-info-panel',

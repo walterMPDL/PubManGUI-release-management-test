@@ -9,11 +9,11 @@ import {
 import de from '@angular/common/locales/de';
 import en from '@angular/common/locales/en';
 
-import {provideRouter, RouteReuseStrategy, withComponentInputBinding, withInMemoryScrolling} from '@angular/router';
+import { provideRouter, RouteReuseStrategy, withComponentInputBinding, withInMemoryScrolling } from '@angular/router';
 
-import {routes} from './app.routes';
-import {PureRrs} from './services/pure-rrs';
-import {DialogModule} from '@angular/cdk/dialog';
+import { routes } from './app.routes';
+import { PureRrs } from './services/pure-rrs';
+import { DialogModule } from '@angular/cdk/dialog';
 import {
   HTTP_INTERCEPTORS,
   HttpClient,
@@ -21,14 +21,14 @@ import {
   withFetch,
   withInterceptorsFromDi
 } from '@angular/common/http';
-import {HttpErrorInterceptor} from "./services/interceptors/http-error.interceptor";
-import {WithCredentialsInterceptor} from "./services/interceptors/with-credentials.interceptor";
+import { HttpErrorInterceptor } from "./services/interceptors/http-error.interceptor";
+import { WithCredentialsInterceptor } from "./services/interceptors/with-credentials.interceptor";
 
-import {provideTranslateService, TranslateLoader, TranslateService} from "@ngx-translate/core";
-import {TranslateHttpLoader} from '@ngx-translate/http-loader';
-import {registerLocaleData} from "@angular/common";
-import {lastValueFrom} from "rxjs";
-import {AaService} from "./services/aa.service";
+import { provideTranslateService, TranslateLoader, TranslateService } from "@ngx-translate/core";
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { registerLocaleData } from "@angular/common";
+import { lastValueFrom } from "rxjs";
+import { AaService } from "./services/aa.service";
 
 const httpLoaderFactory: (http: HttpClient) => TranslateHttpLoader = (http: HttpClient) =>
   new TranslateHttpLoader(http, 'assets/i18n/', '.json');

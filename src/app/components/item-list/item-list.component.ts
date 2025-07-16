@@ -1,25 +1,25 @@
-import {AsyncPipe, CommonModule, Location} from '@angular/common';
-import {AfterViewInit, Component, Input, QueryList, ViewChildren} from '@angular/core';
-import {FormControl, FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {ItemListElementComponent} from './item-list-element/item-list-element.component';
-import {ActivatedRoute, Router} from '@angular/router';
-import {TopnavComponent} from 'src/app/shared/components/topnav/topnav.component';
-import {BehaviorSubject, map, Observable, of, Subscription, tap} from 'rxjs';
-import {ItemVersionVO} from 'src/app/model/inge';
-import {AaService} from 'src/app/services/aa.service';
-import {ItemsService} from "../../services/pubman-rest-client/items.service";
-import {PaginatorComponent} from "../../shared/components/paginator/paginator.component";
-import {TopnavCartComponent} from "../../shared/components/topnav/topnav-cart/topnav-cart.component";
-import {TopnavBatchComponent} from "../../shared/components/topnav/topnav-batch/topnav-batch.component";
-import {ItemListStateService} from "./item-list-state.service";
-import {LoadingComponent} from "../../shared/components/loading/loading.component";
-import {NgbModal, NgbTooltip} from "@ng-bootstrap/ng-bootstrap";
-import {ExportItemsComponent} from "../../shared/components/export-items/export-items.component";
-import {ItemSelectionService} from "../../shared/services/item-selection.service";
+import { AsyncPipe, CommonModule, Location } from '@angular/common';
+import { AfterViewInit, Component, Input, QueryList, ViewChildren } from '@angular/core';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ItemListElementComponent } from './item-list-element/item-list-element.component';
+import { ActivatedRoute, Router } from '@angular/router';
+import { TopnavComponent } from 'src/app/shared/components/topnav/topnav.component';
+import { BehaviorSubject, map, Observable, of, Subscription, tap } from 'rxjs';
+import { ItemVersionVO } from 'src/app/model/inge';
+import { AaService } from 'src/app/services/aa.service';
+import { ItemsService } from "../../services/pubman-rest-client/items.service";
+import { PaginatorComponent } from "../../shared/components/paginator/paginator.component";
+import { TopnavCartComponent } from "../../shared/components/topnav/topnav-cart/topnav-cart.component";
+import { TopnavBatchComponent } from "../../shared/components/topnav/topnav-batch/topnav-batch.component";
+import { ItemListStateService } from "./item-list-state.service";
+import { LoadingComponent } from "../../shared/components/loading/loading.component";
+import { NgbModal, NgbTooltip } from "@ng-bootstrap/ng-bootstrap";
+import { ExportItemsComponent } from "../../shared/components/export-items/export-items.component";
+import { ItemSelectionService } from "../../shared/services/item-selection.service";
 
-import {TranslatePipe} from "@ngx-translate/core";
-import {itemToVersionId} from "../../shared/services/utils";
-import {FeedModalComponent} from "../../shared/components/feed-modal/feed-modal.component";
+import { TranslatePipe } from "@ngx-translate/core";
+import { itemToVersionId } from "../../shared/services/utils";
+import { FeedModalComponent } from "../../shared/components/feed-modal/feed-modal.component";
 
 
 @Component({

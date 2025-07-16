@@ -1,10 +1,10 @@
-import {Component} from '@angular/core';
-import {RouterLink} from '@angular/router';
-import {MessageService} from 'src/app/shared/services/message.service';
-import {AaService} from 'src/app/services/aa.service';
-import {LoginComponent} from './login/login.component';
-import {NgIf} from '@angular/common';
-import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { MessageService } from 'src/app/shared/services/message.service';
+import { AaService } from 'src/app/services/aa.service';
+import { LoginComponent } from './login/login.component';
+import { NgIf } from '@angular/common';
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
     selector: 'pure-aa',

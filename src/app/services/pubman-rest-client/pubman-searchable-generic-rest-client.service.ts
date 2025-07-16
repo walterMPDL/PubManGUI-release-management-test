@@ -1,6 +1,6 @@
-import {PubmanGenericRestClientService, SearchResult} from "./pubman-generic-rest-client.service";
-import {catchError, map, Observable, throwError} from "rxjs";
-import {HttpHeaders, HttpParams, HttpResponse} from "@angular/common/http";
+import { PubmanGenericRestClientService, SearchResult } from "./pubman-generic-rest-client.service";
+import { catchError, map, Observable, throwError } from "rxjs";
+import { HttpHeaders, HttpParams, HttpResponse } from "@angular/common/http";
 
 export abstract class PubmanSearchableGenericRestClientService<modelType> extends PubmanGenericRestClientService<modelType> {
 

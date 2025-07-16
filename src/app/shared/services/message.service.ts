@@ -1,8 +1,8 @@
-import {Injectable, signal} from '@angular/core';
-import {Dialog} from '@angular/cdk/dialog';
+import { Injectable, signal } from '@angular/core';
+import { Dialog } from '@angular/cdk/dialog';
 
-import {MessageComponent} from '../components/message/message.component';
-import {ConfirmationComponent} from '../components/confirmation/confirmation.component';
+import { MessageComponent } from '../components/message/message.component';
+import { ConfirmationComponent } from '../components/confirmation/confirmation.component';
 
 @Injectable({
   providedIn: 'root'

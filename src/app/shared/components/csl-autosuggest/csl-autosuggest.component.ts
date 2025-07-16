@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import {
   catchError,
   debounceTime,
@@ -10,12 +10,12 @@ import {
   switchMap,
   tap
 } from "rxjs";
-import {FormBuilder, FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {NgbTypeahead} from "@ng-bootstrap/ng-bootstrap";
-import {HttpParams} from "@angular/common/http";
-import {ConeService} from "../../../services/cone.service";
-import {FormBuilderService} from "../../../components/item-edit/services/form-builder.service";
-import {EmptyPipe} from "../../services/pipes/empty.pipe";
+import { FormBuilder, FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { NgbTypeahead } from "@ng-bootstrap/ng-bootstrap";
+import { HttpParams } from "@angular/common/http";
+import { ConeService } from "../../../services/cone.service";
+import { FormBuilderService } from "../../../components/item-edit/services/form-builder.service";
+import { EmptyPipe } from "../../services/pipes/empty.pipe";
 
 @Component({
   selector: 'pure-csl-autosuggest',

@@ -1,21 +1,21 @@
-import {CommonModule} from '@angular/common';
-import {Component, HostListener, inject, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { Component, HostListener, inject, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
-import {ImportsService} from 'src/app/components/imports/services/imports.service';
-import {ImportErrorLevel, ImportLogDbVO, ImportLogItemDbVO} from 'src/app/model/inge';
+import { ImportsService } from 'src/app/components/imports/services/imports.service';
+import { ImportErrorLevel, ImportLogDbVO, ImportLogItemDbVO } from 'src/app/model/inge';
 
-import {NgbTooltip} from "@ng-bootstrap/ng-bootstrap";
+import { NgbTooltip } from "@ng-bootstrap/ng-bootstrap";
 
-import {MessageService} from 'src/app/shared/services/message.service';
-import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import { MessageService } from 'src/app/shared/services/message.service';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 
-import {PaginatorComponent} from "src/app/shared/components/paginator/paginator.component";
-import {ImportDetailLogComponent} from "./import-detail-log/import-detail-log.component";
+import { PaginatorComponent } from "src/app/shared/components/paginator/paginator.component";
+import { ImportDetailLogComponent } from "./import-detail-log/import-detail-log.component";
 
-import {_, TranslatePipe, TranslateService} from "@ngx-translate/core";
+import { _, TranslatePipe, TranslateService } from "@ngx-translate/core";
 
-import {LocalizeDatePipe} from "src/app/shared/services/pipes/localize-date.pipe";
+import { LocalizeDatePipe } from "src/app/shared/services/pipes/localize-date.pipe";
 
 @Component({
   selector: 'pure-import-details-list',

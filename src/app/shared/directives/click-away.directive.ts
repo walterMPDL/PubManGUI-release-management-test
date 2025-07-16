@@ -1,5 +1,5 @@
-import {DOCUMENT} from '@angular/common';
-import {Directive, ElementRef, EventEmitter, inject, OnDestroy, OnInit, Output, Renderer2} from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { Directive, ElementRef, EventEmitter, inject, OnDestroy, OnInit, Output, Renderer2 } from '@angular/core';
 
 @Directive({
     selector: '[pureClickAway]',

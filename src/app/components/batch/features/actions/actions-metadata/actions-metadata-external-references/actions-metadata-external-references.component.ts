@@ -1,5 +1,5 @@
-import {CommonModule} from '@angular/common';
-import {Component} from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
 import {
   ChangeExternalReferenceContentCategoryFormComponent
 } from './change-external-reference-content-category-form/change-external-reference-content-category-form.component'

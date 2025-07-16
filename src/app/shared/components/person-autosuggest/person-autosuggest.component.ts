@@ -1,7 +1,7 @@
-import {Component, Input} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {NgbHighlight, NgbTypeahead} from "@ng-bootstrap/ng-bootstrap";
-import {FormArray, FormBuilder, FormControl, ReactiveFormsModule} from "@angular/forms";
+import { Component, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { NgbHighlight, NgbTypeahead } from "@ng-bootstrap/ng-bootstrap";
+import { FormArray, FormBuilder, FormControl, ReactiveFormsModule } from "@angular/forms";
 import {
   catchError,
   debounceTime,
@@ -14,10 +14,10 @@ import {
   switchMap,
   tap
 } from "rxjs";
-import {ConeService, PersonResource} from "../../../services/cone.service";
-import {HttpParams} from "@angular/common/http";
-import {FormBuilderService} from 'src/app/components/item-edit/services/form-builder.service';
-import {IdType, OrganizationVO} from 'src/app/model/inge';
+import { ConeService, PersonResource } from "../../../services/cone.service";
+import { HttpParams } from "@angular/common/http";
+import { FormBuilderService } from 'src/app/components/item-edit/services/form-builder.service';
+import { IdType, OrganizationVO } from 'src/app/model/inge';
 
 @Component({
   selector: 'pure-person-autosuggest',

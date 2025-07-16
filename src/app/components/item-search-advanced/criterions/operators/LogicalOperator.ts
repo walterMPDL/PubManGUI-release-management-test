@@ -1,6 +1,6 @@
-import {SearchCriterion} from "../SearchCriterion";
-import {FormControl} from "@angular/forms";
-import {Observable, of} from "rxjs";
+import { SearchCriterion } from "../SearchCriterion";
+import { FormControl } from "@angular/forms";
+import { Observable, of } from "rxjs";
 
 export class LogicalOperator extends SearchCriterion {
 

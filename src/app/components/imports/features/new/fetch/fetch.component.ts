@@ -1,17 +1,17 @@
-import {CommonModule} from '@angular/common';
-import {Component, inject, OnInit} from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, inject, OnInit } from '@angular/core';
 
-import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {Router} from '@angular/router';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
-import {ContextDbRO} from 'src/app/model/inge';
-import {ImportValidatorsService} from 'src/app/components/imports/services/import-validators.service';
-import {ImportsService} from 'src/app/components/imports/services/imports.service';
-import type {GetArxivParams, GetCrossrefParams} from 'src/app/components/imports/interfaces/imports-params';
-import {AaService} from 'src/app/services/aa.service';
+import { ContextDbRO } from 'src/app/model/inge';
+import { ImportValidatorsService } from 'src/app/components/imports/services/import-validators.service';
+import { ImportsService } from 'src/app/components/imports/services/imports.service';
+import type { GetArxivParams, GetCrossrefParams } from 'src/app/components/imports/interfaces/imports-params';
+import { AaService } from 'src/app/services/aa.service';
 
-import {_, TranslatePipe, TranslateService} from "@ngx-translate/core";
-import {MessageService} from "src/app/shared/services/message.service";
+import { _, TranslatePipe, TranslateService } from "@ngx-translate/core";
+import { MessageService } from "src/app/shared/services/message.service";
 
 @Component({
   selector: 'pure-imports-new-fetch',

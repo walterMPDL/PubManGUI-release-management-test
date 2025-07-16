@@ -1,5 +1,5 @@
-import {inject} from "@angular/core";
-import {ValidationService} from "src/app/services/pubman-rest-client/validation.service";
+import { inject } from "@angular/core";
+import { ValidationService } from "src/app/services/pubman-rest-client/validation.service";
 
 export class EventValidator {
 

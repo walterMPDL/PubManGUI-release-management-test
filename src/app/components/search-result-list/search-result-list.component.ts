@@ -1,11 +1,11 @@
-import {Component} from '@angular/core';
-import {ItemListComponent} from "../item-list/item-list.component";
-import {Observable} from "rxjs";
-import {AaService} from "../../services/aa.service";
-import {ActivatedRoute, Router} from "@angular/router";
-import {Location} from "@angular/common";
-import {SortSelectorComponent} from "../item-list/filters/sort-selector/sort-selector.component";
-import {SearchStateService} from "./search-state.service";
+import { Component } from '@angular/core';
+import { ItemListComponent } from "../item-list/item-list.component";
+import { Observable } from "rxjs";
+import { AaService } from "../../services/aa.service";
+import { ActivatedRoute, Router } from "@angular/router";
+import { Location } from "@angular/common";
+import { SortSelectorComponent } from "../item-list/filters/sort-selector/sort-selector.component";
+import { SearchStateService } from "./search-state.service";
 import {
   ItemAggregationFilterComponent
 } from "../item-list/aggregations/aggregation-filter/item-aggregation-filter.component";
@@ -21,7 +21,7 @@ import {
 import {
   ItemSourceTitleAggregationDirective
 } from "../item-list/aggregations/aggregation-filter/directives/item-sourcetitle-aggregation.directive";
-import {TranslatePipe} from "@ngx-translate/core";
+import { TranslatePipe } from "@ngx-translate/core";
 
 @Component({
   selector: 'pure-search-result-list',

@@ -1,18 +1,18 @@
-import {AfterViewInit, Component, OnInit} from "@angular/core";
-import {baseElasticSearchQueryBuilder} from "../../shared/services/search-utils";
-import {map, Observable, of} from "rxjs";
-import {ItemVersionVO} from "../../model/inge";
-import {ItemsService} from "../../services/pubman-rest-client/items.service";
-import {AsyncPipe, DatePipe, SlicePipe} from "@angular/common";
-import {RouterLink} from "@angular/router";
-import {SanitizeHtmlPipe} from "../../shared/services/pipes/sanitize-html.pipe";
-import {HttpClient} from "@angular/common/http";
-import {environment} from "../../../environments/environment";
-import {LoadingComponent} from "../../shared/components/loading/loading.component";
+import { AfterViewInit, Component, OnInit } from "@angular/core";
+import { baseElasticSearchQueryBuilder } from "../../shared/services/search-utils";
+import { map, Observable, of } from "rxjs";
+import { ItemVersionVO } from "../../model/inge";
+import { ItemsService } from "../../services/pubman-rest-client/items.service";
+import { AsyncPipe, DatePipe, SlicePipe } from "@angular/common";
+import { RouterLink } from "@angular/router";
+import { SanitizeHtmlPipe } from "../../shared/services/pipes/sanitize-html.pipe";
+import { HttpClient } from "@angular/common/http";
+import { environment } from "../../../environments/environment";
+import { LoadingComponent } from "../../shared/components/loading/loading.component";
 
 //My Imports
-import {Chart} from 'chart.js/auto';
-import {CountUp} from 'countup.js';
+import { Chart } from 'chart.js/auto';
+import { CountUp } from 'countup.js';
 
 @Component({
   selector: 'pure-home',

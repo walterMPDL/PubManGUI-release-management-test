@@ -1,8 +1,8 @@
-import {Component, Input} from '@angular/core';
-import {ItemListComponent} from "../../item-list.component";
-import {ItemFilterDirective} from "../directives/item-filter.directive";
-import {DefaultKeyValuePipe} from "../../../../shared/services/pipes/default-key-value.pipe";
-import {TranslatePipe} from "@ngx-translate/core";
+import { Component, Input } from '@angular/core';
+import { ItemListComponent } from "../../item-list.component";
+import { ItemFilterDirective } from "../directives/item-filter.directive";
+import { DefaultKeyValuePipe } from "../../../../shared/services/pipes/default-key-value.pipe";
+import { TranslatePipe } from "@ngx-translate/core";
 
 
 @Component({

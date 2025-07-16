@@ -1,8 +1,8 @@
-import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {NgbActiveModal} from "@ng-bootstrap/ng-bootstrap";
-import {AaService} from "../../../services/aa.service";
-import {tap} from "rxjs";
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
+import { AaService } from "../../../services/aa.service";
+import { tap } from "rxjs";
 
 @Component({
     selector: 'pure-login',

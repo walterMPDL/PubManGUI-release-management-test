@@ -1,18 +1,18 @@
-import {CommonModule} from '@angular/common';
-import {Component, inject, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { Component, inject, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
-import {FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
-import {BatchValidatorsService} from 'src/app/components/batch/services/batch-validators.service';
-import {BatchService} from 'src/app/components/batch/services/batch.service';
-import {IpEntry, MiscellaneousService} from 'src/app/services/pubman-rest-client/miscellaneous.service';
-import type {ReplaceFileAudienceParams} from 'src/app/components/batch/interfaces/batch-params';
+import { BatchValidatorsService } from 'src/app/components/batch/services/batch-validators.service';
+import { BatchService } from 'src/app/components/batch/services/batch.service';
+import { IpEntry, MiscellaneousService } from 'src/app/services/pubman-rest-client/miscellaneous.service';
+import type { ReplaceFileAudienceParams } from 'src/app/components/batch/interfaces/batch-params';
 
 import {
   AudienceFormComponent
 } from 'src/app/components/batch/features/actions/actions-metadata/actions-metadata-files/replace-file-audience-form/audience-form/audience-form.component'
-import {TranslatePipe} from "@ngx-translate/core";
+import { TranslatePipe } from "@ngx-translate/core";
 
 @Component({
   selector: 'pure-replace-file-audience-form',

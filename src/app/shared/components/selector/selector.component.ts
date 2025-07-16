@@ -14,16 +14,16 @@ import {
   ViewChildren,
   ViewContainerRef
 } from '@angular/core';
-import {AsyncPipe, CommonModule, NgFor, NgIf, NgTemplateOutlet} from '@angular/common';
-import {OptionDirective} from './directives/option.directive';
-import {HighlightableDirective} from './directives/highlightable.directive';
-import {SelectorDatasource} from './services/selector-datasource.service';
-import {Overlay, OverlayRef} from '@angular/cdk/overlay';
-import {BehaviorSubject, filter, map, shareReplay, timer} from 'rxjs';
-import {ActiveDescendantKeyManager} from '@angular/cdk/a11y';
-import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {TemplatePortal} from '@angular/cdk/portal';
-import {HighLightJsonPipe} from '../../services/pipes/high-light-json.pipe';
+import { AsyncPipe, CommonModule, NgFor, NgIf, NgTemplateOutlet } from '@angular/common';
+import { OptionDirective } from './directives/option.directive';
+import { HighlightableDirective } from './directives/highlightable.directive';
+import { SelectorDatasource } from './services/selector-datasource.service';
+import { Overlay, OverlayRef } from '@angular/cdk/overlay';
+import { BehaviorSubject, filter, map, shareReplay, timer } from 'rxjs';
+import { ActiveDescendantKeyManager } from '@angular/cdk/a11y';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { TemplatePortal } from '@angular/cdk/portal';
+import { HighLightJsonPipe } from '../../services/pipes/high-light-json.pipe';
 
 @Component({
   selector: 'pure-selector',

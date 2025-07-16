@@ -1,5 +1,5 @@
-import {CommonModule} from '@angular/common';
-import {ChangeDetectionStrategy, Component} from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import FetchComponent from './fetch/fetch.component';
 import ImportComponent from './import/import.component';
 

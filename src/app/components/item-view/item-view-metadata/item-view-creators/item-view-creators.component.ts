@@ -1,12 +1,12 @@
-import {Component, Input, TemplateRef} from '@angular/core';
-import {ItemViewMetadataElementComponent} from "../item-view-metadata-element/item-view-metadata-element.component";
-import {AffiliationDbVO, CreatorVO, OrganizationVO} from "../../../../model/inge";
-import {environment} from 'src/environments/environment';
-import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {OrganizationsService} from "../../../../services/pubman-rest-client/organizations.service";
-import {EmptyPipe} from "../../../../shared/services/pipes/empty.pipe";
-import {TranslatePipe} from "@ngx-translate/core";
-import {LoadingComponent} from "../../../../shared/components/loading/loading.component";
+import { Component, Input, TemplateRef } from '@angular/core';
+import { ItemViewMetadataElementComponent } from "../item-view-metadata-element/item-view-metadata-element.component";
+import { AffiliationDbVO, CreatorVO, OrganizationVO } from "../../../../model/inge";
+import { environment } from 'src/environments/environment';
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { OrganizationsService } from "../../../../services/pubman-rest-client/organizations.service";
+import { EmptyPipe } from "../../../../shared/services/pipes/empty.pipe";
+import { TranslatePipe } from "@ngx-translate/core";
+import { LoadingComponent } from "../../../../shared/components/loading/loading.component";
 
 @Component({
   selector: 'pure-item-view-creators',

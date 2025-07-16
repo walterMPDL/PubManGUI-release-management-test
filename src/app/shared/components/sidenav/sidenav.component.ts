@@ -1,4 +1,4 @@
-import {CommonModule} from '@angular/common';
+import { CommonModule } from '@angular/common';
 import {
   AfterViewInit,
   Component,
@@ -9,21 +9,21 @@ import {
   Renderer2,
   ViewChild
 } from '@angular/core';
-import {RouterLink} from '@angular/router';
-import {AaService} from "../../../services/aa.service";
+import { RouterLink } from '@angular/router';
+import { AaService } from "../../../services/aa.service";
 
-import {MatBadgeModule} from '@angular/material/badge';
-import {BatchService} from 'src/app/components/batch/services/batch.service';
-import {ImportsService} from 'src/app/components/imports/services/imports.service';
-import {BatchNavComponent} from 'src/app/components/batch/batch-nav/batch-nav.component';
-import {ImportsNavComponent} from 'src/app/components/imports/imports-nav/imports-nav.component';
-import {CartService} from "../../services/cart.service";
+import { MatBadgeModule } from '@angular/material/badge';
+import { BatchService } from 'src/app/components/batch/services/batch.service';
+import { ImportsService } from 'src/app/components/imports/services/imports.service';
+import { BatchNavComponent } from 'src/app/components/batch/batch-nav/batch-nav.component';
+import { ImportsNavComponent } from 'src/app/components/imports/imports-nav/imports-nav.component';
+import { CartService } from "../../services/cart.service";
 
-import {TranslatePipe} from "@ngx-translate/core";
+import { TranslatePipe } from "@ngx-translate/core";
 
-import {AaComponent} from 'src/app/components/aa/aa.component';
-import {SearchComponent} from 'src/app/shared/components/search/search.component';
-import {LangSwitchComponent} from 'src/app/shared/components/lang-switch/lang-switch.component';
+import { AaComponent } from 'src/app/components/aa/aa.component';
+import { SearchComponent } from 'src/app/shared/components/search/search.component';
+import { LangSwitchComponent } from 'src/app/shared/components/lang-switch/lang-switch.component';
 
 
 @Component({

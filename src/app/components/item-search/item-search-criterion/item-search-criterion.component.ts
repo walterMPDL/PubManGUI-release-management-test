@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -8,15 +8,15 @@ import {
   ReactiveFormsModule,
   ValidatorFn
 } from '@angular/forms';
-import {debounceTime, distinctUntilChanged, EMPTY, filter, Observable, switchMap} from 'rxjs';
-import {fieldOptions, join_enum} from 'src/app/model/pure_search';
-import {ConeService} from 'src/app/services/cone.service';
-import {OptionDirective} from 'src/app/shared/components/selector/directives/option.directive';
-import {PureOusDirective} from 'src/app/shared/components/selector/services/pure_ous/pure-ous.directive';
-import {SelectorComponent} from 'src/app/shared/components/selector/selector.component';
-import {ClickOutsideDirective} from 'src/app/shared/directives/click-outside.directive';
-import {AsyncPipe} from '@angular/common';
-import {CreatorRole, IdType, MdsPublicationGenre} from 'src/app/model/inge';
+import { debounceTime, distinctUntilChanged, EMPTY, filter, Observable, switchMap } from 'rxjs';
+import { fieldOptions, join_enum } from 'src/app/model/pure_search';
+import { ConeService } from 'src/app/services/cone.service';
+import { OptionDirective } from 'src/app/shared/components/selector/directives/option.directive';
+import { PureOusDirective } from 'src/app/shared/components/selector/services/pure_ous/pure-ous.directive';
+import { SelectorComponent } from 'src/app/shared/components/selector/selector.component';
+import { ClickOutsideDirective } from 'src/app/shared/directives/click-outside.directive';
+import { AsyncPipe } from '@angular/common';
+import { CreatorRole, IdType, MdsPublicationGenre } from 'src/app/model/inge';
 
 // const valid_date_old = /^((?:19|20)[0-9][0-9])-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])$/;
 export const valid_date = /^((?:19|20)[0-9][0-9])(?:(?:-(0[1-9]|1[012]))(?:-(0[1-9]|[12][0-9]|3[01]))?)?$/;

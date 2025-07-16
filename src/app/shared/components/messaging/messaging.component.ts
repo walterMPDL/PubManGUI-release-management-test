@@ -1,6 +1,6 @@
-import {CommonModule} from '@angular/common';
-import {Component, effect} from '@angular/core';
-import {MessageService} from "src/app/shared/services/message.service";
+import { CommonModule } from '@angular/common';
+import { Component, effect } from '@angular/core';
+import { MessageService } from "src/app/shared/services/message.service";
 
 @Component({
   selector: 'pure-messaging',

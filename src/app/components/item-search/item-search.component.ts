@@ -1,9 +1,9 @@
-import {HttpParams} from '@angular/common/http';
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {AbstractControl, FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {Router} from '@angular/router';
-import {Observable, Subject} from 'rxjs';
-import {AaService} from 'src/app/services/aa.service';
+import { HttpParams } from '@angular/common/http';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { Observable, Subject } from 'rxjs';
+import { AaService } from 'src/app/services/aa.service';
 // import { public_filter } from 'src/app/isis/model/pure_queries';
 import {
   bool_query,
@@ -12,9 +12,9 @@ import {
   join_enum,
   search_criterion
 } from 'src/app/model/pure_search';
-import {ConeService} from 'src/app/services/cone.service';
-import {ItemSearchCriterionComponent} from './item-search-criterion/item-search-criterion.component';
-import {AsyncPipe, JsonPipe, NgStyle} from '@angular/common';
+import { ConeService } from 'src/app/services/cone.service';
+import { ItemSearchCriterionComponent } from './item-search-criterion/item-search-criterion.component';
+import { AsyncPipe, JsonPipe, NgStyle } from '@angular/common';
 
 @Component({
   selector: 'pure-item-search',
