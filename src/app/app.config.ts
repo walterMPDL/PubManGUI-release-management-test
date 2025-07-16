@@ -14,7 +14,13 @@ import { RouteReuseStrategy, provideRouter, withInMemoryScrolling, withRouterCon
 import { routes } from './app.routes';
 import { PureRrs } from './services/pure-rrs';
 import { DialogModule } from '@angular/cdk/dialog';
-import {HTTP_INTERCEPTORS, provideHttpClient, withInterceptors, withInterceptorsFromDi} from '@angular/common/http';
+import {
+  HTTP_INTERCEPTORS,
+  provideHttpClient,
+  withFetch,
+  withInterceptors,
+  withInterceptorsFromDi
+} from '@angular/common/http';
 import { HttpErrorInterceptor } from "./services/interceptors/http-error.interceptor";
 import { WithCredentialsInterceptor } from "./services/interceptors/with-credentials.interceptor";
 
@@ -41,7 +47,8 @@ export const appConfig: ApplicationConfig = {
     importProvidersFrom(DialogModule),
 
     provideHttpClient(
-      withInterceptorsFromDi()
+      withInterceptorsFromDi(),
+      withFetch()
     ),
     {
       provide: HTTP_INTERCEPTORS,
