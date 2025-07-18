@@ -11,7 +11,7 @@ import { TranslatePipe } from "@ngx-translate/core";
 import { NgbTooltip } from "@ng-bootstrap/ng-bootstrap";
 
 import { SearchComponent } from 'src/app/components/shared/search/search.component';
-import { ToolsComponent } from 'src/app/shared/components/tools/tools.component';
+import { ToolsnavComponent } from 'src/app/components/shared/toolsnav/toolsnav.component';
 
 
 @Component({
@@ -29,7 +29,7 @@ import { ToolsComponent } from 'src/app/shared/components/tools/tools.component'
     TranslatePipe,
     NgbTooltip,
     SearchComponent,
-    ToolsComponent,
+    ToolsnavComponent,
   ]
 })
 export class HeaderComponent {
