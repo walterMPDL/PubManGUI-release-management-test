@@ -32,7 +32,6 @@
     "strictInputAccessModifiers": true,
     "strictTemplates": true,
     "extendedDiagnostics": {
-      // The categories to use for specific diagnostics.
       "checks": {
         // Maps check name to its category.
         "optionalChainNotNullable": "suppress"
