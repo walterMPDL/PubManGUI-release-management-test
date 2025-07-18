@@ -12,7 +12,7 @@ export const datesValidator: ValidatorFn = (control: AbstractControl,): Validati
   const dateSubmitted = control.get('dateSubmitted');
   const event = control.get('event');
   const genre = control.get('genre');
-
+  genre?.markAsTouched();
   if (MdsPublicationGenre.SERIES == genre?.value
     || MdsPublicationGenre.JOURNAL == genre?.value
     || MdsPublicationGenre.MANUSCRIPT == genre?.value

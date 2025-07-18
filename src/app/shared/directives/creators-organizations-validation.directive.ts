@@ -7,6 +7,7 @@ export const CreatorsOrganizationsValidator: ValidatorFn = (control: AbstractCon
   const creators = control.get('creators') as FormArray;
   let ok:boolean = false;
   let errorOrg:boolean = false;
+  control.get('genre')?.markAsTouched();
   for (let creator of creators.controls) {
     switch (creator.get('type')?.value) {
       case CreatorType.ORGANIZATION:
