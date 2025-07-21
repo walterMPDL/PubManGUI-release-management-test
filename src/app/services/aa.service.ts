@@ -14,6 +14,7 @@ export class Principal{
   isModerator: boolean = false;
   isDepositor: boolean = false;
   isAdmin: boolean = false;
+  isLocalAdmin: boolean = false;
   moderatorContexts: ContextDbVO[] = [];
   depositorContexts: ContextDbVO[] = [];
   allContexts: ContextDbVO[] = [];
@@ -65,6 +66,7 @@ export class AaService {
         principal.loggedIn = true;
         principal.user = user;
         principal.isAdmin = !!user.grantList.find((grant: any) => grant.role === 'SYSADMIN');
+        principal.isLocalAdmin = !!user.grantList.find((grant: any) => grant.role === 'LOCAL_ADMIN');
 
         return forkJoin([
           this.contextService.getContextsForCurrentUser("DEPOSITOR", user),
