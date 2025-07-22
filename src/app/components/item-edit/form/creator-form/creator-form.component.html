@@ -39,11 +39,9 @@
                 @if (type.value === 'ORGANIZATION') {
                 <div class="col-sm" formGroupName="organization">
                     <label for="name" class="col-form-label pe-2">name</label>
-                    <pure-selector [form]="organization" [control_name]="'name'" (notice)="updateOU($event)" purePureOus
-                        placeholder="search ous ..."
-                        [validationError]="creator_form.errors?.[error_types.CREATOR_ORGANIZATION_NAME_NOT_PROVIDED]">
-                        <ng-container *pureOption="let item">{{ item.text }}</ng-container>
-                    </pure-selector>
+                    <pure-ou-autosuggest id="organization{{index+1}}" [formForOuName]="$any(organization.controls.name)"
+                                [formForOuId]="$any(organization.controls.identifier)" [validationEnabled]="true"
+                                [validationError]="creator_form.errors?.[error_types.CREATOR_ORGANIZATION_NAME_NOT_PROVIDED] ? true : false"></pure-ou-autosuggest>
                     @if(creator_form.errors?.[error_types.CREATOR_ORGANIZATION_NAME_NOT_PROVIDED]) {
                     <div class="text-danger">Organization name is required</div>
                     }
