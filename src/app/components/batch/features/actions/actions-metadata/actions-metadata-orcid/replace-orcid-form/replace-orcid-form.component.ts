@@ -4,10 +4,6 @@ import { Router } from '@angular/router';
 
 import { AbstractControl, FormArray, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { IdentifierVO, IdType, OrganizationVO, PersonVO } from 'src/app/model/inge';
-import {
-  ConePersonsService,
-  PersonResource
-} from 'src/app/deprecated/selector/services/cone-persons/cone-persons.service';
 import { PersonAutosuggestComponent } from 'src/app/components/shared/person-autosuggest/person-autosuggest.component';
 
 import { BatchService } from 'src/app/components/batch/services/batch.service';
@@ -41,7 +37,6 @@ export class ReplaceOrcidFormComponent {
   router = inject(Router);
   fb = inject(FormBuilder);
   batchSvc = inject(BatchService);
-  cone = inject(ConePersonsService);
 
   public changeOrcidForm: FormGroup = this.fb.group<ControlType<PersonVO>>({
     completeName: this.fb.control(''),
@@ -68,23 +63,6 @@ export class ReplaceOrcidFormComponent {
       itemIds: []
     }
     return actionParams;
-  }
-
-  updatePerson(event: any) {
-    this.cone.resource(event.id).subscribe(
-      (person: PersonResource) => {
-        const patched: Partial<PersonVO> = {
-          completeName: person.http_xmlns_com_foaf_0_1_family_name + ', ' + person.http_xmlns_com_foaf_0_1_givenname,
-          givenName: person.http_xmlns_com_foaf_0_1_givenname,
-          familyName: person.http_xmlns_com_foaf_0_1_family_name,
-          identifier: {
-            type: IdType.CONE,
-            id: person.id.substring(24)
-          },
-        };
-
-        this.changeOrcidForm.patchValue(patched, { emitEvent: false });
-      });
   }
 
   onSubmit(): void {
