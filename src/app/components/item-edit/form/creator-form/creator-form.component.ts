@@ -1,7 +1,7 @@
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormArray, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ControlType, FormBuilderService } from '../../services/form-builder.service';
+import { ControlType, FormBuilderService } from '../../../../services/form-builder.service';
 import { CreatorRole, CreatorType, IdentifierVO, IdType, OrganizationVO, PersonVO } from 'src/app/model/inge';
 import { ConeService, PersonResource } from 'src/app/services/cone.service';
 import {
