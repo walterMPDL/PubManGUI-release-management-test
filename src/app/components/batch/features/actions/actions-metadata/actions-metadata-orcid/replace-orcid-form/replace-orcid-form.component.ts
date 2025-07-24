@@ -12,15 +12,7 @@ import type { ReplaceOrcidParams } from 'src/app/components/batch/interfaces/bat
 
 import { TranslatePipe } from "@ngx-translate/core";
 
-type Unbox<T> = T extends Array<infer V> ? V : T;
-
-export type ControlType<T> = {
-  [K in keyof T]: T[K] extends Array<any>
-  ? FormArray<AbstractControl<Unbox<T[K]>>>
-  : T[K] extends Record<string, any>
-  ? FormGroup<ControlType<T[K]>>
-  : AbstractControl<T[K] | null>;
-};
+import { ControlType } from 'src/app/services/form-builder.service'; // Adjust 
 
 @Component({
   selector: 'pure-replace-orcid-form',
