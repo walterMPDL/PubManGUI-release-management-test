@@ -42,6 +42,8 @@ import { ContextsService } from 'src/app/services/pubman-rest-client/contexts.se
 import { AaService } from 'src/app/services/aa.service';
 import { MessageService } from 'src/app/services/message.service';
 import { Errors } from 'src/app/model/errors';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { AddMultipleCreatorsModalComponent } from '../add-multiple-creators-modal/add-multiple-creators-modal.component';
 
 @Component({
   selector: 'pure-metadata-form',
@@ -90,13 +92,13 @@ export class MetadataFormComponent implements OnInit {
   loading: boolean = false;
 
   genrePriorityList = [MdsPublicationGenre.ARTICLE.toString()
-              , MdsPublicationGenre.CONFERENCE_PAPER.toString()
-              , MdsPublicationGenre.BOOK_ITEM.toString()
-              , MdsPublicationGenre.TALK_AT_EVENT.toString()
-              , MdsPublicationGenre.THESIS.toString()];
+    , MdsPublicationGenre.CONFERENCE_PAPER.toString()
+    , MdsPublicationGenre.BOOK_ITEM.toString()
+    , MdsPublicationGenre.TALK_AT_EVENT.toString()
+    , MdsPublicationGenre.THESIS.toString()];
 
   constructor(
-    private fb: FormBuilder,
+    private fb: FormBuilder, private modalService: NgbModal
   ) {
   }
 
@@ -160,7 +162,7 @@ export class MetadataFormComponent implements OnInit {
         if (resultContext.allowedGenres) {
           this.allowed_genre_types = resultContext.allowedGenres;
           this.allowed_genre_types.sort((a, b) => {
-            
+
             const aIndex = this.genrePriorityList.indexOf(a);
             const bIndex = this.genrePriorityList.indexOf(b);
 
@@ -183,12 +185,11 @@ export class MetadataFormComponent implements OnInit {
     this.miscellaneousService.selectedGenre.set(this.meta_form.get('genre')?.value);
   }
 
-  addMultipleCreators() {
-    console.log('Adding multiple creators');
+  addMultipleCreators(creatorsString: string) {
     this.loading = true;
-    if (this.multipleCreators?.value != null) {
+    if (creatorsString !== null && creatorsString != '') {
       try {
-        this.miscellaneousService.getDecodedMultiplePersons(this.multipleCreators.value).subscribe(
+        this.miscellaneousService.getDecodedMultiplePersons(creatorsString).subscribe(
           (decodedCreators) => {
             for (let creator of decodedCreators) {
               let personVO: PersonVO = { completeName: creator.family + ', ' + creator.given, familyName: creator.family, givenName: creator.given, alternativeNames: [''], titles: [''], pseudonyms: [''], organizations: [], identifier: { id: '', type: IdType.OTHER }, orcid: '' };
@@ -208,6 +209,11 @@ export class MetadataFormComponent implements OnInit {
       this.messageService.error('Please enter multiple creators in the textfield.');
       this.loading = false;
     }
+  }
+
+  openAddMultipleCreatorsModal() {
+   const modalRef = this.modalService.open(AddMultipleCreatorsModalComponent);
+    modalRef.componentInstance.callback = this.addMultipleCreators.bind(this);
   }
 
   handleAltTitleNotification(event: any) {
