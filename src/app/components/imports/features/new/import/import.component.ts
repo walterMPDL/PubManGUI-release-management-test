@@ -66,6 +66,7 @@ export default class ImportComponent implements OnInit {
     this.importForm.controls['format'].valueChanges.subscribe(format => {
       if (format && format !== this.translateService.instant(_('imports.format'))) this.getFormatConfiguration(format);
     });
+
   }
 
   getFormatConfiguration(format: string) {
@@ -166,7 +167,7 @@ export default class ImportComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.importForm.invalid) {
+    if (this.importForm.invalid || this.importForm.pristine) {
       this.importForm.markAllAsTouched();
       return;
     }
