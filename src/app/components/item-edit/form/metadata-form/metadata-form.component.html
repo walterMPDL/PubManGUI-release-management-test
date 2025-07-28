@@ -20,9 +20,18 @@
                                     <select id="genre" class="form-select" formControlName="genre"
                                         (change)="changeGenre()" data-test="genre">
                                         <option [value]="null" selected disabled>genre</option>
-                                        @for (g of allowed_genre_types; track g) {
-                                        <option [value]="g">{{g}}</option>
-                                        }
+                                        <optgroup label="Top 5">
+                                            @for (g of allowed_genre_types; track g) {
+                                            @if (genrePriorityList.includes(g)) {
+                                            <option [value]="g">{{g}}</option>
+                                            }}
+                                        </optgroup>
+                                        <optgroup label="Alphabetically Sorted">
+                                            @for (g of allowed_genre_types; track g) {
+                                            @if (!genrePriorityList.includes(g)) {
+                                            <option [value]="g">{{g}}</option>
+                                            }}
+                                        </optgroup>
                                     </select>
                                     @if (meta_form.get('genre')?.hasError('required')) {
                                     <div class="text-danger">Genre is required</div>
@@ -347,7 +356,7 @@
                     </div>
                 </div>
                 <div class="d-sm-flex flex-sm-row">
-                <hr/>
+                    <hr />
                 </div>
                 <div class="accordion-body mt-3 mb-3">
                     <ng-container formArrayName="abstracts">
@@ -357,7 +366,6 @@
                             <label for="abstracts" class="col-sm-2 col-form-label">{{abstractIndex + 1}}.
                                 Abstract</label>
                             <div class="col-sm" id="abstract">
-
                                 <ng-container [formGroupName]="abstractIndex">
                                     <pure-abstract-form [abstract_form]="abstract" [index]="abstractIndex"
                                         [multi]="true" [index_length]="abstracts.controls.length"

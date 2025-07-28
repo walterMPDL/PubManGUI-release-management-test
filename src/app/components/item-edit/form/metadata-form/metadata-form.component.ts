@@ -89,6 +89,12 @@ export class MetadataFormComponent implements OnInit {
   multipleCreators = new FormControl<string>('');
   loading: boolean = false;
 
+  genrePriorityList = [MdsPublicationGenre.ARTICLE.toString()
+              , MdsPublicationGenre.CONFERENCE_PAPER.toString()
+              , MdsPublicationGenre.BOOK_ITEM.toString()
+              , MdsPublicationGenre.TALK_AT_EVENT.toString()
+              , MdsPublicationGenre.THESIS.toString()];
+
   constructor(
     private fb: FormBuilder,
   ) {
@@ -153,6 +159,21 @@ export class MetadataFormComponent implements OnInit {
       this.contextService.retrieve(this.context.value.objectId,).subscribe(resultContext => {
         if (resultContext.allowedGenres) {
           this.allowed_genre_types = resultContext.allowedGenres;
+          this.allowed_genre_types.sort((a, b) => {
+            
+            const aIndex = this.genrePriorityList.indexOf(a);
+            const bIndex = this.genrePriorityList.indexOf(b);
+
+            if (aIndex !== -1 && bIndex !== -1) {
+              return aIndex - bIndex;
+            } else if (aIndex !== -1) {
+              return -1;
+            } else if (bIndex !== -1) {
+              return 1;
+            } else {
+              return a.localeCompare(b);
+            }
+          });
         }
       });
     }
