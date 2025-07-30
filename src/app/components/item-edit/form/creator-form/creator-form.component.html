@@ -42,7 +42,7 @@
                 <div class="col-sm" formGroupName="organization">
                     <label for="name" class="col-form-label pe-2">name</label>
                     <pure-ou-autosuggest id="organization{{index+1}}" [formForOuName]="$any(organization.controls.name)"
-                                [formForOuId]="$any(organization.controls.identifier)" [validationEnabled]="true"
+                                [formForOuId]="$any(organization.controls.identifier)" [validationEnabled]="true" [emphasize]="true"
                                 [validationError]="creator_form.errors?.[error_types.CREATOR_ORGANIZATION_NAME_NOT_PROVIDED] ? true : false"></pure-ou-autosuggest>
 
 
@@ -51,14 +51,6 @@
                     }
 
                 </div>
-                <!--TODO link-->
-                <a routerLink="cone_uri{organization.controls.identifier.value}" routerLinkActive="active">
-                    <span class="material-symbols-outlined"
-                        [ngClass]="{'invisible': !organization.controls.identifier.value}"
-                        title="{{organization.controls.identifier.value}}">
-                        info
-                    </span>
-                </a>
                 }
                 @if (type.value === 'PERSON') {
 

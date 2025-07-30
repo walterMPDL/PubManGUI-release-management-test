@@ -35,6 +35,8 @@ export class OuAutosuggestComponent {
   @Input() validationEnabled: boolean = false;
   @Input() validationError: boolean = false;
 
+  @Input() emphasize: boolean = false;
+
   searching: boolean = false;
 
   constructor(private organizationsService: OrganizationsService, private modalService:NgbModal) {
@@ -84,6 +86,7 @@ export class OuAutosuggestComponent {
     //Prevent that the whole ou object is set in the form control
     event.preventDefault();
   }
+
 
   ouAutoSuggestElasticQuery(searchString: string) {
     return {
