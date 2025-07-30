@@ -13,8 +13,7 @@ import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
   selector: 'pure-ou-modal',
   imports: [
     ItemViewMetadataElementComponent,
-    LoadingComponent,
-    AsyncPipe
+    LoadingComponent
   ],
   templateUrl: './ou-modal.component.html',
   styleUrl: './ou-modal.component.scss'

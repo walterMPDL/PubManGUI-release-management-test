@@ -16,7 +16,6 @@ import { OuModalComponent } from "../../../shared/ou-modal/ou-modal.component";
     ItemViewMetadataElementComponent,
     EmptyPipe,
     TranslatePipe,
-    LoadingComponent
   ],
   templateUrl: './item-view-creators.component.html',
   styleUrl: './item-view-creators.component.scss'
