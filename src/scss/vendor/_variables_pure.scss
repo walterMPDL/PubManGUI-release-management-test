@@ -9,6 +9,9 @@ $font-family-base: 'Roboto300', "Segoe UI", 'Helvetica Neue Light', 'Helvetica N
 $headings-font-family: 'Merriweather', 'Times New Roman', Times, serif;
 
 
+$focus-ring-color: rgba($mpg-secondary-blue, 0.5);
+$form-feedback-invalid-color: $mpdl-red;
+
 //$input-focus-box-shadow: 0 0 0 0 transparent;
 //$form-select-focus-box-shadow: 0 0 0 0 transparent;
 //$form-check-input-focus-box-shadow: 0 0 0 0 transparent;
