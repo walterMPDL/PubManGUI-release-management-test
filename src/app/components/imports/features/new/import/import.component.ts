@@ -39,6 +39,8 @@ export default class ImportComponent implements OnInit {
   lastFormat: string = '';
   data: any = '';
 
+  element: any = null;
+
   constructor(
     private changeDetector: ChangeDetectorRef
   ) { }
@@ -66,6 +68,8 @@ export default class ImportComponent implements OnInit {
     this.importForm.controls['format'].valueChanges.subscribe(format => {
       if (format && format !== this.translateService.instant(_('imports.format'))) this.getFormatConfiguration(format);
     });
+
+    this.element = document.getElementById('selectedFile') as HTMLElement;
   }
 
   getFormatConfiguration(format: string) {
@@ -107,12 +111,14 @@ export default class ImportComponent implements OnInit {
   }
 
   setDefaultOption(): void {
-    const defaultArray = this.formatObject["_default"];
-    if (!defaultArray || defaultArray.length === 1) {
-      return;
+    if (this.formatObject) {
+      const defaultArray = this.formatObject["_default"];
+      if (!defaultArray || defaultArray.length === 1) {
+        return;
+      }
+      const defaultValue = defaultArray.find((entry: string) => entry.startsWith(this.getSelectName())).split("=")[1];
+      this.importForm.get('formatConfig')?.setValue(defaultValue);
     }
-    const defaultValue = defaultArray.find((entry: string) => entry.startsWith(this.getSelectName())).split("=")[1];
-    this.importForm.get('formatConfig')?.setValue(defaultValue);
   }
 
   onDragOver($event: any): void {
@@ -120,9 +126,8 @@ export default class ImportComponent implements OnInit {
   }
 
   onFileDrop($event: any): void {
-    console.log("File dropped:", $event);
     $event.preventDefault();
-    if ($event.dataTransfer?.files && $event.dataTransfer.files[0]) {  
+    if ($event.dataTransfer?.files && $event.dataTransfer.files[0]) {
       this.getData($event.dataTransfer.files[0]);
     }
     this.importForm.get('fileName')?.clearAsyncValidators();
@@ -130,7 +135,6 @@ export default class ImportComponent implements OnInit {
   }
 
   onFileChange($event: any): void {
-    console.log("File changed:", $event);
     $event.preventDefault();
     if ($event.target.files && $event.target.files[0]) {
       this.getData($event.target.files[0]);
@@ -140,8 +144,7 @@ export default class ImportComponent implements OnInit {
   }
 
   getData(file: File) {
-    let element = document.getElementById('selectedFile') as HTMLElement;
-    element.innerHTML = `<span class="material-symbols-outlined">description</span> <strong> ${file?.name} </strong>`;
+    this.element.innerHTML = `<span class="material-symbols-outlined">description</span> <strong> ${file?.name} </strong>`;
 
     const reader = file.stream().getReader();
     let result: any = '';
@@ -174,13 +177,13 @@ export default class ImportComponent implements OnInit {
   onSubmit(): void {
     if (this.importForm.valid && this.data) {
       this.importsSvc.postImport(this.getImportParams, this.data).subscribe(() => {
-      this.router.navigate(['/imports/myimports']);
-    });
+        this.router.navigate(['/imports/myimports']);
+      });
     }
   }
 
   checkIfAllRequired() {
-    if(this.importForm.invalid) {
+    if (this.importForm.invalid) {
       Object.keys(this.importForm.controls).forEach(key => {
         const field = this.importForm.get(key);
         if (key === 'fileName') {
@@ -200,8 +203,7 @@ export default class ImportComponent implements OnInit {
       this.formatObject = null;
       this.data = null;
 
-      let element = document.getElementById('selectedFile') as HTMLElement;
-      element.innerHTML = ``;
+      this.element.innerHTML = ``;
     }
   }
 }

@@ -10,7 +10,7 @@
               <i class="bi bi-cloud-upload" style="font-size: 3rem"></i>
               <p>Drag and drop file here</p>
               <div class="mb-3">
-                <input type="file" id="fileName" class="form-control" formControlName="fileName" (change)="onFileChange($event)" [ngClass]="{'border border-danger': importForm.get('fileName')?.pending}" data-test="file-upload-input">
+                <input type="file" id="fileName" class="form-control" formControlName="fileName" (change)="onFileChange($event)" [ngClass]="{'border border-danger': importForm.get('fileName')?.pending, 'text-secondary text-opacity-25': data}" data-test="file-upload-input">
               </div>
 	          </div>
           </div>
