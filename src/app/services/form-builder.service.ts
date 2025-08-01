@@ -249,7 +249,7 @@ export class FormBuilderService {
   event_FG(event: EventVO | null) {
     const event_form: any = this.fb.group<ControlType<EventVO>>({
       endDate: this.fb.nonNullable.control(event?.endDate ? event.endDate : null, { validators: [Validators.pattern(DATE_PATTERN)], updateOn: 'blur' }),
-      invitationStatus: this.fb.nonNullable.control(event?.invitationStatus ? event.invitationStatus : InvitationStatus.INVITED),
+      invitationStatus: this.fb.nonNullable.control(event?.invitationStatus ? event.invitationStatus : null),
       place: this.fb.nonNullable.control(event?.place ? event.place : null),
       startDate: this.fb.nonNullable.control(event?.startDate ? event.startDate : null, { validators: [Validators.pattern(DATE_PATTERN)], updateOn: 'blur' }),
       title: this.fb.nonNullable.control(event?.title ? event.title : null)
