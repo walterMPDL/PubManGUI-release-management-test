@@ -355,9 +355,7 @@ export class ItemFormComponent implements OnInit {
           case 'save': {
             this.form.valid
               ? (this.itemService.create(this.form_2_submit as ItemVersionVO)).subscribe(result => {
-                console.log('Item before save', this.form);
                 this.form = this.fbs.item_FG(result);
-                console.log('Item after save', this.form);
                 console.log('Created Item', JSON.stringify(result));
               })
               : alert('Validation Error when creating new Publication ' + JSON.stringify(this.form.errors) + JSON.stringify(this.form.valid));
