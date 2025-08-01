@@ -12,7 +12,7 @@
             <div class="mb-3">
               <input type="file" id="fileName" class="form-control" formControlName="fileName"
                 (change)="onFileChange($event)"
-                [ngClass]="{'border border-danger': importForm.get('fileName')?.pending, 'text-secondary text-opacity-25': data}"
+                [ngClass]="{'border border-danger': importForm.get('fileName')?.pending, 'text-white': data}"
                 data-test="file-upload-input">
             </div>
           </div>
