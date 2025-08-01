@@ -14,6 +14,7 @@ import { ChipsComponent } from 'src/app/components/shared/chips/chips.component'
 import { AaService } from 'src/app/services/aa.service';
 import { ContextsService } from "../../../../services/pubman-rest-client/contexts.service";
 import { ItemsService } from 'src/app/services/pubman-rest-client/items.service';
+import { ItemListStateService } from 'src/app/components/item-list/item-list-state.service';
 import { FileFormComponent } from '../file-form/file-form.component';
 import { FileUploadComponent } from '../file-upload/file-upload.component';
 import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
@@ -47,6 +48,8 @@ export class ItemFormComponent implements OnInit {
   fbs = inject(FormBuilderService);
   fileStagingService = inject(FileStagingService);
   itemService = inject(ItemsService);
+  listStateService = inject(ItemListStateService);
+
   messageService = inject(MessageService);
   modalService = inject(NgbModal);
   route = inject(ActivatedRoute);
@@ -62,6 +65,7 @@ export class ItemFormComponent implements OnInit {
   @Output() onChangeSwitchMode: EventEmitter<any> = new EventEmitter();
 
   authorizationInfo: any;
+  
 
 
   ngOnInit(): void {
@@ -331,6 +335,10 @@ export class ItemFormComponent implements OnInit {
             this.form.valid
               ? (this.itemService.update(this.form_2_submit.objectId, this.form_2_submit as ItemVersionVO)).subscribe(result => {
                 this.form = this.fbs.item_FG(result);
+                if (this.form.get('objectId')?.value) {
+                  this.listStateService.itemUpdated.next(this.form.get('objectId')?.value);
+                }
+                this.messageService.success('Item updated successfully!');
                 console.log('Updated Item:', JSON.stringify(result))
               })
               : alert('Validation Error when updating existing Publication: ' + JSON.stringify(this.form.errors) + JSON.stringify(this.form.errors));
@@ -356,6 +364,10 @@ export class ItemFormComponent implements OnInit {
             this.form.valid
               ? (this.itemService.create(this.form_2_submit as ItemVersionVO)).subscribe(result => {
                 this.form = this.fbs.item_FG(result);
+                if (this.form.get('objectId')?.value) {
+                  this.listStateService.itemUpdated.next(this.form.get('objectId')?.value);
+                }
+                this.messageService.success('Item created successfully!');
                 console.log('Created Item', JSON.stringify(result));
               })
               : alert('Validation Error when creating new Publication ' + JSON.stringify(this.form.errors) + JSON.stringify(this.form.valid));
