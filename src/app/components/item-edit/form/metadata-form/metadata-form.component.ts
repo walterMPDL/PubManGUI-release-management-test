@@ -181,8 +181,11 @@ export class MetadataFormComponent implements OnInit {
     }
   }
 
-  changeGenre() {
-    this.miscellaneousService.selectedGenre.set(this.meta_form.get('genre')?.value);
+  changeGenre($event: any) {
+    let updatedGenre = $event.target.value;
+    this.meta_form.get('genre')?.setValue(updatedGenre);
+    this.miscellaneousService.selectedGenre.set(updatedGenre);
+    this.genreSpecificResource = this.miscellaneousService.genrePropertiesResource;
   }
 
   addMultipleCreators(creatorsString: string) {
