@@ -32,7 +32,7 @@ export class ChangeSourceGenreFormComponent {
     sourceGenreFrom: ['Genre', [Validators.required]],
     sourceGenreTo: ['Genre', [Validators.required]],
   }, {
-    validators: [this.valSvc.notEqualsValidator('sourceGenreFrom', 'sourceGenreTo'), this.valSvc.allRequiredValidator()]
+    validators: [this.valSvc.notEqualsValidator('sourceGenreFrom', 'sourceGenreTo')]
   });
 
   get changeSourceGenreParams(): ChangeSourceGenreParams {

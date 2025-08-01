@@ -5,8 +5,8 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { Router } from '@angular/router';
 
 import { ContextDbRO, ImportFormat } from 'src/app/model/inge';
-import { ImportsService } from 'src/app/components/imports/services/imports.service';
 import { ImportValidatorsService } from 'src/app/components/imports/services/import-validators.service';
+import { ImportsService } from 'src/app/components/imports/services/imports.service';
 import type { PostImportParams } from 'src/app/components/imports/interfaces/imports-params';
 import { SeparateFilterPipe } from 'src/app/components/imports/pipes/separateFilter.pipe';
 
@@ -55,8 +55,7 @@ export default class ImportComponent implements OnInit {
     formatConfig: [''],
     cone: [''],
     fileName: [null]
-  },
-    { validators: [this.valSvc.allRequiredValidator()] });
+  });
 
   ngOnInit(): void {
     this.aaSvc.principal.subscribe(

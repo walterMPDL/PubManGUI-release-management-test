@@ -44,7 +44,7 @@
       <div class="offset-sm-3 col-sm-6">
         @if (valSvc.notValidField(changeSourceGenreForm.controls['sourceGenreTo'])) {
         <span class="form-text text-danger small">
-          {{ 'batch.actions.metadata.source.changeGenre.invalid' | translate }} {{ valSvc.getFieldError(changeSourceGenreForm) }}
+          {{ 'batch.actions.metadata.source.changeGenre.invalid' | translate }} {{ valSvc.getErrorMsg(changeSourceGenreForm) }}
         </span>
         } @else {
           <span>&nbsp;</span>

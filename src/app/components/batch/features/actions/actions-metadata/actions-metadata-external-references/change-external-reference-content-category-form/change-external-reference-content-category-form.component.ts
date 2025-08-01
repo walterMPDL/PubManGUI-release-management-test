@@ -34,7 +34,7 @@ export class ChangeExternalReferenceContentCategoryFormComponent {
     externalReferenceContentCategoryFrom: [this.translateSvc.instant(_('batch.actions.metadata.extRef.contentCategory')), [ Validators.required ]],
     externalReferenceContentCategoryTo: [this.translateSvc.instant(_('batch.actions.metadata.extRef.contentCategory')), [ Validators.required ]],
   },
-  { validators: [this.valSvc.notEqualsValidator('externalReferenceContentCategoryFrom','externalReferenceContentCategoryTo'), this.valSvc.allRequiredValidator()] });
+  { validators: [this.valSvc.notEqualsValidator('externalReferenceContentCategoryFrom','externalReferenceContentCategoryTo')] });
 
   get changeExternalReferenceContentCategoryParams(): ChangeExternalReferenceContentCategoryParams {
     const actionParams: ChangeExternalReferenceContentCategoryParams = {

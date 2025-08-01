@@ -39,7 +39,7 @@
         @if (valSvc.notValidField(changeFileContentCategoryForm.controls['fileContentCategoryTo'])) {
         <span class="form-text text-danger small">
           {{ 'batch.actions.metadata.files.contentCategory.invalid' | translate }} {{
-          valSvc.getFieldError(changeFileContentCategoryForm.controls['fileContentCategoryTo']) }}
+          valSvc.getErrorMsg(changeFileContentCategoryForm.controls['fileContentCategoryTo']) }}
         </span>
         } @else {
         <span>&nbsp;</span>

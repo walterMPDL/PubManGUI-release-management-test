@@ -34,7 +34,7 @@ export class ChangeReviewMethodFormComponent {
     reviewMethodFrom: [this.translateSvc.instant(_('batch.actions.metadata.publication.reviewType')), [Validators.required]],
     reviewMethodTo: [this.translateSvc.instant(_('batch.actions.metadata.publication.reviewType')), [Validators.required]],
   },
-    { validators: [this.valSvc.notEqualsValidator('reviewMethodFrom', 'reviewMethodTo'), this.valSvc.allRequiredValidator()] });
+    { validators: [this.valSvc.notEqualsValidator('reviewMethodFrom', 'reviewMethodTo')] });
 
   get changeReviewMethodParams(): ChangeReviewMethodParams {
     const actionParams: ChangeReviewMethodParams = {
