@@ -34,7 +34,7 @@ export class ChangeFileContentCategoryFormComponent {
     fileContentCategoryFrom: [this.translateSvc.instant(_('batch.actions.metadata.files.contentCategory')), [Validators.required]],
     fileContentCategoryTo: [this.translateSvc.instant(_('batch.actions.metadata.files.contentCategory')), [Validators.required]],
   },
-    { validators: [this.valSvc.notEqualsValidator('fileContentCategoryFrom', 'fileContentCategoryTo'), this.valSvc.allRequiredValidator()] });
+    { validators: [this.valSvc.notEqualsValidator('fileContentCategoryFrom', 'fileContentCategoryTo')] });
 
   get changeFileContentCategoryParams(): ChangeFileContentCategoryParams {
     const actionParams: ChangeFileContentCategoryParams = {

@@ -24,7 +24,7 @@
     <div class="offset-sm-3 col-sm-6">
       @if(valSvc.notValidField(changeKeywordsForm.controls['keywordsTo'])) {
       <span class="form-text text-danger small">
-        {{ 'batch.actions.metadata.publication.keywordsReplace.invalid' | translate }} {{ valSvc.getFieldError(changeKeywordsForm.controls['keywordsTo']) }}
+        {{ 'batch.actions.metadata.publication.keywordsReplace.invalid' | translate }} {{ valSvc.getErrorMsg(changeKeywordsForm.controls['keywordsTo']) }}
       </span>
       } @else {
       <span>&nbsp;</span>

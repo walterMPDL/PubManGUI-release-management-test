@@ -58,9 +58,7 @@ export default class FetchComponent implements OnInit {
     source: ['crossref'],
     identifier: ['', [Validators.required, this.valSvc.forbiddenURLValidator(/http/i)]],
     fullText: ['FULLTEXT_DEFAULT']
-  },
-    { validators: [this.valSvc.allRequiredValidator()] }
-  );
+  });
 
   get getCrossrefParams(): GetCrossrefParams {
     const importParams: GetCrossrefParams = {
@@ -97,7 +95,7 @@ export default class FetchComponent implements OnInit {
             this.router.navigateByUrl('/edit_import');
           },
           error: (response) => {
-            if (response.error.cause !== undefined ) {
+            if (response.error.cause !== undefined) {
               this.msgSvc.warning(JSON.stringify(response.error.cause.cause.message));
             } else {
               this.msgSvc.warning(JSON.stringify(response.error.exception));
@@ -112,7 +110,7 @@ export default class FetchComponent implements OnInit {
             this.router.navigateByUrl('/edit_import');
           },
           error: (response) => {
-            if (response.error.cause !== undefined ) {
+            if (response.error.cause !== undefined) {
               this.msgSvc.warning(JSON.stringify(response.error.cause.cause.message));
             } else {
               this.msgSvc.warning(JSON.stringify(response.error.exception));
@@ -142,10 +140,10 @@ export default class FetchComponent implements OnInit {
   }
 
   checkIfAllRequired() {
-    if(this.fetchForm.invalid) {
+    if (this.fetchForm.invalid) {
       Object.keys(this.fetchForm.controls).forEach(key => {
         const field = this.fetchForm.get(key);
-      if (field!.hasValidator(Validators.required) && (field!.untouched)) {
+        if (field!.hasValidator(Validators.required) && (field!.untouched)) {
           field!.markAsPending();
         }
       });

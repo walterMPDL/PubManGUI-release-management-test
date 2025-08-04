@@ -5,7 +5,6 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 
 import { SourceIdType } from 'src/app/model/inge';
 
-import { BatchValidatorsService } from 'src/app/components/batch/services/batch-validators.service';
 import { BatchService } from 'src/app/components/batch/services/batch.service';
 import type { AddSourceIdentiferParams } from 'src/app/components/batch/interfaces/batch-params';
 
@@ -25,7 +24,6 @@ import { _, TranslatePipe, TranslateService } from "@ngx-translate/core";
 export class AddSourceIdentifierFormComponent {
   router = inject(Router);
   fb = inject(FormBuilder);
-  valSvc = inject(BatchValidatorsService);
   batchSvc = inject(BatchService);
   translateSvc = inject(TranslateService);
 
@@ -35,8 +33,6 @@ export class AddSourceIdentifierFormComponent {
     sourceNumber: ['1'],
     sourceIdentifierType: [this.translateSvc.instant(_('batch.actions.metadata.source.addId.default')), Validators.required],
     sourceIdentifier: ['', [Validators.required, Validators.minLength(1)]]
-  }, {
-    validators: this.valSvc.allRequiredValidator()
   });
 
   get addSourceIdentifierParams(): AddSourceIdentiferParams {
