@@ -26,6 +26,7 @@ export class CreatorFormComponent {
   @Input() creator_form!: FormGroup;
   @Input() index!: number;
   @Input() index_length!: number;
+  @Input() isSource?: boolean = false;
   @Output() notice = new EventEmitter();
 
   coneService = inject(ConeService);
@@ -38,6 +39,23 @@ export class CreatorFormComponent {
   error_types = Errors;
 
   cone_uri = environment.cone_instance_uri;
+
+  ngOnInit() {
+    this.initRole();
+  }
+
+  initRole() {
+    if (!this.creator_form.get('role')?.value && this.type.value === CreatorType.PERSON) {
+      if(this.isSource) {
+        this.creator_form.get('role')?.setValue(CreatorRole.EDITOR);
+      } else {
+        this.creator_form.get('role')?.setValue(CreatorRole.AUTHOR);
+      }
+      
+    } else if (!this.creator_form.get('role')?.value && this.type.value === CreatorType.ORGANIZATION) {
+      this.creator_form.get('role')?.setValue(CreatorRole.EDITOR);
+    }
+  }
 
 
   get type() {
@@ -81,6 +99,7 @@ export class CreatorFormComponent {
       this.creator_form.get('role')?.reset();
     }
     this.creator_form.get('type')?.setValue(val);
+    this.initRole();
   }
 
   updateOU(event: any) {
