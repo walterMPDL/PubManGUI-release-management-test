@@ -65,7 +65,7 @@ export class ItemFormComponent implements OnInit {
   @Output() onChangeSwitchMode: EventEmitter<any> = new EventEmitter();
 
   authorizationInfo: any;
-  
+
 
 
   ngOnInit(): void {
@@ -91,6 +91,10 @@ export class ItemFormComponent implements OnInit {
     });
     this.aaService.principal.subscribe(p => {
       this.user_contexts = p.depositorContexts;
+      if (!this.context.value.objectId && this.user_contexts.length > 0) {
+        // no contextService call needed, because we just need a contextDbRO
+        this.form.get('context')?.patchValue({ objectId: this.user_contexts[0].objectId, name: this.user_contexts[0].name });
+      }
     });
 
     /*
@@ -144,23 +148,6 @@ export class ItemFormComponent implements OnInit {
     }
   }
 
-  updateFormValidity(form: FormGroup | FormArray) {
-    console.log('updateFormValidity')
-    Object.keys(form.controls).forEach(field => {
-      const control = form.get(field);
-      console.log('control name', field);
-      console.log('control.value', JSON.stringify(control?.value));
-      if (control instanceof FormGroup || control instanceof FormArray) {
-        this.updateFormValidity(control);
-      } else {
-        control?.markAsTouched({ onlySelf: true });
-        control?.markAsDirty({ onlySelf: true });
-        control?.updateValueAndValidity();
-        console.log('control.valid', JSON.stringify(control?.valid));
-      }
-    });
-  }
-
   add_remove_local_tag(event: any) {
     if (event.action === 'add') {
       this.localTags.insert(event.index + 1, new FormControl());
@@ -170,8 +157,9 @@ export class ItemFormComponent implements OnInit {
   }
 
   context_change(contextObjectId: string) {
-    let selecteContext = this.user_contexts?.find((context) => context.objectId == contextObjectId)
-    this.form.get('context')?.patchValue({ objectId: contextObjectId, name: selecteContext?.name });
+    // no contextService call needed, because we just need a contextDbRO
+    let selectedContext = this.user_contexts?.find((context) => context.objectId == contextObjectId)
+    this.form.get('context')?.patchValue({ objectId: contextObjectId, name: selectedContext?.name });
   }
 
   changeSortingMode() {
