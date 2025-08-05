@@ -1,7 +1,7 @@
 import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ControlType, FormBuilderService } from '../../../../services/form-builder.service';
-import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of, switchMap } from 'rxjs';
 import { MetadataFormComponent } from '../metadata-form/metadata-form.component';
@@ -20,7 +20,7 @@ import { FileUploadComponent } from '../file-upload/file-upload.component';
 import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
 import { FileStagingService } from 'src/app/services/pubman-rest-client/file-staging.service';
 import { MessageService } from 'src/app/services/message.service';
-import { itemToVersionId, versionIdToObjectId } from 'src/app/utils/utils';
+import { itemToVersionId } from 'src/app/utils/utils';
 import { ItemActionsModalComponent } from 'src/app/components/shared/item-actions-modal/item-actions-modal.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
