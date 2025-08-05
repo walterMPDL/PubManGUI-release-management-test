@@ -520,8 +520,9 @@
             [ngClass]="{'d-none' : !genreSpecificResource.value().properties.sources.display}">
             <h2 class="accordion-header">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#accordionBodySourcesGroup" aria-expanded="true"
-                    aria-controls="accordionBodySourcesGroup">
+                    data-bs-target="#accordionBodySourcesGroup" [attr.aria-expanded]="!genreSpecificResource.value().properties.sources.optional" 
+                    aria-controls="accordionBodySourcesGroup"
+                    [ngClass]="{'collapsed' : genreSpecificResource.value().properties.sources.optional}">
                     Sources Group
                 </button>
             </h2>
