@@ -6,7 +6,7 @@ import {
 } from '../../../shared/add-remove-buttons/add-remove-buttons.component';
 import { AltTitleFormComponent } from '../alt-title-form/alt-title-form.component';
 import { ControlType, FormBuilderService } from '../../../../services/form-builder.service';
-import { AlternativeTitleVO, CreatorVO, IdentifierVO, MdsPublicationGenre, PublishingInfoVO } from 'src/app/model/inge';
+import { AlternativeTitleVO, CreatorVO, IdentifierVO, SourceGenre, PublishingInfoVO } from 'src/app/model/inge';
 import { CreatorFormComponent } from '../creator-form/creator-form.component';
 import { PublishingInfoFormComponent } from '../publishing-info-form/publishing-info-form.component';
 import { IdentifierFormComponent } from '../identifier-form/identifier-form.component';
@@ -41,10 +41,10 @@ export class SourceFormComponent {
 
   fbs = inject(FormBuilderService);
   miscellaneousService = inject(MiscellaneousService);
-  genreSpecificResource  = this.miscellaneousService.genrePropertiesResource;
+  genreSpecificResource = this.miscellaneousService.genrePropertiesResource;
 
   error_types = Errors;
-  genre_types = Object.keys(MdsPublicationGenre);
+  genre_types = Object.keys(SourceGenre).sort();
 
   get alternativeTitles() {
     return this.source_form.get('alternativeTitles') as FormArray<FormGroup<ControlType<AlternativeTitleVO>>>;
@@ -100,7 +100,7 @@ export class SourceFormComponent {
 
   addCreator(index: number) {
     // console.log('current index', index, 'length', this.creators.length)
-    this.creators.insert( index + 1, this.fbs.creator_FG(null));
+    this.creators.insert(index + 1, this.fbs.creator_FG(null));
   }
 
   dropCreator(event: CdkDragDrop<string[]>) {
@@ -124,7 +124,7 @@ export class SourceFormComponent {
   }
 
   addIdentifier(index: number) {
-    this.identifiers.insert( index + 1, this.fbs.identifier_FG(null));
+    this.identifiers.insert(index + 1, this.fbs.identifier_FG(null));
   }
 
   removeIdentifier(index: number) {
@@ -133,7 +133,7 @@ export class SourceFormComponent {
 
   /** Copied from Angular CDK to make our FormArrays work with drag and drop */
   moveItemInArray<T = any>(array: FormArray<FormGroup<ControlType<T>>>, fromIndex: number, toIndex: number): void {
-    let object:any = array.at(fromIndex);
+    let object: any = array.at(fromIndex);
     array.removeAt(fromIndex);
     array.insert(toIndex, object);
   }
