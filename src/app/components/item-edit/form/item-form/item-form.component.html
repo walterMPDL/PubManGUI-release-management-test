@@ -21,11 +21,6 @@
                         <!--NEEDED to keep the layout including one last collumn for add-remove buttons-->
                     </div>
                 </div>
-                <div class="d-sm-flex flex-sm-row gap-1 mb-1">
-                    <div class="col-sm">
-                        {{form.controls['objectId'].value}}_{{form.controls['versionNumber'].value}}
-                    </div>
-                </div>
             </div>
         </div>
         <!--<div class="row g-1 mb-1">-->
@@ -37,7 +32,7 @@
             <!--GROUP Files-->
             <div class="accordion-item border-0">
                 <h2 class="accordion-header">
-                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                         data-bs-target="#accordionBodyFilesGroup" aria-expanded="true"
                         aria-controls="accordionBodyFilesGroup">
                         Files and Locators Group
