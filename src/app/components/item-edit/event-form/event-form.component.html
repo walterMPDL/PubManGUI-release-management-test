@@ -29,8 +29,8 @@
                 <label class="col-form-label">Place</label>
                 <input type="text" class="form-control" formControlName="place">
             </div>
-            <div class="col-sm-2 form-check">
-                <input id="invitation-status" class="form-check-input mt-2 mx-1" type="checkbox"
+            <div class="col-sm-2 form-check form-switch">
+                <input id="invitation-status" class="form-check-input" type="checkbox" role="switch"
                     [formControl]="invitationBoolean" (change)="change_invitation_status($event)">
                 <label class="form-check-label" for="invitation-status">Invited</label>
             </div>
