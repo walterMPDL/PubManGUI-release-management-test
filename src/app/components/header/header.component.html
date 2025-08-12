@@ -34,7 +34,25 @@
 
         <pure-toolsnav class="me-4"></pure-toolsnav>
 
+        <div class="me-4">
+          <a role="button" [ngbPopover]="ipInfo"
+             class="nav-link">
+            <span class="material-symbols-outlined">place</span>
+          </a>
+          <ng-template #ipInfo>
+            @if(aa.principal.value.matchedIpName) {
+              <span class="fw-bold text-success">{{aa.principal.value.matchedIpName}}</span>
+            }
+            @else {
+              <span class="text-warning">IP is not affiliated to MPG</span>
+            }
+            <p class="small">IP: {{aa.principal.value.ipAddress}}</p>
+          </ng-template>
+        </div>
+
         <pure-aa class="me-4"></pure-aa>
+
+
 
         <pure-lang-switch></pure-lang-switch>
 
