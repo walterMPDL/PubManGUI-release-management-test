@@ -108,10 +108,13 @@ export class MetadataFormComponent implements OnInit {
     private fb: FormBuilder, private modalService: NgbModal
   ) {
     effect(() => {
-      if (this.genreSpecificResource.value()?.properties.sources.optional === false) {
+      if (this.genreSpecificResource.value()?.properties.sources.optional === false && this.sources.value.length === 0) {
         this.sources.push(this.fbs.source_FG(null));
-      } else {
-        this.sources.clear;
+      } else if (this.genreSpecificResource.value()?.properties.sources.display === false){
+        // clear did not work and this is the alternative mentioned in the API documentation
+        while (this.sources.length) {
+          this.sources.removeAt(0);
+        }
       }
     });
   }
