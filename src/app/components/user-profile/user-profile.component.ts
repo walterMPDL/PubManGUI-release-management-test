@@ -63,7 +63,7 @@ export class UserProfileComponent {
       return;
     }
 
-    this.usersService.changePassword(this.principal.user?.objectId!, this.changePasswordForm.get('newPassword1')?.value)
+    this.usersService.changePassword(this.principal.user?.objectId!, this.changePasswordForm.get('newPassword1')?.value, {displayError: false})
       .pipe(
         tap((result) => {
           this.passwordChangeLoading = false;

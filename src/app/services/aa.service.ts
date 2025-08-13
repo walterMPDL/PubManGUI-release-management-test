@@ -6,7 +6,7 @@ import { environment } from 'src/environments/environment';
 import { AccountUserDbVO, ContextDbVO, ItemVersionState } from "../model/inge";
 import { ContextsService } from "./pubman-rest-client/contexts.service";
 import { Router } from "@angular/router";
-import { PubManHttpErrorResponse, SILENT_LOGOUT } from "./interceptors/http-error.interceptor";
+import { DISPLAY_ERROR, PubManHttpErrorResponse, SILENT_LOGOUT } from "./interceptors/http-error.interceptor";
 
 
 export class Principal{
@@ -103,12 +103,14 @@ export class AaService {
     console.log("Login with user " + userName)
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
     const body = userName + ':' + password;
+    const context:HttpContext = new HttpContext().set(DISPLAY_ERROR, false);
     return this.http.request('POST', this.loginUrl, {
       body: body,
       headers: headers,
       observe: 'response',
       //responseType: 'text',
-      withCredentials: true
+      withCredentials: true,
+      context: context
     }).pipe(
       switchMap((response) => {
         const token = response.headers.get('Token');

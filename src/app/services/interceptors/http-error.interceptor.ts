@@ -19,6 +19,7 @@ import { Router } from "@angular/router";
 
 export const IGNORED_STATUSES = new HttpContextToken<number[]>(() => []);
 export const SILENT_LOGOUT = new HttpContextToken<boolean>(() => false);
+export const DISPLAY_ERROR = new HttpContextToken<boolean>(() => true);
 
 export function ignoredStatuses(statuses: number[]) {
     return new HttpContext().set(IGNORED_STATUSES, statuses);
@@ -34,6 +35,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         const ignoredStatuses = request.context.get(IGNORED_STATUSES);
         const silentLogout = request.context.get(SILENT_LOGOUT);
+        const displayError = request.context.get(DISPLAY_ERROR);
         return next.handle(request)
             .pipe(
                 catchError((err: HttpErrorResponse) => {
@@ -71,7 +73,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
                   else {
 
                     const pubmanErrorResp = new PubManHttpErrorResponse(err);
-                    if (!ignoredStatuses?.includes(err.status)) {
+                    if (displayError && !ignoredStatuses?.includes(err.status)) {
                       const error = `${err.status} ${err.statusText}:\n${err.url}\n${pubmanErrorResp.userMessage}`
                       this.message.error(error);
                     }
@@ -95,7 +97,8 @@ export class PubManHttpErrorResponse extends HttpErrorResponse {
       //errors from PubMan backend are JSON objects. However, when requesting "text" in Angular HTTP client, the error is a string encoded JSON
       if(typeof this.error === 'object') {
         this.jsonMessage = this.error;
-        this.userMessage = this.error.message;
+        this.userMessage = this.error.message || this.error.error || 'UNKNOWN ERROR'
+
       }
       else if(typeof this.error === 'string') {
         //try to parse as JSON
@@ -104,7 +107,7 @@ export class PubManHttpErrorResponse extends HttpErrorResponse {
           //check if it's a PubMan backend error response, by checking if it has some properties
           if(json.timestamp) {
             this.jsonMessage = json;
-            this.userMessage = json.message;
+            this.userMessage = json.message || json.error || 'UNKNOWN ERROR'
           }
           else {
             //It's any kind of string

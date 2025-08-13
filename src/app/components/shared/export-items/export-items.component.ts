@@ -98,7 +98,7 @@ export class ExportItemsComponent {
     if (!this.isFormat && this.isValid()) {
 
 
-      this.itemService.retrieveSingleCitation(this.itemIds[0], this.selectedCitationType, this.selectedCslId).subscribe({
+      this.itemService.retrieveSingleCitation(this.itemIds[0], this.selectedCitationType, this.selectedCslId, {displayError: false}).subscribe({
         next: (cit) => {
           //console.log('Citation: ' +cit)
           this.currentCitation = cit;
@@ -192,7 +192,7 @@ export class ExportItemsComponent {
       searchQuery.from = this.selectedFrom;
     }
 
-    this.exportSubscription = this.itemService.searchAndExport(searchQuery, this.selectedExportType, this.selectedCitationType, this.selectedCitationType === citationTypes.CSL ? this.selectedCslId : undefined, true)
+    this.exportSubscription = this.itemService.searchAndExport(searchQuery, this.selectedExportType, this.selectedCitationType, this.selectedCitationType === citationTypes.CSL ? this.selectedCslId : undefined, {displayError: false})
       .pipe(
         tap(result => {
           if (result.body) {
