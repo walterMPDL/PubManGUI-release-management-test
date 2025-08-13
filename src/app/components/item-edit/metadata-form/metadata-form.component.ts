@@ -108,13 +108,27 @@ export class MetadataFormComponent implements OnInit {
     private fb: FormBuilder, private modalService: NgbModal
   ) {
     effect(() => {
+      // Events
+      if (this.genreSpecificResource.value()?.properties.events.display === false){
+          this.event.reset(this.fbs.event_FG(null).value);
+      }
+      // LegalCase
+      if (this.genreSpecificResource.value()?.properties.legal_case.display === false){
+          this.legalCase.reset(this.fbs.legal_case_FG(null).value);
+      }
+      // PublishingInfo
+      if (this.genreSpecificResource.value()?.properties.details_publishing_info.display === false){
+          this.publishingInfo.reset(this.fbs.publishing_info_FG(null).value);
+      }
+      // ProjectInfo
+      if (this.genreSpecificResource.value()?.properties.project_info.display === false){
+          this.projectInfo.reset([this.fbs.project_info_FG(null).value]);
+      }
+      // Sources
       if (this.genreSpecificResource.value()?.properties.sources.optional === false && this.sources.value.length === 0) {
         this.sources.push(this.fbs.source_FG(null));
       } else if (this.genreSpecificResource.value()?.properties.sources.display === false){
-        // clear did not work and this is the alternative mentioned in the API documentation
-        while (this.sources.length) {
-          this.sources.removeAt(0);
-        }
+        this.sources.reset([this.fbs.source_FG(null).value]);
       }
     });
   }
