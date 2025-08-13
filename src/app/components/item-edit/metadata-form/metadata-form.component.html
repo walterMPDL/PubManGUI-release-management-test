@@ -403,14 +403,15 @@
                         </div>
                     </div>
                     <div
-                        [ngClass]="genreSpecificResource.value().properties.content_item_subject.display ? 'd-sm-flex flex-sm-row gap-1 mb-1' : 'd-none'">
+                        [ngClass]="genreSpecificResource.value().properties.content_item_subject.display && subject_classification_types.length > 0 ? 'd-sm-flex flex-sm-row gap-1 mb-1' : 'd-none'">
                         <label for="subjects" class="col-sm-2 col-form-label">Subjects</label>
                         <div class="col-sm" id="subjects">
                             <ng-container formArrayName="subjects">
                                 @for (subject of subjects.controls; track subjectIndex; let subjectIndex = $index) {
                                 <ng-container [formGroupName]="subjectIndex">
-                                    <pure-subject-form [subject_form]="subject" [index]="subjectIndex" [multi]="true"
-                                        [index_length]="subjects.controls.length"
+                                    <pure-subject-form [subject_form]="subject"
+                                        [subject_classification_types]="subject_classification_types"
+                                        [index]="subjectIndex" [multi]="true" [index_length]="subjects.controls.length"
                                         (notice)="handleSubjectNotification($event)"></pure-subject-form>
                                 </ng-container>
                                 }

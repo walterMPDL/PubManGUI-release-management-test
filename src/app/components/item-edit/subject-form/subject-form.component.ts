@@ -4,7 +4,6 @@ import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   AddRemoveButtonsComponent
 } from 'src/app/components/shared/add-remove-buttons/add-remove-buttons.component';
-import { SubjectClassification } from 'src/app/model/inge';
 import { MiscellaneousService } from 'src/app/services/pubman-rest-client/miscellaneous.service';
 
 
@@ -22,14 +21,13 @@ import { MiscellaneousService } from 'src/app/services/pubman-rest-client/miscel
 })
 export class SubjectFormComponent {
   @Input() subject_form!: FormGroup;
+  @Input() subject_classification_types!: string[];
   @Input() index!: number;
   @Input() index_length!: number;
   @Input() multi !: boolean;
   @Output() notice = new EventEmitter();
 
   miscellaneousService = inject(MiscellaneousService);
-
-  subject_classification_types = Object.keys(SubjectClassification);
 
   add_remove_subject(event: any) {
     this.notice.emit(event);

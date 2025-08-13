@@ -19,6 +19,7 @@ import {
   PublishingInfoVO,
   ReviewMethod,
   SourceVO,
+  SubjectClassification,
   SubjectVO
 } from 'src/app/model/inge';
 import { AltTitleFormComponent } from '../alt-title-form/alt-title-form.component';
@@ -93,6 +94,7 @@ export class MetadataFormComponent implements OnInit {
 
   allowed_genre_types = Object.keys(MdsPublicationGenre);
   review_method_types = Object.keys(ReviewMethod);
+  subject_classification_types :string[] = [];
   error_types = Errors;
 
   multipleCreators = new FormControl<string>('');
@@ -136,9 +138,9 @@ export class MetadataFormComponent implements OnInit {
   ngOnInit() {
     let genre = this.meta_form.get('genre')?.value ? this.meta_form.get('genre')?.value : undefined;
     this.miscellaneousService.selectedGenre.set(genre);
-    this.updateAllowedGenres(); // Initialize allowed_genre_types with correct context specific values
+    this.updateAllowedGenresAndSubjects(); // Initialize allowed_genre_types with correct context specific values
     this.context.valueChanges.subscribe(() => {
-      this.updateAllowedGenres();
+      this.updateAllowedGenresAndSubjects();
     });
   }
 
@@ -187,7 +189,7 @@ export class MetadataFormComponent implements OnInit {
     return this.meta_form.get('projectInfo') as FormArray<FormGroup<ControlType<ProjectInfoVO>>>;
   }
 
-  updateAllowedGenres() {
+  updateAllowedGenresAndSubjects() {
     if (this.context.value.objectId) {
       this.contextService.retrieve(this.context.value.objectId,).subscribe(resultContext => {
         if (resultContext.allowedGenres) {
@@ -208,9 +210,14 @@ export class MetadataFormComponent implements OnInit {
             }
           });
         }
+        if (resultContext.allowedSubjectClassifications) {
+          this.subject_classification_types = resultContext.allowedSubjectClassifications.sort();
+          console.log('Updated subject_classification_types', this.subject_classification_types)
+        }
       });
     }
   }
+
 
   changeGenre($event: any) {
     let updatedGenre = $event.target.value;
