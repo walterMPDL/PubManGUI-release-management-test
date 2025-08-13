@@ -65,11 +65,7 @@ export abstract class PubmanGenericRestClientService<modelType> {
       observe: observe ? observe : 'body',
       withCredentials: authenticate
 
-    }).pipe(
-      //map((response: any) => response),
-      catchError((error) => {
-        return throwError(() => new Error(JSON.stringify(error) || 'UNKNOWN ERROR!'));
-      })
+    }
     );
   }
 
@@ -85,9 +81,6 @@ export abstract class PubmanGenericRestClientService<modelType> {
       map((response) => {
         const status = response.status;
         return status;
-      }),
-      catchError((error) => {
-        return throwError(() => new Error(JSON.stringify(error) || 'UNKNOWN ERROR!'));
       })
     );
   }

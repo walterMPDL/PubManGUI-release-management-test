@@ -47,11 +47,7 @@ export abstract class PubmanSearchableGenericRestClientService<modelType> extend
       headers,
       params,
       withCredentials: authenticate
-    }).pipe(
-      map((searchResult: any) => searchResult),
-      catchError((error) => {
-        return throwError(() => new Error(JSON.stringify(error) || 'UNKNOWN ERROR!'));
-      })
+    }
     );
   }
 }

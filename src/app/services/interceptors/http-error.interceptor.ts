@@ -3,7 +3,7 @@ import {
   HttpContextToken,
   HttpErrorResponse,
   HttpEvent,
-  HttpHandler,
+  HttpHandler, HttpHeaders,
   HttpInterceptor,
   HttpRequest
 } from '@angular/common/http';
@@ -69,28 +69,64 @@ export class HttpErrorInterceptor implements HttpInterceptor {
 
                   }
                   else {
-                    if (ignoredStatuses?.includes(err.status)) {
-                      return throwError(() => err);
+
+                    const pubmanErrorResp = new PubManHttpErrorResponse(err);
+                    if (!ignoredStatuses?.includes(err.status)) {
+                      const error = `${err.status} ${err.statusText}:\n${err.url}\n${pubmanErrorResp.userMessage}`
+                      this.message.error(error);
                     }
-                    let message_string;
-                    if (typeof err.error === 'object') {
-                      if (err.error.message) {
-                        message_string = err.error.message;
-                      } else {
-                        message_string = JSON.stringify(err.error, null, '\t');
-                      }
-                    } else if (typeof err.error === 'string') {
-                      message_string = err.error;
-                    }
-                    const error = `${err.status} ${err.statusText}:\n${err.url}\n${message_string}`
-                    this.message.error(error);
-                    return throwError(() => error);
+                    //throw PubmanErrorResponse to handle in further catchErrors
+                    return throwError(() => pubmanErrorResp);
                   }
-
-
-
-
                 })
             );
     }
+}
+
+export class PubManHttpErrorResponse extends HttpErrorResponse {
+
+  userMessage: string;
+  jsonMessage: object|undefined = undefined;
+
+  constructor(errorResponse: HttpErrorResponse) {
+    super({error: errorResponse.error, headers: errorResponse.headers, status: errorResponse.status, statusText: errorResponse.statusText, url:errorResponse.url!})
+
+    if(this.error) {
+      //errors from PubMan backend are JSON objects. However, when requesting "text" in Angular HTTP client, the error is a string encoded JSON
+      if(typeof this.error === 'object') {
+        this.jsonMessage = this.error;
+        this.userMessage = this.error.message;
+      }
+      else if(typeof this.error === 'string') {
+        //try to parse as JSON
+        try {
+          const json = JSON.parse(this.error);
+          //check if it's a PubMan backend error response, by checking if it has some properties
+          if(json.timestamp) {
+            this.jsonMessage = json;
+            this.userMessage = json.message;
+          }
+          else {
+            //It's any kind of string
+            this.userMessage = this.error;
+          }
+
+        } catch (e) {
+          this.userMessage = this.error;
+        }
+      }
+      else {
+        this.userMessage = this.message;
+      }
+    }
+    else {
+      this.userMessage = this.message;
+    }
+
+  }
+
+
+
+
+
 }

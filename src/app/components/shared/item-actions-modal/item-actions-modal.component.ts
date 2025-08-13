@@ -5,9 +5,10 @@ import { ItemVersionVO } from "../../../model/inge";
 import { ItemsService } from "../../../services/pubman-rest-client/items.service";
 import { MessageService } from "../../../services/message.service";
 import { Router } from "@angular/router";
-import { Observable, Subscription } from "rxjs";
+import { catchError, EMPTY, finalize, Observable, Subscription, tap } from "rxjs";
 import { TranslatePipe, TranslateService } from "@ngx-translate/core";
 import { SanitizeHtmlPipe } from "../../../pipes/sanitize-html.pipe";
+import { PubManHttpErrorResponse } from "../../../services/interceptors/http-error.interceptor";
 
 @Component({
   selector: 'pure-item-actions-modal',
@@ -78,23 +79,22 @@ export class ItemActionsModalComponent {
       }
     }
     if(obs) {
-      this.subscription = obs.subscribe({
-          next: (data: any) => {
+      this.subscription = obs
+        .pipe(
+          tap(data => {
             this.messageService.success(this.translateService.instant('common.' + this.action) + " successful");
             this.activeModal.close();
             this.successfullyDone.emit(data);
-          },
-          error: (error) => {
-            this.errorMessage = error;
-          }
-        }
-      );
-        this.subscription.add(
-          () => {
-            console.log("completed")
+          }),
+          catchError((err: PubManHttpErrorResponse) => {
+            this.errorMessage = err.userMessage;
+            return EMPTY;
+          }),
+          finalize(() => {
             this.loading = false;
-          }
+          })
         )
+        .subscribe();
     }
     //this.successfullyDone.emit(this.comment);
   }

@@ -1,4 +1,4 @@
-import { HttpClient, HttpContext, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpContext, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, EMPTY, forkJoin, map, Observable, of, switchMap, tap, throwError } from 'rxjs';
 import { MessageService } from 'src/app/services/message.service';
@@ -6,7 +6,7 @@ import { environment } from 'src/environments/environment';
 import { AccountUserDbVO, ContextDbVO, ItemVersionState } from "../model/inge";
 import { ContextsService } from "./pubman-rest-client/contexts.service";
 import { Router } from "@angular/router";
-import { SILENT_LOGOUT } from "./interceptors/http-error.interceptor";
+import { PubManHttpErrorResponse, SILENT_LOGOUT } from "./interceptors/http-error.interceptor";
 
 
 export class Principal{
@@ -107,7 +107,7 @@ export class AaService {
       body: body,
       headers: headers,
       observe: 'response',
-      responseType: 'text',
+      //responseType: 'text',
       withCredentials: true
     }).pipe(
       switchMap((response) => {
@@ -116,13 +116,10 @@ export class AaService {
         if (response.status === 200) {
           return this.checkLogin();
         } else {
-          this.message.error(response.status + ' ' + response.statusText);
+
           return EMPTY;
         }
       }),
-      catchError((error) => {
-        return throwError(() => new Error(JSON.stringify(error) || 'UNKNOWN ERROR!'));
-      })
     );
   }
 
@@ -162,13 +159,7 @@ export class AaService {
       observe: 'body',
       withCredentials: true,
       context: new HttpContext().set(SILENT_LOGOUT, true)
-    }).pipe(
-      catchError((error) => {
-        console.log(error);
-        //this.logout();
-        return throwError(() => new Error(JSON.stringify(error) || 'UNKNOWN ERROR!'));
-      })
-    );
+    });
   }
 
   /**
