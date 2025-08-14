@@ -39,6 +39,7 @@ import { EventValidator } from 'src/app/directives/validation/event-validation.d
 import { IdentifierValidator } from 'src/app/directives/validation/identifier-validation.directive';
 import { SourceRequiredValidator } from 'src/app/directives/validation/source-required-validation.directive';
 import { SourceValidator } from 'src/app/directives/validation/source-validation.directive';
+import { SubjectValidator } from 'src/app/directives/validation/subject-validation.directive';
 import { Utf8Validator } from 'src/app/directives/validation/utf8-validation.directive';
 import { fileDataValidator } from 'src/app/directives/validation/file-data-validation';
 import { fileUrlValidator } from 'src/app/directives/validation/file-url-validation.directive';
@@ -285,7 +286,8 @@ export class FormBuilderService {
       language: this.fb.nonNullable.control(subject?.language ? subject.language : null),
       value: this.fb.nonNullable.control(subject?.language ? subject.language : null),
       type: this.fb.nonNullable.control(subject?.language ? subject.language : null)
-    });
+    },
+      { validators: [SubjectValidator], updateOn: 'blur' });
     return subject_form
   }
 

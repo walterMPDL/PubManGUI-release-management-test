@@ -5,6 +5,7 @@ import {
   AddRemoveButtonsComponent
 } from 'src/app/components/shared/add-remove-buttons/add-remove-buttons.component';
 import { MiscellaneousService } from 'src/app/services/pubman-rest-client/miscellaneous.service';
+import { Errors } from 'src/app/model/errors';
 
 
 @Component({
@@ -26,6 +27,8 @@ export class SubjectFormComponent {
   @Input() index_length!: number;
   @Input() multi !: boolean;
   @Output() notice = new EventEmitter();
+
+  error_types = Errors;
 
   miscellaneousService = inject(MiscellaneousService);
 
