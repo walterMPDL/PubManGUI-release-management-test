@@ -41,9 +41,13 @@ export class FileFormComponent {
   
   error_types = Errors;
 
+  audiencePriorityList = ['mpg'];
+
   constructor(miscellaneousService: MiscellaneousService) {
     miscellaneousService.retrieveIpList().subscribe(
-      result => { this.ipRangeCompleteList = result; /* console.log('Miscellaneous IPList: ', this.ipRangeCompleteList) */ }
+      result => { 
+        this.sortAudienceList(result); /* console.log('Miscellaneous IPList: ', this.ipRangeCompleteList) */ 
+      }
     )
   }
 
@@ -86,5 +90,26 @@ export class FileFormComponent {
 
   removeAllowedAudienceIds(index: number) {
     this.allowedAudienceIds.removeAt(index);
+  }
+
+  sortAudienceList(ipEntryList: IpEntry[]) {
+    if (ipEntryList) {
+          this.ipRangeCompleteList = ipEntryList;
+          this.ipRangeCompleteList.sort((a, b) => {
+
+            const aIndex = this.audiencePriorityList.indexOf(a.id);
+            const bIndex = this.audiencePriorityList.indexOf(b.id);
+
+            if (aIndex !== -1 && bIndex !== -1) {
+              return aIndex - bIndex;
+            } else if (aIndex !== -1) {
+              return -1;
+            } else if (bIndex !== -1) {
+              return 1;
+            } else {
+              return (a.name).localeCompare(b.name);
+            }
+          });
+        }
   }
 }

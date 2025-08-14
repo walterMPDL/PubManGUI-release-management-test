@@ -111,9 +111,18 @@
                     <select id="audienceId" class="form-select" name="audienceIp[audienceIdIndex]"
                         [formControl]="audienceId">
                         <option [value]="null" selected disabled>Audience Id</option>
-                        @for (ipRange of ipRangeCompleteList; track ipRange) {
-                        <option [value]="ipRange.id">{{ipRange.name}}</option>
-                        }
+                        <optgroup label="Most used">
+                            @for (ipEntry of ipRangeCompleteList; track ipEntry) {
+                            @if (audiencePriorityList.includes(ipEntry.id)) {
+                            <option [value]="ipEntry.id">{{ipEntry.name}}</option>
+                            }}
+                        </optgroup>
+                        <optgroup label="Alphabetically sorted">
+                            @for (ipEntry of ipRangeCompleteList; track ipEntry) {
+                            @if (!audiencePriorityList.includes(ipEntry.id)) {
+                            <option [value]="ipEntry.id">{{ipEntry.name}}</option>
+                            }}
+                        </optgroup>
                     </select>
                 </div>
                 <div class="col-sm-1">
