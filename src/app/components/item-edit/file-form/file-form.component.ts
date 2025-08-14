@@ -61,7 +61,7 @@ export class FileFormComponent {
   }
 
   visibility_change(event: any) {
-    console.log('changed visibility', event.target.value)
+    this.file_form.get('visibility')?.setValue(event.target.value)
   }
 
   allowedAudienceIds_change(event: any) {
