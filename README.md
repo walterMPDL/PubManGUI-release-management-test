@@ -39,7 +39,8 @@ PubManGUI uses [Cypress](https://www.cypress.io/) for end-to-end testing. The te
      {
        "restUrl": "",
        "testUser": {
-         "userName": "",
+         "loginName": "",
+         "name": "",
          "password": ""
        },
        "testContext": {

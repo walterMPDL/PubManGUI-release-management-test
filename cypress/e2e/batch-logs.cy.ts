@@ -1,12 +1,12 @@
 describe('Check Batch Logs', () => {
-  const userName = Cypress.env('testUser').userName
+  const loginName = Cypress.env('testUser').loginName
   const password = Cypress.env('testUser').password
   let itemId: string;
   let itemTitle: string;
 
   beforeEach(() => {
     cy.setLanguage('en')
-    cy.loginViaAPI(userName, password)
+    cy.loginViaAPI(loginName, password)
     cy.fixture('itemMetadataMinimal').then((itemMetadata) => {
       cy.createItemViaAPI(itemMetadata).then((response) => {
         itemId = response.body['objectId']

@@ -1,11 +1,11 @@
 describe('Navigation Menu', () => {
 
-  const userName = Cypress.env('testUser').userName
+  const loginName = Cypress.env('testUser').loginName
   const password = Cypress.env('testUser').password
   const baseUrl = baseUrlWithoutTrailingSlashes()
 
   beforeEach(() => {
-    cy.loginViaAPI(userName, password)
+    cy.loginViaAPI(loginName, password)
   })
 
   afterEach(() => {

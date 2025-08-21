@@ -1,9 +1,11 @@
 describe('New Import', () => {
+  const loginName = Cypress.env('testUser').loginName
+  const password = Cypress.env('testUser').password
   let importLogId: string;
   let itemIds: string[] = [];
 
   beforeEach(() => {
-    cy.loginViaAPI(Cypress.env('testUser').userName, Cypress.env('testUser').password)
+    cy.loginViaAPI(loginName, password)
     cy.visit('/imports/new')
   })
 
