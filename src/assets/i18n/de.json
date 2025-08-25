@@ -421,7 +421,7 @@
 		"import_process_initialize_submit_process": "Intitialisierung des Einstellens",
 		"import_process_initialize_submit_release_process": "Intitialisierung des Einstellens und Freigebens",
 		"import_process_inputstream_available": "Import-Datenstrom gefunden",
-		"import_process_inputstream_unavailable": "Import-Datenstrom nicht gefunden gefunden",
+		"import_process_inputstream_unavailable": "Import-Datenstrom nicht gefunden oder leer",
 		"import_process_item_imported": "Datensatz wurde importiert",
 		"import_process_item_not_imported": "Datensatz wurde nicht importiert",
 		"import_process_no_duplicate_detected": "Es wurden keine Dubletten gefunden",

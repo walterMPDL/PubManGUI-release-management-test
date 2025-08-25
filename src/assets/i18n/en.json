@@ -421,7 +421,7 @@
 		"import_process_initialize_submit_process": "Initializing submission",
 		"import_process_initialize_submit_release_process": "Initializing submission and release",
 		"import_process_inputstream_available": "Import data stream found",
-		"import_process_inputstream_unavailable": "Import data stream not found",
+		"import_process_inputstream_unavailable": "Import data stream not found or empty",
 		"import_process_item_imported": "Item imported",
 		"import_process_item_not_imported": "Item was not imported",
 		"import_process_no_duplicate_detected": "No duplicate was detected",
