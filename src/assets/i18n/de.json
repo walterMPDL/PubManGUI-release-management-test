@@ -236,7 +236,7 @@
 		"list.details.count": "Datensätze importiert",
 		"list.details.delete": "Löschen",
 		"list.details.empty": "Für diesen Detail ist kein Log verfügbar!",
-		"list.details.filter": "Nachrichten zeigen",
+		"list.details.filter": "Datensatz-Nachricht anzeigen",
 		"list.details.for": "Datensatz",
 		"list.details.release": "Freigeben",
 		"list.details.remove": "Aus 'Meine Importe' entfernen",
