@@ -196,7 +196,7 @@ export default class ImportComponent implements OnInit {
 
   @HostListener('document:click', ['$event'])
   clickOutside(event: Event) {
-    if (!this.elRef.nativeElement.contains(event.target)) {
+    if (this.elRef.nativeElement.parentElement.contains(event.target) && !this.elRef.nativeElement.contains(event.target)) {
       this.importForm.reset();
 
       this.formatObject = null;
