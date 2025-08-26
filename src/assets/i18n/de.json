@@ -251,11 +251,11 @@
 		"list.items.empty": "Für diesen Import sind keine Datensätze verfügbar!",
 		"list.items.for": "Import",
 		"list.remove": "Aus dem Protokoll entfernen",
-		"list.remove.confirmation": "Möchten Sie Importprotokol {{name}} wirklich entfernen?",
+		"list.remove.confirmation": "Möchten Sie das Importprotokol \"{{name}}\" wirklich entfernen?",
 		"list.started.on": "gestartet am",
-		"release.confirmation": "Möchten Sie diesen Import \"{{name}}\" wirklich freigeben?",
-		"remove.confirmation": "Möchten Sie diesen Import \"{{name}}\" wirklich löschen?",
-		"submit.confirmation": "Möchten Sie diesen Import \"{{name}}\" wirklich einstellen?"
+		"release.confirmation": "Möchten Sie das Import \"{{name}}\" wirklich freigeben?",
+		"remove.confirmation": "Möchten Sie das Import \"{{name}}\" wirklich löschen?",
+		"submit.confirmation": "Möchten Sie das Import \"{{name}}\" wirklich einstellen?"
 	},
 	"BatchProcessLogDetailState": {
 		"ERROR": "Fehlgeschlagen",
