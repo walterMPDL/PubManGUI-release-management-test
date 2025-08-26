@@ -44,6 +44,10 @@
     top: -1.5em;
   }
 
+  .mat-badge-content {
+    background-color: $body-bg;
+  }
+
   @media (max-width: 1399.98px) {
     left: 2%;
   }

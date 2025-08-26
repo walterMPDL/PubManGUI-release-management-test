@@ -130,10 +130,10 @@
     <svg fill="currentColor" height="24px" width="24px">
       <use href="assets/icons/icons.svg#cart"></use>
     </svg>
+    <span class="nav-label ms-3 text-nowrap">{{'common.basket'| translate }}</span>
     @if(cartService.objectIds.length > 0) {
     <div class="matBadge" matBadge='{{ cartService.objectIds.length }}'></div>
     }
-    <span class="nav-label ms-3">{{'common.basket'| translate }}</span>
   </a>
 
   <a class="nav-link py-2 py-xl-3" [routerLink]="['ou_tree']" (click)="collapse()"
