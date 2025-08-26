@@ -1,11 +1,11 @@
 describe('Create Item', () => {
-  const userName = Cypress.env('testUser').userName
+  const loginName = Cypress.env('testUser').loginName
   const password = Cypress.env('testUser').password
   const context = Cypress.env('testContext').name
   let itemId: string;
 
   beforeEach(() => {
-    cy.loginViaAPI(userName, password)
+    cy.loginViaAPI(loginName, password)
   })
 
   afterEach(() => {

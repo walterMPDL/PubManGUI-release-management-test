@@ -1,11 +1,11 @@
 describe('Navigation Menu', () => {
 
-  const userName = Cypress.env('testUser').userName
+  const loginName = Cypress.env('testUser').loginName
   const password = Cypress.env('testUser').password
   const baseUrl = baseUrlWithoutTrailingSlashes()
 
   beforeEach(() => {
-    cy.loginViaAPI(userName, password)
+    cy.loginViaAPI(loginName, password)
   })
 
   afterEach(() => {
@@ -16,7 +16,7 @@ describe('Navigation Menu', () => {
     //Given
     cy.visit('/')
     //When
-    cy.get('[data-test="sidenav-entry"]').click()
+    cy.get('[data-test="sidenav-entry"]').filter(':visible').click()
     //Then
     cy.url().should('eq', baseUrl + '/edit')
   })
@@ -25,7 +25,7 @@ describe('Navigation Menu', () => {
     //Given
     cy.visit('/')
     //When
-    cy.get('[data-test="sidenav-my-datasets"]').click()
+    cy.get('[data-test="sidenav-my-datasets"]').filter(':visible').click()
     //Then
     cy.url().should('eq', baseUrl + '/my')
   })
@@ -34,7 +34,7 @@ describe('Navigation Menu', () => {
     //Given
     cy.visit('/')
     //When
-    cy.get('[data-test="sidenav-qa-area"]').click()
+    cy.get('[data-test="sidenav-qa-area"]').filter(':visible').click()
     //Then
     cy.url().should('eq', baseUrl + '/qa')
   })
@@ -43,7 +43,7 @@ describe('Navigation Menu', () => {
     //Given
     cy.visit('/')
     //When
-    cy.get('[data-test="sidenav-qa-area"]').click()
+    cy.get('[data-test="sidenav-qa-area"]').filter(':visible').click()
     //Then
     cy.url().should('eq', baseUrl + '/qa')
   })
@@ -54,7 +54,7 @@ describe('Navigation Menu', () => {
     //Given
     cy.visit('/')
     //When
-    cy.get('[data-test="sidenav-batch"]').click()
+    cy.get('[data-test="sidenav-batch"]').filter(':visible').click()
     //Then
     cy.url().should('eq', baseUrl + '/batch/logs')
   })
@@ -65,7 +65,7 @@ describe('Navigation Menu', () => {
     //Given
     cy.visit('/')
     //When
-    cy.get('[data-test="sidenav-basket"]').click()
+    cy.get('[data-test="sidenav-basket"]').filter(':visible').click()
     //Then
     cy.url().should('eq', baseUrl + '/cart')
   })
@@ -74,19 +74,9 @@ describe('Navigation Menu', () => {
     //Given
     cy.visit('/')
     //When
-    cy.get('[data-test="sidenav-organizational-units"]').click()
+    cy.get('[data-test="sidenav-organizational-units"]').filter(':visible').click()
     //Then
     cy.url().should('eq', baseUrl + '/ou_tree')
-  })
-
-  //TODO: Edit this Test if "place" feature is implemented
-  it('Place', () => {
-    //Given
-    cy.visit('/')
-    //When
-    cy.get('[data-test="sidenav-place"]').click()
-    //Then
-    cy.url().should('eq', baseUrl + '/home')
   })
 
   /**

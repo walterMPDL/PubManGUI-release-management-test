@@ -2,6 +2,7 @@ import { defineConfig } from 'cypress'
 
 export default defineConfig({
   watchForFileChanges: false,
+  viewportWidth: 1200,
   e2e: {
     //baseUrl is set to 'http://localhost:4200/' by default by Angular, if Cypress is started with `ng e2e`
     baseUrl: 'https://localhost:4200',

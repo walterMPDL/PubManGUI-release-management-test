@@ -1,11 +1,11 @@
 describe('Execute Batch Actions', () => {
-  const userName = Cypress.env('testUser').userName
+  const loginName = Cypress.env('testUser').loginName
   const password = Cypress.env('testUser').password
   let itemId: string;
   let itemGenre: string;
 
   beforeEach(() => {
-    cy.loginViaAPI(userName, password)
+    cy.loginViaAPI(loginName, password)
     cy.fixture('itemMetadataMinimal').then((itemMetadata) => {
       itemGenre = itemMetadata.metadata.genre
       cy.createItemViaAPI(itemMetadata).then((response) => {

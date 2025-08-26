@@ -1,5 +1,5 @@
 describe('My Imports', () => {
-  const userName = Cypress.env('testUser').userName
+  const loginName = Cypress.env('testUser').loginName
   const password = Cypress.env('testUser').password
   let importName = 'Cypress Test Import ' + new Date().toISOString()
   let importLogId: string
@@ -8,7 +8,7 @@ describe('My Imports', () => {
   const baseUrl = baseUrlWithoutTrailingSlashes()
 
   beforeEach(() => {
-    cy.loginViaAPI(userName, password)
+    cy.loginViaAPI(loginName, password)
 
     // Create import
     cy.fixture('BibTeXSample.bib').then(importFileContent => {
