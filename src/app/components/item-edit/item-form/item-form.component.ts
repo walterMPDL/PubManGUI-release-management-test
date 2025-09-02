@@ -80,15 +80,7 @@ export class ItemFormComponent implements OnInit {
     ).subscribe(item => {
 
       this.itemUpdated(item);
-      if (this.form.value !== null
-        && this.form.value !== undefined
-        && this.form.get('objectId')?.value !== null
-        && this.form.get('versionNumber')?.value !== undefined) {
-        this.itemService.retrieveAuthorizationInfo(itemToVersionId(this.form.value as ItemVersionRO)).subscribe(authInfo => {
-          this.authorizationInfo = authInfo;
-          console.log('this.authorizationInfo: ', this.authorizationInfo);
-        });
-      }
+
       this.initInternalAndExternalFiles();
       // manual Update for form validation
       //this.updateFormValidity(this.form);
@@ -293,6 +285,15 @@ export class ItemFormComponent implements OnInit {
   private itemUpdated(item: ItemVersionVO) {
     this.item = item;
     this.form = this.fbs.item_FG(item);
+    if (this.form.value !== null
+      && this.form.value !== undefined
+      && this.form.get('objectId')?.value !== null
+      && this.form.get('versionNumber')?.value !== undefined) {
+      this.itemService.retrieveAuthorizationInfo(itemToVersionId(this.form.value as ItemVersionRO)).subscribe(authInfo => {
+        this.authorizationInfo = authInfo;
+        console.log('this.authorizationInfo: ', this.authorizationInfo);
+      });
+    }
   }
 
   submit(submitterId: any) {
