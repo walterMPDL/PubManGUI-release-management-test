@@ -23,6 +23,7 @@ import { MessageService } from 'src/app/services/message.service';
 import { itemToVersionId } from 'src/app/utils/utils';
 import { ItemActionsModalComponent } from 'src/app/components/shared/item-actions-modal/item-actions-modal.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ItemBadgesComponent } from "../../shared/item-badges/item-badges.component";
 
 @Component({
   selector: 'pure-item-form',
@@ -36,7 +37,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
     MetadataFormComponent,
     AddRemoveButtonsComponent,
     CdkDropList,
-    CdkDrag],
+    CdkDrag, ItemBadgesComponent],
   templateUrl: './item-form.component.html',
   styleUrls: ['./item-form.component.scss'],
 })
@@ -57,6 +58,7 @@ export class ItemFormComponent implements OnInit {
 
   externalReferences!: FormArray<FormGroup<ControlType<FileDbVO>>>;
   form!: FormGroup;
+  item!: ItemVersionVO;
   form_2_submit: any;
   internalFiles!: FormArray<FormGroup<ControlType<FileDbVO>>>;
   switchFileSortingMode: boolean = false;
@@ -72,10 +74,12 @@ export class ItemFormComponent implements OnInit {
     this.route.data.pipe(
       switchMap(data => {
         // console.log('Data', JSON.stringify(data));
-        return of(this.fbs.item_FG(data['item']));
+        //this.item = data['item'];
+        return of(data['item']);
       })
-    ).subscribe(f => {
-      this.form = f;
+    ).subscribe(item => {
+
+      this.itemUpdated(item);
       if (this.form.value !== null
         && this.form.value !== undefined
         && this.form.get('objectId')?.value !== null
@@ -282,6 +286,15 @@ export class ItemFormComponent implements OnInit {
 
   }
 
+  get formAsItem() {
+    return this.form.value as ItemVersionVO;
+  }
+
+  private itemUpdated(item: ItemVersionVO) {
+    this.item = item;
+    this.form = this.fbs.item_FG(item);
+  }
+
   submit(submitterId: any) {
     console.log('submitterId', typeof submitterId);
     console.log('submitterId', submitterId);
@@ -322,7 +335,7 @@ export class ItemFormComponent implements OnInit {
           case 'save': {
             this.form.valid
               ? (this.itemService.update(this.form_2_submit.objectId, this.form_2_submit as ItemVersionVO)).subscribe(result => {
-                this.form = this.fbs.item_FG(result);
+                this.itemUpdated(result);
                 if (this.form.get('objectId')?.value) {
                   this.listStateService.itemUpdated.next(this.form.get('objectId')?.value);
                 }
@@ -351,7 +364,7 @@ export class ItemFormComponent implements OnInit {
           case 'save': {
             this.form.valid
               ? (this.itemService.create(this.form_2_submit as ItemVersionVO)).subscribe(result => {
-                this.form = this.fbs.item_FG(result);
+                this.itemUpdated(result);
                 if (this.form.get('objectId')?.value) {
                   this.listStateService.itemUpdated.next(this.form.get('objectId')?.value);
                 }
