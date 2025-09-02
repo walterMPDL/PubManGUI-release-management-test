@@ -2,6 +2,7 @@ const fs = require('node:fs');
 const icons = [
   "account_tree",
   "add_circle",
+  "analytics",
   "api",
   "apps",
   "arrow_drop_down",

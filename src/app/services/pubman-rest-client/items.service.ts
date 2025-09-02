@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
-import { AuditDbVO, ItemVersionVO } from "../../model/inge";
+import { AuditDbVO, exportTypes, ItemVersionVO } from "../../model/inge";
 import { PubmanSearchableGenericRestClientService } from "./pubman-searchable-generic-rest-client.service";
 import { HttpParams } from "@angular/common/http";
 import { HttpOptions } from "./pubman-generic-rest-client.service";
@@ -104,6 +104,16 @@ export class ItemsService extends PubmanSearchableGenericRestClientService<ItemV
 
   rollback(id: string, versionNumber:number, opts?: HttpOptions): Observable<ItemVersionVO> {
     return this.httpPut(this.subPath + '/' + id + '_' + versionNumber + '/rollbackToVersion',undefined, opts);
+  }
+
+  jusReport(format: exportTypes.JUS_HTML_XML | exportTypes.JUS_INDESIGN_XML, orgId: string, year: string, opts?:HttpOptions) {
+    let params: HttpParams = new HttpParams()
+      .set('format', format)
+      .set('orgId', orgId)
+      .set('year', year);
+    const mergedOpts = this.createOrMergeHttpOptions(opts, {params: params, observe:'response', responseType: 'blob'});
+    return this.httpGet(this.subPath + '/jusreport', mergedOpts);
+
   }
 
 }

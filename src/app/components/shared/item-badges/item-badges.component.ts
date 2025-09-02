@@ -25,6 +25,7 @@ export class ItemBadgesComponent {
   @Input() showVersion: boolean = false;
 
   @Input() showPublicStatusIcon: boolean = false;
+  @Input() showMetadata: boolean = true;
 
   constructor(protected aaService: AaService) {
   }
