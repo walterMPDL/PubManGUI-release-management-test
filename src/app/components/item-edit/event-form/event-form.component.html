@@ -15,14 +15,14 @@
                 <label class="col-form-label">{{ 'MetadataFields.eventStartDate' | translate }}</label>
                 <input type="text" class="form-control" formControlName="startDate">
                 @if (event_form.get('startDate')?.errors) {
-                <div class="pure-invalid">Date format incorrect</div>
+                <div class="pure-invalid">{{ 'validation.invalidDateFormat' | translate }}</div>
                 }
             </div>
             <div class="col-sm-2">
                 <label class="col-form-label">{{ 'MetadataFields.eventEndDate' | translate }}</label>
                 <input type="text" class="form-control" formControlName="endDate">
                 @if (event_form.get('endDate')?.errors) {
-                <div class="pure-invalid">Date format incorrect</div>
+                <div class="pure-invalid">{{ 'validation.invalidDateFormat' | translate }}</div>
                 }
             </div>
             <div class="col-sm-2">

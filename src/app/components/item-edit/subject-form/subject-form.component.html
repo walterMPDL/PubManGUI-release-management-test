@@ -12,7 +12,7 @@
             </select>
             @if(subject_form.errors?.[error_types.SUBJECT_TYPE_NOT_PROVIDED]) {
             <div class="d-sm-flex flex-sm-row gap-1 mb-1">
-                <div class="pure-invalid">Subject-Type required</div>
+                <div class="pure-invalid">{{ 'validation.required' | translate}}</div>
             </div>
             }
         </div>

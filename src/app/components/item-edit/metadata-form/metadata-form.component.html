@@ -3,7 +3,7 @@
     <div class="accordion" id="accordionPanelsMetadata">
         <!--GROUP Standard-->
         <div class="accordion-item border-0">
-            <h2 class="accordion-header">
+            <h2 class="accordion-header mt-2">
                 <button class="accordion-button rounded-0" type="button" data-bs-toggle="collapse"
                     data-bs-target="#accordionBodyStandardGroup" aria-expanded="true"
                     aria-controls="accordionBodyStandardGroup">
@@ -34,7 +34,7 @@
                                         </optgroup>
                                     </select>
                                     @if (meta_form.get('genre')?.hasError('required')) {
-                                    <div class="pure-invalid">Genre is required</div>
+                                    <div class="pure-invalid">{{ 'validation.required' | translate}}</div>
                                     }
                                 </div>
                                 <div class="col-sm-1">
@@ -67,11 +67,11 @@
                                         formControlName="title" data-test="title"
                                               [ngClass]="meta_form.get('title')?.errors ? 'is-invalid' : ''"></textarea>
                                     @if (meta_form.get('title')?.hasError('required')) {
-                                    <div class="pure-invalid">Title is required</div>
+                                    <div class="pure-invalid">{{ 'validation.required' | translate}}</div>
                                     } @else if
                                     (meta_form.get('title')?.hasError(error_types.NO_UTF8_CHAR_IN_ABSTRACT.toString()))
                                     {
-                                    <div class="pure-invalid">Invalid UTF-8 Character</div>
+                                    <div class="pure-invalid">{{ 'validation.invalidCharacters' | translate }}</div>
                                     }
                                 </div>
                                 <div class="col-sm-1">
@@ -106,7 +106,7 @@
         <!--GROUP Creator-->
         <div
             [ngClass]="genreSpecificResource.value().properties.creator_person_organization.display ? 'accordion-item border-0' : 'd-none'">
-            <h2 class="accordion-header">
+            <h2 class="accordion-header mt-2">
                 <button class="accordion-button" type="button" data-bs-toggle="collapse"
                     data-bs-target="#accordionBodyCreatorGroup" aria-expanded="true"
                     aria-controls="accordionBodyCreatorGroup">
@@ -133,7 +133,7 @@
                             <hr />
                             @if(meta_form.errors?.[error_types.ORGANIZATIONAL_METADATA_NOT_PROVIDED]) {
                             <div class="d-sm-flex flex-sm-row gap-1 mb-1">
-                                <div class="pure-invalid">At least one creator needs an organizational unit.</div>
+                                <div class="pure-invalid">{{ 'validation.minOneAffForCreator' | translate }}</div>
                             </div>
                             }
                             <ng-container formArrayName="creators">
@@ -164,7 +164,7 @@
         <!--GROUP Dates-->
         <div class="accordion-item border-0"
             [ngClass]="{'d-none' : !genreSpecificResource.value().properties.details_item_details_dates.display}">
-            <h2 class="accordion-header">
+            <h2 class="accordion-header mt-2">
                 <button class="accordion-button" type="button" data-bs-toggle="collapse"
                     data-bs-target="#accordionBodyDatesGroup" aria-expanded="true"
                     aria-controls="accordionBodyDatesGroup">
@@ -178,7 +178,7 @@
                         <div class="col-sm">
                             @if(meta_form.hasError(error_types.DATE_NOT_PROVIDED.toString())) {
                             <div class="d-sm-flex flex-sm-row gap-1 mb-1 align-items-end">
-                                <div class="pure-invalid" role="alert">Date required</div>
+                                <div class="pure-invalid" role="alert">{{ 'validation.minOneDate' | translate }}</div>
                             </div>
                             }
                             <div class="d-sm-flex flex-sm-row gap-1 mb-1 align-items-end">
@@ -186,7 +186,7 @@
                                     [ngClass]="{'d-none' : !genreSpecificResource.value().properties.details_item_details_dates_item_date_issued.display}">
                                     <label class="col-form-label">{{ 'MetadataFields.datePublishedInPrint' | translate }}</label>
                                     @if(meta_form.get('datePublishedInPrint')?.hasError('pattern')) {
-                                    <div class="pure-invalid">Incorrect date format. Expected format YYYY-MM-DD</div>
+                                    <div class="pure-invalid">{{ 'validation.invalidDateFormat' | translate }}</div>
                                     }
                                     <input type="text" class="form-control" formControlName="datePublishedInPrint"
                                         [placeholder]="'common.dateFormat' | translate">
@@ -195,7 +195,7 @@
                                     [ngClass]="{'d-none' : !genreSpecificResource.value().properties.details_item_details_dates_item_published_online.display}">
                                     <label class="col-form-label">{{ 'MetadataFields.datePublishedOnline' | translate }}</label>
                                     @if(meta_form.get('datePublishedOnline')?.hasError('pattern')) {
-                                    <div class="pure-invalid">Incorrect date format. Expected format YYYY-MM-DD</div>
+                                    <div class="pure-invalid">{{ 'validation.invalidDateFormat' | translate }}</div>
                                     }
                                     <input type="text" class="form-control" formControlName="datePublishedOnline"
                                            [placeholder]="'common.dateFormat' | translate">
@@ -204,7 +204,7 @@
                                     [ngClass]="{'d-none' : !genreSpecificResource.value().properties.details_item_details_dates_item_date_accepted.display}">
                                     <label class="col-form-label">{{ 'MetadataFields.dateAccepted' | translate }}</label>
                                     @if(meta_form.get('dateAccepted')?.hasError('pattern')) {
-                                    <div class="pure-invalid">Incorrect date format. Expected format YYYY-MM-DD</div>
+                                    <div class="pure-invalid">{{ 'validation.invalidDateFormat' | translate }}</div>
                                     }
                                     <input type="text" class="form-control" formControlName="dateAccepted"
                                            [placeholder]="'common.dateFormat' | translate">
@@ -213,7 +213,7 @@
                                     [ngClass]="{'d-none' : !genreSpecificResource.value().properties.details_item_details_dates_item_date_submitted.display}">
                                     <label class="col-form-label">{{ 'MetadataFields.dateSubmitted' | translate }}</label>
                                     @if(meta_form.get('dateSubmitted')?.hasError('pattern')) {
-                                    <div class="pure-invalid">Incorrect date format. Expected format YYYY-MM-DD</div>
+                                    <div class="pure-invalid">{{ 'validation.invalidDateFormat' | translate }}</div>
                                     }
                                     <input type="text" class="form-control" formControlName="dateSubmitted"
                                            [placeholder]="'common.dateFormat' | translate">
@@ -223,7 +223,7 @@
                                 <div class="col-sm-2">
                                     <label class="col-form-label">{{ 'MetadataFields.dateCreated' | translate }}</label>
                                     @if(meta_form.get('dateCreated')?.hasError('pattern')) {
-                                    <div class="pure-invalid">Incorrect date format. Expected format YYYY-MM-DD</div>
+                                    <div class="pure-invalid">{{ 'validation.invalidDateFormat' | translate }}</div>
                                     }
                                     <input type="text" class="form-control" formControlName="dateCreated"
                                            [placeholder]="'common.dateFormat' | translate" data-test="date-created">
@@ -231,7 +231,7 @@
                                 <div class="col-sm-2">
                                     <label class="col-form-label">{{ 'MetadataFields.dateModified' | translate }}</label>
                                     @if(meta_form.get('dateModified')?.hasError('pattern')) {
-                                    <div class="pure-invalid">Incorrect date format. Expected format YYYY-MM-DD</div>
+                                    <div class="pure-invalid">{{ 'validation.invalidDateFormat' | translate }}</div>
                                     }
                                     <input type="text" class="form-control" formControlName="dateModified"
                                            [placeholder]="'common.dateFormat' | translate">
@@ -249,7 +249,7 @@
         <!--GROUP Details-->
         <div class="accordion-item border-0"
             [ngClass]="{'d-none' : !genreSpecificResource.value().properties.details.display}">
-            <h2 class="accordion-header">
+            <h2 class="accordion-header mt-2">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                     data-bs-target="#accordionBodyDetailsGroup" aria-expanded="true"
                     aria-controls="accordionBodyDetailsGroup">
@@ -440,7 +440,7 @@
         <!--GROUP Event-->
         <div class="accordion-item border-0"
             [ngClass]="{'d-none' : !genreSpecificResource.value().properties.events.display}">
-            <h2 class="accordion-header">
+            <h2 class="accordion-header mt-2">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                     data-bs-target="#accordionBodyEventGroup" aria-expanded="true"
                     aria-controls="accordionBodyEventGroup">
@@ -457,7 +457,7 @@
         <!--GROUP Project Info-->
         <div class="accordion-item border-0"
             [ngClass]="{'d-none' : !genreSpecificResource.value().properties.project_info.display}">
-            <h2 class="accordion-header">
+            <h2 class="accordion-header mt-2">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                     data-bs-target="#accordionBodyProjectInfoGroup" aria-expanded="true"
                     aria-controls="accordionBodyProjectInfoGroup">
@@ -499,7 +499,7 @@
         <!--GROUP Legal Case-->
         <div class="accordion-item border-0"
             [ngClass]="{'d-none' : !genreSpecificResource.value().properties.legal_case.display}">
-            <h2 class="accordion-header">
+            <h2 class="accordion-header mt-2">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                     data-bs-target="#accordionBodyLegalCaseGroup" aria-expanded="true"
                     aria-controls="accordionBodyLegalCaseGroup">
@@ -516,7 +516,7 @@
         <!--GROUP Sources-->
         <div class="accordion-item border-0 mb-3"
             [ngClass]="{'d-none' : !genreSpecificResource.value().properties.sources.display}">
-            <h2 class="accordion-header">
+            <h2 class="accordion-header mt-2">
                 <button class="accordion-button" type="button" data-bs-toggle="collapse"
                     data-bs-target="#accordionBodySourcesGroup"
                     [attr.aria-expanded]="!genreSpecificResource.value().properties.sources.optional"

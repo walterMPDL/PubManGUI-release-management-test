@@ -73,7 +73,12 @@
 		"notEquals": "müssen sich unterscheiden",
 		"equals": "stimmen nicht überein",
 		"notDuplicates": "dupliziert",
-		"allRequired": "nicht alle erforderlichen Werte"
+		"allRequired": "nicht alle erforderlichen Werte",
+    "invalidCharacters": "Der Text enthält ungültige Zeichen",
+    "invalidDateFormat": "Falsches Datumsformat (JJJJ-MM-DD)",
+    "minOneDate": "Mindestens eine Datumsangabe ist erforderlich",
+    "invalidUrlFormat": "Ungültige URL",
+    "minOneAffForCreator": "Mindestens ein Urheber erfordert eine Affiliation"
 	},
 	"header": {
 		"brand": {

@@ -35,7 +35,7 @@
                         }
                     </select>
                     @if(creator_form.errors?.[error_types.CREATOR_ROLE_NOT_PROVIDED]) {
-                    <div class="pure-invalid">Creator role is required</div>
+                    <div class="pure-invalid">{{ 'validation.required' | translate}}</div>
                     }
                 </div>
                 @if (type.value === 'ORGANIZATION') {
@@ -47,7 +47,7 @@
 
 
                     @if(creator_form.errors?.[error_types.CREATOR_ORGANIZATION_NAME_NOT_PROVIDED]) {
-                      <div class="pure-invalid">Organization name is required</div>
+                      <div class="pure-invalid">{{ 'validation.required' | translate}}</div>
                     }
 
                 </div>
@@ -70,7 +70,7 @@
                             [showConeAndOrcid]="true"
                             data-test="familyname-autosuggest" />
                       @if(creator_form.errors?.[error_types.CREATOR_FAMILY_NAME_NOT_PROVIDED] ? true : false) {
-                        <div class="pure-invalid">Creator family name is required</div>
+                        <div class="pure-invalid">{{ 'validation.required' | translate}}</div>
                       }
                     </div>
                     <div class="col-sm-3">
@@ -110,7 +110,7 @@
                                                [validationError]="creator_form.errors?.[error_types.CREATOR_ORGANIZATION_NAME_NOT_PROVIDED] ? true : false"></pure-ou-autosuggest>
 
                           @if(creator_form.errors?.[error_types.CREATOR_ORGANIZATION_NAME_NOT_PROVIDED]) {
-                            <div class="pure-invalid">Creator organization name is required</div>
+                            <div class="pure-invalid">{{ 'validation.required' | translate}}</div>
                           }
                         </div>
 

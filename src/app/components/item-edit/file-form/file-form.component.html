@@ -34,7 +34,7 @@
                         }
                     </select>
                     @if(file_form.errors?.[error_types.COMPONENT_CONTENT_CATEGORY_NOT_PROVIDED]) {
-                    <div class="pure-invalid">Content Category is required</div>
+                    <div class="pure-invalid">{{ 'validation.required' | translate}}</div>
                     }
                 </div>
                 <div class="col-sm-1"><!--NEEDED to keep the layout including one last collumn for add-remove buttons-->
@@ -46,7 +46,7 @@
                     <input type="text" class="form-control" id="file_title" name="title" formControlName="title"
                         [ngClass]="file_form.errors?.[error_types.COMPONENT_FILE_NAME_NOT_PROVIDED] ? 'is-invalid' : ''">
                     @if (file_form.errors?.[error_types.COMPONENT_FILE_NAME_NOT_PROVIDED]) {
-                    <div class="pure-invalid">File Title is required</div>
+                    <div class="pure-invalid">{{ 'validation.required' | translate}}</div>
                     }
                     @if (metadata.controls.title.errors?.['pattern']) {
                     <div class="pure-invalid">File Title pattern does not allow '/'</div>
@@ -64,10 +64,10 @@
                 <input type="text" class="form-control" id="file_content" name="content" formControlName="content"
                     [ngClass]="file_form.errors?.[error_types.COMPONENT_CONTENT_NOT_PROVIDED] ? 'is-invalid' : ''">
                 @if (file_form.errors?.[error_types.COMPONENT_CONTENT_NOT_PROVIDED]) {
-                <div class="pure-invalid">Content is required</div>
+                <div class="pure-invalid">{{ 'validation.required' | translate}}</div>
                 }
                 @if (file_form.errors?.[error_types.LOCATOR_IS_NO_URI]) {
-                <div class="pure-invalid">Locator is no URI. Needs to start with http:// or https:// or ftp://</div>
+                <div class="pure-invalid">{{ 'validation.invalidUrlFormat' | translate }}</div>
                 }
             </div>
             <div class="col-sm-1"><!--NEEDED to keep the layout including one last collumn for add-remove buttons-->
@@ -211,7 +211,7 @@
                     <input type="text" class="form-control" id="file_copyrightDate" name="copyrightDate"
                         formControlName="copyrightDate" placeholder="YYYY-MM-DD">
                     @if (metadata.controls.copyrightDate.errors?.['pattern']) {
-                    <div class="pure-invalid">Date Format invalid</div>
+                    <div class="pure-invalid">{{ 'validation.invalidDateFormat' | translate }}</div>
                     }
                 </div>
                 <div class="col-sm-1"><!--NEEDED to keep the layout including one last collumn for add-remove buttons-->

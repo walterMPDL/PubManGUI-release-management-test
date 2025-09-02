@@ -67,13 +67,18 @@
 	},
 	"chips.localTags.placeholder": "Add local tag",
 	"validation": {
-		"required": "value is required",
+		"required": "Value is required",
 		"minlength": "at least {{minLength}} characters required",
 		"singleWord": "can't contain multiple words",
 		"notEquals": "cannot be the same",
 		"equals": "do not match",
 		"notDuplicates": "duplicate",
-		"allRequired": "not all required values"
+		"allRequired": "not all required values",
+    "invalidCharacters": "The text contains invalid characters",
+    "invalidDateFormat": "Invalid date format (YYYY-MM-DD)",
+    "minOneDate": "At least one Date is required",
+    "invalidUrlFormat": "Invalid URL",
+    "minOneAffForCreator": "At least one creator requires an affiliation"
 	},
 	"header": {
 		"brand": {
