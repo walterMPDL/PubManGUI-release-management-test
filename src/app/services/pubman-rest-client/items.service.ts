@@ -108,6 +108,7 @@ export class ItemsService extends PubmanSearchableGenericRestClientService<ItemV
 
   jusReport(format: exportTypes.JUS_HTML_XML | exportTypes.JUS_INDESIGN_XML, orgId: string, year: string, opts?:HttpOptions) {
     let params: HttpParams = new HttpParams()
+      .set('format', format)
       .set('orgId', orgId)
       .set('year', year);
     const mergedOpts = this.createOrMergeHttpOptions(opts, {params: params, observe:'response', responseType: 'blob'});

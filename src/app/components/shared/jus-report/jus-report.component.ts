@@ -43,7 +43,7 @@ export class JusReportComponent {
       exportFormat: [exportTypes.JUS_HTML_XML],
       orgName: ['', Validators.required],
       orgId: ['', Validators.required],
-      year: [new Date().getFullYear(), Validators.required],
+      year: [new Date().getFullYear(), [Validators.required, Validators.pattern(/^\d{4}$/)]]
     })
   }
 
