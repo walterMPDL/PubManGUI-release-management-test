@@ -25,21 +25,7 @@
       }
     }
   }
-/*
-  __ul li {
-    padding-top: 0.2rem;
-    padding-bottom: 0.2rem;
-    padding-left: 3.5rem !important;
 
-    &:last-of-type {
-      margin-bottom: 1rem;
-    }
-
-    &:hover {
-      color: var(--accent-bg-color) !important;
-    }
-  }
-*/
   .matBadge {
     top: -1.5em;
   }
@@ -82,18 +68,3 @@
     left: -1em;
   }
 }
-/*
-.__show-more {
-  &:not(:hover) {
-    .more-to-show {
-      display: none;
-    }
-  }
-
-  &:hover {
-    .more-to-show {
-      display: block;
-    }
-  }
-}
-*/
