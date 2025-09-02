@@ -10,17 +10,21 @@
           settings
         </span> Admintool</a>
     </li>
+      <hr class="m-1"/>
     }
     <li><a class="dropdown-item" href='https://gui.inge.mpdl.mpg.de/cone/' target="_blank" rel="noopener noreferrer">
         <svg height="24px" width="24px">
           <use href="assets/icons/icons.svg#cone-bw"></use>
         </svg> CoNE</a>
     </li>
+    <hr class="m-1"/>
+
     <li><a class="dropdown-item" href='https://pure.mpg.de/csl-editor/' target="_blank" rel="noopener noreferrer">
       <svg height="24px" width="24px">
           <use href="assets/icons/icons.svg#format_quote"></use>
       </svg><span> {{'header.tools.cslEditor' | translate}}</span></a>
     </li>
+    <hr class="m-1"/>
     <li>
         &nbsp;&nbsp;&nbsp;<span class="material-symbols-outlined">
           api
@@ -32,6 +36,7 @@
     <li><a class="dropdown-item" href='https://colab.mpdl.mpg.de/mediawiki/INGe_REST_API_Documentation' target="_blank" rel="noopener noreferrer">
       <span class="ps-4">&bull; {{'header.tools.restApi.documentation' | translate}}</span></a>
     </li>
+    <hr class="m-1"/>
     <li>
         &nbsp;&nbsp;&nbsp;<span class="material-symbols-outlined">
           stream
@@ -43,6 +48,17 @@
     <li><a class="dropdown-item" href='https://gui.inge.mpdl.mpg.de/oai/oaisearch.do' target="_blank" rel="noopener noreferrer">
       <span class="ps-4">&bull; {{'header.tools.oaiPmh.search' | translate}}</span></a>
     </li>
+
+    @if(aaService.isLoggedIn && aaService.principal.value.isReporter) {
+      <hr class="m-1"/>
+      <li class="dropdown-item">
+        <button class="btn nav-link" (click)="modalService.open(JusReportComponent)">
+          <span class="material-symbols-outlined">analytics</span>
+          JUS Report
+        </button>
+      </li>
+    }
+
   </ul>
 
 </div>

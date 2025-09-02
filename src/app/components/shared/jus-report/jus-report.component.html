@@ -1,0 +1,58 @@
+<div class="modal-header">
+  <h4 class="modal-title" id="modal-basic-title">
+    JUS Report
+  </h4>
+  <button type="button" class="btn-close" aria-label="Close" (click)="closeModal()"></button>
+</div>
+
+<div class="modal-body">
+  <form [formGroup]="reportForm">
+
+    <div class="mb-3">
+      <label for="formatSelect">Format</label>
+      <select class="form-select" formControlName="exportFormat" id="formatSelect" name="selectFormat">
+
+        <option [ngValue]="exportTypes.JUS_HTML_XML">
+          {{ exportTypes.JUS_HTML_XML }}
+        </option>
+        <option [ngValue]="exportTypes.JUS_INDESIGN_XML">
+          {{ exportTypes.JUS_INDESIGN_XML }}
+        </option>
+
+      </select>
+    </div>
+
+  <div class="mb-3">
+    <label for="year">{{ 'common.year' | translate }}</label>
+    <input class="form-control" formControlName="year" id="year" [class.is-invalid]="reportForm.get('year')?.invalid && reportForm.get('year')?.touched">
+
+  </div>
+  <div class="mb-3">
+    <label for="org">{{ 'MetadataFields.organization' | translate }}</label>
+    <pure-ou-autosuggest id="org" [formForOuName]="$any(this.reportForm).controls.orgName" [formForOuId]="$any(this.reportForm).controls.orgId"
+                         [validationError]="(reportForm.get('orgId')?.invalid && reportForm.get('orgName')?.touched) || false"></pure-ou-autosuggest>
+  </div>
+  </form>
+
+
+
+
+@if(errorMessage) {
+  <div class="alert alert-danger" role="alert">
+    {{ errorMessage }}
+  </div>
+}
+
+<div class="modal-footer">
+
+    <button type="button" class="btn btn-primary" (click)="download()" [disabled]="loading || !reportForm.valid">Download
+      @if(loading)
+      {
+        <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+        <span class="visually-hidden" role="status">Loading...</span>
+      }
+    </button>
+
+
+  <!--<button type="button" class="btn btn-outline-secondary" (click)="modal.close('Save click')">Download</button>-->
+</div>

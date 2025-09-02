@@ -687,6 +687,8 @@ export enum exportTypes {
     BIBTEX = "BibTeX",
     ENDNOTE = "EndNote",
     MARC_XML = "Marc_Xml",
+    JUS_HTML_XML = "Jus_Html_Xml",
+    JUS_INDESIGN_XML = "Jus_Indesign_Xml",
     PDF = "pdf",
     DOCX = "docx",
     HTML_PLAIN = "html_plain",
