@@ -5,7 +5,7 @@
         <div class="col-sm-2">
             <label for="subject_type" class="col-sm-2 col-form-label">{{ 'common.type' | translate }}</label>
             <select id="subject_type" class="form-select" formControlName="type">
-                <option [value]="null" selected>-</option>
+                <option [ngValue]="null" selected>-</option>
                 @for (subject_classification_type of subject_classification_types; track subject_classification_type) {
                 <option [value]="subject_classification_type">{{subject_classification_type}}</option>
                 }

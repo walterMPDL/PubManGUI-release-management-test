@@ -1,6 +1,7 @@
 import { AbstractControl, FormArray, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { CreatorType } from 'src/app/model/inge';
 import { Errors } from 'src/app/model/errors'
+import { isFormValueEmpty } from "../../utils/utils";
 
 export const CreatorsOrganizationsValidator: ValidatorFn = (control: AbstractControl,): ValidationErrors | null => {
   const error_types = Errors;
@@ -12,7 +13,7 @@ export const CreatorsOrganizationsValidator: ValidatorFn = (control: AbstractCon
     switch (creator.get('type')?.value) {
       case CreatorType.ORGANIZATION:
         const organization = creator.get('organization');
-        if (organization !== null && organization.get('name')?.value !== null) {
+        if (organization !== null && !isFormValueEmpty(organization.get('name')?.value)) {
           ok = true;
         } else {
           errorOrg = true;
@@ -23,7 +24,7 @@ export const CreatorsOrganizationsValidator: ValidatorFn = (control: AbstractCon
         if (person !== null) {
           const personOrganizations = person.get('organizations') as FormArray;
           for (let organization of personOrganizations.controls) {
-            if (organization !== null && organization.get('name')?.value !== null) {
+            if (organization !== null && !isFormValueEmpty(organization.get('name')?.value)) {
               ok = true;
             }
           }
@@ -32,6 +33,7 @@ export const CreatorsOrganizationsValidator: ValidatorFn = (control: AbstractCon
     }
   }
   if (!ok) {
+    control.get('creators')?.setErrors({type: error_types.ORGANIZATIONAL_METADATA_NOT_PROVIDED});
     return { [error_types.ORGANIZATIONAL_METADATA_NOT_PROVIDED]: true };
   }
   return null;

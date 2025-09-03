@@ -12,13 +12,14 @@ export const SourceRequiredValidator: ValidatorFn = (control: AbstractControl,):
     genre === genre_types.BOOK_ITEM ||
     genre === genre_types.CONFERENCE_PAPER ||
     genre === genre_types.MAGAZINE_ARTICLE ||
-    genre === genre_types.REVIEW_ARTICLE || 
+    genre === genre_types.REVIEW_ARTICLE ||
     genre === genre_types.CONTRIBUTION_TO_COLLECTED_EDITION ||
-    genre === genre_types.CONTRIBUTION_TO_COMMENTARY || 
+    genre === genre_types.CONTRIBUTION_TO_COMMENTARY ||
     genre === genre_types.CONTRIBUTION_TO_ENCYCLOPEDIA ||
     genre === genre_types.CONTRIBUTION_TO_FESTSCHRIFT ||
     genre === genre_types.CONTRIBUTION_TO_HANDBOOK ) {
       if ( metadata.get('sources')?.value.length < 1)  {
+        control.setErrors({type: error_types.SOURCE_NOT_PROVIDED})
         return { [error_types.SOURCE_NOT_PROVIDED]: true };
       }
   }

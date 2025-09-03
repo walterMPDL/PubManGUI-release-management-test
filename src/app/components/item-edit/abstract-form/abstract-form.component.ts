@@ -5,6 +5,7 @@ import { AddRemoveButtonsComponent } from 'src/app/components/shared/add-remove-
 import { Errors } from 'src/app/model/errors';
 import { LanguageAutosuggestComponent } from 'src/app/components/shared/language-autosuggest/language-autosuggest.component';
 import { TranslatePipe } from "@ngx-translate/core";
+import { BootstrapValidationDirective } from "../../../directives/bootstrap-validation.directive";
 
 @Component({
   selector: 'pure-abstract-form',
@@ -16,6 +17,7 @@ import { TranslatePipe } from "@ngx-translate/core";
     LanguageAutosuggestComponent,
     ReactiveFormsModule,
     TranslatePipe,
+    BootstrapValidationDirective,
   ],
   templateUrl: './abstract-form.component.html',
   styleUrl: './abstract-form.component.scss'

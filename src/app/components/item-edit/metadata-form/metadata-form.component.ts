@@ -46,6 +46,8 @@ import { Errors } from 'src/app/model/errors';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AddMultipleCreatorsModalComponent } from '../add-multiple-creators-modal/add-multiple-creators-modal.component';
 import { TranslatePipe } from "@ngx-translate/core";
+import { BootstrapValidationDirective } from "../../../directives/bootstrap-validation.directive";
+import { ValidationErrorComponent } from "../validation-error/validation-error.component";
 
 @Component({
   selector: 'pure-metadata-form',
@@ -70,6 +72,8 @@ import { TranslatePipe } from "@ngx-translate/core";
     CdkDropList,
     CdkDrag,
     TranslatePipe,
+    BootstrapValidationDirective,
+    ValidationErrorComponent
   ],
   templateUrl: './metadata-form.component.html',
   styleUrls: ['./metadata-form.component.scss']

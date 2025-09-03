@@ -19,6 +19,7 @@ import { HttpParams } from "@angular/common/http";
 import { FormBuilderService } from 'src/app/services/form-builder.service';
 import { IdType, OrganizationVO } from 'src/app/model/inge';
 import { TranslatePipe } from "@ngx-translate/core";
+import { BootstrapValidationDirective } from "../../../directives/bootstrap-validation.directive";
 
 @Component({
   selector: 'pure-person-autosuggest',
@@ -29,6 +30,7 @@ import { TranslatePipe } from "@ngx-translate/core";
     NgbHighlight,
     CommonModule,
     TranslatePipe,
+    BootstrapValidationDirective
   ],
   templateUrl: './person-autosuggest.component.html',
   styleUrl: './person-autosuggest.component.scss'

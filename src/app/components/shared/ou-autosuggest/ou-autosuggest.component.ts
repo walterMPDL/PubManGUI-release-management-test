@@ -18,11 +18,12 @@ import { OrganizationsService } from "../../../services/pubman-rest-client/organ
 import { TranslatePipe } from "@ngx-translate/core";
 import { OrganizationVO } from "../../../model/inge";
 import { OuModalComponent } from "../ou-modal/ou-modal.component";
+import { BootstrapValidationDirective } from "../../../directives/bootstrap-validation.directive";
 
 @Component({
   selector: 'pure-ou-autosuggest',
   standalone: true,
-  imports: [CommonModule, NgbTypeahead, ReactiveFormsModule, TranslatePipe],
+  imports: [CommonModule, NgbTypeahead, ReactiveFormsModule, TranslatePipe, BootstrapValidationDirective],
   templateUrl: './ou-autosuggest.component.html',
   styleUrl: './ou-autosuggest.component.scss'
 })

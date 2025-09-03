@@ -19,7 +19,7 @@
                                 <div class="col-sm">
                                     <select id="genre" class="form-select" formControlName="genre"
                                         (change)="changeGenre($event)" data-test="genre">
-                                        <option [value]="null" selected disabled>genre</option>
+                                        <option [ngValue]="null" selected disabled>genre</option>
                                         <optgroup label="Top 5">
                                             @for (g of allowed_genre_types; track g) {
                                             @if (genrePriorityList.includes(g)) {
@@ -64,8 +64,8 @@
                             <div class="d-sm-flex flex-sm-row gap-1 mb-1 align-items-center">
                                 <div class="col-sm">
                                     <textarea type="text" class="form-control" id="title" name="title"
-                                        formControlName="title" data-test="title"
-                                              [ngClass]="meta_form.get('title')?.errors ? 'is-invalid' : ''"></textarea>
+                                        formControlName="title" data-test="title"></textarea>
+                                  <pure-validation-error [control]="meta_form.get('title')"></pure-validation-error>
                                     @if (meta_form.get('title')?.hasError('required')) {
                                     <div class="pure-invalid">{{ 'validation.required' | translate}}</div>
                                     } @else if
@@ -131,11 +131,14 @@
                                 </button>
                             </div>
                             <hr />
+                          <pure-validation-error [control]="creators"/>
+                          <!--
                             @if(meta_form.errors?.[error_types.ORGANIZATIONAL_METADATA_NOT_PROVIDED]) {
                             <div class="d-sm-flex flex-sm-row gap-1 mb-1">
                                 <div class="pure-invalid">{{ 'validation.minOneAffForCreator' | translate }}</div>
                             </div>
                             }
+                            -->
                             <ng-container formArrayName="creators">
                                 <div cdkDropList class="drag-list" (cdkDropListDropped)="dropCreator($event)">
                                     @for (creature of creators.controls; track creature; let ci = $index) {
@@ -298,7 +301,7 @@
                             <div class="d-sm-flex flex-sm-row gap-1 mb-1 align-items-center">
                                 <div class="col-sm">
                                     <select id="reviewMethod" class="form-select" formControlName="reviewMethod">
-                                        <option [value]="null">-</option>
+                                        <option [ngValue]="null">-</option>
                                         @for (review_method of review_method_types; track review_method) {
                                         <option [value]="review_method">{{'ReviewMethod.' + review_method | translate}}</option>
                                         }

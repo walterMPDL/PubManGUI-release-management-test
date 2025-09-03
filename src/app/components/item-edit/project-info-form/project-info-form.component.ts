@@ -8,11 +8,12 @@ import {
 import { Subscription } from 'rxjs';
 import { ControlType, FormBuilderService } from '../../../services/form-builder.service';
 import { TranslatePipe } from "@ngx-translate/core";
+import { BootstrapValidationDirective } from "../../../directives/bootstrap-validation.directive";
 
 @Component({
   selector: 'pure-project-info-form',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, AddRemoveButtonsComponent, TranslatePipe],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, AddRemoveButtonsComponent, TranslatePipe, BootstrapValidationDirective],
   templateUrl: './project-info-form.component.html',
   styleUrl: './project-info-form.component.scss'
 })

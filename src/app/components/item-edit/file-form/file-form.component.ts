@@ -9,6 +9,7 @@ import { AddRemoveButtonsComponent } from 'src/app/components/shared/add-remove-
 import { LoadingComponent } from 'src/app/components/shared/loading/loading.component';
 import { Errors } from 'src/app/model/errors';
 import { TranslatePipe } from "@ngx-translate/core";
+import { BootstrapValidationDirective } from "../../../directives/bootstrap-validation.directive";
 
 @Component({
   selector: 'pure-file-form',
@@ -20,7 +21,8 @@ import { TranslatePipe } from "@ngx-translate/core";
     ReactiveFormsModule,
     CdkDragHandle,
     CdkDragPlaceholder,
-    TranslatePipe
+    TranslatePipe,
+    BootstrapValidationDirective
   ],
   templateUrl: './file-form.component.html',
   styleUrl: './file-form.component.scss'
@@ -87,7 +89,7 @@ export class FileFormComponent {
   }
 
   addAllowedAudienceId(index: number) {
-    this.allowedAudienceIds.insert(index + 1, this.fb.control({}));
+    this.allowedAudienceIds.insert(index + 1, this.fb.control(null));
   }
 
   removeAllowedAudienceIds(index: number) {
@@ -114,4 +116,6 @@ export class FileFormComponent {
           });
         }
   }
+
+  protected readonly Visibility = Visibility;
 }

@@ -13,7 +13,7 @@
                     <div class="col-sm">
                         <select id="contextFromSelect" class="form-select" formControlName="objectId"
                             data-test="context" (change)="context_change(contextFromSelect.value)" #contextFromSelect>
-                            <option [value]="null" selected disabled>Context</option>
+                            <option [ngValue]="null" selected disabled>Context</option>
                             @for (contextObject of user_contexts; track contextObject) {
                             <option [value]="contextObject.objectId">{{contextObject.name}}</option>
                             }

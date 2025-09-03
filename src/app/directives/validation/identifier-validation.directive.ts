@@ -1,14 +1,16 @@
 import { AbstractControl, ValidationErrors, ValidatorFn } from "@angular/forms";
 import { Errors } from "src/app/model/errors";
 import { IdType } from "src/app/model/inge";
+import { isFormValueEmpty } from "../../utils/utils";
 
 export const IdentifierValidator: ValidatorFn = (control: AbstractControl,): ValidationErrors | null => {
   const error_types = Errors;
   const id_type = IdType;
   let identifier = control;
   if (identifier !== null) {
-    if (identifier.get('id')?.value !== null && identifier.get('id')?.value !== '') {
-      if (identifier.get('type')?.value === null) {
+    if (!isFormValueEmpty(identifier.get('id')?.value)) {
+      if (isFormValueEmpty(identifier.get('type')?.value)) {
+        identifier.get('type')?.setErrors({type: error_types.ID_TYPE_NOT_PROVIDED});
         return { [error_types.ID_TYPE_NOT_PROVIDED]: true };
       } else { // Check format of the IDs
         if ((id_type.BIORXIV.valueOf() === identifier.get('type')?.value ||
@@ -22,6 +24,8 @@ export const IdentifierValidator: ValidatorFn = (control: AbstractControl,): Val
           id_type.RESEARCH_SQUARE.valueOf() === identifier.get('type')?.value ||
           id_type.SOCARXIV.valueOf() === identifier.get('type')?.value) &&
           (identifier.get('id')?.value.startsWith("https://doi.org") || identifier.get('id')?.value.startsWith("http://doi.org"))) {
+
+          identifier.get('id')?.setErrors({type: error_types.INCORRECT_ID_DOI_FORMAT});
           return { [error_types.INCORRECT_ID_DOI_FORMAT]: true };
         } // if
       } // else

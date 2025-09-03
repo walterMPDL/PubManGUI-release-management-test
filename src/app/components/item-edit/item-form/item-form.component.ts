@@ -25,6 +25,7 @@ import { ItemActionsModalComponent } from 'src/app/components/shared/item-action
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ItemBadgesComponent } from "../../shared/item-badges/item-badges.component";
 import { TranslatePipe } from "@ngx-translate/core";
+import { BootstrapValidationDirective } from "../../../directives/bootstrap-validation.directive";
 
 @Component({
   selector: 'pure-item-form',
@@ -38,11 +39,12 @@ import { TranslatePipe } from "@ngx-translate/core";
     MetadataFormComponent,
     AddRemoveButtonsComponent,
     CdkDropList,
-    CdkDrag, ItemBadgesComponent, TranslatePipe],
+    CdkDrag, ItemBadgesComponent, TranslatePipe, BootstrapValidationDirective],
   templateUrl: './item-form.component.html',
   styleUrls: ['./item-form.component.scss'],
 })
 export class ItemFormComponent implements OnInit {
+//bsValidation = inject(BootstrapValidationDirective)
 
   aaService = inject(AaService);
   contextService = inject(ContextsService);

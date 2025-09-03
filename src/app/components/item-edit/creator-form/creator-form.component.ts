@@ -14,11 +14,13 @@ import { Errors } from 'src/app/model/errors';
 import { environment } from 'src/environments/environment';
 import { CdkDragHandle } from "@angular/cdk/drag-drop";
 import { TranslatePipe } from "@ngx-translate/core";
+import { BootstrapValidationDirective } from "../../../directives/bootstrap-validation.directive";
+import { ValidationErrorComponent } from "../validation-error/validation-error.component";
 
 @Component({
   selector: 'pure-creator-form',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, AddRemoveButtonsComponent, PersonAutosuggestComponent, OuAutosuggestComponent, CdkDragHandle, TranslatePipe],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, AddRemoveButtonsComponent, PersonAutosuggestComponent, OuAutosuggestComponent, CdkDragHandle, TranslatePipe, BootstrapValidationDirective, ValidationErrorComponent],
   templateUrl: './creator-form.component.html',
   styleUrls: ['./creator-form.component.scss']
 })

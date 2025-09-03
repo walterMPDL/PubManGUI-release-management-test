@@ -8,11 +8,12 @@ import {
   LanguageAutosuggestComponent
 } from 'src/app/components/shared/language-autosuggest/language-autosuggest.component';
 import { MiscellaneousService } from 'src/app/services/pubman-rest-client/miscellaneous.service';
+import { BootstrapValidationDirective } from "../../../directives/bootstrap-validation.directive";
 
 @Component({
   selector: 'pure-language-form',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, AddRemoveButtonsComponent, LanguageAutosuggestComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, AddRemoveButtonsComponent, LanguageAutosuggestComponent, BootstrapValidationDirective],
   templateUrl: './language-form.component.html',
   styleUrl: './language-form.component.scss'
 })
