@@ -1,49 +1,118 @@
-import { Directive, ElementRef, HostBinding, Optional, Self, ViewContainerRef } from '@angular/core';
+import {
+  ContentChild,
+  Directive,
+  ElementRef,
+  HostBinding,
+  Input,
+  Optional, Renderer2,
+  Self,
+  ViewChild,
+  ViewContainerRef,
+  ViewRef
+} from '@angular/core';
 import { AbstractControl, AbstractControlDirective, ControlContainer, NgControl } from "@angular/forms";
 import { ValidationErrorComponent } from "../components/item-edit/validation-error/validation-error.component";
 
-@Directive({
-  selector: '[formControlName],[ngModel],[formControl],[formArray],[formArrayName]'
-})
 /**
- * BootstrapValidationDirective is an Angular directive that applies Bootstrap validation classes to form controls.
- * It binds the `is-invalid` class to a form control based on its validation state.
+ * Directive to automatically handle bootstrap-styled validation for form controls.
+ * It observes the validation state of a form control or group and dynamically appends validation error messages
+ * as a sibling element, either above or below the form control, based on the specified configuration.
  *
- * The directive checks if the form control is invalid and has been touched. If both conditions are met,
- * the `is-invalid` class is dynamically applied, which aligns with Bootstrap's styling conventions for invalid inputs.
+ * This directive works with Angular forms, including reactive forms and template-driven forms. It supports
+ * validation state detection for individual controls as well as grouped controls.
  *
- * This directive works with Angular's `formControlName`, `ngModel`, and `formControl` directives.
+ * The directive also manages the DOM structure by inserting or appending validation error messages
+ * at the appropriate position relative to the input element, taking into account Bootstrap's input-group structure.
  *
- * Dependencies:
- * - NgControl: Injected to access the form control associated with the directive.
+ * The validation error messages are rendered using the `ValidationErrorComponent`, which is dynamically created
+ * and positioned within the DOM using Angular's rendering utilities.
+ *
+ * The directive can be used with the following selectors:
+ * - formControlName
+ * - ngModel
+ * - formControl
+ * - formArray
+ * - formArrayName
+ * - formGroup
+ * - formGroupName
+ *
+ * The `validationMessagePosition` property determines the placement of the validation error message and can
+ * take the following values:
+ * - 'top': The error message is displayed above the form control.
+ * - 'bottom': The error message is displayed below the form control (default).
+ * - 'ignore': Suppresses the rendering of validation error messages.
+ *
+ * Host element's invalid state is dynamically tracked, and the `is-invalid` class is applied to the form control
+ * when it is in an invalid state.
  */
+@Directive({
+  selector: '[formControlName],[ngModel],[formControl],[formArray],[formArrayName],[formGroup],[formGroupName]'
+})
+
 export class BootstrapValidationDirective {
 
+  @Input() validationMessagePosition : 'top' | 'bottom' | 'ignore' = 'bottom'
 
-  constructor(@Self() @Optional() private cd: NgControl, @Self() @Optional() private cont: ControlContainer, private elementRef: ElementRef, private viewContainerRef: ViewContainerRef) {
-
-
-
-    //const msg = document.createElement("<div class='pure-invalid'>Automatic validation directive</div>");
-    //elementRef.nativeElement.parent.appendChild(msg);
+  constructor(@Self() @Optional() private cd: NgControl, @Self() @Optional() private cont: ControlContainer, private elementRef: ElementRef, private viewContainerRef: ViewContainerRef, private renderer: Renderer2
+  ) {
 
   }
 
   ngOnInit() {
-    console.log(this.cont?.name);
-    const errorCompRef = this.viewContainerRef.createComponent(ValidationErrorComponent);
-    if(this.cd?.control) {
-      errorCompRef.instance.control = this.cd.control;
+    const controlName = this.cont?.name?.toString() || this.cd?.name?.toString() || '';
+
+    if(this.validationMessagePosition !== 'ignore'){
+
+      //Default for bottom:
+      let parentElement = this.elementRef.nativeElement.parentElement;
+      let referenceElement = this.elementRef.nativeElement.nextElementSibling;
+
+      if(this.validationMessagePosition === 'top') {
+        referenceElement = this.elementRef.nativeElement;
+      }
+
+
+      if(this.elementRef.nativeElement.parentElement && this.elementRef.nativeElement.parentElement.classList.contains('input-group')){
+        parentElement =  this.elementRef.nativeElement.parentElement.parentElement;
+        if(this.validationMessagePosition === 'top') {
+          referenceElement =  this.elementRef.nativeElement.parentElement;
+        }
+        else if(this.validationMessagePosition === 'bottom') {
+          referenceElement =  this.elementRef.nativeElement.parentElement.nextElementSibling;
+        }
+
+      }
+
+      if(this.elementRef.nativeElement.nodeValue === 'ng-container'){
+        referenceElement =  this.elementRef.nativeElement.previousElementSibling;
+      }
+
+
+      //Create validation message component
+      const errorCompRef = this.viewContainerRef.createComponent(ValidationErrorComponent);
+      errorCompRef.instance.name = controlName;
+      if(this.cd?.control) {
+        errorCompRef.instance.control = this.cd.control;
+      }
+      else if (this.cont?.control) {
+        errorCompRef.instance.control = this.cont.control;
+      }
+
+      const errorElement = errorCompRef.location.nativeElement;
+
+      //Move component to correct position
+      this.renderer.insertBefore(parentElement, errorElement, referenceElement, true);
+
+
     }
-    else if (this.cont?.control) {
-      errorCompRef.instance.control = this.cont.control;
-    }
+
+
 
   }
 
   @HostBinding('class.is-invalid')
   get isInvalid(): boolean {
-    console.log("Check BootstrapValidation Directive");
+    //console.log("Check BootstrapValidation Directive");
     const control = this.cd?.control || this.cont?.control;
     return control ? control.invalid : false;
   }

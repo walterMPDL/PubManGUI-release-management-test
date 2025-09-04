@@ -198,7 +198,7 @@ export class FormBuilderService {
     const metadata_form = this.fb.group<ControlType<MdsPublicationVO>>({
       title: this.fb.nonNullable.control(metadata?.title ? metadata.title : null, { validators: [Validators.required, Utf8Validator], updateOn: VALIDATION_UPDATE_ON }),
       alternativeTitles: this.fb.array(metadata?.alternativeTitles ? metadata.alternativeTitles.map(at => this.alt_title_FG(at) as AbstractControl) : []),
-      creators: this.fb.array(metadata?.creators ? metadata.creators.map(creator => this.creator_FG(creator) as AbstractControl) : [this.creator_FG(null)]),
+      creators: this.fb.array(metadata?.creators ? metadata.creators.map(creator => this.creator_FG(creator) as AbstractControl) : [this.creator_FG(null)], {validators: [CreatorsOrganizationsValidator], updateOn: VALIDATION_UPDATE_ON}),
       dateAccepted: this.fb.nonNullable.control(metadata?.dateAccepted ? metadata.dateAccepted : null, { validators: [Validators.pattern(DATE_PATTERN)], updateOn: VALIDATION_UPDATE_ON }),
       dateCreated: this.fb.nonNullable.control(metadata?.dateCreated ? metadata.dateCreated : null),
       dateModified: this.fb.nonNullable.control(metadata?.dateModified ? metadata.dateModified : null, { validators: [Validators.pattern(DATE_PATTERN)], updateOn: VALIDATION_UPDATE_ON }),
@@ -222,7 +222,7 @@ export class FormBuilderService {
       abstracts: this.fb.array(metadata?.abstracts ? metadata.abstracts.map(a => this.abstract_FG(a) as AbstractControl) : [this.abstract_FG(null)]),
       projectInfo: this.fb.array(metadata?.projectInfo ? metadata.projectInfo.map(pi => this.project_info_FG(pi) as AbstractControl) : [this.project_info_FG(null)]),
     },
-      { validators: [datesValidator, CreatorsOrganizationsValidator, SourceRequiredValidator], updateOn: VALIDATION_UPDATE_ON }
+      { validators: [datesValidator, SourceRequiredValidator], updateOn: VALIDATION_UPDATE_ON }
     );
     return metadata_form;
   }

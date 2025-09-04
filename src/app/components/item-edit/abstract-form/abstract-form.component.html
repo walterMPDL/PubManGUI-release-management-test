@@ -12,9 +12,11 @@
         <div class="col-sm">
             <label for="abstract_value" class="col-sm-2 col-form-label">{{ 'MetadataFields.abstract' | translate }}</label>
             <textarea class="form-control" id="abstract_value" name="abstract_value" formControlName="value"></textarea>
-            @if (abstract_form.get('value')?.hasError(error_types.NO_UTF8_CHAR_IN_ABSTRACT.toString())) {
+            <!--
+          @if (abstract_form.get('value')?.hasError(error_types.NO_UTF8_CHAR_IN_ABSTRACT.toString())) {
             <div class="pure-invalid">{{ 'validation.invalidCharacters' | translate }}</div>
             }
+            -->
         </div>
         <div class="col-sm-1"><!--NEEDED to keep the layout including one last collumn for add-remove buttons-->
         </div>

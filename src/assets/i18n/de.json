@@ -78,7 +78,12 @@
     "invalidDateFormat": "Falsches Datumsformat (JJJJ-MM-DD)",
     "minOneDate": "Mindestens eine Datumsangabe ist erforderlich",
     "invalidUrlFormat": "Ungültige URL",
-    "minOneAffForCreator": "Mindestens ein Urheber erfordert eine Affiliation"
+    "minOneAffForCreator": "Mindestens ein Urheber erfordert eine Affiliation",
+    "invalidOrcid" : "Die Orcid ist ungültig. Bitte in CoNE ändern",
+    "invalidDoi" : "Ungültiges DOI Format",
+    "invalidUtfChar": "Ungültige (nicht UTF-8) Zeichen im Text",
+    "sourceNotProvided" : "Mindestens eine Quelle ist erforderlich",
+    "ipRangeNotProvided" : "IP-Range ist erforderlich"
 	},
 	"header": {
 		"brand": {

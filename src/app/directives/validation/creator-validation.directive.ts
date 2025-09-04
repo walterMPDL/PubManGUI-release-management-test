@@ -10,6 +10,7 @@ export const creatorValidator: ValidatorFn = (control: AbstractControl,): Valida
   const error_types = Errors;
   const creator = control;
   let currentErrors = {} as ValidationErrors;
+
   if (creator !== null) {
     switch (creator.get('type')?.value) {
       case CreatorType.ORGANIZATION:
@@ -18,37 +19,40 @@ export const creatorValidator: ValidatorFn = (control: AbstractControl,): Valida
           if ((!isFormValueEmpty(organization.get('name')?.value) ||
             !isFormValueEmpty(organization.get('adress')?.value))
             && isFormValueEmpty(creator.get('role')?.value === null)) {
-            currentErrors[error_types.CREATOR_ROLE_NOT_PROVIDED] = true;
-            creator.get('role')?.setErrors({type: error_types.CREATOR_ROLE_NOT_PROVIDED});
+
+            //currentErrors[error_types.CREATOR_ROLE_NOT_PROVIDED] = true;
+            creator.get('role')?.setErrors({[error_types.CREATOR_ROLE_NOT_PROVIDED] : true});
 
           }
           if (isFormValueEmpty(organization.get('name')?.value)) {
-            currentErrors[error_types.CREATOR_ORGANIZATION_NAME_NOT_PROVIDED] = true;
-            organization.get('name')?.setErrors({type: error_types.CREATOR_ORGANIZATION_NAME_NOT_PROVIDED});
+            //currentErrors[error_types.CREATOR_ORGANIZATION_NAME_NOT_PROVIDED] = true;
+            organization.get('name')?.setErrors({[error_types.CREATOR_ORGANIZATION_NAME_NOT_PROVIDED] : true});
           }
         }
         break;
       case CreatorType.PERSON:
         const person = creator.get('person');
+
         if (person !== null) {
+          //currentErrors['TÄÄSÄT'] = true;
           if (isFormValueEmpty(person.get('familyName')?.value)) {
-            currentErrors[error_types.CREATOR_FAMILY_NAME_NOT_PROVIDED] = true;
-            person.get('familyName')?.setErrors({type: error_types.CREATOR_FAMILY_NAME_NOT_PROVIDED});
+            //currentErrors[error_types.CREATOR_FAMILY_NAME_NOT_PROVIDED] = true;
+            person.get('familyName')?.setErrors({[error_types.CREATOR_FAMILY_NAME_NOT_PROVIDED] : true});
 
           }
           if ((!isFormValueEmpty(person.get('familyName')?.value) ||
             !isFormValueEmpty(person.get('givenName')?.value)) && isFormValueEmpty(creator.get('role')?.value)) {
-            currentErrors[error_types.CREATOR_ROLE_NOT_PROVIDED] = true;
-            creator.get('role')?.setErrors({type: error_types.CREATOR_ROLE_NOT_PROVIDED});
+            //currentErrors[error_types.CREATOR_ROLE_NOT_PROVIDED] = true;
+            creator.get('role')?.setErrors({[error_types.CREATOR_ROLE_NOT_PROVIDED] : true});
           }
           const orcid = person.get('orcid');
           if (isFormValueEmpty(orcid)) {
             if (!orcid?.value.startsWith(ORCID_HTTPS)) {
               currentErrors[error_types.CREATOR_ORCID_INVALID] = true;
-              person.get('orcid')?.setErrors({type: error_types.CREATOR_ORCID_INVALID});
+              person.get('orcid')?.setErrors({[error_types.CREATOR_ORCID_INVALID] : true});
             } else if ((!orcid.value.substring(ORCID_HTTPS.length).match(ORCID_REGEX))) {
               currentErrors[error_types.CREATOR_ORCID_INVALID] = true;
-              person.get('orcid')?.setErrors({type: error_types.CREATOR_ORCID_INVALID});
+              person.get('orcid')?.setErrors({[error_types.CREATOR_ORCID_INVALID] : true});
             }
           } // if
           const personOrganizations = person.get('organizations') as FormArray;
@@ -59,13 +63,13 @@ export const creatorValidator: ValidatorFn = (control: AbstractControl,): Valida
                 if ((!isFormValueEmpty(organization.get('name')?.value)
                   || !isFormValueEmpty(organization.get('adress')?.value))
                   && isFormValueEmpty(creator.get('role')?.value === null)) {
-                  currentErrors[error_types.CREATOR_ROLE_NOT_PROVIDED] = true;
-                  creator.get('role')?.setErrors({type: error_types.CREATOR_ROLE_NOT_PROVIDED});
+                  //currentErrors[error_types.CREATOR_ROLE_NOT_PROVIDED] = true;
+                  creator.get('role')?.setErrors({[error_types.CREATOR_ROLE_NOT_PROVIDED] : true});
                 } // if
                 else if (isFormValueEmpty(organization.get('name')?.value) &&
                   !isFormValueEmpty(organization.get('address')?.value)) {
-                  currentErrors[error_types.CREATOR_ORGANIZATION_NAME_NOT_PROVIDED] = true;
-                  organization.get('name')?.setErrors({type: error_types.CREATOR_ORGANIZATION_NAME_NOT_PROVIDED});
+                  //currentErrors[error_types.CREATOR_ORGANIZATION_NAME_NOT_PROVIDED] = true;
+                  organization.get('name')?.setErrors({[error_types.CREATOR_ORGANIZATION_NAME_NOT_PROVIDED] : true});
                 }
               }
               j++;

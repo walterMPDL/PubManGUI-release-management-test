@@ -10,8 +10,9 @@ export const fileUrlValidator: ValidatorFn = (control: AbstractControl,): Valida
   if (Storage.EXTERNAL_URL === file.storage) {
     if (!isFormValueEmpty(file.content?.value)
       && !URL_PATTERN.test(file.content?.value)) {
-      control.get("content")?.setErrors({type: error_types.LOCATOR_IS_NO_URI});
-        return {[error_types.LOCATOR_IS_NO_URI]: true};
+      control.get("content")?.setErrors({[error_types.LOCATOR_IS_NO_URI] : true});
+        //return {[error_types.LOCATOR_IS_NO_URI]: true};
+      return {};
     }
   }
   return null;

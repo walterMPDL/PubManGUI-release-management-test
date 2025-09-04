@@ -11,8 +11,9 @@ export const EventValidator: ValidatorFn = (control: AbstractControl,): Validati
         (!isFormValueEmpty(event.get('invitationStatus')?.value))  ||
         (!isFormValueEmpty(event.get('place')?.value)) ||
         (!isFormValueEmpty(event.get('startDate')?.value))) {
-      event.get('title')?.setErrors({type: error_types.EVENT_TITLE_NOT_PROVIDED});
-      return { [error_types.EVENT_TITLE_NOT_PROVIDED]: true };
+      event.get('title')?.setErrors({[error_types.EVENT_TITLE_NOT_PROVIDED] : true});
+      //return { [error_types.EVENT_TITLE_NOT_PROVIDED]: true };
+      return {};
     }
   }
   return null;

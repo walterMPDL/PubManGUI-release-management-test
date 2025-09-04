@@ -8,19 +8,23 @@
                 <option [ngValue]="t">{{'SourceIdType.' + t | translate}}</option>
                 }
             </select>
+          <!--
             @if(identifier_form.errors?.[error_types.ID_TYPE_NOT_PROVIDED]) {
             <div class="d-sm-flex flex-sm-row gap-1 mb-1">
                 <div class="pure-invalid">{{ 'validation.required' | translate}}</div>
             </div>
             }
+            -->
         </div>
         <div class="col-sm">
             <input type="text" class="form-control" id="identifier_value" formControlName="id">
-            @if(identifier_form.errors?.[error_types.INCORRECT_ID_DOI_FORMAT]) {
+            <!--
+          @if(identifier_form.errors?.[error_types.INCORRECT_ID_DOI_FORMAT]) {
             <div class="d-sm-flex flex-sm-row gap-1 mb-1">
                 <div class="pure-invalid">Incorrect ID format. Enter DOIs without leading http(s)://doi.org</div>
             </div>
             }
+            -->
         </div>
         @if (multi) {
         <div class="col-sm-1">

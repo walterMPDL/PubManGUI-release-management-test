@@ -10,8 +10,9 @@ export const IdentifierValidator: ValidatorFn = (control: AbstractControl,): Val
   if (identifier !== null) {
     if (!isFormValueEmpty(identifier.get('id')?.value)) {
       if (isFormValueEmpty(identifier.get('type')?.value)) {
-        identifier.get('type')?.setErrors({type: error_types.ID_TYPE_NOT_PROVIDED});
-        return { [error_types.ID_TYPE_NOT_PROVIDED]: true };
+        identifier.get('type')?.setErrors({[error_types.ID_TYPE_NOT_PROVIDED] : true});
+        //return { [error_types.ID_TYPE_NOT_PROVIDED]: true };
+        return {};
       } else { // Check format of the IDs
         if ((id_type.BIORXIV.valueOf() === identifier.get('type')?.value ||
           id_type.CHEMRXIV.valueOf() === identifier.get('type')?.value ||
@@ -25,8 +26,9 @@ export const IdentifierValidator: ValidatorFn = (control: AbstractControl,): Val
           id_type.SOCARXIV.valueOf() === identifier.get('type')?.value) &&
           (identifier.get('id')?.value.startsWith("https://doi.org") || identifier.get('id')?.value.startsWith("http://doi.org"))) {
 
-          identifier.get('id')?.setErrors({type: error_types.INCORRECT_ID_DOI_FORMAT});
-          return { [error_types.INCORRECT_ID_DOI_FORMAT]: true };
+          identifier.get('id')?.setErrors({[error_types.INCORRECT_ID_DOI_FORMAT] : true});
+          //return { [error_types.INCORRECT_ID_DOI_FORMAT]: true };
+          return {};
         } // if
       } // else
     } // if

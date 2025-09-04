@@ -19,7 +19,7 @@ export const SourceRequiredValidator: ValidatorFn = (control: AbstractControl,):
     genre === genre_types.CONTRIBUTION_TO_FESTSCHRIFT ||
     genre === genre_types.CONTRIBUTION_TO_HANDBOOK ) {
       if ( metadata.get('sources')?.value.length < 1)  {
-        control.setErrors({type: error_types.SOURCE_NOT_PROVIDED})
+        //control.setErrors({[error_types.SOURCE_NOT_PROVIDED] : true})
         return { [error_types.SOURCE_NOT_PROVIDED]: true };
       }
   }

@@ -5,10 +5,10 @@ import { isFormValueEmpty } from "../../utils/utils";
 
 export const CreatorsOrganizationsValidator: ValidatorFn = (control: AbstractControl,): ValidationErrors | null => {
   const error_types = Errors;
-  const creators = control.get('creators') as FormArray;
+  const creators = control as FormArray;
   let ok:boolean = false;
   let errorOrg:boolean = false;
-  control.get('genre')?.markAsTouched();
+  //control.get('genre')?.markAsTouched();
   for (let creator of creators.controls) {
     switch (creator.get('type')?.value) {
       case CreatorType.ORGANIZATION:
@@ -33,7 +33,7 @@ export const CreatorsOrganizationsValidator: ValidatorFn = (control: AbstractCon
     }
   }
   if (!ok) {
-    control.get('creators')?.setErrors({type: error_types.ORGANIZATIONAL_METADATA_NOT_PROVIDED});
+    //control?.setErrors({[error_types.ORGANIZATIONAL_METADATA_NOT_PROVIDED] : true});
     return { [error_types.ORGANIZATIONAL_METADATA_NOT_PROVIDED]: true };
   }
   return null;

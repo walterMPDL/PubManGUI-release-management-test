@@ -10,8 +10,9 @@ export const SubjectValidator: ValidatorFn = (control: AbstractControl,): Valida
   if (subject !== null) {
     if (!isFormValueEmpty(subject.get('value')?.value)) {
       if (isFormValueEmpty(subject.get('type')?.value)) {
-        subject.get('type')?.setErrors({type: error_types.SUBJECT_TYPE_NOT_PROVIDED});
-        return { [error_types.SUBJECT_TYPE_NOT_PROVIDED]: true };
+        subject.get('type')?.setErrors({[error_types.SUBJECT_TYPE_NOT_PROVIDED] : true});
+        return {};
+        //return { [error_types.SUBJECT_TYPE_NOT_PROVIDED]: true };
       }
     } // if
   } // if

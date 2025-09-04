@@ -10,9 +10,11 @@
                 <option [value]="g">{{'MdsPublicationGenre.' + g | translate}}</option>
                 }
             </select>
+          <!--
             @if(source_form.hasError(error_types.SOURCE_GENRE_NOT_PROVIDED.toString())) {
             <div class="pure-invalid">{{ 'validation.required' | translate}}</div>
             }
+            -->
         </div>
         <div class="col-sm-1">
             <pure-add-remove-buttons [index]="index" (notice)="add_remove_source($event)"></pure-add-remove-buttons>
@@ -23,9 +25,11 @@
         <div class="col-sm">
             <label for="source_title" class="col-sm-2 col-form-label">{{ 'MetadataFields.title' | translate }}</label>
             <input type="text" class="form-control" id="source_title" name="title" formControlName="title">
-            @if (source_form.get('title')?.hasError('required')) {
+            <!--
+          @if (source_form.get('title')?.hasError('required')) {
             <div class="pure-invalid">{{ 'validation.required' | translate}}</div>
             }
+            -->
         </div>
         <div class="col-sm-1"><!--NEEDED to keep the layout including one last collumn for add-remove buttons-->
         </div>

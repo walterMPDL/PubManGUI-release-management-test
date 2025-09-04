@@ -5,12 +5,12 @@
 
       <div class="col-sm">
             <div class="d-sm-flex flex-sm-row gap-1 mb-1 align-items-start ">
+
               <!--
                 @if(creator_form.errors?.[error_types.CREATOR_ORCID_INVALID]) {
                 <div class="pure-invalid">Orcid invalid. Please change in CoNE</div>
                 }
                 -->
-              <pure-validation-error [control]="creator_form.get('orcid')"/>
             </div>
             <div class="d-sm-flex flex-sm-row gap-1 mb-1 align-items-start ">
               <div class="col-sm-auto" cdkDragHandle>
@@ -36,7 +36,6 @@
                         <option [value]="r">{{'CreatorRoles.' + r | translate}}</option>
                         }
                     </select>
-                  <pure-validation-error [control]="creator_form.get('role')"/>
                   <!--
                     @if(creator_form.errors?.[error_types.CREATOR_ROLE_NOT_PROVIDED]) {
                     <div class="pure-invalid">{{ 'validation.required' | translate}}</div>
@@ -51,9 +50,11 @@
                                 ></pure-ou-autosuggest>
 
 
+                  <!--
                     @if(creator_form.errors?.[error_types.CREATOR_ORGANIZATION_NAME_NOT_PROVIDED]) {
                       <div class="pure-invalid">{{ 'validation.required' | translate}}</div>
                     }
+                    -->
 
                 </div>
                 }
@@ -71,12 +72,13 @@
                             [formForPersonsIdValue]="$any(person.controls.identifier.controls.id)"
                             [formForPersonsIdType]="$any(person.controls.identifier.controls.type)"
                             [formForPersonsOrcid]="$any(person.controls.orcid)"
-                            [validationError]="creator_form.errors?.[error_types.CREATOR_FAMILY_NAME_NOT_PROVIDED] ? true : false"
                             [showConeAndOrcid]="true"
                             data-test="familyname-autosuggest" />
+                      <!--
                       @if(creator_form.errors?.[error_types.CREATOR_FAMILY_NAME_NOT_PROVIDED] ? true : false) {
                         <div class="pure-invalid">{{ 'validation.required' | translate}}</div>
                       }
+                      -->
                     </div>
                     <div class="col-sm-3">
                         <label for="givenName" class="col-form-label pe-2">{{ 'MetadataFields.givenName' | translate }}</label>
@@ -112,11 +114,13 @@
                           <pure-ou-autosuggest id="personOu{{i+1}}" [formForOuName]="$any(pou.controls.name)"
                                                [formForOuId]="$any(pou.controls.identifier)" [validationEnabled]="true"
                                                [formForOuAddress]="$any(pou.controls.address)"
-                                               [validationError]="creator_form.errors?.[error_types.CREATOR_ORGANIZATION_NAME_NOT_PROVIDED] ? true : false"></pure-ou-autosuggest>
+                                               ></pure-ou-autosuggest>
 
+                        <!--
                           @if(creator_form.errors?.[error_types.CREATOR_ORGANIZATION_NAME_NOT_PROVIDED]) {
                             <div class="pure-invalid">{{ 'validation.required' | translate}}</div>
                           }
+                          -->
                         </div>
 
 
@@ -144,8 +148,7 @@
 
                     </div>
                     } @empty {
-                    <div class="col-sm offset-sm-1"
-                        [ngClass]="creator_form.errors?.[error_types.CREATOR_ORGANIZATION_NAME_NOT_PROVIDED] ? 'is-invalid' : ''">
+                    <div class="col-sm offset-sm-1">
 
                         <pure-add-remove-buttons [index]="0" [del_val]="'hidden'" [add_val]="'add organization'"
                             (notice)="add_remove_person_ou($event)"

@@ -1,5 +1,5 @@
 @if (genreSpecificResource.hasValue()) {
-<div [formGroup]="meta_form">
+<div [formGroup]="meta_form" validationMessagePosition="ignore">
     <div class="accordion" id="accordionPanelsMetadata">
         <!--GROUP Standard-->
         <div class="accordion-item border-0">
@@ -33,9 +33,11 @@
                                             }}
                                         </optgroup>
                                     </select>
+                                  <!--
                                     @if (meta_form.get('genre')?.hasError('required')) {
                                     <div class="pure-invalid">{{ 'validation.required' | translate}}</div>
                                     }
+                                    -->
                                 </div>
                                 <div class="col-sm-1">
                                     <!--NEEDED to keep the layout including one last collumn for add-remove buttons-->
@@ -65,14 +67,7 @@
                                 <div class="col-sm">
                                     <textarea type="text" class="form-control" id="title" name="title"
                                         formControlName="title" data-test="title"></textarea>
-                                  <pure-validation-error [control]="meta_form.get('title')"></pure-validation-error>
-                                    @if (meta_form.get('title')?.hasError('required')) {
-                                    <div class="pure-invalid">{{ 'validation.required' | translate}}</div>
-                                    } @else if
-                                    (meta_form.get('title')?.hasError(error_types.NO_UTF8_CHAR_IN_ABSTRACT.toString()))
-                                    {
-                                    <div class="pure-invalid">{{ 'validation.invalidCharacters' | translate }}</div>
-                                    }
+
                                 </div>
                                 <div class="col-sm-1">
                                     <!--NEEDED to keep the layout including one last collumn for add-remove buttons-->
@@ -131,7 +126,6 @@
                                 </button>
                             </div>
                             <hr />
-                          <pure-validation-error [control]="creators"/>
                           <!--
                             @if(meta_form.errors?.[error_types.ORGANIZATIONAL_METADATA_NOT_PROVIDED]) {
                             <div class="d-sm-flex flex-sm-row gap-1 mb-1">
@@ -139,7 +133,7 @@
                             </div>
                             }
                             -->
-                            <ng-container formArrayName="creators">
+                            <ng-container formArrayName="creators" validationMessagePosition="top">
                                 <div cdkDropList class="drag-list" (cdkDropListDropped)="dropCreator($event)">
                                     @for (creature of creators.controls; track creature; let ci = $index) {
                                     <ng-container [formGroupName]="ci">
@@ -179,65 +173,81 @@
                     <div class="d-sm-flex flex-sm-row gap-1 mb-1">
                         <label class="col-sm-2 col-form-label">{{ 'MetadataFields.date' | translate }}</label>
                         <div class="col-sm">
+
                             @if(meta_form.hasError(error_types.DATE_NOT_PROVIDED.toString())) {
+                              <pure-validation-error [validationError]="{'13' : true}"/>
+                              <!--
                             <div class="d-sm-flex flex-sm-row gap-1 mb-1 align-items-end">
                                 <div class="pure-invalid" role="alert">{{ 'validation.minOneDate' | translate }}</div>
                             </div>
+                            -->
                             }
                             <div class="d-sm-flex flex-sm-row gap-1 mb-1 align-items-end">
                                 <div class="col-sm-2"
                                     [ngClass]="{'d-none' : !genreSpecificResource.value().properties.details_item_details_dates_item_date_issued.display}">
                                     <label class="col-form-label">{{ 'MetadataFields.datePublishedInPrint' | translate }}</label>
-                                    @if(meta_form.get('datePublishedInPrint')?.hasError('pattern')) {
+                                  <!--
+                                  @if(meta_form.get('datePublishedInPrint')?.hasError('pattern')) {
                                     <div class="pure-invalid">{{ 'validation.invalidDateFormat' | translate }}</div>
                                     }
+                                    -->
                                     <input type="text" class="form-control" formControlName="datePublishedInPrint"
-                                        [placeholder]="'common.dateFormat' | translate">
+                                        [placeholder]="'common.dateFormat' | translate" validationMessagePosition="top">
                                 </div>
                                 <div class="col-sm-2"
                                     [ngClass]="{'d-none' : !genreSpecificResource.value().properties.details_item_details_dates_item_published_online.display}">
                                     <label class="col-form-label">{{ 'MetadataFields.datePublishedOnline' | translate }}</label>
-                                    @if(meta_form.get('datePublishedOnline')?.hasError('pattern')) {
+                                  <!--
+                                  @if(meta_form.get('datePublishedOnline')?.hasError('pattern')) {
                                     <div class="pure-invalid">{{ 'validation.invalidDateFormat' | translate }}</div>
                                     }
+                                    -->
                                     <input type="text" class="form-control" formControlName="datePublishedOnline"
-                                           [placeholder]="'common.dateFormat' | translate">
+                                           [placeholder]="'common.dateFormat' | translate" validationMessagePosition="top">
                                 </div>
                                 <div class="col-sm-2"
                                     [ngClass]="{'d-none' : !genreSpecificResource.value().properties.details_item_details_dates_item_date_accepted.display}">
                                     <label class="col-form-label">{{ 'MetadataFields.dateAccepted' | translate }}</label>
-                                    @if(meta_form.get('dateAccepted')?.hasError('pattern')) {
+                                  <!--
+                                  @if(meta_form.get('dateAccepted')?.hasError('pattern')) {
                                     <div class="pure-invalid">{{ 'validation.invalidDateFormat' | translate }}</div>
                                     }
+                                    -->
                                     <input type="text" class="form-control" formControlName="dateAccepted"
-                                           [placeholder]="'common.dateFormat' | translate">
+                                           [placeholder]="'common.dateFormat' | translate" validationMessagePosition="top">
                                 </div>
                                 <div class="col-sm-2"
                                     [ngClass]="{'d-none' : !genreSpecificResource.value().properties.details_item_details_dates_item_date_submitted.display}">
                                     <label class="col-form-label">{{ 'MetadataFields.dateSubmitted' | translate }}</label>
-                                    @if(meta_form.get('dateSubmitted')?.hasError('pattern')) {
+                                  <!--
+                                  @if(meta_form.get('dateSubmitted')?.hasError('pattern')) {
                                     <div class="pure-invalid">{{ 'validation.invalidDateFormat' | translate }}</div>
                                     }
+                                    -->
                                     <input type="text" class="form-control" formControlName="dateSubmitted"
-                                           [placeholder]="'common.dateFormat' | translate">
+                                           [placeholder]="'common.dateFormat' | translate" validationMessagePosition="top">
                                 </div>
                             </div>
                             <div class="d-sm-flex flex-sm-row gap-1 mb-1 align-items-start">
                                 <div class="col-sm-2">
                                     <label class="col-form-label">{{ 'MetadataFields.dateCreated' | translate }}</label>
-                                    @if(meta_form.get('dateCreated')?.hasError('pattern')) {
+                                  <!--
+                                  @if(meta_form.get('dateCreated')?.hasError('pattern')) {
                                     <div class="pure-invalid">{{ 'validation.invalidDateFormat' | translate }}</div>
                                     }
+                                    -->
                                     <input type="text" class="form-control" formControlName="dateCreated"
-                                           [placeholder]="'common.dateFormat' | translate" data-test="date-created">
+                                           [placeholder]="'common.dateFormat' | translate" data-test="date-created" validationMessagePosition="top">
                                 </div>
                                 <div class="col-sm-2">
                                     <label class="col-form-label">{{ 'MetadataFields.dateModified' | translate }}</label>
-                                    @if(meta_form.get('dateModified')?.hasError('pattern')) {
+                                  <!--
+                                  @if(meta_form.get('dateModified')?.hasError('pattern')) {
                                     <div class="pure-invalid">{{ 'validation.invalidDateFormat' | translate }}</div>
                                     }
+                                    -->
                                     <input type="text" class="form-control" formControlName="dateModified"
-                                           [placeholder]="'common.dateFormat' | translate">
+                                           [placeholder]="'common.dateFormat' | translate" validationMessagePosition="top">
                                 </div>
                             </div>
                             <div class="col-sm-1">

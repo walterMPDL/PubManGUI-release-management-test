@@ -403,4 +403,5 @@ export class MetadataFormComponent implements OnInit {
     array.insert(toIndex, object);
   }
 
+  protected readonly Object = Object;
 }

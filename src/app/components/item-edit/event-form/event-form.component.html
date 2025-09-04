@@ -4,25 +4,31 @@
             <div class="col-sm">
                 <label class="col-form-label">{{ 'MetadataFields.eventTitle' | translate }}</label>
                 <input type="text" class="form-control" formControlName="title">
+              <!--
                 @if (event_form.errors?.[error_types.EVENT_TITLE_NOT_PROVIDED]) {
                 <div class="pure-invalid">Event title is required if any other field is not null</div>
                 }
+                -->
             </div>
         </div>
         <div class="d-sm-flex flex-sm-row gap-1 mb-1 align-items-start">
             <div class="col-sm-2">
                 <label class="col-form-label">{{ 'MetadataFields.eventStartDate' | translate }}</label>
                 <input type="text" class="form-control" formControlName="startDate">
+              <!--
                 @if (event_form.get('startDate')?.errors) {
                 <div class="pure-invalid">{{ 'validation.invalidDateFormat' | translate }}</div>
                 }
+                -->
             </div>
             <div class="col-sm-2">
                 <label class="col-form-label">{{ 'MetadataFields.eventEndDate' | translate }}</label>
                 <input type="text" class="form-control" formControlName="endDate">
-                @if (event_form.get('endDate')?.errors) {
+              <!--
+              @if (event_form.get('endDate')?.errors) {
                 <div class="pure-invalid">{{ 'validation.invalidDateFormat' | translate }}</div>
                 }
+                -->
             </div>
             <div class="col-sm-2">
                 <label class="col-form-label">{{ 'MetadataFields.eventPlace' | translate }}</label>

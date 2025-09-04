@@ -9,7 +9,7 @@ export const Utf8Validator: ValidatorFn = (control: AbstractControl,): Validatio
       const chr = text.charCodeAt(i);
       if (chr < 0x20 && chr !== 0x9 && chr !== 0xA && chr !== 0xD
         || chr > 0xD7FF && (chr < 0xE000 || chr === 0xFFFE || chr === 0xFFFF || chr > 0x10FFFF)) {
-        control.setErrors({type: error_types.NO_UTF8_CHAR_IN_ABSTRACT});
+        //control.setErrors({[error_types.NO_UTF8_CHAR_IN_ABSTRACT] : true});
         return { [error_types.NO_UTF8_CHAR_IN_ABSTRACT] : true };
       }
     }

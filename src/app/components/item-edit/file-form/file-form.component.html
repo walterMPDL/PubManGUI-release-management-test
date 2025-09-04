@@ -15,9 +15,11 @@
         <label for="file" class="col-sm col-form-label fw-semibold">{{index + 1}}. {{ 'common.link' | translate }}
             {{file_form.get('metadata')?.get('title')?.value}}</label>
         }
+      <!-- MAYBE
         @if(file_form.errors?.[error_types.COMPONENT_CONTENT_NOT_PROVIDED]) {
         <div class="pure-invalid">Content is required</div>
         }
+        -->
     </div>
     <div class="containerHideOnSort"><!-- #collapse="ngbCollapse" [(ngbCollapse)]="isCollapsed"> -->
         <ng-container formGroupName="metadata">
@@ -32,9 +34,11 @@
                         <option [value]="contentCategoryType">{{'ContentCategories.' + contentCategoryType | translate}}</option>
                         }
                     </select>
+                  <!--
                     @if(file_form.errors?.[error_types.COMPONENT_CONTENT_CATEGORY_NOT_PROVIDED]) {
                     <div class="pure-invalid">{{ 'validation.required' | translate}}</div>
                     }
+                    -->
                 </div>
                 <div class="col-sm-1"><!--NEEDED to keep the layout including one last collumn for add-remove buttons-->
                 </div>
@@ -43,12 +47,14 @@
                 <div class="col-sm">
                     <label for="file_title" class="col-sm-2 col-form-label">{{ 'MetadataFields.title' | translate }}</label>
                     <input type="text" class="form-control" id="file_title" name="title" formControlName="title">
-                    @if (file_form.errors?.[error_types.COMPONENT_FILE_NAME_NOT_PROVIDED]) {
+                    <!--
+                  @if (file_form.errors?.[error_types.COMPONENT_FILE_NAME_NOT_PROVIDED]) {
                     <div class="pure-invalid">{{ 'validation.required' | translate}}</div>
                     }
                     @if (metadata.controls.title.errors?.['pattern']) {
                     <div class="pure-invalid">File Title pattern does not allow '/'</div>
                     }
+                    -->
                 </div>
                 <div class="col-sm-1"><!--NEEDED to keep the layout including one last collumn for add-remove buttons-->
                 </div>
@@ -60,12 +66,14 @@
             <div class="col-sm">
                 <label for="file_content" class="col-sm-2 col-form-label">{{ 'FileMetadataFields.url' | translate }}</label>
                 <input type="text" class="form-control" id="file_content" name="content" formControlName="content">
-                @if (file_form.errors?.[error_types.COMPONENT_CONTENT_NOT_PROVIDED]) {
+              <!--
+              @if (file_form.errors?.[error_types.COMPONENT_CONTENT_NOT_PROVIDED]) {
                 <div class="pure-invalid">{{ 'validation.required' | translate}}</div>
                 }
                 @if (file_form.errors?.[error_types.LOCATOR_IS_NO_URI]) {
                 <div class="pure-invalid">{{ 'validation.invalidUrlFormat' | translate }}</div>
                 }
+                -->
             </div>
             <div class="col-sm-1"><!--NEEDED to keep the layout including one last collumn for add-remove buttons-->
             </div>
@@ -82,9 +90,11 @@
                     <option [value]="visibility">{{'Visibility.' + visibility | translate}}</option>
                     }
                 </select>
+              <!--
                 @if (file_form.errors?.[error_types.COMPONENT_VISIBILITY_NOT_PROVIDED]) {
                 <div class="pure-invalid">{{ 'validation.required' | translate}}</div>
                 }
+                -->
             </div>
             <div class="col-sm-1"><!--NEEDED to keep the layout including one last collumn for add-remove buttons-->
             </div>
@@ -93,11 +103,13 @@
         @if (file_form.get('visibility')?.value == 'AUDIENCE') {
 
         <ng-container formArrayName="allowedAudienceIds">
-            @if (file_form.errors?.[error_types.COMPONENT_IP_RANGE_NOT_PROVIDED]) {
+          <!--MAYBE
+          @if (file_form.errors?.[error_types.COMPONENT_IP_RANGE_NOT_PROVIDED]) {
             <div class="d-sm-flex flex-sm-row gap-1 mb-1">
                 <div class="pure-invalid">IP-Range is required</div>
             </div>
             }
+            -->
             @for (audienceId of allowedAudienceIds.controls; track audienceId; let audienceIdIndex = $index) {
             <div class="d-sm-flex flex-sm-row gap-1 mb-1">
                 <div class="col-sm-2">
@@ -206,9 +218,11 @@
                     <label for="file_copyrightDate" class="col-sm col-form-label">{{ 'FileMetadataFields.copyrightDate' | translate }}</label>
                     <input type="text" class="form-control" id="file_copyrightDate" name="copyrightDate"
                         formControlName="copyrightDate" placeholder="YYYY-MM-DD">
-                    @if (metadata.controls.copyrightDate.errors?.['pattern']) {
+                    <!--
+                  @if (metadata.controls.copyrightDate.errors?.['pattern']) {
                     <div class="pure-invalid">{{ 'validation.invalidDateFormat' | translate }}</div>
                     }
+                    -->
                 </div>
                 <div class="col-sm-1"><!--NEEDED to keep the layout including one last collumn for add-remove buttons-->
                 </div>

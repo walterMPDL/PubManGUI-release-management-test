@@ -28,7 +28,7 @@ export const datesValidator: ValidatorFn = (control: AbstractControl,): Validati
       && (event && event.get('startDate'))) {
       return null;
     }
-    control.setErrors({type: error_types.DATE_NOT_PROVIDED})
+    //control.setErrors({[error_types.DATE_NOT_PROVIDED] : true})
     return { [error_types.DATE_NOT_PROVIDED]: true };
   }
 
