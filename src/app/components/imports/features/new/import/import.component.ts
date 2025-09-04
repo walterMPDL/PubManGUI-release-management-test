@@ -36,7 +36,7 @@ export default class ImportComponent implements OnInit {
   elRef: ElementRef = inject(ElementRef);
 
   formatObject: any = null;
-  lastFormat: string = '';
+  //lastFormat: string = '';
   data: any = '';
 
   constructor(
@@ -71,10 +71,10 @@ export default class ImportComponent implements OnInit {
     this.importsSvc.getFormatConfiguration(format).subscribe(response => {
       this.formatObject = response;
       this.changeDetector.detectChanges();
-      if (format !== this.lastFormat) {
+      //if (format !== this.lastFormat) {
         this.setDefaultOption();
-        this.lastFormat = format;
-      };
+        //this.lastFormat = format;
+      //};
     });
   }
 
@@ -112,6 +112,7 @@ export default class ImportComponent implements OnInit {
         return;
       }
       const defaultValue = defaultArray.find((entry: string) => entry.startsWith(this.getSelectName())).split("=")[1];
+      console.log("Default value for " + this.getSelectName() + ": " + defaultValue);
       this.importForm.get('formatConfig')?.setValue(defaultValue);
     }
   }
@@ -124,6 +125,7 @@ export default class ImportComponent implements OnInit {
     $event.preventDefault();
     if ($event.dataTransfer?.files && $event.dataTransfer.files[0]) {
       this.importForm.controls['fileName'].setValue($event.dataTransfer.files[0].name);
+      this.importForm.controls['fileName'].markAsTouched();
       this.getData($event.dataTransfer.files[0]);
     } 
  
@@ -135,6 +137,7 @@ export default class ImportComponent implements OnInit {
     $event.preventDefault();
     if ($event.target.files && $event.target.files[0]) {
       this.importForm.controls['fileName'].setValue($event.target.files[0].name);
+      this.importForm.controls['fileName'].markAsTouched();
       this.getData($event.target.files[0]);
     } 
 
@@ -172,9 +175,9 @@ export default class ImportComponent implements OnInit {
 
   onSubmit(): void {
     if (this.importForm.valid) {
-      this.importsSvc.postImport(this.getImportParams, this.data).subscribe(() => {
-        this.router.navigate(['/imports/myimports']);
-      });
+      //this.importsSvc.postImport(this.getImportParams, this.data).subscribe(() => {
+        //this.router.navigate(['/imports/myimports']);
+      //});
     }
   }
 
@@ -182,7 +185,7 @@ export default class ImportComponent implements OnInit {
     if (this.importForm.invalid) {
       Object.keys(this.importForm.controls).forEach(key => {
         const field = this.importForm.get(key);
-        if (field!.hasValidator(Validators.required) && (field!.invalid || field!.untouched)) {
+        if (field!.hasValidator(Validators.required) && field!.untouched) {
           field!.markAsPending();
         }
       });
