@@ -186,11 +186,16 @@ export class ItemFormComponent implements OnInit {
         this.fileStagingService.createStageFile(file)
           .subscribe(stagedFileId => {
             file.content = stagedFileId.toString();
+
+            const internalFile = this.fbs.file_FG(file);
+            //Set title as filename (can be changed)
+            internalFile.get("metadata")?.get("title")?.setValue(file.name);
             if (!this.internalFiles) {
-              this.internalFiles = this.fb.array([this.fbs.file_FG(file)]);
+              this.internalFiles = this.fb.array([internalFile]);
             } else {
-              this.internalFiles.push(this.fbs.file_FG(file));
+              this.internalFiles.push(internalFile);
             }
+
 
           })
 
