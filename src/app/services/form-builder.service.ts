@@ -59,6 +59,7 @@ const ORCID_PATTERN = /^http[s]?:\/\/orcid.org\/(\d{4})-(\d{4})-(\d{4})-(\d{3}[0
 const DATE_PATTERN = /^[0-9]{4}-?(?:[01][0-9])?-?(?:[0-3][0-9])?$/;
 const FILE_TITLE_AND_NAME_PATTERN = /^[^/]+$/;
 
+const VALIDATION_UPDATE_ON = 'change';
 @Injectable({
   providedIn: 'root'
 })
@@ -85,7 +86,7 @@ export class FormBuilderService {
 
   context_FG(ctx: ContextDbRO | null) {
     const ctx_form = this.fb.group<ControlType<ContextDbRO>>({
-      objectId: this.fb.nonNullable.control(ctx?.objectId ? ctx.objectId : null, [Validators.required]),
+      objectId: this.fb.nonNullable.control(ctx?.objectId ? ctx.objectId : null, {validators: [Validators.required], updateOn: VALIDATION_UPDATE_ON}),
       name: this.fb.nonNullable.control(ctx?.name ? ctx.name : null)
     });
     return ctx_form;
@@ -94,7 +95,7 @@ export class FormBuilderService {
   file_FG(file: FileDbVO | null) {
     const file_form = this.fb.group<ControlType<FileDbVO>>({
       objectId: this.fb.nonNullable.control(file?.objectId ? file.objectId : null),
-      name: this.fb.nonNullable.control(file?.name ? file.name : null, { validators: [Validators.pattern(FILE_TITLE_AND_NAME_PATTERN)], updateOn: 'blur' }),
+      name: this.fb.nonNullable.control(file?.name ? file.name : null, { validators: [Validators.pattern(FILE_TITLE_AND_NAME_PATTERN)], updateOn: VALIDATION_UPDATE_ON }),
       visibility: this.fb.nonNullable.control(file?.visibility ? file.visibility : Visibility.PUBLIC),
       pid: this.fb.nonNullable.control(file?.pid ? file.pid : null),
       content: this.fb.nonNullable.control(file?.content ? file.content : null),
@@ -107,20 +108,20 @@ export class FormBuilderService {
       allowedAudienceIds: this.fb.array(file?.allowedAudienceIds ? file.allowedAudienceIds.map(audiencId => this.fb.nonNullable.control(audiencId) as AbstractControl) : []),
       sortkz: this.fb.nonNullable.control(file?.sortkz ? file.sortkz : null),
     },
-      { validators: [fileDataValidator, fileUrlValidator], updateOn: 'blur' });
+      { validators: [fileDataValidator, fileUrlValidator], updateOn: VALIDATION_UPDATE_ON });
     return file_form;
   }
 
   mds_file_FG(fileMetadata: MdsFileVO | null) {
     const mdsFile_form = this.fb.group<ControlType<MdsFileVO>>({
-      title: this.fb.nonNullable.control(fileMetadata?.title ? fileMetadata.title : null, [Validators.required, Validators.pattern(FILE_TITLE_AND_NAME_PATTERN)]),
+      title: this.fb.nonNullable.control(fileMetadata?.title ? fileMetadata.title : null, {validators: [Validators.required, Validators.pattern(FILE_TITLE_AND_NAME_PATTERN)], updateOn: VALIDATION_UPDATE_ON }),
       contentCategory: this.fb.nonNullable.control(fileMetadata?.contentCategory ? fileMetadata.contentCategory : null),
       description: this.fb.nonNullable.control(fileMetadata?.description ? fileMetadata.description : null),
       identifiers: this.fb.array(fileMetadata?.identifiers ? fileMetadata.identifiers.map(id => this.identifier_FG(id) as AbstractControl) : []),
       formats: this.fb.array(fileMetadata?.formats ? fileMetadata.formats.map(format => this.format_FG(format) as AbstractControl) : []),
       size: this.fb.nonNullable.control(fileMetadata?.size ? fileMetadata.size : null),
       embargoUntil: this.fb.nonNullable.control(fileMetadata?.embargoUntil ? fileMetadata.embargoUntil : null),
-      copyrightDate: this.fb.nonNullable.control(fileMetadata?.copyrightDate ? fileMetadata.copyrightDate : null, { validators: [Validators.pattern(DATE_PATTERN)], updateOn: 'blur' }),
+      copyrightDate: this.fb.nonNullable.control(fileMetadata?.copyrightDate ? fileMetadata.copyrightDate : null, { validators: [Validators.pattern(DATE_PATTERN)], updateOn: VALIDATION_UPDATE_ON  }),
       rights: this.fb.nonNullable.control(fileMetadata?.rights ? fileMetadata.rights : null),
       license: this.fb.nonNullable.control(fileMetadata?.license ? fileMetadata.license : null),
       oaStatus: this.fb.nonNullable.control(fileMetadata?.oaStatus ? fileMetadata.oaStatus : OA_STATUS.NOT_SPECIFIED),
@@ -141,7 +142,7 @@ export class FormBuilderService {
     const atf = this.fb.group<ControlType<AlternativeTitleVO>>({
       type: this.fb.nonNullable.control(at?.type ? at.type : null),
       language: this.fb.nonNullable.control(at?.language ? at.language : null),
-      value: this.fb.nonNullable.control(at?.value ? at.value : null, { validators: [Utf8Validator], updateOn: 'blur' }),
+      value: this.fb.nonNullable.control(at?.value ? at.value : null, { validators: [Utf8Validator], updateOn: VALIDATION_UPDATE_ON }),
     });
     return atf;
   }
@@ -153,7 +154,7 @@ export class FormBuilderService {
       role: this.fb.nonNullable.control(creator?.role ? creator.role : null),
       type: this.fb.nonNullable.control(creator?.type ? creator.type : CreatorType.PERSON)
     },
-      { validators: [creatorValidator], updateOn: 'blur' }
+      { validators: [creatorValidator], updateOn: VALIDATION_UPDATE_ON }
     );
     creator?.organization ? creator_form.get('person')?.disable() : creator_form.get('organization')?.disable();
     return creator_form;
@@ -177,7 +178,7 @@ export class FormBuilderService {
       titles: this.fb.array(person?.titles ? person.titles.map(t => this.fb.nonNullable.control(t) as AbstractControl) : []),
       alternativeNames: this.fb.array(person?.alternativeNames ? person.alternativeNames.map(an => this.fb.nonNullable.control(an) as AbstractControl) : []),
       pseudonyms: this.fb.array(person?.pseudonyms ? person.pseudonyms.map(p => this.fb.nonNullable.control(p) as AbstractControl) : []),
-      orcid: this.fb.nonNullable.control(person?.orcid ? person.orcid : null, { validators: [Validators.pattern(ORCID_PATTERN)], updateOn: 'blur' }),
+      orcid: this.fb.nonNullable.control(person?.orcid ? person.orcid : null, { validators: [Validators.pattern(ORCID_PATTERN)], updateOn: VALIDATION_UPDATE_ON }),
       identifier: person?.identifier ? this.identifier_FG(person.identifier) : this.identifier_FG(null),
       organizations: this.fb.array(person?.organizations ? person.organizations.map(ou => this.organization_FG(ou) as AbstractControl) : [])
     });
@@ -195,15 +196,15 @@ export class FormBuilderService {
 
   metadata_FG(metadata: MdsPublicationVO | null) {
     const metadata_form = this.fb.group<ControlType<MdsPublicationVO>>({
-      title: this.fb.nonNullable.control(metadata?.title ? metadata.title : null, { validators: [Validators.required, Utf8Validator], updateOn: 'blur' }),
+      title: this.fb.nonNullable.control(metadata?.title ? metadata.title : null, { validators: [Validators.required, Utf8Validator], updateOn: VALIDATION_UPDATE_ON }),
       alternativeTitles: this.fb.array(metadata?.alternativeTitles ? metadata.alternativeTitles.map(at => this.alt_title_FG(at) as AbstractControl) : []),
-      creators: this.fb.array(metadata?.creators ? metadata.creators.map(creator => this.creator_FG(creator) as AbstractControl) : [this.creator_FG(null)]),
-      dateAccepted: this.fb.nonNullable.control(metadata?.dateAccepted ? metadata.dateAccepted : null, { validators: [Validators.pattern(DATE_PATTERN)], updateOn: 'blur' }),
+      creators: this.fb.array(metadata?.creators ? metadata.creators.map(creator => this.creator_FG(creator) as AbstractControl) : [this.creator_FG(null)], {validators: [CreatorsOrganizationsValidator], updateOn: VALIDATION_UPDATE_ON}),
+      dateAccepted: this.fb.nonNullable.control(metadata?.dateAccepted ? metadata.dateAccepted : null, { validators: [Validators.pattern(DATE_PATTERN)], updateOn: VALIDATION_UPDATE_ON }),
       dateCreated: this.fb.nonNullable.control(metadata?.dateCreated ? metadata.dateCreated : null),
-      dateModified: this.fb.nonNullable.control(metadata?.dateModified ? metadata.dateModified : null, { validators: [Validators.pattern(DATE_PATTERN)], updateOn: 'blur' }),
-      datePublishedInPrint: this.fb.nonNullable.control(metadata?.datePublishedInPrint ? metadata.datePublishedInPrint : null, { validators: [Validators.pattern(DATE_PATTERN)], updateOn: 'blur' }),
-      datePublishedOnline: this.fb.nonNullable.control(metadata?.datePublishedOnline ? metadata.datePublishedOnline : null, { validators: [Validators.pattern(DATE_PATTERN)], updateOn: 'blur' }),
-      dateSubmitted: this.fb.nonNullable.control(metadata?.dateSubmitted ? metadata.dateSubmitted : null, { validators: [Validators.pattern(DATE_PATTERN)], updateOn: 'blur' }),
+      dateModified: this.fb.nonNullable.control(metadata?.dateModified ? metadata.dateModified : null, { validators: [Validators.pattern(DATE_PATTERN)], updateOn: VALIDATION_UPDATE_ON }),
+      datePublishedInPrint: this.fb.nonNullable.control(metadata?.datePublishedInPrint ? metadata.datePublishedInPrint : null, { validators: [Validators.pattern(DATE_PATTERN)], updateOn: VALIDATION_UPDATE_ON }),
+      datePublishedOnline: this.fb.nonNullable.control(metadata?.datePublishedOnline ? metadata.datePublishedOnline : null, { validators: [Validators.pattern(DATE_PATTERN)], updateOn: VALIDATION_UPDATE_ON }),
+      dateSubmitted: this.fb.nonNullable.control(metadata?.dateSubmitted ? metadata.dateSubmitted : null, { validators: [Validators.pattern(DATE_PATTERN)], updateOn: VALIDATION_UPDATE_ON }),
       degree: this.fb.nonNullable.control(metadata?.degree ? metadata.degree : null),
       event: metadata?.event ? this.event_FG(metadata.event) : this.event_FG(null),
       legalCase: metadata?.legalCase ? this.legal_case_FG(metadata.legalCase) : this.legal_case_FG(null),
@@ -221,7 +222,7 @@ export class FormBuilderService {
       abstracts: this.fb.array(metadata?.abstracts ? metadata.abstracts.map(a => this.abstract_FG(a) as AbstractControl) : [this.abstract_FG(null)]),
       projectInfo: this.fb.array(metadata?.projectInfo ? metadata.projectInfo.map(pi => this.project_info_FG(pi) as AbstractControl) : [this.project_info_FG(null)]),
     },
-      { validators: [datesValidator, CreatorsOrganizationsValidator, SourceRequiredValidator], updateOn: 'blur' }
+      { validators: [datesValidator, SourceRequiredValidator], updateOn: VALIDATION_UPDATE_ON }
     );
     return metadata_form;
   }
@@ -229,11 +230,11 @@ export class FormBuilderService {
   source_FG(source: SourceVO | null) {
     const source_form = this.fb.group<ControlType<SourceVO>>({
       alternativeTitles: this.fb.array(source?.alternativeTitles ? source.alternativeTitles.map(at => this.alt_title_FG(at) as AbstractControl) : []),
-      title: this.fb.nonNullable.control(source?.title ? source.title : null, { validators: [Validators.required], updateOn: 'blur' }),
+      title: this.fb.nonNullable.control(source?.title ? source.title : null, { validators: [Validators.required], updateOn: VALIDATION_UPDATE_ON }),
       creators: this.fb.array(source?.creators ? source.creators.map(c => this.creator_FG(c) as AbstractControl) : []),
       volume: this.fb.nonNullable.control(source?.volume ? source.volume : null),
       issue: this.fb.nonNullable.control(source?.issue ? source.issue : null),
-      // datePublishedInPrint: this.fb.nonNullable.control(source?.datePublishedInPrint ? source.datePublishedInPrint : new Date(), { validators: [Validators.pattern(DATE_PATTERN)], updateOn: 'blur' }),
+      // datePublishedInPrint: this.fb.nonNullable.control(source?.datePublishedInPrint ? source.datePublishedInPrint : new Date(), { validators: [Validators.pattern(DATE_PATTERN)], updateOn: VALIDATION_UPDATE_ON }),
       startPage: this.fb.nonNullable.control(source?.startPage ? source.startPage : null),
       endPage: this.fb.nonNullable.control(source?.endPage ? source.endPage : null),
       sequenceNumber: this.fb.nonNullable.control(source?.sequenceNumber ? source.sequenceNumber : null),
@@ -243,21 +244,21 @@ export class FormBuilderService {
       genre: this.fb.nonNullable.control(source?.genre ? source.genre : null),
       totalNumberOfPages: this.fb.nonNullable.control(source?.totalNumberOfPages ? source.totalNumberOfPages : null),
     },
-      { validators: [SourceValidator], updateOn: 'blur' });
+      { validators: [SourceValidator], updateOn: VALIDATION_UPDATE_ON });
     return source_form;
   }
 
   event_FG(event: EventVO | null) {
     const event_form: any = this.fb.group<ControlType<EventVO>>({
-      endDate: this.fb.nonNullable.control(event?.endDate ? event.endDate : null, { validators: [Validators.pattern(DATE_PATTERN)], updateOn: 'blur' }),
+      endDate: this.fb.nonNullable.control(event?.endDate ? event.endDate : null, { validators: [Validators.pattern(DATE_PATTERN)], updateOn: VALIDATION_UPDATE_ON }),
       invitationStatus: this.fb.nonNullable.control(event?.invitationStatus ? event.invitationStatus : null),
       place: this.fb.nonNullable.control(event?.place ? event.place : null),
-      startDate: this.fb.nonNullable.control(event?.startDate ? event.startDate : null, { validators: [Validators.pattern(DATE_PATTERN)], updateOn: 'blur' }),
+      startDate: this.fb.nonNullable.control(event?.startDate ? event.startDate : null, { validators: [Validators.pattern(DATE_PATTERN)], updateOn: VALIDATION_UPDATE_ON }),
       title: this.fb.nonNullable.control(event?.title ? event.title : null)
     },
       {
         validators: [EventValidator],
-        updateOn: 'blur' // 'blur' or 'change' or 'submit'
+        updateOn: VALIDATION_UPDATE_ON // 'blur' or 'change' or 'submit'
       });
     return event_form;
   }
@@ -267,7 +268,7 @@ export class FormBuilderService {
       courtName: this.fb.nonNullable.control(legal_case?.courtName ? legal_case.courtName : null),
       title: this.fb.nonNullable.control(legal_case?.title ? legal_case.title : null),
       identifier: this.fb.nonNullable.control(legal_case?.identifier ? legal_case.identifier : null),
-      datePublished: this.fb.nonNullable.control(legal_case?.datePublished ? legal_case.datePublished : null, { validators: [Validators.pattern(DATE_PATTERN)], updateOn: 'blur' })
+      datePublished: this.fb.nonNullable.control(legal_case?.datePublished ? legal_case.datePublished : null, { validators: [Validators.pattern(DATE_PATTERN)], updateOn: VALIDATION_UPDATE_ON })
     });
     return case_form;
   }
@@ -287,14 +288,14 @@ export class FormBuilderService {
       value: this.fb.nonNullable.control(subject?.language ? subject.language : null),
       type: this.fb.nonNullable.control(subject?.language ? subject.language : null)
     },
-      { validators: [SubjectValidator], updateOn: 'blur' });
+      { validators: [SubjectValidator], updateOn: VALIDATION_UPDATE_ON });
     return subject_form
   }
 
   abstract_FG(abstract: AbstractVO | null) {
     const abstract_form = this.fb.group<ControlType<AbstractVO>>({
       language: this.fb.nonNullable.control(abstract?.language ? abstract.language : null),
-      value: this.fb.nonNullable.control(abstract?.value ? abstract.value : null, { validators: [Utf8Validator], updateOn: 'blur' })
+      value: this.fb.nonNullable.control(abstract?.value ? abstract.value : null, { validators: [Utf8Validator], updateOn: VALIDATION_UPDATE_ON })
     });
     return abstract_form
   }

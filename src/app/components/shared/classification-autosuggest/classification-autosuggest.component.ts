@@ -15,6 +15,7 @@ import {
 } from "rxjs";
 import { HttpParams } from "@angular/common/http";
 import { SubjectClassification } from "../../../model/inge";
+import { BootstrapValidationDirective } from "../../../directives/bootstrap-validation.directive";
 
 @Component({
   selector: 'pure-classification-autosuggest',
@@ -22,7 +23,8 @@ import { SubjectClassification } from "../../../model/inge";
     FormsModule,
     NgbTypeahead,
     TranslatePipe,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    BootstrapValidationDirective
   ],
   templateUrl: './classification-autosuggest.component.html',
   styleUrl: './classification-autosuggest.component.scss'

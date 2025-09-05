@@ -14,6 +14,8 @@ import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
 import { MiscellaneousService } from 'src/app/services/pubman-rest-client/miscellaneous.service';
 import { Errors } from 'src/app/model/errors';
 import { LoadingComponent } from 'src/app/components/shared/loading/loading.component';
+import { TranslatePipe } from "@ngx-translate/core";
+import { BootstrapValidationDirective } from "../../../directives/bootstrap-validation.directive";
 
 @Component({
   selector: 'pure-source-form',
@@ -28,7 +30,8 @@ import { LoadingComponent } from 'src/app/components/shared/loading/loading.comp
     FormsModule,
     ReactiveFormsModule,
     CdkDropList,
-    CdkDrag
+    CdkDrag, TranslatePipe,
+    BootstrapValidationDirective
   ],
   templateUrl: './source-form.component.html',
   styleUrl: './source-form.component.scss'

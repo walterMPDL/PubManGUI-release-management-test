@@ -24,6 +24,8 @@ import { itemToVersionId } from 'src/app/utils/utils';
 import { ItemActionsModalComponent } from 'src/app/components/shared/item-actions-modal/item-actions-modal.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ItemBadgesComponent } from "../../shared/item-badges/item-badges.component";
+import { TranslatePipe } from "@ngx-translate/core";
+import { BootstrapValidationDirective } from "../../../directives/bootstrap-validation.directive";
 
 @Component({
   selector: 'pure-item-form',
@@ -37,11 +39,12 @@ import { ItemBadgesComponent } from "../../shared/item-badges/item-badges.compon
     MetadataFormComponent,
     AddRemoveButtonsComponent,
     CdkDropList,
-    CdkDrag, ItemBadgesComponent],
+    CdkDrag, ItemBadgesComponent, TranslatePipe, BootstrapValidationDirective],
   templateUrl: './item-form.component.html',
   styleUrls: ['./item-form.component.scss'],
 })
 export class ItemFormComponent implements OnInit {
+//bsValidation = inject(BootstrapValidationDirective)
 
   aaService = inject(AaService);
   contextService = inject(ContextsService);
@@ -185,6 +188,7 @@ export class ItemFormComponent implements OnInit {
             } else {
               this.internalFiles.push(this.fbs.file_FG(file));
             }
+
           })
 
       } else {
@@ -222,7 +226,13 @@ export class ItemFormComponent implements OnInit {
   }
 
   handleNoExternalReferences() {
-    this.externalReferences.push(this.fbs.file_FG(null));
+    if(!this.externalReferences) {
+      this.externalReferences = this.fb.array([this.fbs.file_FG(null)]);
+    }
+    else {
+      this.externalReferences.push(this.fbs.file_FG(null));
+    }
+
   }
 
   addExternalReference(index: number) {
@@ -278,10 +288,6 @@ export class ItemFormComponent implements OnInit {
 
   }
 
-  get formAsItem() {
-    return this.form.value as ItemVersionVO;
-  }
-
   private itemUpdated(item: ItemVersionVO) {
     this.item = item;
     this.form = this.fbs.item_FG(item);
@@ -294,6 +300,12 @@ export class ItemFormComponent implements OnInit {
         console.log('this.authorizationInfo: ', this.authorizationInfo);
       });
     }
+  }
+
+  get allValid() {
+    return this.form.valid &&
+      (this.internalFiles ? this.internalFiles.valid : true) &&
+      (this.externalReferences ? this.externalReferences.valid : true)
   }
 
   submit(submitterId: any) {
@@ -421,6 +433,7 @@ export class ItemFormComponent implements OnInit {
       }
     });
   }
+
 }
 
 /*

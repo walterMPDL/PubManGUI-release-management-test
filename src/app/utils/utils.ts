@@ -6,6 +6,9 @@ const rePropertySplit = /\s*=\s*(.+)/
 const reEncodingSplit = /\s*'[^']*'\s*(.*)/
 const reQuotesTrim = /(?:^["'\s]*)|(?:["'\s]*$)/g
 
+const isFormValueEmpty = (value: any) => {
+  return value === null || value === undefined || value === '' || value === '0: null'
+}
 
 const versionIdToObjectId = (id: string): string => {
     return id.substring(0, id.lastIndexOf('_'));
@@ -55,5 +58,6 @@ const contentDispositionParser = (data: string | null) => {
 export {
   contentDispositionParser,
   versionIdToObjectId,
-  itemToVersionId
+  itemToVersionId,
+  isFormValueEmpty
 }

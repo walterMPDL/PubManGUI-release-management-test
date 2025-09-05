@@ -16,11 +16,12 @@ import { ConeService } from 'src/app/services/cone.service';
 import { FormControl, ReactiveFormsModule } from "@angular/forms";
 import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
 import { TranslatePipe, TranslateService } from "@ngx-translate/core";
+import { BootstrapValidationDirective } from "../../../directives/bootstrap-validation.directive";
 
 @Component({
   selector: 'pure-language-autosuggest',
   standalone: true,
-  imports: [CommonModule, NgbTypeahead, ReactiveFormsModule, TranslatePipe],
+  imports: [CommonModule, NgbTypeahead, ReactiveFormsModule, TranslatePipe, BootstrapValidationDirective],
   templateUrl: './language-autosuggest.component.html',
   styleUrl: './language-autosuggest.component.scss'
 })
