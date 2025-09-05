@@ -5,6 +5,7 @@ const icons = [
   "analytics",
   "api",
   "apps",
+  "arrow_drop_down",
   "breaking_news_alt_1",
   "cancel",
   "check_circle",
