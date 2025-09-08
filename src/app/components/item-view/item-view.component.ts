@@ -262,7 +262,7 @@ export class ItemViewComponent {
   }
 
   get firstAuthors() {
-    return this.item?.metadata.creators.slice(0,10);
+    return this.item?.metadata?.creators?.slice(0,10);
   }
 
   get storedFiles() {

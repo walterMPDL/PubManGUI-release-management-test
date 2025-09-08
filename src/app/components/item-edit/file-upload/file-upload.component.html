@@ -17,9 +17,9 @@
     @for(tf of transferringFilesMap.values(); track tf.file) {
       <div class = "row mb-2">
         <div class="text-start small">{{tf.file.name}}</div>
-        <div class="progress">
-          @let loadedPercent = Math.round((tf.loaded/tf.total)*100);
-          <div class="progress-bar progress-bar-striped" [class.progress-bar-animated]="!tf.finished" [class.bg-success]="tf.finished" role="progressbar" [style.width]="loadedPercent + '%'" [attr.aria-valuenow]="loadedPercent" aria-valuemin="0" aria-valuemax="100">
+        @let loadedPercent = Math.round((tf.loaded/tf.total)*100);
+        <div class="progress" role="progressbar" [attr.aria-valuenow]="loadedPercent" aria-valuemin="0" aria-valuemax="100">
+          <div class="progress-bar progress-bar-striped" [style.width.%]="loadedPercent"  [class.progress-bar-animated]="!tf.finished" [class.bg-success]="tf.finished" >
             {{loadedPercent}}%
           </div>
         </div>

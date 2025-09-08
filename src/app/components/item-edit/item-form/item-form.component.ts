@@ -9,7 +9,7 @@ import {
   ContextDbRO,
   ContextDbVO,
   FileDbVO,
-  ItemVersionRO,
+  ItemVersionRO, ItemVersionState,
   ItemVersionVO,
   MdsPublicationVO,
   Storage
@@ -316,6 +316,7 @@ export class ItemFormComponent implements OnInit {
         console.log('this.authorizationInfo: ', this.authorizationInfo);
       });
     }
+    this.form.updateValueAndValidity();
   }
 
   get allValid() {
@@ -325,7 +326,13 @@ export class ItemFormComponent implements OnInit {
   }
 
   get validForSave() {
-    return this.form?.get("metadata")?.get("title")?.valid;
+    if(!this.form.get("objid") || this.form.get("publicState")?.value === ItemVersionState.PENDING) {
+      return this.form?.get("metadata")?.get("title")?.valid;
+    }
+    else {
+      return this.allValid;
+    }
+
   }
 
   submit(submitterId: any) {
@@ -366,7 +373,7 @@ export class ItemFormComponent implements OnInit {
       if (this.form_2_submit.objectId) {
         switch (submitterId) {
           case 'save': {
-            this.form.valid
+            this.validForSave
               ? (this.itemService.update(this.form_2_submit.objectId, this.form_2_submit as ItemVersionVO)).subscribe(result => {
                 this.itemUpdated(result);
                 if (this.form.get('objectId')?.value) {
@@ -379,13 +386,13 @@ export class ItemFormComponent implements OnInit {
             break;
           }
           case 'submit': {
-            this.form.valid
+            this.allValid
               ? (this.itemService.update(this.form_2_submit.objectId, this.form_2_submit as ItemVersionVO)).subscribe((result: ItemVersionVO) => this.openActionsModal('submit', result))
               : alert('Validation Error when updating existing Publication: ' + JSON.stringify(this.form.errors) + JSON.stringify(this.form.errors));
             break;
           }
           case 'release': {
-            this.form.valid
+            this.allValid
               ? (this.itemService.update(this.form_2_submit.objectId, this.form_2_submit as ItemVersionVO)).subscribe((result: ItemVersionVO) => this.openActionsModal('release', result))
               : alert('Validation Error when updating existing Publication: ' + JSON.stringify(this.form.errors) + JSON.stringify(this.form.errors));
             break;
@@ -395,7 +402,7 @@ export class ItemFormComponent implements OnInit {
 
         switch (submitterId) {
           case 'save': {
-            this.form.valid
+            this.validForSave
               ? (this.itemService.create(this.form_2_submit as ItemVersionVO)).subscribe(result => {
                 this.itemUpdated(result);
                 if (this.form.get('objectId')?.value) {
@@ -408,13 +415,13 @@ export class ItemFormComponent implements OnInit {
             break;
           }
           case 'submit': {
-            this.form.valid
+            this.allValid
               ? (this.itemService.create(this.form_2_submit as ItemVersionVO)).subscribe((result: ItemVersionVO) => this.openActionsModal('submit', result))
               : alert('Validation Error when creating new Publication ' + JSON.stringify(this.form.errors) + JSON.stringify(this.form.valid));
             break;
           }
           case 'release': {
-            this.form.valid
+            this.allValid
               ? (this.itemService.create(this.form_2_submit as ItemVersionVO)).subscribe((result: ItemVersionVO) => this.openActionsModal('submit', result))
               : alert('Validation Error when creating new Publication ' + JSON.stringify(this.form.errors) + JSON.stringify(this.form.valid));
             break;
