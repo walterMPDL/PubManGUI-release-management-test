@@ -324,6 +324,10 @@ export class ItemFormComponent implements OnInit {
       (this.externalReferences ? this.externalReferences.valid : true)
   }
 
+  get validForSave() {
+    return this.form?.get("metadata")?.get("title")?.valid;
+  }
+
   submit(submitterId: any) {
     console.log('submitterId', typeof submitterId);
     console.log('submitterId', submitterId);

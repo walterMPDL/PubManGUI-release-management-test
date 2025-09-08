@@ -794,6 +794,7 @@
 	},
   "Edit" : {
     "addMultipleCreators" : "Mehrere Autoren hinzufügen (Copy-Paste)",
-    "validationErrorsExist" : "Validierungsfehler! Bitte beheben Sie alle Fehler vor dem Speichern."
+    "validationErrorsExist" : "Validierungsfehler! Bitte beheben Sie alle Fehler vor dem Einstellen oder Freigeben.",
+    "validForSave" : "Sie können den Datensatz speichern."
   }
 }
