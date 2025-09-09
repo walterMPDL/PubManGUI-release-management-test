@@ -4,6 +4,7 @@ import { TranslateService } from "@ngx-translate/core";
 import { Errors } from "../../../model/errors";
 import { Subscription } from "rxjs";
 import { DATE_PATTERN, FILE_TITLE_AND_NAME_PATTERN, ORCID_PATTERN } from "../../../services/form-builder.service";
+import { showValidationError } from "../../../directives/bootstrap-validation.directive";
 
 @Component({
   selector: 'pure-validation-error',
@@ -25,9 +26,19 @@ export class ValidationErrorComponent {
   ngOnInit() {
     if(this.control) {
       //console.log("Control" + this.control);
-      this.updateMessages(this.control?.errors);
-      this.statusSubscription = this.control.statusChanges.subscribe(status => {
-        this.updateMessages(this.control?.errors)
+
+      if(showValidationError(this.control)) {
+        this.updateMessages(this.control?.errors);
+      }
+      this.statusSubscription = this.control.events.subscribe(status => {
+        if(showValidationError(this.control))
+        {
+          this.updateMessages(this.control?.errors)
+        }
+        else {
+          this.errorMessages = []
+        }
+
       })
     }
 
@@ -35,10 +46,6 @@ export class ValidationErrorComponent {
       //console.log("validation error " + this.validationError);
       this.updateMessages(this.validationError)
     }
-
-
-
-
   }
 
   ngOnDestroy() {

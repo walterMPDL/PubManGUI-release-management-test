@@ -59,6 +59,8 @@ export class BootstrapValidationDirective {
   }
 
   ngOnInit() {
+
+    const control = this.cont?.control || this.cd?.control;
     const controlName = this.cont?.name?.toString() || this.cd?.name?.toString() || '';
 
     if(this.validationMessagePosition !== 'ignore'){
@@ -108,6 +110,7 @@ export class BootstrapValidationDirective {
       const errorElement = errorCompRef.location.nativeElement;
 
       //Move component to correct position
+
       this.renderer.insertBefore(parentElement, errorElement, referenceElement, true);
 
 
@@ -121,7 +124,12 @@ export class BootstrapValidationDirective {
   get isInvalid(): boolean {
     //console.log("Check BootstrapValidation Directive");
     const control = this.cd?.control || this.cont?.control;
-    return control ? control.invalid : false;
+    return showValidationError(control);
   }
 
+
+
+}
+export function showValidationError(control: AbstractControl | undefined | null): boolean {
+  return control !==null && control!== undefined && control.invalid// && control.touched;
 }

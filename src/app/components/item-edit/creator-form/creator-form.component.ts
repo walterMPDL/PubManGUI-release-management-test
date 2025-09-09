@@ -163,7 +163,7 @@ export class CreatorFormComponent {
     } else if (event.action === 'remove') {
       this.organizations.removeAt(event.index);
     }
-    this.creator_form.updateValueAndValidity();
+    //this.creator_form.updateValueAndValidity();
   }
 
   handleIdentifierNotification(event: any) {
@@ -182,7 +182,7 @@ export class CreatorFormComponent {
 
   add_remove_creator(event: any) {
     this.notice.emit(event);
-    this.creator_form.updateValueAndValidity();
+    //this.creator_form.updateValueAndValidity();
   }
 
 }
