@@ -32,7 +32,7 @@ export class ValidationErrorComponent {
     }
 
     if(this.validationError) {
-      console.log("validation error " + this.validationError);
+      //console.log("validation error " + this.validationError);
       this.updateMessages(this.validationError)
     }
 

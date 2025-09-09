@@ -69,6 +69,9 @@ export class BootstrapValidationDirective {
 
       if(this.validationMessagePosition === 'top') {
         referenceElement = this.elementRef.nativeElement;
+        console.log('top element', this.elementRef.nativeElement);
+        console.log('top element prev', this.elementRef.nativeElement.previousElementSibling);
+        console.log('top element next', this.elementRef.nativeElement.nextElementSibling);
       }
 
 
@@ -86,6 +89,9 @@ export class BootstrapValidationDirective {
       //As ng-containers are not rendered, but create a comment, we need to take the sibling
       if(this.elementRef.nativeElement.nodeValue === 'ng-container'){
         if(this.validationMessagePosition === 'top'){
+          console.log('top element', this.elementRef.nativeElement);
+          console.log('top element prev', this.elementRef.nativeElement.previousElementSibling);
+          console.log('top element next', this.elementRef.nativeElement.nextElementSibling);
           referenceElement =  this.elementRef.nativeElement.previousElementSibling;
         }
         else if(this.validationMessagePosition === 'bottom'){
