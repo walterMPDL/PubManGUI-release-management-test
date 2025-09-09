@@ -55,9 +55,9 @@ export type ControlType<T> = {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const ORCID_PATTERN = /^http[s]?:\/\/orcid.org\/(\d{4})-(\d{4})-(\d{4})-(\d{3}[0-9X])$/;
-const DATE_PATTERN = /^[0-9]{4}-?(?:[01][0-9])?-?(?:[0-3][0-9])?$/;
-const FILE_TITLE_AND_NAME_PATTERN = /^[^/]+$/;
+export const ORCID_PATTERN = /^http[s]?:\/\/orcid.org\/(\d{4})-(\d{4})-(\d{4})-(\d{3}[0-9X])$/;
+export const DATE_PATTERN = /^[0-9]{4}-?(?:[01][0-9])?-?(?:[0-3][0-9])?$/;
+export const FILE_TITLE_AND_NAME_PATTERN = /^[^/]+$/;
 
 const VALIDATION_UPDATE_ON = 'change';
 @Injectable({

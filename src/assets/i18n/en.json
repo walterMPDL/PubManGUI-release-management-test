@@ -52,6 +52,7 @@
 		"withdraw": "Discard",
 		"delete": "Delete",
 		"revise": "Send back",
+    "save": "Save",
 		"useAsTemplate": "Use as template",
 		"addDoi": "Add DOI",
 		"rollback": "Revert",

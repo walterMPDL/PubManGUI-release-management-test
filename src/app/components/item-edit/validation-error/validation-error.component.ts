@@ -3,6 +3,7 @@ import { AbstractControl, FormControl, ValidationErrors } from "@angular/forms";
 import { TranslateService } from "@ngx-translate/core";
 import { Errors } from "../../../model/errors";
 import { Subscription } from "rxjs";
+import { DATE_PATTERN, FILE_TITLE_AND_NAME_PATTERN, ORCID_PATTERN } from "../../../services/form-builder.service";
 
 @Component({
   selector: 'pure-validation-error',
@@ -74,6 +75,25 @@ export class ValidationErrorComponent {
       case Errors.SOURCE_GENRE_NOT_PROVIDED.toString() :
       case Errors.SUBJECT_TYPE_NOT_PROVIDED.toString() : {
         return this.translateService.instant('validation.required');
+      }
+      case 'pattern' : {
+        console.log(val.requiredPattern);
+        console.log(DATE_PATTERN);
+        switch(val.requiredPattern) {
+          case DATE_PATTERN.toString() : {
+            return this.translateService.instant('validation.invalidDateFormat');
+          }
+          case ORCID_PATTERN.toString() : {
+            return this.translateService.instant('validation.invalidOrcid');
+          }
+          case FILE_TITLE_AND_NAME_PATTERN.toString() : {
+            return this.translateService.instant('validation.invalidFileName');
+          }
+          default :{
+            return "Invalid pattern, expected " + val.requiredPattern;
+          }
+        }
+
       }
       case Errors.CREATOR_ORCID_INVALID.toString() :
         return this.translateService.instant('validation.invalidOrcid');

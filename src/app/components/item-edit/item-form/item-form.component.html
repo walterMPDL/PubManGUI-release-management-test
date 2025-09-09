@@ -154,7 +154,7 @@
       }
 
         <div class="d-sm-flex flex-sm-row gap-1 mb-3 px-3">
-            <label for="title" class="col-sm-2 col-form-label">local tags</label>
+            <label for="title" class="col-sm-2 col-form-label">{{ 'MetadataFields.localTags' | translate }}</label>
             <div class="col-sm">
                 <div class="d-sm-flex flex-sm-row gap-1 mb-1 align-items-center">
                     <div class="col-sm">
@@ -177,12 +177,17 @@
        }
         <div class="d-sm-flex flex-sm-row mb-3 px-3 justify-content-end">
             <div class="col-auto">
-                <button class="btn btn-primary me-3" id="save" type="button" value="save" data-test="save" (click)="submit('save')" [disabled]="!validForSave">SAVE</button>
+                <button class="btn btn-primary me-3" id="save" type="button" value="save" data-test="save" (click)="submit('save')" [disabled]="!validForSave">
+                  {{'common.save' | translate}}</button>
                 @if (!form.controls['objectId'].value || (authorizationInfo && authorizationInfo.actions['SUBMIT'])) {
-                <button class="btn btn-primary me-3" id="submit" type="button" value="submit" (click)="submit('submit')" [disabled]="!allValid">SUBMIT</button>
+                <button class="btn btn-primary me-3" id="submit" type="button" value="submit" (click)="submit('submit')" [disabled]="!allValid">
+                  {{'common.submit' | translate}}
+                </button>
                 }
                 @if (authorizationInfo && authorizationInfo.actions['RELEASE']) {
-                <button class="btn btn-primary" id="release" type="button" value="release" (click)="submit('release')" [disabled]="!allValid">RELEASE</button>
+                <button class="btn btn-primary" id="release" type="button" value="release" (click)="submit('release')" [disabled]="!allValid">
+                  {{'common.release' | translate}}
+                </button>
                 }
             </div>
         </div>
@@ -192,7 +197,7 @@
 
 
 
-  <button type="button" class="btn btn-outline-secondary" data-bs-toggle="collapse"
+  <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="collapse"
           [attr.data-bs-target]="'#collapseJSON'" aria-expanded="true" aria-controls="collapseOne">Show JSON</button>
 
 <div class="container-fluid d-sm-flex flex-sm-row mb-1" id="collapseJSON" class="collapse">
