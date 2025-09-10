@@ -361,6 +361,12 @@ export class ItemFormComponent implements OnInit {
 
   }
 
+  get anyDirty() {
+    return this.form.dirty ||
+      (this.internalFiles && this.internalFiles.dirty) &&
+      (this.externalReferences && this.externalReferences.dirty)
+  }
+
   submit(saveType: 'save'|'submit'|'release') {
     console.log('submitterId', typeof saveType);
     console.log('submitterId', saveType);
@@ -402,6 +408,13 @@ export class ItemFormComponent implements OnInit {
     }
     //To test error handling
     //this.form_2_submit.metadata.title = null;
+
+
+    if(saveType !== "save" && !this.anyDirty) {
+      //skip save as nothing was edited
+      this.openActionsModal(saveType, this.item)
+      return;
+    }
 
     // submit form
     this.saveInProgress = true;
