@@ -2,18 +2,18 @@ import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormArray, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FundingInfoVO, FundingProgramVO, IdentifierVO, IdType } from 'src/app/model/inge';
-import {
-  AddRemoveButtonsComponent
-} from 'src/app/components/shared/add-remove-buttons/add-remove-buttons.component';
-import { Subscription } from 'rxjs';
+import { AddRemoveButtonsComponent } from 'src/app/components/shared/add-remove-buttons/add-remove-buttons.component';
+import { Subscription, tap } from 'rxjs';
 import { ControlType, FormBuilderService } from '../../../services/form-builder.service';
 import { TranslatePipe } from "@ngx-translate/core";
 import { BootstrapValidationDirective } from "../../../directives/bootstrap-validation.directive";
+import { ConeAutosuggestComponent } from "../../shared/cone-autosuggest/cone-autosuggest.component";
+import { ConeService } from "../../../services/cone.service";
 
 @Component({
   selector: 'pure-project-info-form',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, AddRemoveButtonsComponent, TranslatePipe, BootstrapValidationDirective],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, AddRemoveButtonsComponent, TranslatePipe, BootstrapValidationDirective, ConeAutosuggestComponent],
   templateUrl: './project-info-form.component.html',
   styleUrl: './project-info-form.component.scss'
 })
@@ -25,6 +25,7 @@ export class ProjectInfoFormComponent {
   @Output() notice = new EventEmitter();
 
   fbs = inject(FormBuilderService);
+  coneService = inject(ConeService);
 
   private grantIdentiferSubscription: Subscription | undefined;
   private fundingOrganizationIdentifierSubscription: Subscription | undefined;
@@ -129,5 +130,49 @@ export class ProjectInfoFormComponent {
     this.grantIdentiferSubscription?.unsubscribe();
     this.fundingOrganizationIdentifierSubscription?.unsubscribe();
     this.fundingProgramIdentifierSubscription?.unsubscribe();
+  }
+
+  fundingProgramConeSelected($event: any) {
+    if ($event) {
+      this.coneService.getConeResource($event.parsedId).pipe(
+        tap(data => {
+          this.fundingProgram.get('title')?.setValue(data.http_purl_org_dc_elements_1_1_title);
+          if(data.http_purl_org_dc_elements_1_1_identifier) {
+            this.fundingProgramIdentifier.setValue({
+              id: data.http_purl_org_dc_elements_1_1_identifier,
+              type: IdType.GRANT_ID
+            });
+          }
+        }),
+      )
+      .subscribe();
+    }
+    else {
+      this.fundingProgram.get('title')?.setValue('');
+      this.fundingProgramIdentifier.setValue(this.fbs.identifier_FG(null).value);
+    }
+
+  }
+
+  fundingOrganizationConeSelected($event: any) {
+    if ($event) {
+      this.coneService.getConeResource($event.parsedId).pipe(
+        tap(data => {
+          this.fundingOrganization.get('title')?.setValue(data.http_purl_org_dc_elements_1_1_title);
+          if(data.http_purl_org_dc_elements_1_1_identifier) {
+            this.fundingOrganizationIdentifier.setValue({
+              id: data.http_purl_org_dc_elements_1_1_identifier,
+              type: IdType.GRANT_ID
+            });
+          }
+        }),
+      )
+        .subscribe();
+    }
+    else {
+      this.fundingOrganization.get('title')?.setValue('');
+      this.fundingOrganizationIdentifier.setValue(this.fbs.identifier_FG(null).value);
+    }
+
   }
 }

@@ -34,6 +34,7 @@ export class ConeAutosuggestComponent {
   @Input() form!: FormControl;
   @Input() addQuotesForSearch:boolean = false;
   @Input() lockIfFilled:boolean = true;
+  @Input() additionalLockElements: HTMLInputElement[] = [];
 
   @Output() valueSelected = new EventEmitter();
 
@@ -48,6 +49,8 @@ export class ConeAutosuggestComponent {
   ngOnInit() {
     if(this.form && this.form.value) {
       this.selected = true;
+      this.disableFields();
+
     }
   }
 
@@ -74,8 +77,8 @@ export class ConeAutosuggestComponent {
     if(this.addQuotesForSearch) {
       value = '"' + value + '"'
     }
-
     this.form?.setValue(value);
+    this.disableFields();
     this.selected = true;
 
     const coneId = event.item.id.substring(event.item.id.lastIndexOf("/cone/") + 5, event.item.id.length)
@@ -92,8 +95,30 @@ export class ConeAutosuggestComponent {
   }
 
   deleteFields() {
+
     this.form.setValue('');
+    this.enableFields();
     this.selected = false;
     this.valueSelected.emit(undefined);
   }
+
+  disableFields() {
+    if(this.lockIfFilled)
+    {
+      this.additionalLockElements.forEach(inputElement => {
+        inputElement.readOnly = true;
+      })
+    }
+  }
+
+  enableFields() {
+    if(this.lockIfFilled)
+    {
+      this.additionalLockElements.forEach(inputElement => {
+        inputElement.readOnly = false;
+      })
+    }
+  }
+
+
 }
