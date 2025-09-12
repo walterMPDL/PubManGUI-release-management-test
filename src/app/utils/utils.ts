@@ -7,7 +7,7 @@ const reEncodingSplit = /\s*'[^']*'\s*(.*)/
 const reQuotesTrim = /(?:^["'\s]*)|(?:["'\s]*$)/g
 
 const isFormValueEmpty = (value: any) => {
-  return value === null || value === undefined || value === '' || value === '0: null'
+  return value === null || value === undefined || value === '' || value === '0: null' || ((typeof value === 'string') && value.trim().length === 0)
 }
 
 const versionIdToObjectId = (id: string): string => {
