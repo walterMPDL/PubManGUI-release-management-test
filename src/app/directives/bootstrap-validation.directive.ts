@@ -46,24 +46,51 @@ import { ValidationErrorComponent } from "../components/item-edit/validation-err
  * when it is in an invalid state.
  */
 @Directive({
-  selector: '[formControlName],[ngModel],[formControl],[formArray],[formArrayName],[formGroup],[formGroupName]'
+  selector: '[formControlName],[ngModel],[formControl],[formArray],[formArrayName],[formGroup],[formGroupName]',
+
 })
 
 export class BootstrapValidationDirective {
 
   @Input() validationMessagePosition : 'top' | 'bottom' | 'ignore' = 'bottom'
 
+  private headingElement: Element | null;
+  private control : AbstractControl | null = null;
+  private controlName
+
   constructor(@Self() @Optional() private cd: NgControl, @Self() @Optional() private cont: ControlContainer, private elementRef: ElementRef, private viewContainerRef: ViewContainerRef, private renderer: Renderer2
   ) {
+    //this.control = cont?.control || cd?.control;
+
+    this.controlName = cont?.name?.toString() || cd?.name?.toString() || '';
+    this.headingElement = this.findAccordionHeader(this.elementRef.nativeElement);
+
 
   }
 
   ngOnInit() {
 
-    const control = this.cont?.control || this.cd?.control;
-    const controlName = this.cont?.name?.toString() || this.cd?.name?.toString() || '';
+    this.control = this.cont?.control || this.cd?.control;
+
+    //console.log(this.controlName, this.control?.valid, this.headingElement);
+
+    //this.addRemoveValidationInfoToHeader();
+
+    /*
+    this.control?.statusChanges.subscribe(status => {
+      this.addRemoveValidationInfoToHeader();
+      if(this.controlName === 'title') {
+        //console.log("Heading for " + this.controlName, this.headingElement);
+      }
+    })
+
+     */
+
+
 
     if(this.validationMessagePosition !== 'ignore'){
+
+
 
       //Default for bottom:
       let parentElement = this.elementRef.nativeElement.parentElement;
@@ -99,7 +126,7 @@ export class BootstrapValidationDirective {
 
       //Create validation message component
       const errorCompRef = this.viewContainerRef.createComponent(ValidationErrorComponent);
-      errorCompRef.instance.name = controlName;
+      errorCompRef.instance.name = this.controlName;
       if(this.cd?.control) {
         errorCompRef.instance.control = this.cd.control;
       }
@@ -124,12 +151,48 @@ export class BootstrapValidationDirective {
   get isInvalid(): boolean {
     //console.log("Check BootstrapValidation Directive");
     const control = this.cd?.control || this.cont?.control;
-    return showValidationError(control);
+    return isShowValidationError(control);
   }
 
 
+  private addRemoveValidationInfoToHeader() {
+    const validationSymbol = this.headingElement?.querySelector('.head-validation-symbol');
+    const isValid = this.headingElement?.querySelector('.ng-invalid') === null
+    if(this.controlName === 'title') {
+      const invalidElement = this.headingElement?.querySelector('.ng-invalid');
+      console.log("update " + this.controlName, this.headingElement, validationSymbol, isValid, invalidElement);
+    }
+    //console.log("symbol", this.controlName, validationSymbol, isValid);
+    if (!isValid) {
+      if (!validationSymbol) {
+        //console.log("append", this.headingElement)
+        this.headingElement?.querySelector('h2 button')?.insertAdjacentHTML('beforeend', '<span class="head-validation-symbol">FOUND</span>');
+      }
+    }
+    else {
+      //console.log("remove")
+      validationSymbol?.remove();
+    }
+  }
+
+  private findAccordionHeader(htmlElement: HTMLElement | null | undefined): Element | null {
+    if (htmlElement) {
+
+      if (htmlElement?.classList?.contains('accordion-item')) {
+        const headingButton = htmlElement.querySelector('h2 button');
+        //console.log("Heading found", heading);
+        //console.log(heading);
+        if(headingButton) {
+          return htmlElement;
+        }
+      } else {
+        return this.findAccordionHeader(htmlElement?.parentElement);
+      }
+    }
+    return null;
+  }
 
 }
-export function showValidationError(control: AbstractControl | undefined | null): boolean {
+export function isShowValidationError(control: AbstractControl | undefined | null): boolean {
   return control !==null && control!== undefined && control.invalid && control.touched;
 }

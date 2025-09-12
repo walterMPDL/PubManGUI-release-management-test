@@ -2,7 +2,7 @@
 <div [formGroup]="meta_form" validationMessagePosition="ignore">
     <div class="accordion" id="accordionPanelsMetadata">
         <!--GROUP Standard-->
-        <div class="accordion-item border-0">
+        <div id="basic-metadata" class="accordion-item border-0">
             <h2 class="accordion-header mt-2">
                 <button class="accordion-button rounded-0" type="button" data-bs-toggle="collapse"
                     data-bs-target="#accordionBodyStandardGroup" aria-expanded="true"
@@ -99,8 +99,9 @@
 
 
         <!--GROUP Creator-->
-        <div
-            [ngClass]="genreSpecificResource.value().properties.creator_person_organization.display ? 'accordion-item border-0' : 'd-none'">
+      @if(genreSpecificResource.value().properties.creator_person_organization.display)
+      {
+        <div  id="creators-metadata" class="accordion-item border-0">
             <h2 class="accordion-header mt-2">
                 <button class="accordion-button" type="button" data-bs-toggle="collapse"
                     data-bs-target="#accordionBodyCreatorGroup" aria-expanded="true"
@@ -158,9 +159,10 @@
                 </div>
             </div>
         </div>
+      }
 
         <!--GROUP Dates-->
-        <div class="accordion-item border-0"
+        <div id="dates-metadata" class="accordion-item border-0"
             [ngClass]="{'d-none' : !genreSpecificResource.value().properties.details_item_details_dates.display}">
             <h2 class="accordion-header mt-2">
                 <button class="accordion-button" type="button" data-bs-toggle="collapse"
@@ -261,7 +263,7 @@
         </div>
 
         <!--GROUP Details-->
-        <div class="accordion-item border-0"
+        <div id="details-metadata" class="accordion-item border-0"
             [ngClass]="{'d-none' : !genreSpecificResource.value().properties.details.display}">
             <h2 class="accordion-header mt-2">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
@@ -452,7 +454,7 @@
         </div>
 
         <!--GROUP Event-->
-        <div class="accordion-item border-0"
+        <div id="event-metadata" class="accordion-item border-0"
             [ngClass]="{'d-none' : !genreSpecificResource.value().properties.events.display}">
             <h2 class="accordion-header mt-2">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
@@ -469,7 +471,7 @@
         </div>
 
         <!--GROUP Project Info-->
-        <div class="accordion-item border-0"
+        <div id="project-metadata" class="accordion-item border-0"
             [ngClass]="{'d-none' : !genreSpecificResource.value().properties.project_info.display}">
             <h2 class="accordion-header mt-2">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
@@ -511,7 +513,7 @@
         </div>
 
         <!--GROUP Legal Case-->
-        <div class="accordion-item border-0"
+        <div id="legal-case-metadata" class="accordion-item border-0"
             [ngClass]="{'d-none' : !genreSpecificResource.value().properties.legal_case.display}">
             <h2 class="accordion-header mt-2">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
@@ -528,7 +530,7 @@
         </div>
 
         <!--GROUP Sources-->
-        <div class="accordion-item border-0 mb-3"
+        <div id="sources-metadata" class="accordion-item border-0 mb-3"
             [ngClass]="{'d-none' : !genreSpecificResource.value().properties.sources.display}">
             <h2 class="accordion-header mt-2">
                 <button class="accordion-button" type="button" data-bs-toggle="collapse"
@@ -550,6 +552,9 @@
                 }
                 <ng-container formArrayName="sources">
                     @for (source of sources.controls; track source; let sourcesIndex = $index) {
+                     @if(sourcesIndex > 0) {
+                       <hr/>
+                     }
                     <div class="accordion-body mt-3 mb-3">
                         <div class="d-sm-flex flex-sm-row gap-1 mb-1">
                             <label for="sources" class="col-sm-2 col-form-label">{{sourcesIndex + 1}}.

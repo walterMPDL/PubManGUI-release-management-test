@@ -49,6 +49,7 @@ import { TranslatePipe } from "@ngx-translate/core";
 import { BootstrapValidationDirective } from "../../../directives/bootstrap-validation.directive";
 import { ValidationErrorComponent } from "../validation-error/validation-error.component";
 import { remove_null_empty } from "../../../utils/utils_final";
+import { AccordionGroupValidationDirective } from "../../../directives/accordion-group-validation.directive";
 
 @Component({
   selector: 'pure-metadata-form',
@@ -74,6 +75,7 @@ import { remove_null_empty } from "../../../utils/utils_final";
     CdkDrag,
     TranslatePipe,
     BootstrapValidationDirective,
+    AccordionGroupValidationDirective,
     ValidationErrorComponent
   ],
   templateUrl: './metadata-form.component.html',

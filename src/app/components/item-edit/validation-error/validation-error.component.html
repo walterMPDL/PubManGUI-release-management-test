@@ -1,6 +1,7 @@
 
   @for (msg of errorMessages; track msg) {
-    <div class="small"><i class="bi bi-exclamation-circle-fill"></i> {{msg}}</div>
+    <!-- Use ng-invalid here to be compatible with AccordionGroupValidationDirective -->
+    <div class="small ng-invalid"><i class="bi bi-exclamation-circle-fill"></i> {{msg}}</div>
   }
 
 
