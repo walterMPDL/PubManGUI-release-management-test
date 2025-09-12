@@ -23,12 +23,12 @@
             <div formGroupName="fundingProgram" class="d-sm-flex flex-sm-row gap-1 mb-1 align-items-center">
                 <div class="col-sm-7">
                     <label class="col-form-label">{{ 'MetadataFields.projectInfoFundingProgram' | translate }}</label>
-                    <input type="text" class="form-control" formControlName="title">
+                  <pure-cone-autosuggest coneType="funding-programs" [form]="$any(fundingProgram.get('title'))" (valueSelected)="fundingProgramConeSelected($event)"/>
                 </div>
                 <div [formGroup]="fundingProgramIdentifier" class="col-sm">
                     <label class="col-sm col-form-label">{{ 'MetadataFields.projectInfoFundingProgramId' | translate }}</label>
                     <input type="text" class="form-control" id="progam_identifier_type" formControlName="type" hidden>
-                    <input type="text" class="form-control" id="progam_identifier_value" formControlName="id">
+                    <input type="text" class="form-control" id="progam_identifier_value" formControlName="id" readonly="true">
                 </div>
                 <div class="col-sm-1"><!--NEEDED to keep the layout including one last collumn for add-remove buttons-->
                 </div>
@@ -36,12 +36,12 @@
             <div formGroupName="fundingOrganization" class="d-sm-flex flex-sm-row gap-1 mb-1 align-items-center">
                 <div class="col-sm-7">
                     <label class="col-form-label">{{ 'MetadataFields.projectInfoFundingOrganization' | translate }}</label>
-                    <input type="text" class="form-control" formControlName="title">
+                  <pure-cone-autosuggest coneType="funding-organizations" [form]="$any(fundingOrganization.get('title'))" (valueSelected)="fundingOrganizationConeSelected($event)"/>
                 </div>
                 <div [formGroup]="fundingOrganizationIdentifier" class="col-sm">
                     <label class="col-sm col-form-label">{{ 'MetadataFields.projectInfoFundingOrganizationId' | translate }}</label>
-                    <input type="text" class="form-control" id="progam_identifier_type" formControlName="type" hidden>
-                    <input type="text" class="form-control" id="progam_identifier_value" formControlName="id">
+                    <input type="text" class="form-control" id="progam_identifier_type" formControlName="type" hidden >
+                    <input type="text" class="form-control" id="progam_identifier_value" formControlName="id"readonly="true">
                 </div>
                 <div class="col-sm-1"><!--NEEDED to keep the layout including one last collumn for add-remove buttons-->
                 </div>
