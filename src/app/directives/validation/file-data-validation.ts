@@ -14,7 +14,7 @@ export const fileDataValidator: ValidatorFn = (control: AbstractControl,): Valid
     if (Storage.EXTERNAL_URL === file.storage) {
        if(isFormValueEmpty(file.content)) {
         control.get("content")?.setErrors({[error_types.COMPONENT_CONTENT_NOT_PROVIDED] : true});
-        currentErrors[error_types.COMPONENT_CONTENT_NOT_PROVIDED] =  true;
+        //currentErrors[error_types.COMPONENT_CONTENT_NOT_PROVIDED] =  true;
       }
        else if(!URL_PATTERN.test(file.content)) {
          control.get("content")?.setErrors({[error_types.LOCATOR_IS_NO_URI] : true});
@@ -49,6 +49,9 @@ export const fileDataValidator: ValidatorFn = (control: AbstractControl,): Valid
         else {
           control.get("allowedAudienceIds")?.setErrors(null);
         }
+      }
+      else {
+        control.get("allowedAudienceIds")?.setErrors(null);
       }
       //File with missing visibility (internal managed files only)
       if (isFormValueEmpty(file.visibility)) {

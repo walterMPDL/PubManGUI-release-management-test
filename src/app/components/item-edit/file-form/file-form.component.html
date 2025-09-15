@@ -1,5 +1,5 @@
 @if (genreSpecificResource.hasValue()) {
-<div [formGroup]="file_form" [ngClass]="{'d-none' : !genreSpecificResource.value().properties.files.display}">
+<div [formGroup]="file_form" [ngClass]="{'d-none' : !genreSpecificResource.value().properties.files.display}" validationMessagePosition="top">
 
     <div class="custom-drag-placeholder" *cdkDragPlaceholder></div>
     <div class="d-sm-flex flex-sm-row gap-1 mb-1" cdkDragHandle>
@@ -149,8 +149,9 @@
             }
         </ng-container>
         }}
+      <!-- Embargo Date -->
         <ng-container formGroupName="metadata">
-            @if (file_form.get('visibility')?.value == 'PRIVATE' && file_form.get('storage')?.value ==
+            @if ((file_form.get('visibility')?.value == 'PRIVATE' || file_form.get('visibility')?.value == 'AUDIENCE') && file_form.get('storage')?.value ==
             'INTERNAL_MANAGED') {
             <div class="d-sm-flex flex-sm-row gap-1 mb-1">
                 <div class="col-sm-2">
