@@ -42,8 +42,8 @@ import { SourceValidator } from 'src/app/directives/validation/source-validation
 import { SubjectValidator } from 'src/app/directives/validation/subject-validation.directive';
 import { Utf8Validator } from 'src/app/directives/validation/utf8-validation.directive';
 import { fileDataValidator } from 'src/app/directives/validation/file-data-validation';
-import { fileUrlValidator } from 'src/app/directives/validation/file-url-validation.directive';
 import { alternativeTitleValidator } from "../directives/validation/alternative-title.validation.directive";
+import { requiredNoWhitespace } from "../directives/validation/required-no-whitespace-validation.directive";
 
 type Unbox<T> = T extends Array<infer V> ? V : T;
 
@@ -110,19 +110,19 @@ export class FormBuilderService {
       allowedAudienceIds: this.fb.array(file?.allowedAudienceIds ? file.allowedAudienceIds.map(audiencId => this.fb.nonNullable.control(audiencId) as AbstractControl) : []),
       sortkz: this.fb.nonNullable.control(file?.sortkz ? file.sortkz : undefined),
     },
-      { validators: [fileDataValidator, fileUrlValidator], updateOn: VALIDATION_UPDATE_ON });
+      { validators: [fileDataValidator], updateOn: VALIDATION_UPDATE_ON });
     return file_form;
   }
 
   mds_file_FG(fileMetadata: MdsFileVO | null) {
     const mdsFile_form = this.fb.group<ControlType<MdsFileVO>>({
-      title: this.fb.nonNullable.control(fileMetadata?.title ? fileMetadata.title : undefined, {validators: [Validators.required, Validators.pattern(FILE_TITLE_AND_NAME_PATTERN)], updateOn: VALIDATION_UPDATE_ON }),
+      title: this.fb.nonNullable.control(fileMetadata?.title ? fileMetadata.title : undefined, {validators: [requiredNoWhitespace, Validators.pattern(FILE_TITLE_AND_NAME_PATTERN)], updateOn: VALIDATION_UPDATE_ON }),
       contentCategory: this.fb.nonNullable.control(fileMetadata?.contentCategory ? fileMetadata.contentCategory : undefined),
       description: this.fb.nonNullable.control(fileMetadata?.description ? fileMetadata.description : undefined),
       identifiers: this.fb.array(fileMetadata?.identifiers ? fileMetadata.identifiers.map(id => this.identifier_FG(id) as AbstractControl) : []),
       formats: this.fb.array(fileMetadata?.formats ? fileMetadata.formats.map(format => this.format_FG(format) as AbstractControl) : []),
       size: this.fb.nonNullable.control(fileMetadata?.size ? fileMetadata.size : undefined),
-      embargoUntil: this.fb.nonNullable.control(fileMetadata?.embargoUntil ? fileMetadata.embargoUntil : undefined),
+      embargoUntil: this.fb.nonNullable.control(fileMetadata?.embargoUntil ? fileMetadata.embargoUntil : undefined, { validators: [Validators.pattern(DATE_PATTERN)], updateOn: VALIDATION_UPDATE_ON  }),
       copyrightDate: this.fb.nonNullable.control(fileMetadata?.copyrightDate ? fileMetadata.copyrightDate : undefined, { validators: [Validators.pattern(DATE_PATTERN)], updateOn: VALIDATION_UPDATE_ON  }),
       rights: this.fb.nonNullable.control(fileMetadata?.rights ? fileMetadata.rights : undefined),
       license: this.fb.nonNullable.control(fileMetadata?.license ? fileMetadata.license : undefined),
@@ -198,7 +198,7 @@ export class FormBuilderService {
 
   metadata_FG(metadata: MdsPublicationVO | null) {
     const metadata_form = this.fb.group<ControlType<MdsPublicationVO>>({
-      title: this.fb.nonNullable.control(metadata?.title ? metadata.title : undefined, { validators: [Validators.required, Utf8Validator], updateOn: VALIDATION_UPDATE_ON }),
+      title: this.fb.nonNullable.control(metadata?.title ? metadata.title : undefined, { validators: [requiredNoWhitespace, Utf8Validator], updateOn: VALIDATION_UPDATE_ON }),
       alternativeTitles: this.fb.array(metadata?.alternativeTitles ? metadata.alternativeTitles.map(at => this.alt_title_FG(at) as AbstractControl) : []),
       creators: this.fb.array(metadata?.creators ? metadata.creators.map(creator => this.creator_FG(creator) as AbstractControl) : [this.creator_FG(null)], {validators: [CreatorsOrganizationsValidator], updateOn: VALIDATION_UPDATE_ON}),
       dateAccepted: this.fb.nonNullable.control(metadata?.dateAccepted ? metadata.dateAccepted : undefined, { validators: [Validators.pattern(DATE_PATTERN)], updateOn: VALIDATION_UPDATE_ON }),
@@ -232,7 +232,7 @@ export class FormBuilderService {
   source_FG(source: SourceVO | null) {
     const source_form = this.fb.group<ControlType<SourceVO>>({
       alternativeTitles: this.fb.array(source?.alternativeTitles ? source.alternativeTitles.map(at => this.alt_title_FG(at) as AbstractControl) : []),
-      title: this.fb.nonNullable.control(source?.title ? source.title : undefined, { validators: [Validators.required], updateOn: VALIDATION_UPDATE_ON }),
+      title: this.fb.nonNullable.control(source?.title ? source.title : undefined, { validators: [requiredNoWhitespace], updateOn: VALIDATION_UPDATE_ON }),
       creators: this.fb.array(source?.creators ? source.creators.map(c => this.creator_FG(c) as AbstractControl) : []),
       volume: this.fb.nonNullable.control(source?.volume ? source.volume : undefined),
       issue: this.fb.nonNullable.control(source?.issue ? source.issue : undefined),

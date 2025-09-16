@@ -42,6 +42,7 @@ import { TranslatePipe } from "@ngx-translate/core";
 import { BootstrapValidationDirective } from "../../../directives/bootstrap-validation.directive";
 import { LoadingComponent } from "../../shared/loading/loading.component";
 import { MiscellaneousService } from "../../../services/pubman-rest-client/miscellaneous.service";
+import { AccordionGroupValidationDirective } from "../../../directives/accordion-group-validation.directive";
 
 @Component({
   selector: 'pure-item-form',
@@ -55,7 +56,7 @@ import { MiscellaneousService } from "../../../services/pubman-rest-client/misce
     MetadataFormComponent,
     AddRemoveButtonsComponent,
     CdkDropList,
-    CdkDrag, ItemBadgesComponent, TranslatePipe, BootstrapValidationDirective, LoadingComponent],
+    CdkDrag, ItemBadgesComponent, TranslatePipe, BootstrapValidationDirective, AccordionGroupValidationDirective, LoadingComponent],
   templateUrl: './item-form.component.html',
   styleUrls: ['./item-form.component.scss'],
 })
