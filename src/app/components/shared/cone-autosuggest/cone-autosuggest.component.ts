@@ -1,6 +1,6 @@
 import { Component, computed, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { NgbTypeahead } from "@ng-bootstrap/ng-bootstrap";
+import { NgbHighlight, NgbTypeahead } from "@ng-bootstrap/ng-bootstrap";
 import { TranslatePipe, TranslateService } from "@ngx-translate/core";
 import { ConeService } from "../../../services/cone.service";
 import {
@@ -24,7 +24,8 @@ import { BootstrapValidationDirective } from "../../../directives/bootstrap-vali
     NgbTypeahead,
     TranslatePipe,
     ReactiveFormsModule,
-    BootstrapValidationDirective
+    BootstrapValidationDirective,
+    NgbHighlight
   ],
   templateUrl: './cone-autosuggest.component.html',
   styleUrl: './cone-autosuggest.component.scss'

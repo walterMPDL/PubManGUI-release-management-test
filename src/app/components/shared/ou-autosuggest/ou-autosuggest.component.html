@@ -3,7 +3,7 @@
   <input class="form-control {{emphasize && formForOuName.value ? 'fw-bold' : ''}}" type="text" [formControl]="formForOuName" [ngbTypeahead]="suggestOus"
     [ngClass]="{'is-invalid': validationError}" (selectItem)="suggestOusSelector($event)"
     [resultFormatter]="suggestOusFormatter" [inputFormatter]="suggestOusFormatter" [readonly]="formForOuId?.value"
-    [placeholder]="'common.autosuggestPlaceholder' | translate" />
+    [placeholder]="'common.autosuggestPlaceholder' | translate" container="body"/>
 
   @if(searching) {
   <button class="btn btn-outline-dark" disabled>
