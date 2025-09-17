@@ -66,3 +66,14 @@ button > .material-symbols-outlined {
   font-style: italic;
 }
 
+ngb-typeahead-window {
+
+  max-width:60%;
+
+  .dropdown-item {
+    text-wrap: wrap;
+    //overflow: hidden;
+    //text-overflow: ellipsis;
+  }
+}
+

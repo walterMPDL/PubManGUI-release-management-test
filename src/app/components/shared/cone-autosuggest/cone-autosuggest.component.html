@@ -1,8 +1,18 @@
 
+
+
+<ng-template #coneAutosuggestTemplate let-r="result" let-t="term">
+  <div class="text-wrap">
+    <ngb-highlight [result]="r.value" [term]="t"></ngb-highlight>
+  </div>
+
+</ng-template>
+
+
 <div class="input-group">
   <input class="form-control" type="text" [formControl]="form" [ngbTypeahead]="suggest" [resultFormatter]="resultFormatter"
          (selectItem)="suggestSelector($event)" [readonly]="lockIfFilled && selected"
-         [placeholder]="'common.autosuggestPlaceholder' | translate"/>
+         [placeholder]="'common.autosuggestPlaceholder' | translate" container="body"/>
 
   @if(searching) {
 
