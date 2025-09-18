@@ -383,7 +383,7 @@ export class ItemFormComponent implements OnInit {
   }
 
   get validForSave() {
-    if(!this.form.get("objid") || this.form.get("publicState")?.value === ItemVersionState.PENDING) {
+    if(!this.form.get("objectId")?.value || this.form.get("publicState")?.value === ItemVersionState.PENDING) {
       return this.form?.get("metadata")?.get("title")?.valid;
     }
     else {
