@@ -151,7 +151,7 @@ export class BatchService {
             this.updateProcessProgress();
           }, 1000 * (this.updateDelay < 60 ? Math.ceil(this.updateDelay++ / 10) : 60 ));
         } else {
-          this.updateDelay = 1;
+          this.updateDelay = 2;
           this.endProcess();
         }
       })
@@ -360,7 +360,8 @@ export class BatchService {
     actionParams.itemIds = this.items;
 
     const url = `${this.#baseUrl}/batchProcess/changeGenre`;
-    const query = `?genreFrom=${actionParams.genreFrom}&genreTo=${actionParams.genreTo}&degreeType=${actionParams.degreeType}`;
+    var query = `?genreFrom=${actionParams.genreFrom}&genreTo=${actionParams.genreTo}`;
+    if (actionParams.degreeType) query += `&degreeType=${actionParams.degreeType}`;
     const body = { itemIds: actionParams.itemIds };
 
     const actionResponse: Observable<resp.ActionGenericResponse> = this.http.put<resp.ActionGenericResponse>(url + query, body, { withCredentials: true })

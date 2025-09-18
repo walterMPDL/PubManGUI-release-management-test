@@ -3,8 +3,15 @@
 <tr class="bg-light border-bottom border-white d-flex py-2 my-1">
     @if (log.state === state.RUNNING) {
 
-        <td class="col-2 px-1">
-            <span >{{ batchSvc.getProcessLog().state | titlecase }}</span>
+        <td class="col-2 d-flex flex-column flex-xl-row justify-content-between ps-1">
+            <span class="d-flex d-none d-lg-inline">{{ 'BatchProcessLogHeaderState.' + batchSvc.getProcessLog().state | translate }}</span>
+            <div>
+             @if (batchSvc.getProcessLog().state === state.FINISHED) {
+                <span class="material-symbols-outlined text-success pe-1">check_circle</span>
+            } @else if(batchSvc.getProcessLog().state !== state.RUNNING) {
+                <span class="material-symbols-outlined text-danger pe-1">cancel</span>
+            }
+            </div>
 
             @if (log.batchLogHeaderId === batchSvc.getProcessLog().batchLogHeaderId) {
                 @if (batchSvc.isProcessRunning()) {
@@ -14,11 +21,9 @@
                     </span>
                 }
             } @else {
-
                 <span class="material-symbols-outlined pe-1 d-flex justify-content-end" title="Something gone wrong!">
                     error
                 </span>
-
             }
         </td>
 
