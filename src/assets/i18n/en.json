@@ -254,7 +254,7 @@
 		"fetch.source": "Source",
 		"fileImport": "File Import",
 		"fileImport.running": "Please wait, an import is running!",
-		"fileImport.upload": "For File upload",
+		"fileImport.upload": "File upload",
 		"list.details": "Log",
 		"list.details.count": "items imported",
 		"list.details.delete": "Delete",
