@@ -53,7 +53,7 @@ export class NotificationComponent {
         this.severity_icon = 'info';
         setTimeout(() => {
           this.close();
-        }, 10000);
+        }, 20000);
     }
   }
 

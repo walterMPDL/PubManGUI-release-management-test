@@ -71,7 +71,7 @@ export class MessageService {
     if (message.lastIndexOf('\n')>=0) {
       const formattedMsg = this.splitRawError(message);
       msg = { type: 'danger', title: formattedMsg.title, text: formattedMsg.content };
-      if (this.lastMessage().title && this.lastMessage().title === formattedMsg.title) return;
+      //if (this.lastMessage().title && this.lastMessage().title === formattedMsg.title) return;
     } else {
       msg = { type: 'danger', text: message };
     }
