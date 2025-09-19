@@ -29,11 +29,10 @@
            }
           @else {
             <div>
-              <h5>{{item.context.name}}
-                <button class="btn btn-sm btn-outline-secondary" (click)="openChangeContextModal()">
+              <h5 class="d-inline align-middle me-2">{{item.context.name}}</h5>
+              <button class="btn btn-sm btn-outline-secondary" (click)="openChangeContextModal()">
                 {{'common.changeContext' | translate}}
-                </button>
-              </h5>
+              </button>
             </div>
           }
 
