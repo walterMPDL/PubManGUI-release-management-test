@@ -3,10 +3,10 @@
     <cdk-tree-node *cdkTreeNodeDef="let node" cdkTreeNodePadding class="flat-tree-node">
         <button class="btn btn-sm btn-outline border-0">
             <i class="bi-dash" [style.visibility]="'hidden'"></i>
-            <span [ngClass]="{'text-muted': node.item.publicStatus === 'CLOSED' }" style="cursor: default">{{node.item.name}}</span>
+            <span [ngClass]="{'text-muted': node.item.publicStatus === 'CLOSED' }" class="ms-2" style="cursor: default">{{node.item.name}}</span>
         </button>
         <span>
-            <button class="btn btn-link p-0" (click)="info(node)">
+            <button class="btn btn-link p-0 ms-1" (click)="info(node)">
                 <span class="material-symbols-outlined">info</span>
             </button>
         </span>
@@ -15,10 +15,10 @@
         <button class="btn btn-sm btn-outline border-0" cdkTreeNodeToggle>
             <i class="text-primary"
                 [ngClass]="{'bi-chevron-down': treeControl.isExpanded(node), 'bi-chevron-right': !treeControl.isExpanded(node)}"></i>
-            <span [ngClass]="{'text-muted': node.item.publicStatus === 'CLOSED'}">{{node.item.name}}</span>
+            <span [ngClass]="{'text-muted': node.item.publicStatus === 'CLOSED'}" class="ms-2" >{{node.item.name}}</span>
         </button>
         <span>
-            <button class="btn btn-link p-0" (click)="info(node)">
+            <button class="btn btn-link p-0 ms-1" (click)="info(node)">
                 <span class="material-symbols-outlined">info</span>
             </button>
         </span>
