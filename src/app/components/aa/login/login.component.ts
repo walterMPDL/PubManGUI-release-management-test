@@ -5,7 +5,7 @@ import { AaService } from "../../../services/aa.service";
 import { catchError, EMPTY, tap, throwError } from "rxjs";
 import { HttpErrorResponse } from "@angular/common/http";
 import { PubManHttpErrorResponse } from "../../../services/interceptors/http-error.interceptor";
-import { ValidationErrorComponent } from "../../item-edit/validation-error/validation-error.component";
+import { ValidationErrorComponent } from "../../shared/validation-error/validation-error.component";
 
 @Component({
     selector: 'pure-login',
