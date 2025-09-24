@@ -289,8 +289,8 @@ export class FormBuilderService {
   subject_FG(subject: SubjectVO | null) {
     const subject_form = this.fb.group<ControlType<SubjectVO>>({
       language: this.fb.nonNullable.control(subject?.language ? subject.language : undefined),
-      value: this.fb.nonNullable.control(subject?.language ? subject.language : undefined),
-      type: this.fb.nonNullable.control(subject?.language ? subject.language : undefined)
+      value: this.fb.nonNullable.control(subject?.value ? subject.value : undefined),
+      type: this.fb.nonNullable.control(subject?.type ? subject.type : undefined)
     },
       { validators: [SubjectValidator], updateOn: VALIDATION_UPDATE_ON });
     return subject_form

@@ -346,7 +346,7 @@ export class ItemFormComponent implements OnInit {
     this.form = this.fbs.item_FG(item);
 
     if(initial) {
-      if (this.user_contexts.length > 0) {
+      if (this.user_contexts.length > 0 && !this.form.get('objectId')?.value) {
         // no contextService call needed, because we just need a contextDbRO
         this.form.get('context')?.patchValue({ objectId: this.user_contexts[0].objectId, name: this.user_contexts[0].name });
       }

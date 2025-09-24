@@ -68,6 +68,7 @@ export class LoginComponent implements OnInit {
   passwordChanged(newPasswd: any) {
     this.showPasswordChange = false;
     this.loginForm.get('password')?.setValue(newPasswd);
+    this.errorMessage = undefined;
     this.messageService.success(this.translateService.instant('common.updateSuccessful'));
 
   }
