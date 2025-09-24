@@ -13,6 +13,9 @@ import { AaService } from 'src/app/services/aa.service';
 import { _, TranslatePipe } from "@ngx-translate/core";
 import { MessageService } from "src/app/services/message.service";
 
+import { ValidationErrorComponent } from "src/app/components/shared/validation-error/validation-error.component";
+
+
 @Component({
   selector: 'pure-imports-new-fetch',
   standalone: true,
@@ -20,7 +23,8 @@ import { MessageService } from "src/app/services/message.service";
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    TranslatePipe
+    TranslatePipe,
+    ValidationErrorComponent
   ],
   templateUrl: './fetch.component.html',
 })
@@ -79,45 +83,42 @@ export default class FetchComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.fetchForm.invalid) {
-      this.fetchForm.markAllAsTouched();
-      return;
-    }
+    if (this.fetchForm.valid) {
 
-    const source = this.fetchForm.controls['source'].value;
-    this.fetchStart();
+      const source = this.fetchForm.controls['source'].value;
+      this.fetchStart();
 
-
-    switch (source) {
-      case 'crossref':
-        this.importsSvc.getCrossref(this.getCrossrefParams).subscribe({
-          next: () => {
-            this.router.navigateByUrl('/edit_import');
-          },
-          error: (response) => {
-            if (response.error.cause !== undefined) {
-              this.msgSvc.warning(JSON.stringify(response.error.cause.cause.message));
-            } else {
-              this.msgSvc.warning(JSON.stringify(response.error.exception));
-            }
-            this.fetchEnd();
-          },
-        });
-        break;
-      case 'arxiv':
-        this.importsSvc.getArxiv(this.getArxivParams).subscribe({
-          next: () => {
-            this.router.navigateByUrl('/edit_import');
-          },
-          error: (response) => {
-            if (response.error.cause !== undefined) {
-              this.msgSvc.warning(JSON.stringify(response.error.cause.cause.message));
-            } else {
-              this.msgSvc.warning(JSON.stringify(response.error.exception));
-            }
-            this.fetchEnd();
-          },
-        });
+      switch (source) {
+        case 'crossref':
+          this.importsSvc.getCrossref(this.getCrossrefParams).subscribe({
+            next: () => {
+              this.router.navigateByUrl('/edit_import');
+            },
+            error: (response) => {
+              if (response.error.cause !== undefined) {
+                this.msgSvc.warning(JSON.stringify(response.error.cause.cause.message));
+              } else {
+                this.msgSvc.warning(JSON.stringify(response.error.exception));
+              }
+              this.fetchEnd();
+            },
+          });
+          break;
+        case 'arxiv':
+          this.importsSvc.getArxiv(this.getArxivParams).subscribe({
+            next: () => {
+              this.router.navigateByUrl('/edit_import');
+            },
+            error: (response) => {
+              if (response.error.cause !== undefined) {
+                this.msgSvc.warning(JSON.stringify(response.error.cause.cause.message));
+              } else {
+                this.msgSvc.warning(JSON.stringify(response.error.exception));
+              }
+              this.fetchEnd();
+            },
+          });
+      }
     }
   }
 
@@ -156,7 +157,7 @@ export default class FetchComponent implements OnInit {
       this.fetchForm.reset();
 
       this.fetchForm.controls['source'].setValue('crossref');
-      this.fetchForm.controls['fullText'].setValue('FULLTEXT_DEFAULT');""
+      this.fetchForm.controls['fullText'].setValue('FULLTEXT_DEFAULT'); ""
     }
   }
 }

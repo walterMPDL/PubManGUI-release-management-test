@@ -54,7 +54,7 @@
       <label for="context" class="col-sm-3 col-form-label">{{ 'imports.context' | translate }}</label>
       <div class="col-sm-9">
         <select id="context" class="form-select" formControlName="contextId"
-          [class.is-invalid]="importForm.get('contextId')?.invalid &&importForm.get('contextId')?.touched || importForm.get('contextId')?.pending"
+          [class.is-invalid]="importForm.get('contextId')?.invalid && importForm.get('contextId')?.touched || importForm.get('contextId')?.pending"
           data-test="import-context">
           <!--[ngClass]="{'border border-danger': importForm.get('contextId')?.pending}" -->
           <option [value]="null" selected disable hidden>{{ 'imports.context' | translate }}</option>
@@ -85,7 +85,7 @@
       </div>
       <div class="col-sm-2">
         <select class="form-select" formControlName="format"
-          [class.is-invalid]="importForm.get('format')?.invalid &&importForm.get('format')?.touched || importForm.get('format')?.pending" 
+          [class.is-invalid]="importForm.get('format')?.invalid && importForm.get('format')?.touched || importForm.get('format')?.pending" 
           (change)="onFormatChange($event)" 
           data-test="import-format">
           <!--[ngClass]="{'border border-danger': importForm.get('format')?.pending}"-->
@@ -115,7 +115,7 @@
       </div>
       <div class="col-sm-9">
         <input class="form-control" formControlName="importName"
-          [class.is-invalid]="importForm.get('importName')?.invalid &&importForm.get('importName')?.touched || importForm.get('importName')?.pending"
+          [class.is-invalid]="importForm.get('importName')?.invalid && importForm.get('importName')?.touched || importForm.get('importName')?.pending"
           data-test="import-name">
           <!--[ngClass]="{'border border-danger': importForm.get('importName')?.pending}" -->
       </div>
