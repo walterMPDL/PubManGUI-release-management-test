@@ -88,7 +88,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
 export class PubManHttpErrorResponse extends HttpErrorResponse {
 
   userMessage: string;
-  jsonMessage: object|undefined = undefined;
+  jsonMessage: any = undefined;
 
   constructor(errorResponse: HttpErrorResponse) {
     super({error: errorResponse.error, headers: errorResponse.headers, status: errorResponse.status, statusText: errorResponse.statusText, url:errorResponse.url!})

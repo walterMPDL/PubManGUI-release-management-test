@@ -9,11 +9,8 @@ import { HttpOptions } from "./pubman-generic-rest-client.service";
 })
 export class ContextsService extends PubmanSearchableGenericRestClientService<ContextDbVO>{
 
-  static instance: ContextsService;
-
   constructor() {
     super('/contexts');
-    ContextsService.instance = this;
   }
 
 

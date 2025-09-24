@@ -1,6 +1,18 @@
 import { HttpClient, HttpContext, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, EMPTY, forkJoin, map, Observable, of, switchMap, tap, throwError } from 'rxjs';
+import {
+  BehaviorSubject,
+  catchError,
+  EMPTY,
+  finalize,
+  forkJoin,
+  map,
+  Observable,
+  of,
+  switchMap,
+  tap,
+  throwError
+} from 'rxjs';
 import { MessageService } from 'src/app/services/message.service';
 import { environment } from 'src/environments/environment';
 import { AccountUserDbVO, ContextDbVO, ItemVersionState } from "../model/inge";
@@ -39,8 +51,6 @@ export class Principal{
 })
 export class AaService {
 
-  static instance: AaService;
-
   private loginUrl = environment.inge_rest_uri.concat('/login');
   private logoutUrl = environment.inge_rest_uri.concat('/logout');
 
@@ -56,7 +66,6 @@ export class AaService {
     const principal: Principal = new Principal();
     this.principal = new BehaviorSubject<Principal>(principal);
     //this.checkLogin();
-    AaService.instance = this;
   }
 
   get isLoggedInObservable(): Observable<boolean> {
@@ -141,8 +150,6 @@ export class AaService {
       if(res.status === 200) {
         console.log("Successfully logged out from backend");
       }
-        this.principal.next(new Principal());
-      //sessionStorage.clear();
       //localStorage.clear();
         /*
       const  loggedOutprincipal = new Principal();
@@ -156,7 +163,11 @@ export class AaService {
           this.router.navigate(['/'])
         })
 
-    })
+    }),
+      finalize(() => {
+        this.principal.next(new Principal());
+        sessionStorage.clear();
+      })
     ).subscribe()
 
   }
