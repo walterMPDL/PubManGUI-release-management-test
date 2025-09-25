@@ -1,5 +1,4 @@
 .imports {
-
   .top_nav_pos {
     overflow: visible;
   }
@@ -23,7 +22,7 @@
       top: -200px;
     }
   }
-/*
+  /*
   .show-more {
     &:not(:hover) {
       .more-to-show {
@@ -54,7 +53,7 @@
           margin-bottom: 1rem;
         }
         */
-        
+
         &:hover {
           color: var(--accent-bg-color) !important;
         }
@@ -71,12 +70,12 @@
     &::-webkit-file-upload-button {
       visibility: hidden;
     }
-  } 
+  }
 
   #fileName {
-      border-color: var(--bs-body-bg);
-      color: var(--bs-success);
-      font-weight: bold;
+    border-color: var(--bs-body-bg);
+    color: var(--bs-success);
+    font-weight: bold;
 
     &:focus {
       box-shadow: none;
@@ -86,8 +85,7 @@
       font-weight: normal;
       font-style: italic;
     }
-
-  } 
+  }
 
   #identifier {
     &::placeholder {
@@ -95,4 +93,7 @@
     }
   }
 
+  .validation-error {
+    min-height: 1.5em;
+  }
 }

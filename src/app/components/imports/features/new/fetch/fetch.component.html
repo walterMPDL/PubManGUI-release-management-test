@@ -15,9 +15,9 @@
         </select>
       </div>
     </div>
-    <div class="mb-2 row">
+    <div class="mb-2 row validation-error" >
       <div class="offset-sm-3 col-sm-6">
-        <pure-validation-error [control]="fetchForm.get('contextId')"/>
+       <pure-validation-error [control]="fetchForm.get('contextId')"/>
       </div>
     </div>
 
@@ -36,7 +36,7 @@
           [class.is-invalid]="fetchForm.get('identifier')?.invalid && fetchForm.get('identifier')?.touched || fetchForm.get('identifier')?.pending">
       </div>
     </div>
-    <div class="mb-2 row">
+    <div class="mb-2 row validation-error">
       <div class="offset-sm-5 col-sm-6">
         <pure-validation-error [control]="fetchForm.get('identifier')"/>
       </div>
