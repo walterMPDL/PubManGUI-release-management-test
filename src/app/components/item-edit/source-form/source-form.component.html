@@ -54,7 +54,7 @@
                         (notice)="handleAltTitleNotification($event)"></pure-alt-title-form>
                 </ng-container>
                 } @empty {
-                <pure-add-remove-buttons [index]="0" [del_val]="'hidden'" [add_val]="'common.add' | translate"
+                <pure-add-remove-buttons [index]="0" [del_val]="'hidden'" [add_val]="'common.add' | translate" [addIconAndText]="true"
                     (notice)="handleAltTitleNotification($event)"></pure-add-remove-buttons>
                 }
             </ng-container>
@@ -77,7 +77,7 @@
                     </ng-container>
                     } @empty {
                     <div class="col-sm">
-                        <pure-add-remove-buttons [index]="0" [del_val]="'hidden'" [add_val]="'common.add' | translate"
+                        <pure-add-remove-buttons [index]="0" [del_val]="'hidden'" [add_val]="'common.add' | translate" [addIconAndText]="true"
                             (notice)="handleCreatorNotification($event)"></pure-add-remove-buttons>
                     </div>
                     }
@@ -110,7 +110,7 @@
                     }
 
                     @empty {
-                    <pure-add-remove-buttons [index]="0" [del_val]="'hidden'" [add_val]="'common.add' | translate"
+                    <pure-add-remove-buttons [index]="0" [del_val]="'hidden'" [add_val]="'common.add' | translate" [addIconAndText]="true"
                         (notice)="handleIdentifierNotification($event)"></pure-add-remove-buttons>
                     }
                 </ng-container>

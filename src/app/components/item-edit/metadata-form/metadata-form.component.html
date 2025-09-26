@@ -87,7 +87,7 @@
                                         (notice)="handleAltTitleNotification($event)"></pure-alt-title-form>
                                 </ng-container>
                                 } @empty {
-                                <pure-add-remove-buttons [index]="0" [del_val]="'hidden'" [add_val]="'common.add' | translate"
+                                <pure-add-remove-buttons [index]="0" [del_val]="'hidden'" [add_val]="'common.add' | translate" [addIconAndText]="true"
                                     (notice)="handleAltTitleNotification($event)"></pure-add-remove-buttons>
                                 }
                             </ng-container>
@@ -148,7 +148,7 @@
                                     } @empty {
                                     <div class="col-sm">
                                         <pure-add-remove-buttons [index]="0" [del_val]="'hidden'"
-                                            [add_val]="'common.add' | translate" (notice)="handleCreatorNotification($event)"
+                                            [add_val]="'common.add' | translate" (notice)="handleCreatorNotification($event)" [addIconAndText]="true"
                                             data-test="add-remove-creators"></pure-add-remove-buttons>
                                     </div>
                                     }
@@ -287,7 +287,7 @@
                                 </ng-container>
                                 }
                                 @empty {
-                                <pure-add-remove-buttons [index]="0" [del_val]="'hidden'" [add_val]="'common.add' | translate"
+                                <pure-add-remove-buttons [index]="0" [del_val]="'hidden'" [add_val]="'common.add' | translate" [addIconAndText]="true"
                                     (notice)="handleLanguageNotification($event)"></pure-add-remove-buttons>
                                 }
                             </ng-container>
@@ -364,7 +364,7 @@
                                 </ng-container>
                                 }
                                 @empty {
-                                <pure-add-remove-buttons [index]="0" [del_val]="'hidden'" [add_val]="'common.add' | translate"
+                                <pure-add-remove-buttons [index]="0" [del_val]="'hidden'" [add_val]="'common.add' | translate" [addIconAndText]="true"
                                     (notice)="handleIdentifierNotification($event)"></pure-add-remove-buttons>
                                 }
                             </ng-container>
@@ -395,7 +395,7 @@
                         </div>
                         }
                         @empty {
-                        <pure-add-remove-buttons [index]="0" [del_val]="'hidden'" [add_val]="'common.add' | translate"
+                        <pure-add-remove-buttons [index]="0" [del_val]="'hidden'" [add_val]="'common.add' | translate" [addIconAndText]="true"
                             (notice)="handleAbstractNotification($event)"></pure-add-remove-buttons>
                         }
                     </ng-container>
@@ -427,7 +427,7 @@
                                 </ng-container>
                                 }
                                 @empty {
-                                <pure-add-remove-buttons [index]="0" [del_val]="'hidden'" [add_val]="'common.add' | translate"
+                                <pure-add-remove-buttons [index]="0" [del_val]="'hidden'" [add_val]="'common.add' | translate" [addIconAndText]="true"
                                     (notice)="handleSubjectNotification($event)"></pure-add-remove-buttons>
                                 }
                             </ng-container>
@@ -502,7 +502,7 @@
                     }
                     @empty {
                     <div class="accordion-body mt-3 mb-3">
-                        <pure-add-remove-buttons [index]="0" [del_val]="'hidden'" [add_val]="'common.add' | translate"
+                        <pure-add-remove-buttons [index]="0" [del_val]="'hidden'" [add_val]="'common.add' | translate" [addIconAndText]="true"
                             (notice)="handleProjectInfoNotification($event)"></pure-add-remove-buttons>
                     </div>
                     }
@@ -567,7 +567,7 @@
                     </div>
                     } @empty {
                     <div class="accordion-body mt-3 mb-3">
-                        <pure-add-remove-buttons [index]="0" [del_val]="'hidden'" [add_val]="'common.add' | translate"
+                        <pure-add-remove-buttons [index]="0" [del_val]="'hidden'" [add_val]="'common.add' | translate" [addIconAndText]="true"
                             (notice)="handleSourceNotification($event)"></pure-add-remove-buttons>
                     </div>
                     }

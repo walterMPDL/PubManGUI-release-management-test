@@ -1,4 +1,23 @@
 <div class="d-flex">
-    <button type="button" [ngClass]="!hiddenAddButton ? 'btn btn-sm btn-outline-secondary me-1' : 'invisible'" name="add" [disabled]="disableAdd" [innerHTML]="add_value" (click)="add(index)"></button>
-    <button type="button" class="btn btn-sm btn-outline-secondary" name="remove" [innerHTML]="del_value" (click)="remove(index)" [disabled]="disableRemove" [hidden]="del_value === 'hidden'"></button>
+    <button type="button" [ngClass]="!hiddenAddButton ? 'btn btn-sm btn-outline-secondary me-1' : 'invisible'" name="add" [disabled]="disableAdd" (click)="add(index)">
+      @if(addIconAndText) {
+        <i class="bi bi-plus-lg"></i>
+      }
+      @if(add_val) {
+        {{add_val}}
+      } @else {
+        <i class="bi bi-plus"></i>
+      }
+    </button>
+    <button type="button" class="btn btn-sm btn-outline-secondary" name="remove" (click)="remove(index)" [disabled]="disableRemove" [hidden]="del_val === 'hidden'">
+      @if(addIconAndText) {
+        <i class="bi bi-dash-lg"></i>
+      }
+      @if(del_val) {
+        {{del_val}}
+      } @else {
+        <i class="bi bi-dash"></i>
+      }
+
+    </button>
 </div>

@@ -93,7 +93,7 @@
                                   <hr/>
                                 }
                                 @empty {
-                                <pure-add-remove-buttons [index]="0" [del_val]="'hidden'" [add_val]="'common.add' | translate"
+                                <pure-add-remove-buttons [index]="0" [del_val]="'hidden'" [add_val]="'common.add' | translate" [addIconAndText]="true"
                                     (notice)="handleInternalFileNotification($event)"></pure-add-remove-buttons>
                                 }
                             </div>
@@ -150,7 +150,7 @@
                           }
                           @else {
                             <pure-add-remove-buttons [index]="0" [del_val]="'hidden'"
-                                                     [add_val]="'common.add' | translate"
+                                                     [add_val]="'common.add' | translate" [addIconAndText]="true"
                                                      (notice)="handleNoExternalReferences()"></pure-add-remove-buttons>
                           }
                         </div>
