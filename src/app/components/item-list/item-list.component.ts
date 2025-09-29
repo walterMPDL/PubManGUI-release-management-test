@@ -4,7 +4,7 @@ import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ItemListElementComponent } from './item-list-element/item-list-element.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TopnavComponent } from 'src/app/components/shared/topnav/topnav.component';
-import { BehaviorSubject, map, Observable, of, Subscription, tap } from 'rxjs';
+import { BehaviorSubject, catchError, map, Observable, of, Subscription, tap } from 'rxjs';
 import { ItemVersionVO } from 'src/app/model/inge';
 import { AaService } from 'src/app/services/aa.service';
 import { ItemsService } from "../../services/pubman-rest-client/items.service";
@@ -225,6 +225,9 @@ export class ItemListComponent implements AfterViewInit{
         this.listStateService.currentPageOfList = this.currentPage;
         this.listStateService.currentSizeOfList = this.size;
 
+      }),
+      catchError(err => {
+        return of([]);
       })
     );
   }

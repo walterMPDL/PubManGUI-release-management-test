@@ -82,6 +82,10 @@ export class MessageService {
   }
 
   httpError(error: PubManHttpErrorResponse) {
+    this.displayOnArea(this.httpErrorToMessage(error));
+  }
+
+  httpErrorToMessage(error: PubManHttpErrorResponse) {
     let title = error.userMessage;
     let text = `
         ${(error.url || '')}<br/>
@@ -126,7 +130,9 @@ export class MessageService {
       }
 
     }
-    this.displayOnArea({type: 'danger', title: title, text: text, collapsed: collapsed});
+    title = this.translateService.instant('common.errorOccured') + ": " + title;
+    text = '<small><b>Technical information:</b><br/>' + text + '</small>';
+    return {type: 'danger', title: title, text: text, collapsed: collapsed}
   }
 
   splitMessage(message: string): { title: string, content: string } {
