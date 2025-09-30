@@ -34,6 +34,7 @@ export class NotificationComponent {
 
   ngOnChanges() {
     this.dress(this.message);
+
   }
 
   dress(content: any): void {

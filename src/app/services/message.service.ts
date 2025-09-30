@@ -19,7 +19,7 @@ export class MessageService {
 
   constructor(public dialog: Dialog, private translateService: TranslateService) { }
 
-  displayMessage(message?: { type: string; text: string; }) {
+  displayMessage(message?: Message) {
     // this.messageDialogRef = this.dialog.open(MessageComponent, {
       this.dialog.open(MessageComponent, {
       // hasBackdrop: false,
@@ -29,7 +29,7 @@ export class MessageService {
     });
   }
 
-  displayConfirmation(message?: { title?: string, text?: string, confirm: string, cancel: string }) {
+  displayConfirmation(message?: Message) {
     const ref = this.dialog.open(ConfirmationComponent, {
       hasBackdrop: false,
       // autoFocus: false,
@@ -39,21 +39,22 @@ export class MessageService {
     return ref;
   }
 
-  displayOnArea(message?: { type: string; title?: string, text: string; collapsed?: boolean }) {
+  displayOnArea(message?: Message) {
     this.lastMessage.set(message);
   }
 
   info(message: string) {
-    const msg = { type: 'info', text: message };
+    const msg: Message = { type: 'info', text: message };
     //this.displayMessage(msg);
     this.displayOnArea(msg);
   }
 
   success(message: string) {
-    let title, msg = null;
+    let title = null;
+    let msg: Message | undefined;
     if (message.lastIndexOf('\n')>=0) {
       const multilines = this.splitMessage(message);
-      msg = { type: 'success', title: multilines.title, text: multilines.content };
+      msg = { type: 'success', title: multilines.title, text: multilines.text };
       if (this.lastMessage().title && this.lastMessage().title === title) return;
     } else {
       msg = { type: 'success', text: message };
@@ -63,16 +64,16 @@ export class MessageService {
   }
 
   warning(message: string) {
-    const msg = { type: 'warning', text: message };
+    const msg: Message = { type: 'warning', text: message };
     //this.displayMessage(msg);
     this.displayOnArea(msg);
   }
 
   error(message: string) {
-    let msg = null;
+    let msg: Message | undefined = undefined;
     if (message.lastIndexOf('\n')>=0) {
       const formattedMsg = this.splitRawError(message);
-      msg = { type: 'danger', title: formattedMsg.title, text: formattedMsg.content };
+      msg = { type: 'danger', title: formattedMsg.title, text: formattedMsg.text };
       //if (this.lastMessage().title && this.lastMessage().title === formattedMsg.title) return;
     } else {
       msg = { type: 'danger', text: message };
@@ -85,7 +86,7 @@ export class MessageService {
     this.displayOnArea(this.httpErrorToMessage(error));
   }
 
-  httpErrorToMessage(error: PubManHttpErrorResponse) {
+  httpErrorToMessage(error: PubManHttpErrorResponse): Message {
     let title = error.userMessage;
     let text = `
         ${(error.url || '')}<br/>
@@ -136,13 +137,13 @@ export class MessageService {
     return {type: 'danger', title: title, text: text, collapsed: collapsed}
   }
 
-  splitMessage(message: string): { title: string, content: string } {
+  splitMessage(message: string): Message {
     const title = message.substring(0,message.indexOf('\n'));
     const content = message.substring(message.indexOf('\n')+1);
-    return { title: title, content: content };
+    return { title: title, text: content };
   }
 
-  splitRawError(message: string): { title: string, content: string } {
+  splitRawError(message: string): Message {
     let title = null;
     if (message.substring(message.lastIndexOf('\n')).length < 3) {
       title = message.substring(0, message.indexOf('\n'));
@@ -150,6 +151,15 @@ export class MessageService {
       title = message.substring(message.lastIndexOf('\n'));
     }
     const content = message.substring(0, message.lastIndexOf('\n'));
-    return { title: title, content: content };
+    return { title: title, text: content };
   }
+}
+
+export interface Message {
+  type?: 'info' | 'warning' | 'success' | 'danger';
+  title?: string;
+  text: string;
+  collapsed?: boolean;
+  confirm?:string,
+  cancel?:string
 }
