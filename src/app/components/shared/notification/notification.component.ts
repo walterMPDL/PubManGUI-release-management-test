@@ -58,7 +58,7 @@ export class NotificationComponent {
         this.severity_icon = 'task_alt';
         setTimeout(() => {
           this.close();
-        }, 5000);
+        }, 3000);
         break;
       case 'info':
         this.fg_color = 'text-info-emphasis';
@@ -66,7 +66,7 @@ export class NotificationComponent {
         this.severity_icon = 'info';
         setTimeout(() => {
           this.close();
-        }, 5000);
+        }, 3000);
     }
   }
 

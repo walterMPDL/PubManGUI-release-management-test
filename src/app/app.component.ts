@@ -12,6 +12,7 @@ import { NgbTooltipConfig } from "@ng-bootstrap/ng-bootstrap";
 import { filter } from "rxjs/operators";
 import { Title } from "@angular/platform-browser";
 import { AaService } from "./services/aa.service";
+import { MessageService } from "./services/message.service";
 
 @Component({
   selector: 'app-root',
@@ -29,9 +30,11 @@ export class AppComponent {
     private activatedRoute: ActivatedRoute,
     private title: Title,
     private translate: TranslateService,
-    private aaService: AaService
+    private aaService: AaService,
+    private messageService: MessageService,
   )
   {
+    messageService.error("bla blub\nmllllll")
     // Check login every time the focus is on the window, e.g. if a user has logged in/out in another tab or admin tool
     window.onfocus = function() {
       aaService.checkLoginChanged();

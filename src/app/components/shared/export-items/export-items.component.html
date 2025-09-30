@@ -116,13 +116,13 @@
     </div>
 
   }
+
+  @if(errorMessage) {
+      <pure-notification class="mt-5" [message]="errorMessage"/>
+  }
 </div>
 
-@if(errorMessage) {
-  <div class="mt-2">
-    <pure-notification class="mt-5" [message]="errorMessage"/>
-  </div>
-}
+
 
 <div class="modal-footer">
 

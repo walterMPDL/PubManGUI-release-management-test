@@ -43,6 +43,8 @@ export class ItemListStateService {
     const currentStart = ((this.currentPageOfList -1) * this.currentSizeOfList) + 1;
     const curentEnd = (this.currentPageOfList) * this.currentSizeOfList;
 
+    console.log(this.page, currentStart, curentEnd);
+
     //if selected item is not in current range, do a new search
     if(this.page > curentEnd || this.page < currentStart) {
       this.search().subscribe(list => {
@@ -67,7 +69,7 @@ export class ItemListStateService {
 
     if (this.currentFullQuery) {
 
-      const from = (Math.floor(this.page / this.currentSizeOfList)) * this.currentSizeOfList;
+      const from = (Math.floor((this.page-1) / this.currentSizeOfList)) * this.currentSizeOfList;
       console.log("Set from to " + from);
       this.currentPageOfList = (from / this.currentSizeOfList) + 1;
       console.log("Set currentPageOfList to " + this.currentPageOfList);
