@@ -10,7 +10,7 @@ import { STRONG_PASSWORD_REGEX_PATTERN } from "../../../services/form-builder.se
 import { TranslatePipe } from "@ngx-translate/core";
 import { BootstrapValidationDirective } from "../../../directives/bootstrap-validation.directive";
 import { NotificationComponent } from "../notification/notification.component";
-import { MessageService } from "../../../services/message.service";
+import { Message, MessageService } from "../../../services/message.service";
 
 
 @Component({
@@ -31,7 +31,7 @@ export class ChangePasswordComponent {
   changePasswordForm!: FormGroup;
   passwordChangeSuccess = false;
   passwordChangeLoading = false;
-  errorMessage?: any;
+  errorMessage?: Message;
 
   //Set principal if user is logged in
   @Input() principal : Principal | undefined;
@@ -67,7 +67,7 @@ export class ChangePasswordComponent {
     const newPassword2 = this.changePasswordForm.get("newPassword2")?.value;
 
     if(newPassword1 !== newPassword2) {
-      this.errorMessage = "Passwords do not match";
+      this.errorMessage = {type: "danger", text: "Passwords do not match"};
       this.passwordChangeLoading = false;
       return;
     }

@@ -27,7 +27,7 @@
 
     @if(message.title && !collapsed) {
     <div class="d-flex justify-content-center align-bottom p-1">
-      <span [ngClass]="[bg_color, fg_color]" class="text-break" [innerHTML]="message.text"></span>
+      <span [ngClass]="[bg_color, fg_color]" class="text-break" [innerHTML]="message.text | sanitizeHtml:['br','b','i','small']"></span>
     </div>
     }
   </div>

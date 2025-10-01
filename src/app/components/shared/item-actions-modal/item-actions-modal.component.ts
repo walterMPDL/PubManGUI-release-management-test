@@ -3,7 +3,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 import { ItemVersionVO } from "../../../model/inge";
 import { ItemsService } from "../../../services/pubman-rest-client/items.service";
-import { MessageService } from "../../../services/message.service";
+import { Message, MessageService } from "../../../services/message.service";
 import { Router } from "@angular/router";
 import { catchError, EMPTY, finalize, Observable, Subscription, tap } from "rxjs";
 import { TranslatePipe, TranslateService } from "@ngx-translate/core";
@@ -35,7 +35,7 @@ export class ItemActionsModalComponent {
 
   protected comment : string = '';
 
-  protected errorMessage: any = undefined;
+  protected errorMessage?: Message;
 
   protected loading = false;
 

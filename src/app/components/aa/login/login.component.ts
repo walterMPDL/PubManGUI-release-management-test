@@ -7,7 +7,7 @@ import { HttpErrorResponse } from "@angular/common/http";
 import { PubManHttpErrorResponse } from "../../../services/interceptors/http-error.interceptor";
 import { ValidationErrorComponent } from "../../shared/validation-error/validation-error.component";
 import { ChangePasswordComponent } from "../../shared/change-password/change-password.component";
-import { MessageService } from "../../../services/message.service";
+import { Message, MessageService } from "../../../services/message.service";
 import { TranslateService } from "@ngx-translate/core";
 import { BootstrapValidationDirective } from "../../../directives/bootstrap-validation.directive";
 import { NotificationComponent } from "../../shared/notification/notification.component";
@@ -23,7 +23,7 @@ export class LoginComponent implements OnInit {
 
   loginForm!: FormGroup;
 
-  errorMessage?: any;
+  errorMessage?: Message;
 
   @Input() forcedLogout = false;
 

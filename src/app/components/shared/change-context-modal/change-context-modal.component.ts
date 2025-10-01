@@ -3,7 +3,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 import { ContextDbVO, ContextState, ItemVersionState, ItemVersionVO, Workflow } from "../../../model/inge";
 import { ItemsService } from "../../../services/pubman-rest-client/items.service";
-import { MessageService } from "../../../services/message.service";
+import { Message, MessageService } from "../../../services/message.service";
 import { catchError, EMPTY, finalize, Subscription, tap } from "rxjs";
 import { TranslatePipe, TranslateService } from "@ngx-translate/core";
 import { SanitizeHtmlPipe } from "../../../pipes/sanitize-html.pipe";
@@ -32,7 +32,7 @@ export class ChangeContextModalComponent {
   contextList : {context: ContextDbVO, invalid:boolean }[] = [];
   selectedContextId = '';
 
-  errorMessage: any = {};
+  errorMessage?: Message;
 
   loading = false;
 

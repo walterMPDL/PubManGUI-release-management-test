@@ -13,7 +13,7 @@ import { JsonPipe } from "@angular/common";
 import { PubManHttpErrorResponse } from "../../../services/interceptors/http-error.interceptor";
 import { ConeAutosuggestComponent } from "../cone-autosuggest/cone-autosuggest.component";
 import { NotificationComponent } from "../notification/notification.component";
-import { MessageService } from "../../../services/message.service";
+import { Message, MessageService } from "../../../services/message.service";
 import { BootstrapValidationDirective } from "../../../directives/bootstrap-validation.directive";
 import { ValidationErrorComponent } from "../validation-error/validation-error.component";
 
@@ -63,7 +63,7 @@ export class ExportItemsComponent {
   currentCitation: string = '';
 
   protected loading = false;
-  protected errorMessage: any = {};
+  protected errorMessage?: Message;
   private exportSubscription?: Subscription;
 
   protected atomFeedUrl = "";
@@ -97,7 +97,7 @@ export class ExportItemsComponent {
   }
 
   updateStoredExportInfo() {
-    this.errorMessage = "";
+    this.errorMessage = undefined;
     const exportType: ExportType = {
       exportType: this.selectedExportType.value,
       citationType: this.selectedCitationType.value,

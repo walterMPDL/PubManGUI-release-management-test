@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from "@angul
 import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 import { ContextDbVO, ContextState, ItemVersionState, ItemVersionVO, Workflow } from "../../../model/inge";
 import { ItemsService } from "../../../services/pubman-rest-client/items.service";
-import { MessageService } from "../../../services/message.service";
+import { Message, MessageService } from "../../../services/message.service";
 import { catchError, EMPTY, finalize, Subscription, tap } from "rxjs";
 import { TranslatePipe, TranslateService } from "@ngx-translate/core";
 import { SanitizeHtmlPipe } from "../../../pipes/sanitize-html.pipe";
@@ -35,7 +35,7 @@ export class UpdateLocaltagsModalComponent {
   formGroup: FormGroup;
   tmpLocalTags: string[] = []
 
-  errorMessage: any = undefined;
+  errorMessage?: Message;
 
   loading = false;
 
