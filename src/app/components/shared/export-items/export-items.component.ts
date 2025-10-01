@@ -14,6 +14,8 @@ import { PubManHttpErrorResponse } from "../../../services/interceptors/http-err
 import { ConeAutosuggestComponent } from "../cone-autosuggest/cone-autosuggest.component";
 import { NotificationComponent } from "../notification/notification.component";
 import { MessageService } from "../../../services/message.service";
+import { BootstrapValidationDirective } from "../../../directives/bootstrap-validation.directive";
+import { ValidationErrorComponent } from "../validation-error/validation-error.component";
 
 
 @Component({
@@ -26,7 +28,9 @@ import { MessageService } from "../../../services/message.service";
     JsonPipe,
     ConeAutosuggestComponent,
     ReactiveFormsModule,
-    NotificationComponent
+    NotificationComponent,
+    BootstrapValidationDirective,
+    ValidationErrorComponent
   ],
   templateUrl: './export-items.component.html',
   styleUrl: './export-items.component.scss'
@@ -55,6 +59,7 @@ export class ExportItemsComponent {
   selectedSize = 500;
   selectedFrom = 0;
 
+  maxSize = 5000;
   currentCitation: string = '';
 
   protected loading = false;
@@ -122,7 +127,7 @@ export class ExportItemsComponent {
 
   isValid(): boolean {
     return this.itemIds.length > 0 &&
-      (this.selectedCitationType.value !== citationTypes.CSL || (this.selectedCslId?.value?.length > 0));
+      (this.selectedCitationType.value !== citationTypes.CSL || (this.selectedCslId?.value?.length > 0)) && this.selectedSize <= this.maxSize;
   }
 
   handleFormatChange($event: Event) {

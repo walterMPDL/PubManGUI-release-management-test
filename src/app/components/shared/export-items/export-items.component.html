@@ -98,9 +98,9 @@
     }
   @if(type === 'exportAll') {
     <div class="mb-3">
-      <label for="sizeInput">Size</label>
-      <input class="form-control" id="sizeInput" type="number" [(ngModel)]="selectedSize" (change)="handleSizeChange($event)"/>
-
+      <label for="sizeInput">Size (max. 5000)</label>
+      <input class="form-control" id="sizeInput" type="number" [(ngModel)]="selectedSize" (change)="handleSizeChange($event)" [max]="maxSize" #sizeControl='ngModel'/>
+      <pure-validation-error [control]="sizeControl.control"/>
       <label for="sizeInput">Offset</label>
       <input class="form-control" id="offsetInput" type="number" [(ngModel)]="selectedFrom" (change)="handleFromChange($event)"/>
 
