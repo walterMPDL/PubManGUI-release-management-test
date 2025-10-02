@@ -18,6 +18,8 @@ export class NotificationComponent {
   bg_color = 'bg-info-subtle';
   severity_icon: string = 'info';
 
+  private currentTimeout?: any;
+
   constructor( private messageSvc: MessageService) { }
 
   /*
@@ -39,9 +41,10 @@ export class NotificationComponent {
   }
 
   dress(content: any): void {
+    if(this.currentTimeout) {
+      clearTimeout(this.currentTimeout);
+    }
     this.collapsed = content?.collapsed === undefined ? true : content.collapsed;
-    console.log("Message", content);
-    console.log("Collapsed", this.collapsed);
     switch (content.type) {
       case 'error':
       case 'danger':
@@ -58,7 +61,7 @@ export class NotificationComponent {
         this.fg_color = `text-success-emphasis`;
         this.bg_color = `bg-success-subtle`;
         this.severity_icon = 'task_alt';
-        setTimeout(() => {
+        this.currentTimeout = setTimeout(() => {
           this.close();
         }, 3000);
         break;
@@ -66,7 +69,7 @@ export class NotificationComponent {
         this.fg_color = 'text-info-emphasis';
         this.bg_color = 'bg-info-subtle';
         this.severity_icon = 'info';
-        setTimeout(() => {
+        this.currentTimeout = setTimeout(() => {
           this.close();
         }, 3000);
     }
