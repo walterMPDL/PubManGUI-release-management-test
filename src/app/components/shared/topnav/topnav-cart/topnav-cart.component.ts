@@ -14,6 +14,9 @@ import { _, TranslatePipe, TranslateService } from "@ngx-translate/core";
     NgbTooltip,
     TranslatePipe
   ],
+  host: {
+    style: "display: contents"
+  },
   templateUrl: './topnav-cart.component.html',
   //styleUrl: './topnav-cart.component.scss'
 })

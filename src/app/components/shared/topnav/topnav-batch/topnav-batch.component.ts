@@ -14,6 +14,9 @@ import { versionIdToObjectId } from "../../../../utils/utils";
     NgbTooltip,
     TranslatePipe
   ],
+  host: {
+    style: "display: contents"
+  },
   templateUrl: './topnav-batch.component.html',
 })
 export class TopnavBatchComponent {

@@ -2,7 +2,7 @@
     position: sticky;
     top: 150px;
     //z-index: 15;
-    z-index: 1000; 
+    z-index: 1000;
     //overflow: hidden;
     border-radius: 0.2rem;
     box-shadow: color-mix(in srgb, var(--bs-body-color), transparent 80%) 0.2rem 0.5rem 1rem 0;
@@ -19,6 +19,11 @@
         //z-index: 1031;
         top: 100px;
     }
+
+  div.vr:first-child, div.vr:last-child, div.vr+div.vr,div.vr:has(+ *:empty) {
+    display: none;
+  }
+
 
   @media (max-width: 1399.98px) {
     top: 100px;

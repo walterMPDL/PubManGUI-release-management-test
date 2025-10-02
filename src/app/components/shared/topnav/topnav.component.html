@@ -2,10 +2,8 @@
 <div class="row align-items-center top_nav_pos bg-body" [ngClass]="{ 'scrolled': isScrolled }">
   <div class="col-md ps-0">
     <nav id="topnav" class="navbar navbar-expand bg-body">
-      <div class="container-fluid">
-
         <div class="collapse navbar-collapse" id="top_nav">
-
+          <div class="navbar-nav ms-2">
           <ng-content select="[start]"></ng-content>
 
 
@@ -61,8 +59,8 @@
           -->
 
           <!--</div>-->
+          </div>
         </div>
-      </div>
     </nav>
 
   </div>
