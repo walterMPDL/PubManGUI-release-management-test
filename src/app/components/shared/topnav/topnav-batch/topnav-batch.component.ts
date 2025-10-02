@@ -32,12 +32,21 @@ export class TopnavBatchComponent {
       const added = this.batchSvc.addToBatchDatasets(selected);
       if (this.resetSelectionAfterAction)
         this.itemSelectionService.resetList();
+      this.msgSvc.success(
+        this.translateSvc.instant('batch.name') + ": " +
+        added + ' ' + this.translateSvc.instant(_('common.datasets.filled'))
+        + ((selected.length! - added) > 0 ? ", " + `${selected.length! - added} `
+          + this.translateSvc.instant(_('common.datasets.duplicated'))  + "." : '')
+      );
+      /*
       this.msgSvc.success(selected.length + ' '
         + this.translateSvc.instant(_('batch.datasets.selected')) + '\n' + added + ' '
         + this.translateSvc.instant(_('batch.datasets.filled'))
         + ((selected.length! - added) > 0 ? ", " + `${selected.length! - added} `
         + this.translateSvc.instant(_('batch.datasets.duplicated'))  + "." : '')
       );
+
+       */
     } else {
       this.msgSvc.warning(this.translateSvc.instant(_('batch.datasets.empty')) + '!');
     }
@@ -49,12 +58,23 @@ export class TopnavBatchComponent {
       const removed = this.batchSvc.removeFromBatchDatasets(selected);
       if (this.resetSelectionAfterAction)
         this.itemSelectionService.resetList();
+      this.msgSvc.success(
+        this.translateSvc.instant('batch.name') + ": " +
+        //selected.length + ' '
+        //+ this.translateSvc.instant(_('common.datasets.selected')) + '\n' +
+        removed + ' ' + this.translateSvc.instant(_('common.datasets.removed'))
+        + ((selected.length! - removed) > 0 ? ", " + `${selected.length! - removed} `
+          + this.translateSvc.instant(_('common.datasets.missing')) + "." : '')
+      );
+      /*
       this.msgSvc.success(selected.length + ' '
         + this.translateSvc.instant(_('batch.datasets.selected')) + '\n' + removed + ' '
         + this.translateSvc.instant(_('batch.datasets.removed'))
         + ((selected.length! - removed) > 0 ? ", " + `${selected.length! - removed} `
         + this.translateSvc.instant(_('batch.datasets.missing')) + "." : '')
       );
+
+       */
     } else {
       this.msgSvc.warning(this.translateSvc.instant(_('batch.datasets.empty')) + '!');
     }

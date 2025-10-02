@@ -74,7 +74,12 @@
     "value": "Wert",
     "add": "Hinzufügen",
     "remove": "Entfernen",
-    "updateSuccessful": "Änderung erfolgreich"
+    "updateSuccessful": "Änderung erfolgreich",
+    "datasets.duplicated": "dupliziert wird/wurden ignoriert",
+    "datasets.empty": "Es wurden keine Datensätze ausgewählt",
+    "datasets.filled": "Datensatz/Datensätze wird/wurden hinzugefügt",
+    "datasets.missing": "wird/wurden ignoriert",
+    "datasets.removed": "Datensatz/Datensätze wird/wurden entfernt"
   },
   "chips.localTags.placeholder": "Lokalen Tag hinzufügen",
   "validation": {
@@ -228,12 +233,7 @@
     "actions.start": "Aktion gestarted!",
     "actions.stop": "Aktion beendet!",
     "datasets.add": "Der Batchverarbeitung hinzufügen",
-    "datasets.duplicated": "auf Batch dupliziert wird/wurden ignoriert",
-    "datasets.empty": "Die Batchverarbeitung ist leer",
-    "datasets.filled": "Datensatz/Datensätze wird/wurden der Batchverarbeitung hinzugefügt",
-    "datasets.missing": "nicht im Batch, wird/wurden ignoriert",
     "datasets.remove": "Aus der Batchverarbeitung entfernen",
-    "datasets.removed": "Datensatz/Datensätze wird/wurden der Batchverarbeitung entfernt",
     "datasets.selected": "Datensatz/Datensätze ausgewählt",
     "logs.details": "Details",
     "logs.details.back": "Zurück zu den Protokollen",

@@ -74,7 +74,12 @@
     "value": "Value",
     "add": "Add",
     "remove": "Remove",
-    "updateSuccessful": "Update successful"
+    "updateSuccessful": "Update successful",
+    "datasets.duplicated": "duplicated was/were ignored",
+    "datasets.empty": "No datasets were selected",
+    "datasets.filled": "item/items added",
+    "datasets.missing": "was/were ignored",
+    "datasets.removed": "item/items removed"
   },
   "chips.localTags.placeholder": "Add local tag",
   "validation": {
@@ -228,12 +233,7 @@
     "actions.start": "Action started!",
     "actions.stop": "Action finished!",
     "datasets.add": "Add checked items to Batch",
-    "datasets.duplicated": "on batch duplicated was/were ignored",
-    "datasets.empty": "The Batch processing is empty",
-    "datasets.filled": "item/items added to batch processing",
-    "datasets.missing": "not on batch was/were ignored",
     "datasets.remove": "Remove checked items from Batch",
-    "datasets.removed": "item/items removed from batch processing",
     "datasets.selected": "item/items selected",
     "logs.details": "Log details",
     "logs.details.back": "Back to Logs",
