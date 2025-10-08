@@ -6,6 +6,9 @@ import { ConfirmationComponent } from '../components/shared/confirmation/confirm
 import { PubManHttpErrorResponse } from "./interceptors/http-error.interceptor";
 import { TranslateService } from "@ngx-translate/core";
 import sanitizeHtml from "sanitize-html";
+import { Subject, takeUntil, tap, timer } from "rxjs";
+import { filter } from "rxjs/operators";
+import { NavigationEnd, Router } from "@angular/router";
 
 @Injectable({
   providedIn: 'root'
@@ -16,9 +19,46 @@ export class MessageService {
   // confirmationDialogRef!: DialogRef<boolean>;
   confirmation = false;
 
-  public lastMessage = signal<any>({});
+  public lastMessage = signal<Message[]>([]);
 
-  constructor(public dialog: Dialog, private translateService: TranslateService) { }
+  private destroy$: Subject<boolean> = new Subject<boolean>();
+
+  constructor(public dialog: Dialog, private translateService: TranslateService, private router:Router) {
+
+    //Remove message after navigating to another page
+    this.router.events
+      .pipe(
+        takeUntil(this.destroy$),
+        filter((e) => e instanceof NavigationEnd),
+        tap((e) => {
+          this.lastMessage.set(this.lastMessage().filter(msg => msg.keepAfterNavigation));
+        }),
+      )
+      .subscribe()
+
+
+    /*
+    timer(0, 6000).pipe(
+      tap(countdown => {
+        this.success("Test "+ countdown);
+      })
+    ).subscribe()
+
+    timer(0, 10000).pipe(
+      tap(countdown => {
+        this.error("Test "+ countdown);
+      })
+    ).subscribe()
+
+     */
+
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next(true);
+    this.destroy$.complete();
+  }
+
 
   displayMessage(message?: Message) {
     // this.messageDialogRef = this.dialog.open(MessageComponent, {
@@ -41,7 +81,7 @@ export class MessageService {
   }
 
   displayOnArea(message?: Message) {
-    this.lastMessage.set(message);
+    if(message) this.lastMessage().push(message);
   }
 
   info(message: string, keepAfterNavigation:boolean=false) {
@@ -56,7 +96,7 @@ export class MessageService {
     if (message.lastIndexOf('\n')>=0) {
       const multilines = this.splitMessage(message);
       msg = { type: 'success', title: multilines.title, text: multilines.text };
-      if (this.lastMessage().title && this.lastMessage().title === title) return;
+      if (this.lastMessage().length > 0 && this.lastMessage()[0].title && this.lastMessage()[0].title === title) return;
     } else {
       msg = { type: 'success', text: message };
     }

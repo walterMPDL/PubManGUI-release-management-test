@@ -3,6 +3,12 @@
     <pure-breadcrumb></pure-breadcrumb>
   </div>
   <div id="messaging" class="col-12 col-xl-4 mt-xl-0">
-    <pure-notification [message]="currentMessage"></pure-notification>
+
+    @for(msg of messageSvc.lastMessage(); track msg) {
+      <pure-notification [message]="msg"></pure-notification>
+    }
+
+
+
   </div>
 </div>

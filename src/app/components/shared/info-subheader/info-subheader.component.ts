@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, effect, HostListener, inject } from '@angular/core';
+import { Component, computed, effect, HostListener, inject } from '@angular/core';
 import { BreadcrumbComponent } from '../breadcrumb/breadcrumb.component';
 import { NotificationComponent } from '../notification/notification.component';
 import { Message, MessageService } from "../../../services/message.service";
@@ -16,30 +16,14 @@ import { Subject, takeUntil, tap } from "rxjs";
 export class InfoSubheaderComponent {
   isScrolled = false;
 
-  currentMessage?: Message;
-  private messageSvc = inject(MessageService);
-  private router: Router = inject(Router);
-
+  protected messageSvc = inject(MessageService);
   private destroy$: Subject<boolean> = new Subject<boolean>();
 
 
 
   constructor() {
 
-    //Remove message after navigating to another page
-    this.router.events
-      .pipe(
-        takeUntil(this.destroy$),
-        filter((e) => e instanceof NavigationEnd),
-        tap((e) => {
-          if(this.currentMessage && !this.currentMessage.keepAfterNavigation) {
-            this.currentMessage = undefined;
-          }
 
-        }),
-
-      )
-      .subscribe()
   }
 
   ngOnDestroy() {
@@ -47,10 +31,13 @@ export class InfoSubheaderComponent {
     this.destroy$.complete();
   }
 
+  /*
   public onAreaMessage = effect(() => {
     this.currentMessage = this.messageSvc.lastMessage();
     return true;
   });
+
+   */
 
   @HostListener('window:scroll', ['$event'])
   onWindowScroll() {

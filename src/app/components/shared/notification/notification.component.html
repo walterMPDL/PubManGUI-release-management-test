@@ -1,7 +1,12 @@
 @if(message?.text || message?.title) {
-<div [ngClass]="{'collapsed': !collapsed}" class="m-0">
-  <div class="rounded-1 p1" [ngClass]="[bg_color, fg_color]">
+  @let bg_color_subtle = 'bg-' + main_color +'-subtle';
+  @let bg_color = 'bg-' + main_color;
+  @let text_color_emphasis= 'text-' + main_color +'-emphasis';
+
+<div [ngClass]="{'collapsed': !collapsed}" class="mb-1">
+  <div class="rounded-1 p1" [ngClass]="[bg_color_subtle, text_color_emphasis]">
     <div class="d-flex justify-content-between align-top">
+
       <span class="material-symbols-outlined type">
         {{ severity_icon }}
       </span>
@@ -27,9 +32,17 @@
 
     @if(message?.title && !collapsed) {
     <div class="d-flex justify-content-center align-bottom p-1">
-      <span [ngClass]="[bg_color, fg_color]" class="text-break" [innerHTML]="message?.text"></span>
+      <span [ngClass]="[bg_color_subtle, text_color_emphasis]" class="text-break" [innerHTML]="message?.text"></span>
+    </div>
+    }
+
+    @if(countdownEnabled) {
+
+    <div class="progress rounded-0 rounded-bottom-1" [ngClass]="bg_color_subtle" style="height: 3px;" >
+      <div class="progress-bar" [ngClass]="bg_color" role="progressbar" [style.width.%]="progress" aria-valuemax="100"></div>
     </div>
     }
   </div>
+
 </div>
 }

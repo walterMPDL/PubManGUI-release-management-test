@@ -19,6 +19,7 @@ import { AccountUserDbVO, ContextDbVO, ItemVersionState } from "../model/inge";
 import { ContextsService } from "./pubman-rest-client/contexts.service";
 import { Router } from "@angular/router";
 import { DISPLAY_ERROR, PubManHttpErrorResponse, SILENT_LOGOUT } from "./interceptors/http-error.interceptor";
+import { TranslateService } from "@ngx-translate/core";
 
 
 export class Principal{
@@ -62,6 +63,7 @@ export class AaService {
     private contextService: ContextsService,
     private message: MessageService,
     private router: Router,
+    private translate: TranslateService,
   ) {
     const principal: Principal = new Principal();
     this.principal = new BehaviorSubject<Principal>(principal);
@@ -166,7 +168,7 @@ export class AaService {
       this.principal.next(loggedOutprincipal);
          */
         this.checkLogin().subscribe(res => {
-          this.message.info("Logged out successfully");
+          this.message.info("Logout " +this.translate.instant('common.succeeded'), true);
           this.router.navigate(['/'])
         })
 
