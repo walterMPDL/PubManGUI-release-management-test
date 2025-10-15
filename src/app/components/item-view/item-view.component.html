@@ -74,7 +74,7 @@
           </button>
         }
 
-      <div  class="vr"></div>
+
 
       @if (aaService.principal.value.isDepositor) {
         <button  class="nav-link" (click)="useAsTemplate()" ngbTooltip="{{'common.useAsTemplate' | translate}}"
@@ -82,6 +82,8 @@
           <span class="material-symbols-outlined">copy_all</span>
         </button>
       }
+
+      <div  class="vr"></div>
 
       <button  class="nav-link" (click)="openExportModal()" ngbTooltip="{{'common.export' | translate}}"
               placement="bottom-left">
