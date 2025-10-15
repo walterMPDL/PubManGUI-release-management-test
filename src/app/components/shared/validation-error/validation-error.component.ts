@@ -79,7 +79,6 @@ export class ValidationErrorComponent {
       case Errors.SUBJECT_VALUE_NOT_PROVIDED.toString() :
       case Errors.ALT_TITLE_VALUE_NOT_PROVIDED.toString() :
       case Errors.ALT_TITLE_TYPE_NOT_PROVIDED.toString() :
-      case Errors.DEGREE_NOT_PROVIDED.toString() :
       {
 
         return this.translateService.instant('validation.required');
