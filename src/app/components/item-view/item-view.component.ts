@@ -187,7 +187,7 @@ export class ItemViewComponent {
               //retrieve thumbnail, if available
               this.firstPublicPdfFile = i?.files?.find(f => (f.storage === Storage.INTERNAL_MANAGED && f.visibility === Visibility.PUBLIC && f.mimeType === 'application/pdf'));
               if (this.firstPublicPdfFile) {
-                this.itemsService.thumbnailAvalilable(i.objectId, this.firstPublicPdfFile.objectId).subscribe(thumbAvailable => {
+                this.itemsService.thumbnailAvalilable(i.objectId, this.firstPublicPdfFile.objectId!).subscribe(thumbAvailable => {
                   this.thumbnailUrl = this.ingeUri + this.firstPublicPdfFile?.content.replace('/content', '/thumbnail')
                 })
               }
@@ -286,7 +286,7 @@ export class ItemViewComponent {
   get isModeratorOrDepositor() {
     return this.item && this.aaService.isLoggedIn &&
     ((this.item?.creator?.objectId === this.aaService.principal.value.user?.objectId)
-      || (this.aaService.principal.value.moderatorContexts.map(c => c.objectId).includes(this.item.context.objectId)));
+      || (this.aaService.principal.value.moderatorContexts.map(c => c.objectId).includes(this.item.context!.objectId)));
   }
 
 

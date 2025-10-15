@@ -314,7 +314,7 @@
           <pure-item-view-metadata-element [sub]="true" [hl]="true">
             <span label>{{ 'MetadataFields.context' | translate }}</span>
             <span content>
-            {{ item.context.name }}
+            {{ item.context?.name }}
               @if (authorizationInfo && authorizationInfo.actions['EDIT']) {
               <button class="btn btn-sm btn-outline-secondary" (click)="openChangeContextModal()">
                 {{'common.changeContext' | translate}}
