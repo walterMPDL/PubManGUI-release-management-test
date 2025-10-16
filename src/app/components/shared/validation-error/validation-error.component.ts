@@ -132,6 +132,8 @@ export class ValidationErrorComponent {
         return this.translateService.instant('validation.forbiddenUrl');
       case Errors.OLD_AND_NEW_ARE_SAME.toString() :
         return this.translateService.instant('validation.notSameValues');
+      case Errors.DUPLICATED_VALUES.toString() :
+        return this.translateService.instant('validation.noDuplicates');      
       default : {
         const errorNumber = parseInt(key);
         if(!isNaN(errorNumber)) {
