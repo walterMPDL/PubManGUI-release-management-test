@@ -221,7 +221,8 @@ export default class ImportDetailsListComponent implements OnInit {
           const msg = this.translateSvc.instant(_('imports.list.details.delete'), { name: this.import.name }) + ' ' + this.translateSvc.instant(_('common.completed')) + '!\n';
           this.msgSvc.success(msg);
           setTimeout(() => {
-            this.router.navigate(['/imports/myimports']);
+            //this.router.navigate(['/imports/myimports']);
+            this.refreshLogs(); // INGUI-113 After deletion user should stay on "details" page
           }, 1000);
         })
       }
