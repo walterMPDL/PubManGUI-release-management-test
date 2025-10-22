@@ -122,7 +122,7 @@ export class BatchService {
   startProcess(id: number) {
     this.batchProcessLogHeaderId = id;
     this.#processRunning.set(true);
-    this.items = [];
+    //this.items = [];
 
     this.msgSvc.info(this.translateSvc.instant(_('batch.actions.start')) + '\n');
     this.updateProcessProgress();
