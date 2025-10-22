@@ -1,14 +1,18 @@
 describe('New Import', () => {
+  const loginName = Cypress.env('testUser').loginName
+  const password = Cypress.env('testUser').password
+  let importLogId: string;
   let itemIds: string[] = [];
 
   beforeEach(() => {
-    cy.loginViaAPI(Cypress.env('testUser').userName, Cypress.env('testUser').password)
+    cy.loginViaAPI(loginName, password)
     cy.visit('/imports/new')
   })
 
   afterEach(() => {
     if(itemIds.length > 0){
       cy.deleteItemsViaAPI(itemIds)
+      cy.deleteImportLogViaAPI(importLogId)
     }
     cy.logoutViaAPI()
   })
@@ -29,7 +33,7 @@ describe('New Import', () => {
   iDfetchTestCases.forEach(({ description, source, identifier }) => {
     it(description, () => {
       // Given
-      cy.intercept('GET', '/rest/dataFetch/*').as('fetch')
+      cy.intercept('GET', '/rest/dataFetch/**').as('fetch')
 
       // When
       //TODO: Move the select of the source behind the context selection. As soon as the Context select error is fixed
@@ -72,7 +76,6 @@ describe('New Import', () => {
       //When
       cy.get('[data-test=file-upload-input]').selectFile({contents: 'cypress/fixtures/' + fileName,}, {force: true})
       cy.get('#fileName').invoke('val').should('contain', fileName)
-      cy.get('#selectedFile').invoke('text').should('contain', fileName)
 
       cy.get('select[data-test=import-context]').select(Cypress.env('testContext').name)
       cy.get('select[formControlName="format"]').select(format)
@@ -90,16 +93,16 @@ describe('New Import', () => {
         expect(interception.response.statusCode).to.equal(200)
 
         // @ts-ignore
-        let importId = interception.response.body['id'];
+        importLogId = interception.response.body['id'];
 
-        cy.repeatedRequest('GET', Cypress.env('restUrl') + '/import/importLog/' + importId, null,
+        cy.repeatedRequest('GET', Cypress.env('restUrl') + '/import/importLog/' + importLogId, null,
           'status', ['FINISHED'], 10, 1000).then((response) => {
           // @ts-ignore
           expect(response.status).to.equal(200)
           // @ts-ignore
           expect(response.body['status']).to.equal('FINISHED')
 
-          cy.getImportLogItemIdsViaAPI(importId).then((itemIdsResponse) => {
+          cy.getImportLogItemIdsViaAPI(importLogId).then((itemIdsResponse) => {
             itemIds = itemIdsResponse;
             cy.log('Imported Item IDs: ' + itemIds.join(', '))
             expect(itemIdsResponse.length).to.be.equal(expectedItemCount)

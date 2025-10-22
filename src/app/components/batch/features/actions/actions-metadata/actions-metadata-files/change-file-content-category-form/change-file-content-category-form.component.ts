@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, ElementRef, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -11,13 +11,16 @@ import { ContentCategories } from 'src/app/model/inge';
 
 import { _, TranslatePipe, TranslateService } from "@ngx-translate/core";
 
+import { ValidationErrorComponent } from "src/app/components/shared/validation-error/validation-error.component";
+
 @Component({
   selector: 'pure-change-file-content-category-form',
   standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    TranslatePipe
+    TranslatePipe,
+    ValidationErrorComponent
   ],
   templateUrl: './change-file-content-category-form.component.html',
 })
@@ -27,14 +30,15 @@ export class ChangeFileContentCategoryFormComponent {
   valSvc = inject(BatchValidatorsService);
   batchSvc = inject(BatchService);
   translateSvc = inject(TranslateService);
+  elRef: ElementRef = inject(ElementRef);
 
   contentCategories = Object.keys(ContentCategories).sort();
 
   public changeFileContentCategoryForm: FormGroup = this.fb.group({
-    fileContentCategoryFrom: [this.translateSvc.instant(_('batch.actions.metadata.files.contentCategory')), [Validators.required]],
-    fileContentCategoryTo: [this.translateSvc.instant(_('batch.actions.metadata.files.contentCategory')), [Validators.required]],
+    fileContentCategoryFrom: [null, [Validators.required]],
+    fileContentCategoryTo: [null, [Validators.required]],
   },
-    { validators: [this.valSvc.notEqualsValidator('fileContentCategoryFrom', 'fileContentCategoryTo'), this.valSvc.allRequiredValidator()] });
+    { validators: [this.valSvc.notSameValues('fileContentCategoryFrom', 'fileContentCategoryTo')] });
 
   get changeFileContentCategoryParams(): ChangeFileContentCategoryParams {
     const actionParams: ChangeFileContentCategoryParams = {
@@ -43,6 +47,10 @@ export class ChangeFileContentCategoryFormComponent {
       itemIds: []
     }
     return actionParams;
+  }
+
+  ngOnInit(): void {
+    this.changeFileContentCategoryForm.reset();
   }
 
   onSubmit(): void {
@@ -54,7 +62,26 @@ export class ChangeFileContentCategoryFormComponent {
     this.batchSvc.changeFileContentCategory(this.changeFileContentCategoryParams).subscribe(actionResponse => {
       //console.log(actionResponse);
       this.batchSvc.startProcess(actionResponse.batchLogHeaderId);
+      this.changeFileContentCategoryForm.reset();
       this.router.navigate(['/batch/logs']);
     });
+  }
+
+  checkIfAllRequired() {
+    if (!this.changeFileContentCategoryForm.valid) {
+      Object.keys(this.changeFileContentCategoryForm.controls).forEach(key => {
+        const field = this.changeFileContentCategoryForm.get(key);
+        if (field!.hasValidator(Validators.required) && (field!.pristine)) {
+          field!.markAsPending();
+        }
+      });
+    }
+  }
+
+  @HostListener('document:click', ['$event'])
+  clickOutside(event: Event) {
+    if (this.elRef.nativeElement.parentElement.contains(event.target) && !this.elRef.nativeElement.contains(event.target)) {
+      this.changeFileContentCategoryForm.reset();
+    }
   }
 }

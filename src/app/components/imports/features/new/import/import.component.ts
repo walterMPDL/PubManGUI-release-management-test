@@ -1,17 +1,20 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit, ElementRef, HostListener } from '@angular/core';
 
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { ContextDbRO, ImportFormat } from 'src/app/model/inge';
-import { ImportsService } from 'src/app/components/imports/services/imports.service';
 import { ImportValidatorsService } from 'src/app/components/imports/services/import-validators.service';
+import { ImportsService } from 'src/app/components/imports/services/imports.service';
 import type { PostImportParams } from 'src/app/components/imports/interfaces/imports-params';
 import { SeparateFilterPipe } from 'src/app/components/imports/pipes/separateFilter.pipe';
 
 import { AaService } from 'src/app/services/aa.service';
 import { _, TranslatePipe, TranslateService } from "@ngx-translate/core";
+
+import { ValidationErrorComponent } from "src/app/components/shared/validation-error/validation-error.component";
+import { NgbTooltip } from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: 'pure-imports-new-import',
@@ -21,7 +24,9 @@ import { _, TranslatePipe, TranslateService } from "@ngx-translate/core";
     FormsModule,
     ReactiveFormsModule,
     SeparateFilterPipe,
-    TranslatePipe
+    TranslatePipe,
+    ValidationErrorComponent,
+    NgbTooltip
   ],
   templateUrl: './import.component.html',
   styles: [".dropzone { width: 100%; padding: 0.5rem 1.5rem 0.5rem 1.5rem; text-align: center; border: dashed 2px; }"], // TO-DO move to scss
@@ -33,9 +38,11 @@ export default class ImportComponent implements OnInit {
   fb = inject(FormBuilder);
   aaSvc = inject(AaService);
   translateService = inject(TranslateService);
+  elRef: ElementRef = inject(ElementRef);
 
   formatObject: any = null;
   lastFormat: string = '';
+  coneSwitch!: HTMLInputElement;
   data: any = '';
 
   constructor(
@@ -46,14 +53,13 @@ export default class ImportComponent implements OnInit {
   user_contexts?: ContextDbRO[] = [];
 
   public importForm: FormGroup = this.fb.group({
-    contextId: [this.translateService.instant(_('imports.context')), [Validators.required]],
-    importName: ['', [Validators.required]],
-    format: ['ENDNOTE_STRING'],
+    contextId: [null, [Validators.required]],
+    importName: [null, [Validators.required]],
+    format: [null, [Validators.required]],
     formatConfig: [''],
     cone: [''],
-    fileName: ['', [Validators.required]]
-  },
-    { validators: [this.valSvc.allRequiredValidator()] });
+    fileName: [null, [Validators.required]]
+  });
 
   ngOnInit(): void {
     this.aaSvc.principal.subscribe(
@@ -61,10 +67,17 @@ export default class ImportComponent implements OnInit {
         this.user_contexts = p.depositorContexts;
       }
     );
+
+    //this.coneSwitch = this.elRef.nativeElement.querySelector('#cone');
+    //this.importForm.controls['format'].valueChanges.subscribe(format => {
+      //if (format && format !== this.translateService.instant(_('imports.format'))) this.getFormatConfiguration(format);
+      //if (format) this.getFormatConfiguration(format);
+    //});
   }
 
-  ngDoCheck() {
-    this.getFormatConfiguration(this.importForm.get('format')!.value);
+  onFormatChange($event: any): void {
+    $event.preventDefault();
+    this.getFormatConfiguration($event.target.value);
   }
 
   getFormatConfiguration(format: string) {
@@ -72,7 +85,8 @@ export default class ImportComponent implements OnInit {
       this.formatObject = response;
       this.changeDetector.detectChanges();
       if (format !== this.lastFormat) {
-        this.setDefaultOption();
+        this.setSelectDefaultOption();
+        this.isCoNE();
         this.lastFormat = format;
       };
     });
@@ -82,15 +96,13 @@ export default class ImportComponent implements OnInit {
     return (this.formatObject !== null && Object.keys(this.formatObject).length > 0);
   }
 
-  isCoNE(): boolean {
-    if (this.hasConfig()) {
-      const defaultArray = this.formatObject["_default"];
-      const coNEEntry = defaultArray.find((entry: string) => entry.startsWith("CoNE="));
-      if (coNEEntry) {
-        return (coNEEntry.split("=")[1] === "true");
-      }
+  isCoNE(): void {
+    const defaultArray = this.formatObject["_default"];
+    const coNEEntry = defaultArray.find((entry: string) => entry.startsWith("CoNE="));
+    if (coNEEntry) {
+      this.coneSwitch = document.getElementById("cone") as HTMLInputElement;
+      this.coneSwitch.checked = (coNEEntry.split("=")[1] === "true");
     }
-    return false;
   }
 
   hasSelect(): boolean {
@@ -101,14 +113,19 @@ export default class ImportComponent implements OnInit {
     return Object.keys(this.formatObject)[2];
   }
 
-  getOptionList(): string[] {
+  getSelectOptionList(): string[] {
     return Object.entries(this.formatObject)[2][1] as string[];
   }
 
-  setDefaultOption(): void {
-    const defaultArray = this.formatObject["_default"];
-    const defaultValue = defaultArray.find((entry: string) => entry.startsWith(this.getSelectName())).split("=")[1];
-    this.importForm.get('formatConfig')?.setValue(defaultValue);
+  setSelectDefaultOption(): void {
+    if (this.formatObject) {
+      const defaultArray = this.formatObject["_default"];
+      if (!defaultArray || defaultArray.length === 1) {
+        return;
+      }
+      const defaultValue = defaultArray.find((entry: string) => entry.startsWith(this.getSelectName())).split("=")[1];
+      this.importForm.get('formatConfig')?.setValue(defaultValue);
+    }
   }
 
   onDragOver($event: any): void {
@@ -118,21 +135,28 @@ export default class ImportComponent implements OnInit {
   onFileDrop($event: any): void {
     $event.preventDefault();
     if ($event.dataTransfer?.files && $event.dataTransfer.files[0]) {
+      this.importForm.controls['fileName'].setValue($event.dataTransfer.files[0].name);
+      this.importForm.controls['fileName'].markAsTouched();
       this.getData($event.dataTransfer.files[0]);
-    }
+    } 
+ 
+    this.importForm.get('fileName')?.clearAsyncValidators();
+    this.importForm.get('fileName')?.updateValueAndValidity();
   }
 
-  onChange($event: any): void {
+  onFileChange($event: any): void {
     $event.preventDefault();
     if ($event.target.files && $event.target.files[0]) {
+      this.importForm.controls['fileName'].setValue($event.target.files[0].name);
+      this.importForm.controls['fileName'].markAsTouched();
       this.getData($event.target.files[0]);
-    }
+    } 
+
+    this.importForm.get('fileName')?.clearAsyncValidators();
+    this.importForm.get('fileName')?.updateValueAndValidity();
   }
 
   getData(file: File) {
-    let element = document.getElementById('selectedFile') as HTMLElement;
-    element.innerHTML = `<span class="material-symbols-outlined">description</span> <strong> ${file?.name} </strong>`;
-
     const reader = file.stream().getReader();
     let result: any = '';
 
@@ -161,13 +185,31 @@ export default class ImportComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.importForm.invalid) {
-      this.importForm.markAllAsTouched();
-      return;
+    if (this.importForm.valid) {
+      this.importsSvc.postImport(this.getImportParams, this.data).subscribe(() => {
+        this.importsSvc.checkImports();
+        this.router.navigate(['/imports/myimports']);
+      });
     }
+  }
 
-    this.importsSvc.postImport(this.getImportParams, this.data).subscribe(() => {
-      this.router.navigate(['/imports/myimports']);
-    });
+  checkIfAllRequired() {
+    if (this.importForm.invalid) {
+      Object.keys(this.importForm.controls).forEach(key => {
+        const field = this.importForm.get(key);
+        if (field!.hasValidator(Validators.required) && field!.untouched) {
+          field!.markAsPending();
+        }
+      });
+    }
+  }
+
+  @HostListener('document:click', ['$event'])
+  clickOutside(event: Event) {
+    if (this.elRef.nativeElement.parentElement.contains(event.target) && !this.elRef.nativeElement.contains(event.target)) {
+      this.importForm.reset();
+      this.formatObject = null;
+      this.data = null;
+    }
   }
 }

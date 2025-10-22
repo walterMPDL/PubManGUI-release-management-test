@@ -1,0 +1,173 @@
+<div [formGroup]="creator_form">
+    <div class="d-sm-flex flex-sm-row gap-1 p-2 {{index < index_length-1 ? 'border-bottom':''}} {{index%2===0 ? '':'bg-mpg-bg-gray'}}">
+
+
+
+      <div class="col-sm">
+            <div class="d-sm-flex flex-sm-row gap-1 mb-1 align-items-start ">
+
+              <!--
+                @if(creator_form.errors?.[error_types.CREATOR_ORCID_INVALID]) {
+                <div class="pure-invalid">Orcid invalid. Please change in CoNE</div>
+                }
+                -->
+            </div>
+            <div class="d-sm-flex flex-sm-row gap-1 mb-1 align-items-start ">
+              <div class="col-sm-auto" cdkDragHandle>
+                <label class="col-form-label pe-2">&nbsp;</label><br/>
+                <div class="material-symbols-outlined drag-list-box">drag_indicator</div>
+              </div>
+
+              <div class="col-sm-2">
+                    <label for="creator_type" class="col-form-label pe-2">{{ 'common.type' | translate }}</label>
+                    <select id="creator_type" class="form-select" formControlName="type" (change)="type_change($event)">
+                        <!--TODO: type_change really needed?-->
+                        <option [ngValue]="null" selected disabled>{{ 'common.type' | translate }}</option>
+                        @for (t of creator_types; track t) {
+                        <option [value]="t">{{'MetadataFields.' + t.toLowerCase() | translate}}</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <label for="creator_role" class="col-form-label pe-2">{{ 'common.role' | translate }}</label>
+                    <select id="creator_role" class="form-select" formControlName="role" data-test="creator">
+                        <option [ngValue]="null" selected disabled>{{ 'common.role' | translate }}</option>
+                        @for (r of creator_roles; track r) {
+                        <option [value]="r">{{'CreatorRoles.' + r | translate}}</option>
+                        }
+                    </select>
+                  <!--
+                    @if(creator_form.errors?.[error_types.CREATOR_ROLE_NOT_PROVIDED]) {
+                    <div class="pure-invalid">{{ 'validation.required' | translate}}</div>
+                    }
+                    -->
+                </div>
+                @if (type.value === 'ORGANIZATION') {
+                <div class="col-sm" formGroupName="organization">
+                    <label for="name" class="col-form-label pe-2">{{ 'MetadataFields.organization' | translate }}</label>
+                    <pure-ou-autosuggest id="organization{{index+1}}" [formForOuName]="$any(organization.controls.name)"
+                                [formForOuId]="$any(organization.controls.identifier)" [validationEnabled]="true" [emphasize]="true"
+                                ></pure-ou-autosuggest>
+
+
+                  <!--
+                    @if(creator_form.errors?.[error_types.CREATOR_ORGANIZATION_NAME_NOT_PROVIDED]) {
+                      <div class="pure-invalid">{{ 'validation.required' | translate}}</div>
+                    }
+                    -->
+
+                </div>
+                }
+                @if (type.value === 'PERSON') {
+
+                <ng-container formGroupName="person">
+                    <div class="col-sm-4">
+                        <label for="familyName" class="col-form-label pe-2">{{ 'MetadataFields.familyName' | translate }}</label>
+                        <!--<input type="text" class="form-control" id="familyName"
+                            formControlName="familyName">-->
+                        <pure-person-autosuggest id="familyName"
+                            [formForPersonsGivenName]="$any(person.controls.givenName)"
+                            [formForPersonsFamilyName]="$any(person.controls.familyName)"
+                            [formForPersonOrganizations]="$any(person.controls.organizations)"
+                            [formForPersonsIdValue]="$any(person.controls.identifier).controls.id"
+                            [formForPersonsIdType]="$any(person.controls.identifier).controls.type"
+                            [formForPersonsOrcid]="$any(person.controls.orcid)"
+                            [showConeAndOrcid]="true"
+                            data-test="familyname-autosuggest" />
+                      <!--
+                      @if(creator_form.errors?.[error_types.CREATOR_FAMILY_NAME_NOT_PROVIDED] ? true : false) {
+                        <div class="pure-invalid">{{ 'validation.required' | translate}}</div>
+                      }
+                      -->
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="givenName" class="col-form-label pe-2">{{ 'MetadataFields.givenName' | translate }}</label>
+                        <input type="text" class="form-control" id="givenName" formControlName="givenName"
+                            data-test="givenname">
+                    </div>
+                    <!-- Just in case
+                        <label for="orcid" class="col-sm-1 col-form-label text-end pe-2">orcid</label>
+                        <div class="col-sm">
+                            <input type="text" class="form-control" id="orcid" formControlName="orcid">
+                        </div>
+                        <label for="id" class="col-sm-1 col-form-label text-end pe-2">id</label>
+                        <div class="col-sm">
+                            <pure-identifier-form [identifier_form]="identifier" [multi]="false"
+                                (notice)="handleIdentifierNotification($event)"></pure-identifier-form>
+                        </div>
+                        -->
+                </ng-container>
+                }
+            </div>
+
+            @if (type.value === 'PERSON') {
+            <ng-container formGroupName="person">
+                <div formArrayName="organizations">
+                    @for (pou of organizations.controls; track pou; let i = $index) {
+                    <div class="d-sm-flex flex-sm-row gap-1 mb-1 align-items-start" [formGroupName]="i">
+                      <div class="col-sm-auto">
+                        <label for="ou_name" class="col-form-label">{{i+1}}</label>
+                      </div>
+
+                      <div class="col-sm-8">
+
+                          <pure-ou-autosuggest id="personOu{{i+1}}" [formForOuName]="$any(pou.controls.name)"
+                                               [formForOuId]="$any(pou.controls.identifier)" [validationEnabled]="true"
+                                               [formForOuAddress]="$any(pou.controls.address)"
+                                               ></pure-ou-autosuggest>
+
+                        <!--
+                          @if(creator_form.errors?.[error_types.CREATOR_ORGANIZATION_NAME_NOT_PROVIDED]) {
+                            <div class="pure-invalid">{{ 'validation.required' | translate}}</div>
+                          }
+                          -->
+                        </div>
+
+
+                      <div class="col-sm-3">
+                        <!--<label for="ou_address" class="col-form-label pe-2">address</label>-->
+                        <textarea class="form-control" rows="1" type="text" id="givenName" formControlName="address"
+                                  data-test="ou_address" placeholder="Adress"></textarea>
+                      </div>
+
+                        <!--TODO link-->
+                      <!--
+                        <div class="col-sm-auto py-1" [ngClass]="{'invisible': !pou.controls.identifier.value}">
+                            <a routerLink="/TODO" routerLinkActive="active">
+                                <span class="material-symbols-outlined"
+                                    title="{{pou.controls.identifier.value}}">
+                                    info
+                                </span>
+                            </a>
+                        </div>
+                        -->
+                        <div class="col-sm-1">
+                            <pure-add-remove-buttons [index]="i"
+                                (notice)="add_remove_person_ou($event)"></pure-add-remove-buttons>
+                        </div>
+
+                    </div>
+                    } @empty {
+                    <div class="col-sm offset-sm-1">
+
+                        <pure-add-remove-buttons [index]="0" [del_val]="'hidden'" [add_val]="'MetadataFields.organization' | translate"  [addIconAndText]="true"
+                            (notice)="add_remove_person_ou($event)"
+                            data-test="add-remove-organizations"></pure-add-remove-buttons>
+
+                    </div>
+                    }
+
+                </div>
+            </ng-container>
+            }
+            <!-- DEBUG
+            <div class="d-sm-flex flex-sm-row gap-1 mb-1 align-items-start">
+                <span>Creator valid: {{creator_form.valid}} | Creator errors: {{creator_form.errors | json}} </span>
+            </div>
+            -->
+        </div>
+        <div class="col-sm-1">
+            <pure-add-remove-buttons [index]="index" (notice)="add_remove_creator($event)"></pure-add-remove-buttons>
+        </div>
+    </div>
+</div>

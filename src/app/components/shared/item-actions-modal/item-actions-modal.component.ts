@@ -3,11 +3,15 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 import { ItemVersionVO } from "../../../model/inge";
 import { ItemsService } from "../../../services/pubman-rest-client/items.service";
-import { MessageService } from "../../../services/message.service";
+import { Message, MessageService } from "../../../services/message.service";
 import { Router } from "@angular/router";
-import { Observable, Subscription } from "rxjs";
+import { catchError, EMPTY, finalize, Observable, Subscription, tap } from "rxjs";
 import { TranslatePipe, TranslateService } from "@ngx-translate/core";
 import { SanitizeHtmlPipe } from "../../../pipes/sanitize-html.pipe";
+import { PubManHttpErrorResponse } from "../../../services/interceptors/http-error.interceptor";
+import { NotificationComponent } from "../notification/notification.component";
+import { BootstrapValidationDirective } from "../../../directives/bootstrap-validation.directive";
+import { ValidationErrorComponent } from "../validation-error/validation-error.component";
 
 @Component({
   selector: 'pure-item-actions-modal',
@@ -15,7 +19,10 @@ import { SanitizeHtmlPipe } from "../../../pipes/sanitize-html.pipe";
     FormsModule,
     ReactiveFormsModule,
     TranslatePipe,
-    SanitizeHtmlPipe
+    SanitizeHtmlPipe,
+    NotificationComponent,
+    BootstrapValidationDirective,
+    ValidationErrorComponent
   ],
   templateUrl: './item-actions-modal.component.html'
 })
@@ -28,7 +35,7 @@ export class ItemActionsModalComponent {
 
   protected comment : string = '';
 
-  protected errorMessage: string = '';
+  protected errorMessage?: Message;
 
   protected loading = false;
 
@@ -78,53 +85,52 @@ export class ItemActionsModalComponent {
       }
     }
     if(obs) {
-      this.subscription = obs.subscribe({
-          next: (data: any) => {
-            this.messageService.success(this.translateService.instant('common.' + this.action) + " successful");
+      this.subscription = obs
+        .pipe(
+          tap(data => {
+            this.messageService.success(this.translateService.instant('common.' + this.action) + " " + this.translateService.instant('common.succeeded'), true);
             this.activeModal.close();
             this.successfullyDone.emit(data);
-          },
-          error: (error) => {
-            this.errorMessage = error;
-          }
-        }
-      );
-        this.subscription.add(
-          () => {
-            console.log("completed")
+          }),
+          catchError((err: PubManHttpErrorResponse) => {
+            this.errorMessage = this.messageService.httpErrorToMessage(err);
+            return EMPTY;
+          }),
+          finalize(() => {
             this.loading = false;
-          }
+          })
         )
+        .subscribe();
     }
     //this.successfullyDone.emit(this.comment);
   }
 
   submit() {
-    return this.itemsService.submit(this.item!.objectId!, this.item!.lastModificationDate!, this.comment);
+    return this.itemsService.submit(this.item!.objectId!, this.item!.modificationDate!, this.comment, {globalErrorDisplay: false});
   }
 
   release() {
-    return this.itemsService.release(this.item!.objectId!, this.item!.lastModificationDate!, this.comment);
+    return this.itemsService.release(this.item!.objectId!, this.item!.modificationDate!, this.comment, {globalErrorDisplay: false});
   }
 
   revise() {
-    return this.itemsService.revise(this.item!.objectId!, this.item!.lastModificationDate!, this.comment);
+    return this.itemsService.revise(this.item!.objectId!, this.item!.modificationDate!, this.comment, {globalErrorDisplay: false});
   }
 
   withdraw() {
-    return this.itemsService.withdraw(this.item!.objectId!, this.item!.lastModificationDate!, this.comment);
+    return this.itemsService.withdraw(this.item!.objectId!, this.item!.modificationDate!, this.comment, {globalErrorDisplay: false});
   }
 
   delete() {
-    return this.itemsService.delete(this.item!.objectId!, this.item!.lastModificationDate!);
+    return this.itemsService.delete(this.item!.objectId!, this.item!.modificationDate!, {globalErrorDisplay: false});
   }
 
   addDoi() {
-    return this.itemsService.addDoi(this.item!.objectId!);
+    return this.itemsService.addDoi(this.item!.objectId!, {globalErrorDisplay: false});
   }
 
   rollback() {
-    return this.itemsService.rollback(this.item!.objectId!, this.rollbackVersion!);
+    return this.itemsService.rollback(this.item!.objectId!, this.rollbackVersion!, {globalErrorDisplay: false});
   }
 
 }

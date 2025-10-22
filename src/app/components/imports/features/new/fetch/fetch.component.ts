@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ElementRef, HostListener } from '@angular/core';
 
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -10,8 +10,11 @@ import { ImportsService } from 'src/app/components/imports/services/imports.serv
 import type { GetArxivParams, GetCrossrefParams } from 'src/app/components/imports/interfaces/imports-params';
 import { AaService } from 'src/app/services/aa.service';
 
-import { _, TranslatePipe, TranslateService } from "@ngx-translate/core";
+import { _, TranslatePipe } from "@ngx-translate/core";
 import { MessageService } from "src/app/services/message.service";
+
+import { ValidationErrorComponent } from "src/app/components/shared/validation-error/validation-error.component";
+
 
 @Component({
   selector: 'pure-imports-new-fetch',
@@ -20,7 +23,8 @@ import { MessageService } from "src/app/services/message.service";
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    TranslatePipe
+    TranslatePipe,
+    ValidationErrorComponent
   ],
   templateUrl: './fetch.component.html',
 })
@@ -30,8 +34,8 @@ export default class FetchComponent implements OnInit {
   router = inject(Router);
   fb = inject(FormBuilder);
   aaSvc = inject(AaService);
-  translateService = inject(TranslateService);
   msgSvc = inject(MessageService);
+  elRef: ElementRef = inject(ElementRef);
 
   user_contexts?: ContextDbRO[] = [];
 
@@ -54,13 +58,11 @@ export default class FetchComponent implements OnInit {
   }
 
   public fetchForm: FormGroup = this.fb.group({
-    contextId: [this.translateService.instant(_('imports.context')), Validators.required],
+    contextId: [null, Validators.required],
     source: ['crossref'],
     identifier: ['', [Validators.required, this.valSvc.forbiddenURLValidator(/http/i)]],
     fullText: ['FULLTEXT_DEFAULT']
-  },
-    { validators: [this.valSvc.allRequiredValidator()] }
-  );
+  });
 
   get getCrossrefParams(): GetCrossrefParams {
     const importParams: GetCrossrefParams = {
@@ -81,45 +83,42 @@ export default class FetchComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.fetchForm.invalid) {
-      this.fetchForm.markAllAsTouched();
-      return;
-    }
+    if (this.fetchForm.valid) {
 
-    const source = this.fetchForm.controls['source'].value;
-    this.fetchStart();
+      const source = this.fetchForm.controls['source'].value;
+      this.fetchStart();
 
-
-    switch (source) {
-      case 'crossref':
-        this.importsSvc.getCrossref(this.getCrossrefParams).subscribe({
-          next: () => {
-            this.router.navigateByUrl('/edit_import');
-          },
-          error: (response) => {
-            if (response.error.cause !== undefined ) {
-              this.msgSvc.warning(JSON.stringify(response.error.cause.cause.message));
-            } else {
-              this.msgSvc.warning(JSON.stringify(response.error.exception));
-            }
-            this.fetchEnd();
-          },
-        });
-        break;
-      case 'arxiv':
-        this.importsSvc.getArxiv(this.getArxivParams).subscribe({
-          next: () => {
-            this.router.navigateByUrl('/edit_import');
-          },
-          error: (response) => {
-            if (response.error.cause !== undefined ) {
-              this.msgSvc.warning(JSON.stringify(response.error.cause.cause.message));
-            } else {
-              this.msgSvc.warning(JSON.stringify(response.error.exception));
-            }
-            this.fetchEnd();
-          },
-        });
+      switch (source) {
+        case 'crossref':
+          this.importsSvc.getCrossref(this.getCrossrefParams).subscribe({
+            next: () => {
+              this.router.navigateByUrl('/edit_import');
+            },
+            error: (response) => {
+              if (response.error.cause !== undefined) {
+                this.msgSvc.warning(JSON.stringify(response.error.cause.cause.message));
+              } else {
+                this.msgSvc.warning(JSON.stringify(response.error.exception));
+              }
+              this.fetchEnd();
+            },
+          });
+          break;
+        case 'arxiv':
+          this.importsSvc.getArxiv(this.getArxivParams).subscribe({
+            next: () => {
+              this.router.navigateByUrl('/edit_import');
+            },
+            error: (response) => {
+              if (response.error.cause !== undefined) {
+                this.msgSvc.warning(JSON.stringify(response.error.cause.cause.message));
+              } else {
+                this.msgSvc.warning(JSON.stringify(response.error.exception));
+              }
+              this.fetchEnd();
+            },
+          });
+      }
     }
   }
 
@@ -141,4 +140,24 @@ export default class FetchComponent implements OnInit {
     element.innerHTML = 'GO'
   }
 
+  checkIfAllRequired() {
+    if (this.fetchForm.invalid) {
+      Object.keys(this.fetchForm.controls).forEach(key => {
+        const field = this.fetchForm.get(key);
+        if (field!.hasValidator(Validators.required) && (field!.untouched)) {
+          field!.markAsPending();
+        }
+      });
+    }
+  }
+
+  @HostListener('document:click', ['$event'])
+  clickOutside(event: Event) {
+    if (this.elRef.nativeElement.parentElement.contains(event.target) && !this.elRef.nativeElement.contains(event.target)) {
+      this.fetchForm.reset();
+
+      this.fetchForm.controls['source'].setValue('crossref');
+      this.fetchForm.controls['fullText'].setValue('FULLTEXT_DEFAULT'); ""
+    }
+  }
 }

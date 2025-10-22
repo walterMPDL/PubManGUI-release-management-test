@@ -13,6 +13,9 @@ import { AaService } from 'src/app/services/aa.service';
 
 import { _, TranslatePipe, TranslateService } from "@ngx-translate/core";
 
+import { ValidationErrorComponent } from "src/app/components/shared/validation-error/validation-error.component";
+import { BootstrapValidationDirective } from 'src/app/directives/bootstrap-validation.directive';
+
 @Component({
   selector: 'pure-batch-change-context',
   standalone: true,
@@ -20,7 +23,8 @@ import { _, TranslatePipe, TranslateService } from "@ngx-translate/core";
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    TranslatePipe
+    TranslatePipe,
+    ValidationErrorComponent
   ],
   templateUrl: './change-context.component.html',
 })
@@ -34,19 +38,11 @@ export class ActionsContextComponent implements OnInit {
 
   user_contexts?: ContextDbRO[] = [];
 
-  ngOnInit(): void {
-    this.aaSvc.principal.subscribe(
-      p => {
-        this.user_contexts = p.depositorContexts;
-      }
-    );
-  }
-
   public changeContextForm: FormGroup = this.fb.group({
-    contextFrom: [this.translateSvc.instant(_('batch.actions.context')), Validators.required],
-    contextTo: [this.translateSvc.instant(_('batch.actions.context')), Validators.required]
+    contextFrom: [null, Validators.required],
+    contextTo: [null, Validators.required]
   },
-  { validators: [this.valSvc.notEqualsValidator('contextFrom','contextTo'), this.valSvc.allRequiredValidator()] }
+    { validators: [this.valSvc.notSameValues('contextFrom', 'contextTo')] }
   );
 
   get changeContextParams(): ChangeContextParams {
@@ -58,15 +54,33 @@ export class ActionsContextComponent implements OnInit {
     return actionParams;
   }
 
+  ngOnInit(): void {
+    this.aaSvc.principal.subscribe(
+      p => {
+        this.user_contexts = p.depositorContexts;
+      }
+    );
+    this.changeContextForm.reset();
+  }
+
   onSubmit(): void {
-    if (this.changeContextForm.invalid) {
-      this.changeContextForm.markAllAsTouched();
-      return;
+    if (this.changeContextForm.valid) {
+      this.batchSvc.changeContext(this.changeContextParams).subscribe(actionResponse => {
+        this.batchSvc.startProcess(actionResponse.batchLogHeaderId);
+        this.router.navigate(['/batch/logs']);
+      });
     }
-    this.batchSvc.changeContext(this.changeContextParams).subscribe(actionResponse => {
-      this.batchSvc.startProcess(actionResponse.batchLogHeaderId);
-      this.router.navigate(['/batch/logs']);
-    });
+  }
+
+  checkIfAllRequired() {
+    if (!this.changeContextForm.valid) {
+      Object.keys(this.changeContextForm.controls).forEach(key => {
+        const field = this.changeContextForm.get(key);
+        if (field!.hasValidator(Validators.required) && (!field!.dirty)) {
+          field!.markAsPending();
+        }
+      });
+    }
   }
 
 }

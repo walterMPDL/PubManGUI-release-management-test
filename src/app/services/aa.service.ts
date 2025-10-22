@@ -1,11 +1,25 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpContext, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, EMPTY, forkJoin, map, Observable, of, switchMap, tap, throwError } from 'rxjs';
+import {
+  BehaviorSubject,
+  catchError,
+  EMPTY,
+  finalize,
+  forkJoin,
+  map,
+  Observable,
+  of,
+  switchMap,
+  tap,
+  throwError
+} from 'rxjs';
 import { MessageService } from 'src/app/services/message.service';
 import { environment } from 'src/environments/environment';
 import { AccountUserDbVO, ContextDbVO, ItemVersionState } from "../model/inge";
 import { ContextsService } from "./pubman-rest-client/contexts.service";
 import { Router } from "@angular/router";
+import { DISPLAY_ERROR, PubManHttpErrorResponse, SILENT_LOGOUT } from "./interceptors/http-error.interceptor";
+import { TranslateService } from "@ngx-translate/core";
 
 
 export class Principal{
@@ -14,17 +28,29 @@ export class Principal{
   isModerator: boolean = false;
   isDepositor: boolean = false;
   isAdmin: boolean = false;
+  isLocalAdmin: boolean = false;
+  isReporter: boolean = false;
   moderatorContexts: ContextDbVO[] = [];
   depositorContexts: ContextDbVO[] = [];
   allContexts: ContextDbVO[] = [];
+  ipAddress?:string;
+  matchedIpName?: string;
+  matchedIpId?: string;
+
+  isModeratorForContext(contextId:string): boolean {
+    return this.moderatorContexts.some(contextObj => contextObj.objectId === contextId);
+  }
+
+  isDepositorForContext(contextId:string): boolean {
+    return this.depositorContexts.some(contextObj => contextObj.objectId === contextId);
+  }
+
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class AaService {
-
-  static instance: AaService;
 
   private loginUrl = environment.inge_rest_uri.concat('/login');
   private logoutUrl = environment.inge_rest_uri.concat('/logout');
@@ -36,12 +62,12 @@ export class AaService {
     private http: HttpClient,
     private contextService: ContextsService,
     private message: MessageService,
-    private router: Router
+    private router: Router,
+    private translate: TranslateService,
   ) {
     const principal: Principal = new Principal();
     this.principal = new BehaviorSubject<Principal>(principal);
     //this.checkLogin();
-    AaService.instance = this;
   }
 
   get isLoggedInObservable(): Observable<boolean> {
@@ -57,14 +83,21 @@ export class AaService {
     return this.who().pipe(
       switchMap(user => {
         let principal: Principal = new Principal();
-        if (!user) {
+        principal.ipAddress = user?.ipAddress;
+        principal.matchedIpName = user?.matchedIpName;
+        principal.matchedIpId = user?.matchedIpId;
+
+        if (!user || !user.active) {
           this.principal.next(principal);
           return of(principal);
         }
 
         principal.loggedIn = true;
         principal.user = user;
-        principal.isAdmin = !!user.grantList.find((grant: any) => grant.role === 'SYSADMIN');
+        principal.isAdmin = !!user.grantList?.find((grant: any) => grant.role === 'SYSADMIN');
+        principal.isLocalAdmin = !!user.grantList?.find((grant: any) => grant.role === 'LOCAL_ADMIN');
+        principal.isReporter = !!user.grantList?.find((grant: any) => grant.role === 'REPORTER');
+        console.log(principal.isAdmin)
 
         return forkJoin([
           this.contextService.getContextsForCurrentUser("DEPOSITOR", user),
@@ -75,9 +108,15 @@ export class AaService {
               principal.depositorContexts = depositorResults.records.map(rec => rec.data);
               principal.isDepositor = principal.depositorContexts.length > 0;
             }
+            else {
+              principal.depositorContexts = [];
+            }
             if (moderatorResults) {
               principal.moderatorContexts = moderatorResults.records.map(rec => rec.data);
               principal.isModerator = principal.moderatorContexts.length > 0;
+            }
+            else {
+              principal.moderatorContexts = [];
             }
 
             this.principal.next(principal);
@@ -92,12 +131,14 @@ export class AaService {
     console.log("Login with user " + userName)
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
     const body = userName + ':' + password;
+    const context:HttpContext = new HttpContext().set(DISPLAY_ERROR, false);
     return this.http.request('POST', this.loginUrl, {
       body: body,
       headers: headers,
       observe: 'response',
-      responseType: 'text',
-      withCredentials: true
+      //responseType: 'text',
+      withCredentials: true,
+      context: context
     }).pipe(
       switchMap((response) => {
         const token = response.headers.get('Token');
@@ -105,33 +146,60 @@ export class AaService {
         if (response.status === 200) {
           return this.checkLogin();
         } else {
-          this.message.error(response.status + ' ' + response.statusText);
+
           return EMPTY;
         }
       }),
-      catchError((error) => {
-        return throwError(() => new Error(JSON.stringify(error) || 'UNKNOWN ERROR!'));
-      })
     );
   }
 
   logout(): void {
-    this.http.request('GET', this.logoutUrl, {observe: "response", responseType: "text"}).pipe(
+    this.http.request('GET', this.logoutUrl, {withCredentials: true, observe: "response", responseType: "text"}).pipe(
       tap(res => {
       if(res.status === 200) {
         console.log("Successfully logged out from backend");
       }
-      sessionStorage.clear();
-      localStorage.clear();
-      this.principal.next(new Principal());
-      this.message.info("Logged out successfully");
-      this.router.navigate(['/'])
-    })
+      //localStorage.clear();
+        /*
+      const  loggedOutprincipal = new Principal();
+      loggedOutprincipal.ipAddress = this.principal.value.ipAddress;
+      loggedOutprincipal.matchedIpName= this.principal.value.matchedIpName;
+      loggedOutprincipal.matchedIpId = this.principal.value.matchedIpId;
+      this.principal.next(loggedOutprincipal);
+         */
+        this.checkLogin().subscribe(res => {
+          this.message.info("Logout " +this.translate.instant('common.succeeded'), true);
+          this.router.navigate(['/'])
+        })
+
+    }),
+      finalize(() => {
+        this.principal.next(new Principal());
+        sessionStorage.clear();
+      })
     ).subscribe()
 
   }
 
-  private who(): Observable<AccountUserDbVO> {
+  checkLoginChanged() {
+    this.who(false).pipe(
+      tap(user => {
+        if(this.principal?.value?.user?.loginname != user?.loginname) {
+          this.message.warning("Your former login is not valid anymore and was changed (Did you login in another window/tab?)", true);
+          this.checkLogin().subscribe();
+          this.router.navigate(['/'])
+        }
+
+        }
+      )
+    ).subscribe();
+  }
+
+
+
+
+
+  private who(silentLogout=true): Observable<AccountUserDbVO> {
     //const headers = new HttpHeaders().set('Authorization', token);
     const whoUrl = this.loginUrl + '/who';
     let user: any;
@@ -139,14 +207,9 @@ export class AaService {
     return this.http.request<AccountUserDbVO>('GET', whoUrl, {
       //headers: headers,
       observe: 'body',
-      withCredentials: true
-    }).pipe(
-      catchError((error) => {
-        console.log(error);
-        //this.logout();
-        return throwError(() => new Error(JSON.stringify(error) || 'UNKNOWN ERROR!'));
-      })
-    );
+      withCredentials: true,
+      context: new HttpContext().set(SILENT_LOGOUT, silentLogout)
+    });
   }
 
   /**
@@ -161,7 +224,7 @@ export class AaService {
   public filterOutQuery(states: string[]) {
     let moderatorQuery: any = undefined;
     let depositorQuery: any = undefined;
-    const depositorStates:string[] = states.filter(state => state === ItemVersionState.PENDING.valueOf());
+    const depositorStates:string[] = states.filter(state => state === ItemVersionState.PENDING.valueOf() || state === ItemVersionState.SUBMITTED.valueOf() || state === ItemVersionState.IN_REVISION.valueOf());
     const moderatorStates:string[] = states.filter(state => state === ItemVersionState.SUBMITTED.valueOf() || state === ItemVersionState.IN_REVISION.valueOf());
 
     if(this.principal.getValue().moderatorContexts.length > 0 && moderatorStates.length > 0)

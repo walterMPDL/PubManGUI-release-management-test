@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, ElementRef, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
@@ -10,13 +10,17 @@ import { SourceGenre } from 'src/app/model/inge';
 
 import { TranslatePipe } from "@ngx-translate/core";
 
+import { ValidationErrorComponent } from "src/app/components/shared/validation-error/validation-error.component";
+
+
 @Component({
   selector: 'pure-change-source-genre-form',
   standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    TranslatePipe
+    TranslatePipe,
+    ValidationErrorComponent
   ],
   templateUrl: './change-source-genre-form.component.html',
 })
@@ -25,6 +29,7 @@ export class ChangeSourceGenreFormComponent {
   fb = inject(FormBuilder);
   valSvc = inject(BatchValidatorsService);
   batchSvc = inject(BatchService);
+  elRef: ElementRef = inject(ElementRef);
 
   sourceGenres = Object.keys(SourceGenre).sort();
 
@@ -32,7 +37,7 @@ export class ChangeSourceGenreFormComponent {
     sourceGenreFrom: ['Genre', [Validators.required]],
     sourceGenreTo: ['Genre', [Validators.required]],
   }, {
-    validators: [this.valSvc.notEqualsValidator('sourceGenreFrom', 'sourceGenreTo'), this.valSvc.allRequiredValidator()]
+    validators: [this.valSvc.notSameValues('sourceGenreFrom', 'sourceGenreTo')]
   });
 
   get changeSourceGenreParams(): ChangeSourceGenreParams {
@@ -44,16 +49,34 @@ export class ChangeSourceGenreFormComponent {
     return actionParams;
   }
 
+  ngOnInit(): void {
+    this.changeSourceGenreForm.reset();
+  }
+  
   onSubmit(): void {
-    if (this.changeSourceGenreForm.invalid) {
-      this.changeSourceGenreForm.markAllAsTouched();
-      return;
+    if (this.changeSourceGenreForm.valid) {
+      this.batchSvc.changeSourceGenre(this.changeSourceGenreParams).subscribe(actionResponse => {
+        this.batchSvc.startProcess(actionResponse.batchLogHeaderId);
+        this.router.navigate(['/batch/logs']);
+      });
     }
+  }
 
-    this.batchSvc.changeSourceGenre(this.changeSourceGenreParams).subscribe(actionResponse => {
-      this.batchSvc.startProcess(actionResponse.batchLogHeaderId);
-      this.router.navigate(['/batch/logs']);
-    });
+  checkIfAllRequired() {
+    if (!this.changeSourceGenreForm.valid) {
+      Object.keys(this.changeSourceGenreForm.controls).forEach(key => {
+        const field = this.changeSourceGenreForm.get(key);
+        if (field!.hasValidator(Validators.required) && (field!.pristine)) {
+          field!.markAsPending();
+        }
+      });
+    }
+  }
 
+  @HostListener('document:click', ['$event'])
+  clickOutside(event: Event) {
+    if (this.elRef.nativeElement.parentElement.contains(event.target) && !this.elRef.nativeElement.contains(event.target)) {
+      this.changeSourceGenreForm.reset();
+    }
   }
 }

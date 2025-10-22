@@ -7,17 +7,23 @@
   </div>
 
   <form [formGroup]="changeFileVisibilityForm" (ngSubmit)="onSubmit()" autocomplete="off">
-    <div class="mb-3 row">
+    <div class="row">
       <div class="col-sm-3">
         <label class="col-form-label">{{ 'batch.actions.metadata.files.visibility.from' | translate }}</label>
       </div>
       <div class="col-sm-9">
-        <select class="form-select" formControlName="fileVisibilityFrom">
-          <option [value]='' selected disabled>{{ 'batch.actions.metadata.files.visibility' | translate }}</option>
+        <select class="form-select" formControlName="fileVisibilityFrom" 
+          [ngClass]="{'border border-danger': changeFileVisibilityForm.get('fileVisibilityFrom')?.pending || changeFileVisibilityForm.get('fileVisibilityFrom')?.invalid && (changeFileVisibilityForm.get('fileVisibilityFrom')?.touched || changeFileVisibilityForm.get('fileVisibilityFrom')?.dirty)}">
+          <option [value]="null" selected disabled hidden>{{ 'batch.actions.metadata.files.visibility' | translate }}</option>
           @for (fileVisibility of visibility; track fileVisibility) {
           <option [value]="fileVisibility"> {{ 'Visibility.' + fileVisibility | translate }}</option>
           }
         </select>
+      </div>
+    </div>
+    <div class="mb-2 row validation-error">
+      <div class="offset-sm-3 col-sm-6">
+        <pure-validation-error [control]="changeFileVisibilityForm.get('fileVisibilityFrom')"/>
       </div>
     </div>
 
@@ -26,30 +32,25 @@
         <label class="col-form-label">{{ 'batch.actions.metadata.files.visibility.to' | translate }}</label>
       </div>
       <div class="col-sm-9">
-        <select class="form-select" formControlName="fileVisibilityTo">
-          <option [value]='' selected disabled>{{ 'batch.actions.metadata.files.visibility' | translate }}</option>
+        <select class="form-select" formControlName="fileVisibilityTo" 
+          [ngClass]="{'border border-danger': changeFileVisibilityForm.get('fileVisibilityTo')?.pending || changeFileVisibilityForm.get('fileVisibilityTo')?.invalid && (changeFileVisibilityForm.get('fileVisibilityTo')?.touched || changeFileVisibilityForm.get('fileVisibilityTo')?.dirty)}">
+          <option [value]="null" selected disabled hidden>{{ 'batch.actions.metadata.files.visibility' | translate }}</option>
           @for (fileVisibility of visibility; track fileVisibility) {
           <option [value]="fileVisibility"> {{ 'Visibility.' + fileVisibility | translate }}</option>
           }
         </select>
       </div>
     </div>
-    <div class="mb-2 row">
+    <div class="mb-2 row validation-error">
       <div class="offset-sm-3 col-sm-6">
-        @if (valSvc.notValidField(changeFileVisibilityForm.controls['fileVisibilityTo'])) {
-        <span class="form-text text-danger small">
-          {{ 'batch.actions.metadata.files.visibility.invalid' | translate }} {{
-          valSvc.getFieldError(changeFileVisibilityForm.controls['fileVisibilityTo']) }}
-        </span>
-        } @else {
-        <span>&nbsp;</span>
-        }
+        <pure-validation-error [control]="changeFileVisibilityForm.get('fileVisibilityTo')"/>
+        <pure-validation-error [control]="changeFileVisibilityForm"/>
       </div>
     </div>
 
     <div class="row">
-      <div>
-        <button type="submit" [disabled]="changeFileVisibilityForm.invalid || changeFileVisibilityForm.pristine"
+      <div class="offset-sm-11 col-sm-1" (click)="checkIfAllRequired()">
+        <button type="submit" [disabled]="!changeFileVisibilityForm.valid"
           class="btn btn-outline-primary float-end">
           GO
         </button>

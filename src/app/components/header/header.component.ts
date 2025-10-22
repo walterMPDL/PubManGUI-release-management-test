@@ -8,14 +8,10 @@ import { LangSwitchComponent } from 'src/app/components/shared/lang-switch/lang-
 import { SidenavComponent } from 'src/app/components/shared/sidenav/sidenav.component';
 
 import { TranslatePipe } from "@ngx-translate/core";
-import { NgbTooltip } from "@ng-bootstrap/ng-bootstrap";
+import { NgbPopover, NgbTooltip } from "@ng-bootstrap/ng-bootstrap";
 
-<<<<<<< HEAD
-import { SearchComponent } from 'src/app/shared/components/search/search.component';
-import { ToolsComponent } from 'src/app/shared/components/tools/tools.component';
-=======
 import { SearchComponent } from 'src/app/components/shared/search/search.component';
->>>>>>> main
+import { ToolsnavComponent } from 'src/app/components/shared/toolsnav/toolsnav.component';
 
 
 @Component({
@@ -33,7 +29,8 @@ import { SearchComponent } from 'src/app/components/shared/search/search.compone
     TranslatePipe,
     NgbTooltip,
     SearchComponent,
-    ToolsComponent,
+    ToolsnavComponent,
+    NgbPopover,
   ]
 })
 export class HeaderComponent {

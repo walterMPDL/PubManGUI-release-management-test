@@ -1,0 +1,28 @@
+
+@if(!uploadInProgress) {
+  <form formArray="file_upload_form">
+    <div class = "d-sm-flex flex-sm-row gap-1 mb-1">
+      <div class="dropzone col-sm" pureFileUpload (dropFiles)="onDropFiles($event)">
+        <i class="bi bi-cloud-upload" style="font-size: 3rem"></i>
+        <p>Drag and drop file here</p>
+        <div class="mb-3">
+          <input class="form-control" type="file" id="formFileMultiple" multiple (change)="onChange($event)">
+        </div>
+      </div>
+    </div>
+  </form>
+} @else {
+  <div class="dropzone">
+
+    @for(tf of transferringFilesMap.values(); track tf.file) {
+      <div class = "container p-0 mb-2">
+        <div class="text-start small">{{tf.file.name}}</div>
+        <div class="progress" role="progressbar" [attr.aria-valuenow]="tf.percentage" aria-valuemin="0" aria-valuemax="100">
+          <div class="progress-bar progress-bar-striped" [style.width.%]="tf.percentage"  [class.progress-bar-animated]="!tf.finished" [class.bg-success]="tf.finished" >
+            {{tf.percentage}}%
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+}

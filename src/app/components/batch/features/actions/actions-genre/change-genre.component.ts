@@ -11,13 +11,16 @@ import { DegreeType, MdsPublicationGenre } from 'src/app/model/inge';
 
 import { TranslatePipe } from "@ngx-translate/core";
 
+import { ValidationErrorComponent } from "src/app/components/shared/validation-error/validation-error.component";
+
 @Component({
   selector: 'pure-batch-change-genre',
   standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    TranslatePipe
+    TranslatePipe,
+    ValidationErrorComponent
   ],
   templateUrl: './change-genre.component.html',
 })
@@ -31,11 +34,11 @@ export class ActionsGenreComponent {
   degreeTypes = Object.keys(DegreeType);
 
   public changeGenreForm: FormGroup = this.fb.group({
-    genreFrom: ['Genre', [Validators.required]],
-    genreTo: ['Genre', [Validators.required]],
-    degreeType: [{ value: '', disabled: true }],
+    genreFrom: [null, [Validators.required]],
+    genreTo: [null, [Validators.required]],
+    degreeType: [{ value: null, disabled: true }, [Validators.required]],
   },
-    { validators: [this.valSvc.notEqualsValidator('genreFrom', 'genreTo'), this.valSvc.allRequiredValidator()] }
+    { validators: [this.valSvc.notSameValues('genreFrom', 'genreTo')] }
   );
 
   get changeGenreParams(): ChangeGenreParams {
@@ -48,16 +51,38 @@ export class ActionsGenreComponent {
     return actionParams;
   }
 
-  onSubmit(): void {
-    if (this.changeGenreForm.invalid) {
-      this.changeGenreForm.markAllAsTouched();
-      return;
-    }
-    this.batchSvc.changeGenre(this.changeGenreParams).subscribe(actionResponse => {
-      this.batchSvc.startProcess(actionResponse.batchLogHeaderId);
-      this.changeGenreForm.reset();
-      this.router.navigate(['/batch/logs']);
+  ngOnInit(): void {
+    this.changeGenreForm.reset();
+
+    this.changeGenreForm.get('genreTo')?.valueChanges.subscribe(value => {
+      if (this.changeGenreForm.get('genreTo')?.value !== 'THESIS') {
+        this.changeGenreForm.get('degreeType')?.reset();
+        this.changeGenreForm.get('degreeType')?.disable();
+      } else {
+        this.changeGenreForm.get('degreeType')?.enable();
+      }
     });
+  }
+
+  onSubmit(): void {
+    if (this.changeGenreForm.valid) {
+      this.batchSvc.changeGenre(this.changeGenreParams).subscribe(actionResponse => {
+        this.batchSvc.startProcess(actionResponse.batchLogHeaderId);
+        this.changeGenreForm.reset();
+        this.router.navigate(['/batch/logs']);
+      });
+    }
+  }
+
+  checkIfAllRequired() {
+    if (this.changeGenreForm.invalid) {
+      Object.keys(this.changeGenreForm.controls).forEach(key => {
+        const field = this.changeGenreForm.get(key);
+        if (field!.hasValidator(Validators.required) && (field!.pristine)) {
+          field!.markAsPending();
+        }
+      });
+    }
   }
 
 }

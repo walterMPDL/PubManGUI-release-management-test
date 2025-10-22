@@ -2,7 +2,7 @@
   left: 9.7%;
   position: fixed;
   top: 150px;
-  width: 16.6rem;
+  width: 17em;
   z-index: 1032;
   overflow: hidden;
   border-radius: 0.4rem;
@@ -12,11 +12,11 @@
   white-space: nowrap;
 
   .nav-link {
-    max-width: 13.6rem;
+    max-width: 14em;
     overflow: visible;
 
     &:not(disabled):hover {
-      background-color: rgba(0, 0, 0, 0.04);
+      background-color: color-mix(in srgb, var(--bs-dark), transparent 90%);
       cursor: pointer;
 
       span,
@@ -26,24 +26,18 @@
     }
   }
 
-  ul li {
-    padding-top: 0.2rem;
-    padding-bottom: 0.2rem;
-    padding-left: 3.5rem !important;
-
-    &:last-of-type {
-      margin-bottom: 1rem;
-    }
-
-    &:hover {
-      color: var(--accent-bg-color) !important;
-    }
-  }
-
   .matBadge {
-    top: -1.5em;
+    bottom: 1.6em;
+    left: 0.2em;
   }
 
+  .mat-badge-content {
+    background-color: $body-bg;
+  }
+
+  @media (max-width: 1399.98px) {
+    left: 2%;
+  }
 }
 
 .navbar-toggler:focus {
@@ -51,7 +45,7 @@
 }
 
 .side_nav.collapsed {
-  width: 6.5rem;
+  width: 6.2rem;
 }
 
 .side_nav.collapsed .bi {
@@ -63,35 +57,14 @@
 }
 
 .side_nav_mobile {
-  right: 0.5vh;
   position: fixed;
-  top: 1.5vh;
+  top: 1rem;
   width: 100%;
   z-index: 16;
-  overflow: hidden;
+  //overflow: hidden;
 
   .mat-badge {
-    top: -1.5rem;
-  }
-
-  @media (max-width: 1399.98px) {
-    .matBadge {
-      top: -1em;
-      left: -1em;
-    }
-  }
-}
-
-.show-more {
-  &:not(:hover) {
-    .more-to-show {
-      display: none;
-    }
-  }
-
-  &:hover {
-    .more-to-show {
-      display: block;
-    }
+    top: -1em;
+    left: -1em;
   }
 }

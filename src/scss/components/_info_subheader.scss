@@ -1,0 +1,27 @@
+pure-info-subheader {
+  .row {
+    position: fixed;
+    top: 100px;
+    z-index: 1010;
+    height: 50px;
+    padding-top: 15px;
+
+    &.scrolled {
+      top: 50px;
+      transition: all 0.1s ease;
+      background-color: var(--bs-body-bg) !important;
+    }
+  }
+
+  @media (max-width: 1199.98px) {
+    .row {
+      top: 50px;
+    }
+  }
+}
+
+#content {
+  @media (max-width: 1199.98px) {
+    margin-top: -50px;
+  }
+}

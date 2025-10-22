@@ -6,13 +6,9 @@ import { AaService } from 'src/app/services/aa.service';
 import { MessageService } from 'src/app/services/message.service';
 import { BatchService } from '../services/batch.service';
 
+import { MatBadgeModule } from '@angular/material/badge';
 import { _, TranslatePipe, TranslateService } from "@ngx-translate/core";
 
-interface NavOption {
-  route: string;
-  label: string;
-  disabled: boolean;
-}
 
 @Component({
   selector: 'pure-batch-nav',
@@ -21,6 +17,7 @@ interface NavOption {
   imports: [
     CommonModule,
     RouterModule,
+    MatBadgeModule,
     TranslatePipe]
 })
 export class BatchNavComponent implements OnInit {
@@ -35,24 +32,17 @@ export class BatchNavComponent implements OnInit {
   mobile: boolean | null = null;
   mobile_options: HTMLElement | null = null;
 
-  public navList = signal<NavOption[]>([
-    { route: '/batch/datasets', label: 'datasets', disabled: false },
-    { route: '/batch/actions', label: 'actions', disabled: false },
-    { route: '/batch/logs', label: 'logs', disabled: false },
-  ]);
-
+  isMoreShown: boolean = false;
 
   ngOnInit(): void {
     this.batchSvc.items;
-    this.navList()[0].disabled = !this.batchSvc.areItemsSelected();
-    this.navList()[1].disabled = !this.batchSvc.areItemsSelected() || this.batchSvc.isProcessRunning();
+    this.batchSvc.checkLogs();
 
     const viewWidth = document.documentElement.offsetWidth || 0;
     this.mobile = viewWidth < 1400 ? true : false;
   }
 
-  // TO-DO ???
-  warning(option: string) {
+  whenReady(option: string) {
     switch (option) {
       case '/batch/datasets':
         if (!this.batchSvc.areItemsSelected()) {
@@ -75,8 +65,15 @@ export class BatchNavComponent implements OnInit {
           })
         }
         break;
-    }
-
+      case '/batch/logs':
+        if (!this.batchSvc.hasLogs()) {
+          this.msgSvc.warning(this.translateSvc.instant(_('batch.logs.details.empty')) + '\n');
+          this.msgSvc.dialog.afterAllClosed.subscribe(result => {
+            this.router.navigate(['/batch'])
+          })
+        }
+        break;
+      }
     this.collapse();
   }
 
@@ -84,7 +81,12 @@ export class BatchNavComponent implements OnInit {
     if (this.mobile) {
       if (!this.mobile_options) this.mobile_options = this.document.getElementById('side_nav_mobile_options');
       if (this.mobile_options?.classList.contains('show')) this.mobile_options!.classList.remove('show');
-    }
+    } 
+  }
+
+  showMore(): boolean {
+    this.isMoreShown = !this.isMoreShown;
+    return this.isMoreShown;
   }
 
   @HostListener('window:resize', ['$event'])
@@ -92,5 +94,7 @@ export class BatchNavComponent implements OnInit {
     const viewWidth = document.documentElement.offsetWidth || 0;
     this.mobile = viewWidth < 1400 ? true : false;
   }
+
+  //style = window.getComputedStyle(document.querySelector('#batch-options')!);
 
 }

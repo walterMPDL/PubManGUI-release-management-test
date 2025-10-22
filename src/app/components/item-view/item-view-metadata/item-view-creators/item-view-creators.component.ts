@@ -7,6 +7,7 @@ import { OrganizationsService } from "../../../../services/pubman-rest-client/or
 import { EmptyPipe } from "../../../../pipes/empty.pipe";
 import { TranslatePipe } from "@ngx-translate/core";
 import { LoadingComponent } from "../../../shared/loading/loading.component";
+import { OuModalComponent } from "../../../shared/ou-modal/ou-modal.component";
 
 @Component({
   selector: 'pure-item-view-creators',
@@ -15,7 +16,6 @@ import { LoadingComponent } from "../../../shared/loading/loading.component";
     ItemViewMetadataElementComponent,
     EmptyPipe,
     TranslatePipe,
-    LoadingComponent
   ],
   templateUrl: './item-view-creators.component.html',
   styleUrl: './item-view-creators.component.scss'
@@ -58,13 +58,13 @@ export class ItemViewCreatorsComponent {
             //console.log("Handling aff " + creatorOu.name);
 
             let index = 0;
-            if (this.affiliationMap.has(creatorOu.name)) {
+            if (this.affiliationMap.has(creatorOu.name!)) {
 
-              index = this.affiliations.indexOf(this.affiliationMap.get(creatorOu.name)!) + 1;
+              index = this.affiliations.indexOf(this.affiliationMap.get(creatorOu.name!)!) + 1;
 
 
             } else {
-              this.affiliationMap.set(creatorOu.name, creatorOu);
+              this.affiliationMap.set(creatorOu.name!, creatorOu);
               this.affiliations.push(creatorOu);
               index = this.affiliations.length;
             }
@@ -119,14 +119,19 @@ export class ItemViewCreatorsComponent {
     this.maxDisplay = 20;
   }
 
-  toggleAffPopover(content: TemplateRef<any>, aff: OrganizationVO) {
+  toggleAffPopover(ou: OrganizationVO) {
+
 
       this.selectedAffiliationForPopover = undefined;
-      this.modalService.open(content, {size: 'lg'});
+      const componentInstance = this.modalService.open(OuModalComponent, {size: 'lg'}).componentInstance;
+      componentInstance.ouId = ou.identifier;
+      /*
       this.ouService.retrieve(aff.identifier).subscribe(ou => {
         this.selectedAffiliationForPopover = ou;
 
       })
+
+       */
 
     }
 }

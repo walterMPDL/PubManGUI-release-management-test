@@ -1,16 +1,17 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, ElementRef, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { SourceIdType } from 'src/app/model/inge';
 
-import { BatchValidatorsService } from 'src/app/components/batch/services/batch-validators.service';
 import { BatchService } from 'src/app/components/batch/services/batch.service';
+import { BatchValidatorsService } from 'src/app/components/batch/services/batch-validators.service';
 import type { AddSourceIdentiferParams } from 'src/app/components/batch/interfaces/batch-params';
 
 import { _, TranslatePipe, TranslateService } from "@ngx-translate/core";
 
+import { ValidationErrorComponent } from "src/app/components/shared/validation-error/validation-error.component";
 
 @Component({
   selector: 'pure-add-source-identifier-form',
@@ -18,25 +19,25 @@ import { _, TranslatePipe, TranslateService } from "@ngx-translate/core";
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    TranslatePipe
+    TranslatePipe,
+    ValidationErrorComponent
   ],
   templateUrl: './add-source-identifier-form.component.html',
 })
 export class AddSourceIdentifierFormComponent {
   router = inject(Router);
   fb = inject(FormBuilder);
-  valSvc = inject(BatchValidatorsService);
   batchSvc = inject(BatchService);
+  valSvc = inject(BatchValidatorsService);
   translateSvc = inject(TranslateService);
+  elRef: ElementRef = inject(ElementRef);
 
   sourceIdTypes = Object.keys(SourceIdType);
 
   public addSourceIdentifierForm: FormGroup = this.fb.group({
-    sourceNumber: ['1'],
-    sourceIdentifierType: [this.translateSvc.instant(_('batch.actions.metadata.source.addId.default')), Validators.required],
-    sourceIdentifier: ['', [Validators.required, Validators.minLength(1)]]
-  }, {
-    validators: this.valSvc.allRequiredValidator()
+    sourceNumber: ['1', Validators.required],
+    sourceIdentifierType: [null, Validators.required],
+    sourceIdentifier: [null, [Validators.required, Validators.minLength(1)]]
   });
 
   get addSourceIdentifierParams(): AddSourceIdentiferParams {
@@ -49,15 +50,36 @@ export class AddSourceIdentifierFormComponent {
     return actionParams;
   }
 
-  onSubmit(): void {
-    if (this.addSourceIdentifierForm.invalid) {
-      this.addSourceIdentifierForm.markAllAsTouched();
-      return;
-    }
+  ngOnInit(): void {
+    this.addSourceIdentifierForm.reset();
+    this.addSourceIdentifierForm.controls['sourceNumber'].setValue('1');
+  }
 
-    this.batchSvc.addSourceIdentifer(this.addSourceIdentifierParams).subscribe(actionResponse => {
-      this.batchSvc.startProcess(actionResponse.batchLogHeaderId);
-      this.router.navigate(['/batch/logs']);
-    });
+  onSubmit(): void {
+    if (this.addSourceIdentifierForm.valid) {
+      this.batchSvc.addSourceIdentifer(this.addSourceIdentifierParams).subscribe(actionResponse => {
+        this.batchSvc.startProcess(actionResponse.batchLogHeaderId);
+        this.router.navigate(['/batch/logs']);
+      });
+    }
+  }
+
+  checkIfAllRequired() {
+    if (!this.addSourceIdentifierForm.valid) {
+      Object.keys(this.addSourceIdentifierForm.controls).forEach(key => {
+        const field = this.addSourceIdentifierForm.get(key);
+        if (field!.hasValidator(Validators.required) && (field!.pristine)) {
+          field!.markAsPending();
+        }
+      });
+    }
+  }
+
+  @HostListener('document:click', ['$event'])
+  clickOutside(event: Event) {
+    if (this.elRef.nativeElement.parentElement.contains(event.target) && !this.elRef.nativeElement.contains(event.target)) {
+      this.addSourceIdentifierForm.reset();
+      this.addSourceIdentifierForm.controls['sourceNumber'].setValue('1');
+    }
   }
 }

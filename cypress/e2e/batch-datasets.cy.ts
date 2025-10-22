@@ -1,11 +1,11 @@
 describe('Add and Remove Item to/from Batch', () => {
-  const userName = Cypress.env('testUser').userName
+  const loginName = Cypress.env('testUser').loginName
   const password = Cypress.env('testUser').password
   let itemId: string;
   let itemTitle: string;
 
   beforeEach(() => {
-    cy.loginViaAPI(userName, password)
+    cy.loginViaAPI(loginName, password)
     cy.fixture('itemMetadataMinimal').then((itemMetadata) => {
       cy.createItemViaAPI(itemMetadata).then((response) => {
         itemId = response.body['objectId']
@@ -30,10 +30,10 @@ describe('Add and Remove Item to/from Batch', () => {
 
     //Then
     //TODO: Check the exact confirmation message is displayed
-    cy.get('pure-messaging').should('exist')
-    cy.get('[data-test="batch-badge"]').contains('1').should('be.visible')
+    cy.get('pure-notification').should('exist')
+    cy.get('[data-test="sidenav-batch"]').filter(':visible').find('[data-test="batch-badge"]').contains('1').should('be.visible')
 
-    cy.visit('batch/datasets')
+    cy.visit('/batch/datasets')
     cy.get('[data-test="item-title"]').contains(itemTitle).parents('pure-item-list-element').should('be.visible')
     cy.get('pure-item-list-element').should('have.length', 1)
   })
@@ -49,7 +49,7 @@ describe('Add and Remove Item to/from Batch', () => {
 
     //Then
     //TODO: Check the exact confirmation/empty-batch message is displayed
-    cy.get('pure-messaging').should('exist')
+    cy.get('pure-notification').should('exist')
     cy.contains(itemTitle).should('not.exist');
   })
 

@@ -12,15 +12,13 @@ export const datesValidator: ValidatorFn = (control: AbstractControl,): Validati
   const dateSubmitted = control.get('dateSubmitted');
   const event = control.get('event');
   const genre = control.get('genre');
-
+  genre?.markAsTouched();
   if (MdsPublicationGenre.SERIES == genre?.value
     || MdsPublicationGenre.JOURNAL == genre?.value
     || MdsPublicationGenre.MANUSCRIPT == genre?.value
     || MdsPublicationGenre.OTHER == genre?.value) {
     return null;
   }
-
-  console.log('!dateAccepted?.value', !dateAccepted?.value);
 
   if (!dateAccepted?.value && !dateCreated?.value && !dateModified?.value && !datePublishedInPrint?.value && !datePublishedOnline?.value && !dateSubmitted?.value) {
 
@@ -30,6 +28,7 @@ export const datesValidator: ValidatorFn = (control: AbstractControl,): Validati
       && (event && event.get('startDate'))) {
       return null;
     }
+    //control.setErrors({[error_types.DATE_NOT_PROVIDED] : true})
     return { [error_types.DATE_NOT_PROVIDED]: true };
   }
 

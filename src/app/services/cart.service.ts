@@ -44,6 +44,11 @@ export class CartService {
      */
   }
 
+  removeAll() {
+    sessionStorage.setItem(CART_STORAGE_KEY, JSON.stringify([]));
+    this.versionIds$.next([]);
+  }
+
 
   get objectIds(): string[] {
     if (sessionStorage.getItem(CART_STORAGE_KEY)) {

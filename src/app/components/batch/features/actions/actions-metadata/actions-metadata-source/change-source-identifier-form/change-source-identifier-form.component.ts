@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, ElementRef, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -12,13 +12,17 @@ import type { ChangeSourceIdentifierParams } from 'src/app/components/batch/inte
 
 import { _, TranslatePipe, TranslateService } from "@ngx-translate/core";
 
+import { ValidationErrorComponent } from "src/app/components/shared/validation-error/validation-error.component";
+
+
 @Component({
   selector: 'pure-change-source-identifier-form',
   standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    TranslatePipe
+    TranslatePipe,
+    ValidationErrorComponent
   ],
   templateUrl: './change-source-identifier-form.component.html',
 })
@@ -28,17 +32,18 @@ export class ChangeSourceIdentifierFormComponent {
   valSvc = inject(BatchValidatorsService);
   batchSvc = inject(BatchService);
   translateSvc = inject(TranslateService);
+  elRef: ElementRef = inject(ElementRef);
 
   sourceIdTypes = Object.keys(SourceIdType);
 
   public changeSourceIdentifierForm: FormGroup = this.fb.group({
-    sourceNumber: ['1'],
-    sourceIdentifierType: [this.translateSvc.instant(_('batch.actions.metadata.source.replaceId.default')), Validators.required],
+    sourceNumber: ['1', Validators.required],
+    sourceIdentifierType: [null, Validators.required],
     sourceIdentifierFrom: ['', [Validators.required, Validators.minLength(1)]],
     sourceIdentifierTo: [''],
   },
     {
-      validators: [this.valSvc.notEqualsValidator('sourceIdentifierFrom', 'sourceIdentifierTo'), this.valSvc.allRequiredValidator()]
+      validators: [this.valSvc.notSameValues('sourceIdentifierFrom', 'sourceIdentifierTo')]
     });
 
   get changeSourceIdentifierParams(): ChangeSourceIdentifierParams {
@@ -52,15 +57,36 @@ export class ChangeSourceIdentifierFormComponent {
     return actionParams;
   }
 
-  onSubmit(): void {
-    if (this.changeSourceIdentifierForm.invalid) {
-      this.changeSourceIdentifierForm.markAllAsTouched();
-      return;
-    }
+  ngOnInit(): void {
+    this.changeSourceIdentifierForm.reset();
+    this.changeSourceIdentifierForm.controls['sourceNumber'].setValue('1');
+  }
 
-    this.batchSvc.changeSourceIdentifier(this.changeSourceIdentifierParams).subscribe(actionResponse => {
-      this.batchSvc.startProcess(actionResponse.batchLogHeaderId);
-      this.router.navigate(['/batch/logs']);
-    });
+  onSubmit(): void {
+    if (this.changeSourceIdentifierForm.valid) {
+      this.batchSvc.changeSourceIdentifier(this.changeSourceIdentifierParams).subscribe(actionResponse => {
+        this.batchSvc.startProcess(actionResponse.batchLogHeaderId);
+        this.router.navigate(['/batch/logs']);
+      });
+    }
+  }
+
+  checkIfAllRequired() {
+    if (!this.changeSourceIdentifierForm.valid) {
+      Object.keys(this.changeSourceIdentifierForm.controls).forEach(key => {
+        const field = this.changeSourceIdentifierForm.get(key);
+        if (field!.hasValidator(Validators.required) && (field!.pristine)) {
+          field!.markAsPending();
+        }
+      });
+    }
+  }
+
+  @HostListener('document:click', ['$event'])
+  clickOutside(event: Event) {
+    if (this.elRef.nativeElement.parentElement.contains(event.target) && !this.elRef.nativeElement.contains(event.target)) {
+      this.changeSourceIdentifierForm.reset();
+      this.changeSourceIdentifierForm.controls['sourceNumber'].setValue('1');
+    }
   }
 }

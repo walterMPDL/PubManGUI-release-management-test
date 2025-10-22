@@ -3,6 +3,12 @@ import { Dialog } from '@angular/cdk/dialog';
 
 import { MessageComponent } from '../components/shared/message/message.component';
 import { ConfirmationComponent } from '../components/shared/confirmation/confirmation.component';
+import { PubManHttpErrorResponse } from "./interceptors/http-error.interceptor";
+import { TranslateService } from "@ngx-translate/core";
+import sanitizeHtml from "sanitize-html";
+import { Subject, takeUntil, tap, timer } from "rxjs";
+import { filter } from "rxjs/operators";
+import { NavigationEnd, Router } from "@angular/router";
 
 @Injectable({
   providedIn: 'root'
@@ -13,11 +19,48 @@ export class MessageService {
   // confirmationDialogRef!: DialogRef<boolean>;
   confirmation = false;
 
-  public lastMessage = signal<any>({});
+  public lastMessage = signal<Message[]>([]);
 
-  constructor(public dialog: Dialog) { }
+  private destroy$: Subject<boolean> = new Subject<boolean>();
 
-  displayMessage(message?: { type: string; text: string; }) {
+  constructor(public dialog: Dialog, private translateService: TranslateService, private router:Router) {
+
+    //Remove message after navigating to another page
+    this.router.events
+      .pipe(
+        takeUntil(this.destroy$),
+        filter((e) => e instanceof NavigationEnd),
+        tap((e) => {
+          this.lastMessage.set(this.lastMessage().filter(msg => msg.keepAfterNavigation));
+        }),
+      )
+      .subscribe()
+
+
+    /*
+    timer(0, 6000).pipe(
+      tap(countdown => {
+        this.success("Test "+ countdown);
+      })
+    ).subscribe()
+
+    timer(0, 10000).pipe(
+      tap(countdown => {
+        this.error("Test "+ countdown);
+      })
+    ).subscribe()
+
+     */
+
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next(true);
+    this.destroy$.complete();
+  }
+
+
+  displayMessage(message?: Message) {
     // this.messageDialogRef = this.dialog.open(MessageComponent, {
       this.dialog.open(MessageComponent, {
       // hasBackdrop: false,
@@ -27,7 +70,7 @@ export class MessageService {
     });
   }
 
-  displayConfirmation(message?: { title?: string, text: string, confirm: string, cancel: string }) {
+  displayConfirmation(message?: Message) {
     const ref = this.dialog.open(ConfirmationComponent, {
       hasBackdrop: false,
       // autoFocus: false,
@@ -37,55 +80,119 @@ export class MessageService {
     return ref;
   }
 
-  displayOnArea(message?: { type: string; title?: string, text: string; }) {
-    this.lastMessage.set(message);
+  displayOnArea(message?: Message) {
+    if(message) this.lastMessage().push(message);
   }
 
-  info(message: string) {
-    const msg = { type: 'info', text: message };
+  info(message: string, keepAfterNavigation:boolean=false) {
+    const msg: Message = { type: 'info', text: message, keepAfterNavigation: keepAfterNavigation };
     //this.displayMessage(msg);
     this.displayOnArea(msg);
   }
 
-  success(message: string) {
-    let title, msg = null;
+  success(message: string, keepAfterNavigation:boolean=false) {
+    let title = null;
+    let msg: Message | undefined;
     if (message.lastIndexOf('\n')>=0) {
       const multilines = this.splitMessage(message);
-      msg = { type: 'success', title: multilines.title, text: multilines.content };
-      if (this.lastMessage().title && this.lastMessage().title === title) return;
+      msg = { type: 'success', title: multilines.title, text: multilines.text };
+      if (this.lastMessage().length > 0 && this.lastMessage()[0].title && this.lastMessage()[0].title === title) return;
     } else {
       msg = { type: 'success', text: message };
     }
+    msg.keepAfterNavigation = keepAfterNavigation;
     //this.displayMessage(msg);
     this.displayOnArea(msg);
   }
 
-  warning(message: string) {
-    const msg = { type: 'warning', text: message };
-    this.displayMessage(msg);
-    //this.displayOnArea(msg);
+  warning(message: string, keepAfterNavigation:boolean=false) {
+    const msg: Message = { type: 'warning', text: message, keepAfterNavigation: keepAfterNavigation };
+    //this.displayMessage(msg);
+    this.displayOnArea(msg);
   }
 
-  error(message: string) {
-    let msg = null;
+  error(message: string, keepAfterNavigation:boolean=false) {
+    let msg: Message | undefined = undefined;
     if (message.lastIndexOf('\n')>=0) {
       const formattedMsg = this.splitRawError(message);
-      msg = { type: 'danger', title: formattedMsg.title, text: formattedMsg.content };
-      if (this.lastMessage().title && this.lastMessage().title === formattedMsg.title) return;
+      msg = { type: 'danger', title: formattedMsg.title, text: formattedMsg.text };
+      //if (this.lastMessage().title && this.lastMessage().title === formattedMsg.title) return;
     } else {
       msg = { type: 'danger', text: message };
     }
+    msg.keepAfterNavigation = keepAfterNavigation;
     //this.displayMessage(msg);
     this.displayOnArea(msg);
   }
 
-  splitMessage(message: string): { title: string, content: string } {
-    const title = message.substring(0,message.indexOf('\n'));
-    const content = message.substring(message.indexOf('\n')+1);
-    return { title: title, content: content };
+  httpError(error: PubManHttpErrorResponse) {
+    this.displayOnArea(this.httpErrorToMessage(error));
   }
 
-  splitRawError(message: string): { title: string, content: string } {
+  httpErrorToMessage(error: PubManHttpErrorResponse): Message {
+    let title = "";
+    if(error.jsonMessage?.reason) {
+      title = this.translateService.instant('backendErrors.' + error.jsonMessage.reason);
+    }
+    else if(error.status===404) {
+      title = this.translateService.instant('backendErrors.GENERIC_NOT_FOUND');
+    }
+    else if(error.status===401 || error.status===403) {
+      title = this.translateService.instant('backendErrors.PERMISSION_DENIED');
+    }
+    else {
+      title = sanitizeHtml(error.userMessage);
+    }
+
+    let text = `
+        ${(error.url || '')}<br/>
+        ${error.status}: ${error.statusText}<br/>
+        `
+    let collapsed = true;
+
+    if(error.jsonMessage?.['validation-report']) {
+      let validations = '<ul class="list-group list-group-flush bg-transparent">';
+      error.jsonMessage?.['validation-report']?.items?.forEach((valrep: any) => {
+        validations = validations +
+          `<li class="list-group-item bg-transparent">
+            <span class="bi bi-info-circle-fill me-2"></span>
+             ${this.translateService.instant('backendValidation.' + sanitizeHtml(valrep.content))}
+            </li>`;
+      });
+      text = validations + '</ul>';
+      collapsed = false;
+      return {type: 'danger', title: title, text: text, collapsed: collapsed}
+    }
+    else if(error.jsonMessage?.timestamp) {
+      text = text +
+        `${sanitizeHtml(error.jsonMessage.message) || '-'}<br/>
+         ${error.jsonMessage.reason || '-'}<br/>
+         ${sanitizeHtml(error.jsonMessage.exception)}<br/>
+         ${error.jsonMessage.timestamp}
+        `
+    }
+    else {
+
+      if(error.jsonMessage) {
+        text = text + sanitizeHtml(JSON.stringify(error.jsonMessage));
+      }
+      else {
+        text = text + sanitizeHtml(error.error);
+      }
+
+    }
+    //title = this.translateService.instant('common.errorOccured') + ": " + title;
+    text = '<small><b>Technical information:</b><br/>' + text + '</small>';
+    return {type: 'danger', title: title, text: text, collapsed: collapsed}
+  }
+
+  splitMessage(message: string): Message {
+    const title = message.substring(0,message.indexOf('\n'));
+    const content = message.substring(message.indexOf('\n')+1);
+    return { title: title, text: content };
+  }
+
+  splitRawError(message: string): Message {
     let title = null;
     if (message.substring(message.lastIndexOf('\n')).length < 3) {
       title = message.substring(0, message.indexOf('\n'));
@@ -93,6 +200,16 @@ export class MessageService {
       title = message.substring(message.lastIndexOf('\n'));
     }
     const content = message.substring(0, message.lastIndexOf('\n'));
-    return { title: title, content: content };
+    return { title: title, text: content };
   }
+}
+
+export interface Message {
+  type?: 'info' | 'warning' | 'success' | 'danger';
+  title?: string;
+  text: string;
+  collapsed?: boolean;
+  confirm?:string,
+  cancel?:string
+  keepAfterNavigation?:boolean;
 }

@@ -1,12 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, ElementRef, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { BatchService } from 'src/app/components/batch/services/batch.service';
+import { BatchValidatorsService } from 'src/app/components/batch/services/batch-validators.service';
 import type { ReplaceSourceEditionParams } from 'src/app/components/batch/interfaces/batch-params';
 
 import { TranslatePipe } from "@ngx-translate/core";
+
+import { ValidationErrorComponent } from "src/app/components/shared/validation-error/validation-error.component";
 
 @Component({
   selector: 'pure-replace-source-edition-form',
@@ -14,7 +17,8 @@ import { TranslatePipe } from "@ngx-translate/core";
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    TranslatePipe
+    TranslatePipe,
+    ValidationErrorComponent
   ],
   templateUrl: './replace-source-edition-form.component.html',
 })
@@ -22,10 +26,12 @@ export class ReplaceSourceEditionFormComponent {
   router = inject(Router);
   fb = inject(FormBuilder);
   batchSvc = inject(BatchService);
+  valSvc = inject(BatchValidatorsService);
+  elRef: ElementRef = inject(ElementRef);
 
   public replaceSourceEditionForm: FormGroup = this.fb.group({
     sourceNumber: ['1', [Validators.required]],
-    sourceEdition: ['', [Validators.required]],
+    sourceEdition: [null, [Validators.required]],
   });
 
   get replaceSourceEditionParams(): ReplaceSourceEditionParams {
@@ -37,15 +43,36 @@ export class ReplaceSourceEditionFormComponent {
     return actionParams;
   }
 
-  onSubmit(): void {
-    if (this.replaceSourceEditionForm.invalid) {
-      this.replaceSourceEditionForm.markAllAsTouched();
-      return;
-    }
+  ngOnInit(): void {
+    this.replaceSourceEditionForm.reset();
+    this.replaceSourceEditionForm.controls['sourceNumber'].setValue('1');
+  }
 
-    this.batchSvc.replaceSourceEdition(this.replaceSourceEditionParams).subscribe(actionResponse => {
-      this.batchSvc.startProcess(actionResponse.batchLogHeaderId);
-      this.router.navigate(['/batch/logs']);
-    });
+  onSubmit(): void {
+    if (this.replaceSourceEditionForm.valid) {
+      this.batchSvc.replaceSourceEdition(this.replaceSourceEditionParams).subscribe(actionResponse => {
+        this.batchSvc.startProcess(actionResponse.batchLogHeaderId);
+        this.router.navigate(['/batch/logs']);
+      });
+    }
+  }
+
+  checkIfAllRequired() {
+    if (!this.replaceSourceEditionForm.valid) {
+      Object.keys(this.replaceSourceEditionForm.controls).forEach(key => {
+        const field = this.replaceSourceEditionForm.get(key);
+        if (field!.hasValidator(Validators.required) && (field!.pristine)) {
+          field!.markAsPending();
+        }
+      });
+    }
+  }
+
+  @HostListener('document:click', ['$event'])
+  clickOutside(event: Event) {
+    if (this.elRef.nativeElement.parentElement.contains(event.target) && !this.elRef.nativeElement.contains(event.target)) {
+      this.replaceSourceEditionForm.reset();
+      this.replaceSourceEditionForm.controls['sourceNumber'].setValue('1');
+    }
   }
 }

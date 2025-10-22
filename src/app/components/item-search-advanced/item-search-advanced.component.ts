@@ -5,7 +5,7 @@ import { SearchCriterion } from "./criterions/SearchCriterion";
 import { LogicalOperator } from "./criterions/operators/LogicalOperator";
 import { DisplayType, searchTypes, searchTypesI } from "./criterions/search_config";
 import { Parenthesis, PARENTHESIS_TYPE } from "./criterions/operators/Parenthesis";
-import { CreatorRole, IdType } from "../../model/inge";
+import { CreatorRole, IdType, ItemVersionState, SubjectClassification } from "../../model/inge";
 import { TitleSearchCriterion } from "./criterions/StandardSearchCriterion";
 import { OrganizationSearchCriterion, PersonSearchCriterion } from "./criterions/StringOrHiddenIdSearchCriterion";
 import { DATE_SEARCH_TYPES, DateSearchCriterion } from "./criterions/DateSearchCriterion";
@@ -26,16 +26,20 @@ import { SearchStateService } from "../search-result-list/search-state.service";
 import { TranslatePipe, TranslateService } from "@ngx-translate/core";
 import { SortByLabelPipe } from "../../pipes/sort-by-label.pipe";
 
-import {
-  SavedSearchesModalComponent
-} from "../shared/saved-searches-modal/saved-searches-modal.component";
+import { SavedSearchesModalComponent } from "../shared/saved-searches-modal/saved-searches-modal.component";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { AddRemoveButtonsComponent } from "../shared/add-remove-buttons/add-remove-buttons.component";
+import { ConeAutosuggestComponent } from "../shared/cone-autosuggest/cone-autosuggest.component";
+import { ContextsService } from "../../services/pubman-rest-client/contexts.service";
+import { OrganizationsService } from "../../services/pubman-rest-client/organizations.service";
+import { BootstrapValidationDirective } from "../../directives/bootstrap-validation.directive";
+import { ValidationErrorComponent } from "../shared/validation-error/validation-error.component";
 
 @Component({
   selector: 'pure-item-search-advanced',
   standalone: true,
   imports: [
-    FormsModule, ReactiveFormsModule, NgFor, JsonPipe, OuAutosuggestComponent, PersonAutosuggestComponent, FileSectionComponent, KeyValuePipe, TranslatePipe, SortByLabelPipe, NgTemplateOutlet
+    FormsModule, ReactiveFormsModule, NgFor, JsonPipe, OuAutosuggestComponent, PersonAutosuggestComponent, FileSectionComponent, KeyValuePipe, TranslatePipe, SortByLabelPipe, NgTemplateOutlet, AddRemoveButtonsComponent, ConeAutosuggestComponent, BootstrapValidationDirective, ValidationErrorComponent
   ],
   templateUrl: './item-search-advanced.component.html',
   styleUrl: './item-search-advanced.component.scss',
@@ -54,12 +58,12 @@ export class ItemSearchAdvancedComponent {
   possibleCriterionsForClosingParenthesisMap: SearchCriterion[] = []
   protected readonly DisplayType = DisplayType;
 
-  contextListSearchCriterion = new ContextListSearchCriterion();
-  itemStateListSearchCriterion = new ItemStateListSearchCriterion();
-  genreListSearchCriterion = new GenreListSearchCriterion(this.translateService);
-  publicationStateSearchCriterion = new PublicationStateSearchCriterion();
-  fileSectionSearchCriterion = new FileSectionSearchCriterion(COMPONENT_SEARCH_TYPES.FILES);
-  locatorSectionSearchCriterion = new FileSectionSearchCriterion(COMPONENT_SEARCH_TYPES.LOCATORS);
+  contextListSearchCriterion!: ContextListSearchCriterion;
+  itemStateListSearchCriterion!: ItemStateListSearchCriterion;
+  genreListSearchCriterion!: GenreListSearchCriterion;
+  publicationStateSearchCriterion!: PublicationStateSearchCriterion;
+  fileSectionSearchCriterion!: FileSectionSearchCriterion;
+  locatorSectionSearchCriterion!: FileSectionSearchCriterion;
 
   private principalSubscription?: Subscription;
 
@@ -67,6 +71,8 @@ export class ItemSearchAdvancedComponent {
   anzGenreRows: number = 0;
   genreRows: number[] = [];
   genreCols: number[] = [];
+
+  private servicesForCriterions: any;
 
   constructor(
     private router: Router,
@@ -77,8 +83,16 @@ export class ItemSearchAdvancedComponent {
     private clipboard: Clipboard,
     private searchStateService: SearchStateService,
     private translateService: TranslateService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private contextsService: ContextsService,
+    private ouService: OrganizationsService,
 ) {
+    this.servicesForCriterions = {
+      contextsService: this.contextsService,
+      ouService: this.ouService,
+      aaService: this.aaService,
+    }
+    this.initCriterions();
     this.initializeGenres();
   }
 
@@ -96,6 +110,16 @@ export class ItemSearchAdvancedComponent {
   ngOnDestroy() {
     console.log("Destroying advanced search");
     this.principalSubscription?.unsubscribe();
+  }
+
+  initCriterions() {
+    this.contextListSearchCriterion = new ContextListSearchCriterion(this.servicesForCriterions);
+    this.itemStateListSearchCriterion = new ItemStateListSearchCriterion(this.servicesForCriterions);
+    this.genreListSearchCriterion = new GenreListSearchCriterion(this.servicesForCriterions);
+    this.publicationStateSearchCriterion = new PublicationStateSearchCriterion(this.servicesForCriterions);
+    this.fileSectionSearchCriterion = new FileSectionSearchCriterion(COMPONENT_SEARCH_TYPES.FILES, this.servicesForCriterions);
+    this.locatorSectionSearchCriterion = new FileSectionSearchCriterion(COMPONENT_SEARCH_TYPES.LOCATORS, this.servicesForCriterions);
+
   }
 
   @HostListener('window:resize', ['$event'])
@@ -118,12 +142,7 @@ export class ItemSearchAdvancedComponent {
   }
 
   reset() {
-    this.itemStateListSearchCriterion = new ItemStateListSearchCriterion();
-    this.genreListSearchCriterion = new GenreListSearchCriterion(this.translateService);
-    this.publicationStateSearchCriterion = new PublicationStateSearchCriterion();
-    this.fileSectionSearchCriterion = new FileSectionSearchCriterion(COMPONENT_SEARCH_TYPES.FILES);
-    this.locatorSectionSearchCriterion = new FileSectionSearchCriterion(COMPONENT_SEARCH_TYPES.LOCATORS);
-    this.contextListSearchCriterion = new ContextListSearchCriterion();
+    this.initCriterions();
 
     this.searchForm = this.fb.group({
 
@@ -136,13 +155,16 @@ export class ItemSearchAdvancedComponent {
       locators: this.locatorSectionSearchCriterion
     });
 
-    this.flexibleFields.push(new TitleSearchCriterion());
+    this.flexibleFields.push(new TitleSearchCriterion(this.servicesForCriterions));
     this.flexibleFields.push(new LogicalOperator("and"));
-    this.flexibleFields.push(new PersonSearchCriterion());
+    this.flexibleFields.push(new PersonSearchCriterion(this.servicesForCriterions));
     this.flexibleFields.push(new LogicalOperator("and"));
-    this.flexibleFields.push(new OrganizationSearchCriterion());
+    this.flexibleFields.push(new OrganizationSearchCriterion(this.servicesForCriterions));
     this.flexibleFields.push(new LogicalOperator("and"));
-    this.flexibleFields.push(new DateSearchCriterion(DATE_SEARCH_TYPES.ANYDATE));
+    this.flexibleFields.push(new DateSearchCriterion(DATE_SEARCH_TYPES.ANYDATE, this.servicesForCriterions));
+
+    this.currentlyOpenedParenthesis = undefined;
+    this.possibleCriterionsForClosingParenthesisMap = [];
   }
 
   parseFormJson(formJson: any) {
@@ -156,7 +178,7 @@ export class ItemSearchAdvancedComponent {
         this.flexibleFields.clear();
         //Recreate flexible search criterions and patch form values
         for (let currentField of (value as any[])) {
-          const newSearchCriterion: SearchCriterion = new searchTypes[currentField.type].handlerClass(currentField.type);
+          const newSearchCriterion: SearchCriterion = new searchTypes[currentField.type].handlerClass(currentField.type, this.servicesForCriterions);
           newSearchCriterion.patchValue(currentField);
           this.flexibleFields.push(newSearchCriterion);
         }
@@ -171,7 +193,7 @@ export class ItemSearchAdvancedComponent {
   changeType(index: number, newType: string) {
     //console.log("Change criterion at index " + index + " to type " + newType);
 
-    const newSearchCriterion: SearchCriterion = new searchTypes[newType].handlerClass(newType);
+    const newSearchCriterion: SearchCriterion = new searchTypes[newType].handlerClass(newType, this.servicesForCriterions);
     this.flexibleFields.removeAt(index);
     this.flexibleFields.insert(index, newSearchCriterion);
   }
@@ -205,7 +227,7 @@ export class ItemSearchAdvancedComponent {
     if (DisplayType.PARENTHESIS === this.searchTypes[searchCriterion.type].displayType) {
       newSearchCriterion = new TitleSearchCriterion();
     } else {
-      newSearchCriterion = new searchTypes[searchCriterion.type].handlerClass(searchCriterion.type);
+      newSearchCriterion = new searchTypes[searchCriterion.type].handlerClass(searchCriterion.type, this.servicesForCriterions);
     }
 
     newSearchCriterion.level = searchCriterion.level;
@@ -665,6 +687,71 @@ export class ItemSearchAdvancedComponent {
     })
 
   }
+
+  switchToAdmin(admin: boolean) {
+    if(admin) {
+
+      Object.keys(this.contextListSearchCriterion.contextListFormGroup.controls).forEach(key => {
+        this.contextListSearchCriterion.contextListFormGroup.get(key)?.setValue(true);
+      })
+
+      this.itemStateListSearchCriterion.publicationStatesFormGroup.get(ItemVersionState.PENDING.valueOf())?.setValue(true);
+      this.itemStateListSearchCriterion.publicationStatesFormGroup.get(ItemVersionState.SUBMITTED.valueOf())?.setValue(true);
+      this.itemStateListSearchCriterion.publicationStatesFormGroup.get(ItemVersionState.RELEASED.valueOf())?.setValue(true);
+      this.itemStateListSearchCriterion.publicationStatesFormGroup.get(ItemVersionState.IN_REVISION.valueOf())?.setValue(true);
+      this.itemStateListSearchCriterion.publicationStatesFormGroup.get(ItemVersionState.WITHDRAWN.valueOf())?.setValue(false);
+    }
+    else {
+
+      Object.keys(this.contextListSearchCriterion.contextListFormGroup.controls).forEach(key => {
+        console.log(key)
+        this.contextListSearchCriterion.contextListFormGroup.get(key)?.setValue(false);
+      })
+
+      this.itemStateListSearchCriterion.publicationStatesFormGroup.get(ItemVersionState.PENDING.valueOf())?.setValue(false);
+      this.itemStateListSearchCriterion.publicationStatesFormGroup.get(ItemVersionState.SUBMITTED.valueOf())?.setValue(false);
+      this.itemStateListSearchCriterion.publicationStatesFormGroup.get(ItemVersionState.RELEASED.valueOf())?.setValue(true);
+      this.itemStateListSearchCriterion.publicationStatesFormGroup.get(ItemVersionState.IN_REVISION.valueOf())?.setValue(false);
+      this.itemStateListSearchCriterion.publicationStatesFormGroup.get(ItemVersionState.WITHDRAWN.valueOf())?.setValue(false);
+    }
+
+  }
+
+  get isAdmin() {
+   const anyContextSelected = Object.keys(this.contextListSearchCriterion.contextListFormGroup.controls)
+     .map(key => this.contextListSearchCriterion.contextListFormGroup.get(key)?.value)
+     .includes(true);
+
+   const anyAdminStatesSelected =
+     this.itemStateListSearchCriterion.publicationStatesFormGroup.get(ItemVersionState.PENDING.valueOf())?.value == true ||
+    this.itemStateListSearchCriterion.publicationStatesFormGroup.get(ItemVersionState.SUBMITTED.valueOf())?.value == true ||
+    //this.itemStateListSearchCriterion.publicationStatesFormGroup.get(ItemVersionState.RELEASED.valueOf())?.value == true ||
+    this.itemStateListSearchCriterion.publicationStatesFormGroup.get(ItemVersionState.IN_REVISION.valueOf())?.value == true
+    //this.itemStateListSearchCriterion.publicationStatesFormGroup.get(ItemVersionState.WITHDRAWN.valueOf())?.value == false;
+
+   return anyContextSelected || anyAdminStatesSelected;
+  }
+
+  get isPublic() {
+    const anyContextSelected = Object.keys(this.contextListSearchCriterion.contextListFormGroup.controls)
+      .map(key => this.contextListSearchCriterion.contextListFormGroup.get(key)?.value)
+      .includes(true);
+
+    const onlyReleasedSelected =
+      this.itemStateListSearchCriterion.publicationStatesFormGroup.get(ItemVersionState.PENDING.valueOf())?.value == false &&
+      this.itemStateListSearchCriterion.publicationStatesFormGroup.get(ItemVersionState.SUBMITTED.valueOf())?.value == false &&
+      this.itemStateListSearchCriterion.publicationStatesFormGroup.get(ItemVersionState.RELEASED.valueOf())?.value == true &&
+      this.itemStateListSearchCriterion.publicationStatesFormGroup.get(ItemVersionState.IN_REVISION.valueOf())?.value == false
+    //this.itemStateListSearchCriterion.publicationStatesFormGroup.get(ItemVersionState.WITHDRAWN.valueOf())?.value == false;
+
+    return (!anyContextSelected) && onlyReleasedSelected;
+  }
+
+  get isValid() {
+    return this.searchForm.valid && this.currentlyOpenedParenthesis === undefined && this.flexibleFields.controls.length > 0;
+  }
+
+  protected readonly SubjectClassification = SubjectClassification;
 }
 
 

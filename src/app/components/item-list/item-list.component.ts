@@ -1,10 +1,10 @@
 import { AsyncPipe, CommonModule, Location } from '@angular/common';
-import { AfterViewInit, Component, Input, QueryList, ViewChildren } from '@angular/core';
+import { AfterViewInit, Component, ContentChild, ContentChildren, Input, QueryList, ViewChildren } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ItemListElementComponent } from './item-list-element/item-list-element.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TopnavComponent } from 'src/app/components/shared/topnav/topnav.component';
-import { BehaviorSubject, map, Observable, of, Subscription, tap } from 'rxjs';
+import { BehaviorSubject, catchError, map, Observable, of, Subscription, tap } from 'rxjs';
 import { ItemVersionVO } from 'src/app/model/inge';
 import { AaService } from 'src/app/services/aa.service';
 import { ItemsService } from "../../services/pubman-rest-client/items.service";
@@ -20,6 +20,10 @@ import { ItemSelectionService } from "../../services/item-selection.service";
 import { TranslatePipe } from "@ngx-translate/core";
 import { itemToVersionId } from "../../utils/utils";
 import { FeedModalComponent } from "../shared/feed-modal/feed-modal.component";
+import { ItemFilterComponent } from "./filters/item-filter/item-filter.component";
+import { ItemAggregationFilterComponent } from "./aggregations/aggregation-filter/item-aggregation-filter.component";
+import { SortSelectorComponent } from "./filters/sort-selector/sort-selector.component";
+
 
 
 @Component({
@@ -39,8 +43,7 @@ import { FeedModalComponent } from "../shared/feed-modal/feed-modal.component";
     NgbTooltip,
     TranslatePipe
   ],
-  templateUrl: './item-list.component.html',
-  styleUrl: './item-list.component.scss'
+  templateUrl: './item-list.component.html'
 })
 export class ItemListComponent implements AfterViewInit{
 
@@ -48,6 +51,9 @@ export class ItemListComponent implements AfterViewInit{
   @Input() searchResultType = false;
   //@Input() filterSectionTemplate?: TemplateRef<any> | undefined;
   @ViewChildren(ItemListElementComponent) list_items!: QueryList<ItemListElementComponent>;
+  @ContentChildren(ItemFilterComponent) private filterComponents!: QueryList<ItemFilterComponent>;
+  @ContentChildren(ItemAggregationFilterComponent) private aggregationComponents!: QueryList<ItemAggregationFilterComponent>;
+  @ContentChild(SortSelectorComponent) private sortSelectorComponent!: SortSelectorComponent
   //@ViewChild(PaginatorComponent) paginator!: PaginatorComponent
 
 
@@ -55,8 +61,8 @@ export class ItemListComponent implements AfterViewInit{
   result_list: Observable<ItemVersionVO[]> | undefined;
   number_of_results: number = 0;
 
-  filterEvents: Map<string, FilterEvent> = new Map();
-  aggregationEvents: Map<string, AggregationEvent> = new Map();
+  //filterEvents: Map<string, FilterEvent> = new Map();
+  //aggregationEvents: Map<string, AggregationEvent> = new Map();
 
   protected currentPage:number = 1;
   protected size:number = 25;
@@ -102,28 +108,6 @@ export class ItemListComponent implements AfterViewInit{
 
   }
 
-  updateQueryParams() {
-    /*
-    const queryParams: Params = {
-      page: this.currentPage,
-      size: this.size
-    };
-    this.router.navigate(
-      [],
-      {
-        relativeTo: this.activatedRoute,
-        queryParams,
-        queryParamsHandling: 'merge', // remove to replace all query params by provided
-      }
-    );
-
-     */
-  }
-
-  ngOnInit() {
-    //this.size = parseInt(this.activatedRoute.snapshot.queryParamMap.get('size') || '25');
-    //this.currentPage = parseInt(this.activatedRoute.snapshot.queryParamMap.get('page') || '1');
-  }
 
   ngOnDestroy() {
     this.searchQuerySubscription.unsubscribe();
@@ -151,10 +135,14 @@ export class ItemListComponent implements AfterViewInit{
   public reset()
   {
     this.currentPage = 1;
-    this.filterEvents = new Map<string, FilterEvent>();
+    this.filterComponents.forEach(filterComp => {
+      filterComp.reset();
+    })
+    //this.filterEvents = new Map<string, FilterEvent>();
     //Clear all aggregation results
-    this.aggregationEvents.forEach(aggEvent => {
-      aggEvent.result.next(undefined);
+    this.aggregationComponents.forEach(aggComp => {
+      aggComp.reset();
+
     })
 
   }
@@ -164,16 +152,24 @@ export class ItemListComponent implements AfterViewInit{
   updateList() {
     let query = this.currentQuery;
 
-    if(this.filterEvents.size > 0) {
-      const filterQueries = Array.from(this.filterEvents.values()).filter(fe => fe.query).map(fe => fe.query);
-      //console.log("Filter Queries " + JSON.stringify(filterQueries))
+    const filterQueries = this.filterComponents
+      .map(filter =>
+      filter.selectedFilterEvent.query)
+      .filter(filterQuery => filterQuery);
+    const aggFilterQueries = this.aggregationComponents
+      .map(aggComp => aggComp.selectedFilterEvent?.query)
+      .filter(aggQuery => aggQuery);
 
-      if (filterQueries.length) {
+    const allFilterQueries = filterQueries.concat(aggFilterQueries);
+
+    if(allFilterQueries.length > 0) {
+
+      if (allFilterQueries.length) {
         query = {
           bool: {
             must: [
               this.currentQuery,
-              ...filterQueries
+              ...allFilterQueries
             ]
           }
         }
@@ -182,10 +178,16 @@ export class ItemListComponent implements AfterViewInit{
 
     let aggQueries = undefined;
     let runtimeMappings = undefined;
-    if(this.aggregationEvents.size > 0) {
-      aggQueries = Object.assign({}, ...Array.from(this.aggregationEvents.values()).filter(fe => fe.query).map(fe => fe.query))
-      runtimeMappings = Object.assign({}, ...Array.from(this.aggregationEvents.values()).filter(fe => fe.runtimeMapping).map(fe => fe.runtimeMapping))
+
+    const aggEvents = this.aggregationComponents
+      .map(aggComponent => aggComponent.aggEvent);
+
+    if(aggEvents.length > 0) {
+      aggQueries = Object.assign({}, ...aggEvents.filter(fe => fe.query).map(fe => fe.query))
+      runtimeMappings = Object.assign({}, ...aggEvents.filter(fe => fe.runtimeMapping).map(fe => fe.runtimeMapping))
     }
+
+    this.currentSortQuery = this.sortSelectorComponent?.currentSortQuery;
 
     const completeQuery = {
       query: query,
@@ -200,7 +202,6 @@ export class ItemListComponent implements AfterViewInit{
 
     this.currentCompleteQuery = completeQuery;
     this.search(completeQuery);
-    this.updateQueryParams()
   }
 
   private search(body: any) {
@@ -224,16 +225,19 @@ export class ItemListComponent implements AfterViewInit{
         this.listStateService.currentPageOfList = this.currentPage;
         this.listStateService.currentSizeOfList = this.size;
 
+      }),
+      catchError(err => {
+        return of([]);
       })
     );
   }
 
   applyAggregationResults(aggResult: object) {
-    this.aggregationEvents.forEach((ae, key) => {
+    this.aggregationComponents.forEach((aggComp) => {
       // Use ends with, because PuRe currently returns aggregation names with typed_keys parameter enabled, see https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations.html#return-agg-type
-      const aggKey = Object.keys(aggResult).find(k => k.endsWith(key)) as keyof typeof aggResult;
+      const aggKey = Object.keys(aggResult).find(k => k.endsWith(aggComp.aggEvent.name)) as keyof typeof aggResult;
       if(aggResult[aggKey]){
-        ae.result.next(aggResult[aggKey]);
+        aggComp.result.next(aggResult[aggKey]);
       }
     })
   }
@@ -247,26 +251,13 @@ export class ItemListComponent implements AfterViewInit{
     }
   }
 
-
-  registerFilter(fe: FilterEvent) {
-    //const filterEvent : FilterEvent = fe as FilterEvent;
-    this.filterEvents.set(fe.name,fe);
-    //this.update_query(this.currentQuery, this.page_size, 0);
-
-  }
-
-  updateFilter(fe: FilterEvent) {
-    //console.log("Update Filter: " + fe.name + ' - ' + fe.query)
-    this.filterEvents.set(fe.name,fe);
-    this.currentPage=1;
-    this.updateList();
-    //this.onPageChange(1)
-  }
-
+/*
   registerAggregation(ae: AggregationEvent) {
     this.aggregationEvents.set(ae.name,ae);
   }
 
+ */
+/*
   registerSort(sortQuery: any) {
     this.currentSortQuery = sortQuery;
 
@@ -278,6 +269,13 @@ export class ItemListComponent implements AfterViewInit{
     this.updateList();
     //this.onPageChange(1)
 
+  }
+
+ */
+
+  updateFilterOrSort() {
+    this.currentPage=1
+    this.updateList();
   }
 
 

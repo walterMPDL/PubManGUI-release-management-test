@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, ElementRef, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -11,13 +11,16 @@ import { ReviewMethod } from 'src/app/model/inge';
 
 import { _, TranslatePipe, TranslateService } from "@ngx-translate/core";
 
+import { ValidationErrorComponent } from "src/app/components/shared/validation-error/validation-error.component";
+
 @Component({
   selector: 'pure-change-review-method-form',
   standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    TranslatePipe
+    TranslatePipe,
+    ValidationErrorComponent
   ],
   templateUrl: './change-review-method-form.component.html',
 })
@@ -27,14 +30,15 @@ export class ChangeReviewMethodFormComponent {
   valSvc = inject(BatchValidatorsService);
   batchSvc = inject(BatchService);
   translateSvc = inject(TranslateService);
+  elRef: ElementRef = inject(ElementRef);
 
   reviewMethods = Object.keys(ReviewMethod);
 
   public changeReviewMethodForm: FormGroup = this.fb.group({
-    reviewMethodFrom: [this.translateSvc.instant(_('batch.actions.metadata.publication.reviewType')), [Validators.required]],
-    reviewMethodTo: [this.translateSvc.instant(_('batch.actions.metadata.publication.reviewType')), [Validators.required]],
+    reviewMethodFrom: [null, [Validators.required]],
+    reviewMethodTo: [null, [Validators.required]],
   },
-    { validators: [this.valSvc.notEqualsValidator('reviewMethodFrom', 'reviewMethodTo'), this.valSvc.allRequiredValidator()] });
+    { validators: [this.valSvc.notSameValues('reviewMethodFrom', 'reviewMethodTo')] });
 
   get changeReviewMethodParams(): ChangeReviewMethodParams {
     const actionParams: ChangeReviewMethodParams = {
@@ -45,15 +49,35 @@ export class ChangeReviewMethodFormComponent {
     return actionParams;
   }
 
+  ngOnInit(): void {
+    this.changeReviewMethodForm.reset();
+  } 
+  
   onSubmit(): void {
-    if (this.changeReviewMethodForm.invalid) {
-      this.changeReviewMethodForm.markAllAsTouched();
-      return;
-    }
+    if (this.changeReviewMethodForm.valid) {
 
-    this.batchSvc.changeReviewMethod(this.changeReviewMethodParams).subscribe(actionResponse => {
-      this.batchSvc.startProcess(actionResponse.batchLogHeaderId);
-      this.router.navigate(['/batch/logs']);
-    });
+      this.batchSvc.changeReviewMethod(this.changeReviewMethodParams).subscribe(actionResponse => {
+        this.batchSvc.startProcess(actionResponse.batchLogHeaderId);
+        this.router.navigate(['/batch/logs']);
+      });
+    }
+  }
+
+  checkIfAllRequired() {
+    if (!this.changeReviewMethodForm.valid) {
+      Object.keys(this.changeReviewMethodForm.controls).forEach(key => {
+        const field = this.changeReviewMethodForm.get(key);
+        if (field!.hasValidator(Validators.required) && (field!.pristine)) {
+          field!.markAsPending();
+        }
+      });
+    }
+  }
+
+  @HostListener('document:click', ['$event'])
+  clickOutside(event: Event) {
+    if (this.elRef.nativeElement.parentElement.contains(event.target) && !this.elRef.nativeElement.contains(event.target)) {
+      this.changeReviewMethodForm.reset();
+    }
   }
 }

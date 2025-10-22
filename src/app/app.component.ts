@@ -5,17 +5,20 @@ import { HeaderComponent } from './components/header/header.component';
 import { SidenavComponent } from './components/shared/sidenav/sidenav.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { ScrollToTopComponent } from './components/shared/scroll-to-top/scroll-to-top.component';
-import { InfoPanelComponent } from "./components/shared/info-panel/info-panel.component";
+import { InfoSubheaderComponent } from "./components/shared/info-subheader/info-subheader.component";
 
 import { TranslateModule, TranslateService } from "@ngx-translate/core";
 import { NgbTooltipConfig } from "@ng-bootstrap/ng-bootstrap";
 import { filter } from "rxjs/operators";
 import { Title } from "@angular/platform-browser";
+import { AaService } from "./services/aa.service";
+import { MessageService } from "./services/message.service";
+import { WindowFocusCheckLoginService } from "./services/window-focus-check-login.service";
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, HeaderComponent, FooterComponent, SidenavComponent, ScrollToTopComponent, InfoPanelComponent, TranslateModule],
+  imports: [CommonModule, RouterOutlet, HeaderComponent, FooterComponent, SidenavComponent, ScrollToTopComponent, InfoSubheaderComponent, TranslateModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
@@ -28,8 +31,13 @@ export class AppComponent {
     private activatedRoute: ActivatedRoute,
     private title: Title,
     private translate: TranslateService,
+    private aaService: AaService,
+    private messageService: MessageService,
+    private windowFocusCheckLoginService: WindowFocusCheckLoginService,
   )
   {
+    windowFocusCheckLoginService.enabled = true;
+
 
     //Set HTML title to the breadcrumb label
     this.router.events

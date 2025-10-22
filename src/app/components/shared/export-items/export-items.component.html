@@ -12,7 +12,7 @@
 
     <div class="mb-3">
       <label for="formatSelect">Format</label>
-      <select class="form-select" [(ngModel)]="selectedExportType" (change)="handleFormatChange($event)" id="formatSelect" name="selectFormat">
+      <select class="form-select" [formControl]="selectedExportType" (change)="handleFormatChange($event)" id="formatSelect" name="selectFormat">
         <optgroup label="Format Exports">
         <option [ngValue]="exportTypes.ENDNOTE">
           {{ exportTypes.ENDNOTE }}
@@ -58,7 +58,7 @@
     @if(!isFormat) {
     <div class="mb-3">
       <label for="citationSelect">Citation</label>
-      <select class="form-select" [(ngModel)]="selectedCitationType" (change)="handleCitationChange($event)" id="citationSelect" name="selectFormat">
+      <select class="form-select" [formControl]="selectedCitationType" (change)="handleCitationChange($event)" id="citationSelect" name="selectFormat">
 
         <option value="{{citationTypes.APA}}">
           {{ citationTypes.APA }}
@@ -81,25 +81,26 @@
     </div>
 
 
-      @if(selectedCitationType===citationTypes.CSL) {
+      @if(selectedCitationType.value===citationTypes.CSL) {
         <div class="mb-3">
-          <pure-csl-autosuggest (selectedEvent)="selectCsl($event)" [selectedCslId]="selectedCslId" [selectedCslName]="selectedCslName"/>
+          <pure-cone-autosuggest coneType="citation-styles" [form]="selectedCslName" (valueSelected)="selectCsl($event)"/>
         </div>
       }
 
 
-      <h6>Citation Example</h6>
+
       @if(currentCitation) {
+        <h6>Citation Example</h6>
         <p [innerHTML]="currentCitation"></p>
-      } @else {
+      } @else if(loading) {
         <pure-loading></pure-loading>
       }
     }
   @if(type === 'exportAll') {
     <div class="mb-3">
-      <label for="sizeInput">Size</label>
-      <input class="form-control" id="sizeInput" type="number" [(ngModel)]="selectedSize" (change)="handleSizeChange($event)"/>
-
+      <label for="sizeInput">Size (max. 5000)</label>
+      <input class="form-control" id="sizeInput" type="number" [(ngModel)]="selectedSize" (change)="handleSizeChange($event)" [max]="maxSize" #sizeControl='ngModel'/>
+      <pure-validation-error [control]="sizeControl.control"/>
       <label for="sizeInput">Offset</label>
       <input class="form-control" id="offsetInput" type="number" [(ngModel)]="selectedFrom" (change)="handleFromChange($event)"/>
 
@@ -115,13 +116,13 @@
     </div>
 
   }
+
+  @if(errorMessage) {
+      <pure-notification class="mt-5" [message]="errorMessage"/>
+  }
 </div>
 
-@if(errorMessage) {
-  <div class="alert alert-danger" role="alert">
-    {{ errorMessage }}
-  </div>
-}
+
 
 <div class="modal-footer">
 

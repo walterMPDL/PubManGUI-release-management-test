@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, ElementRef, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -11,13 +11,16 @@ import type { ChangeKeywordsParams } from 'src/app/components/batch/interfaces/b
 
 import { TranslatePipe } from "@ngx-translate/core";
 
+import { ValidationErrorComponent } from "src/app/components/shared/validation-error/validation-error.component";
+
 @Component({
   selector: 'pure-change-keywords-form',
   standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    TranslatePipe
+    TranslatePipe,
+    ValidationErrorComponent
   ],
   templateUrl: './change-keywords-form.component.html',
 })
@@ -26,12 +29,13 @@ export class ChangeKeywordsFormComponent {
   fb = inject(FormBuilder);
   batchSvc = inject(BatchService);
   valSvc = inject(BatchValidatorsService);
+  elRef: ElementRef = inject(ElementRef);
 
   public changeKeywordsForm: FormGroup = this.fb.group({
-    keywordsFrom: ['', [Validators.required]],
-    keywordsTo: ['', [Validators.required]],
+    keywordsFrom: [null, [Validators.required]],
+    keywordsTo: [null, [Validators.required]],
   }, {
-    validators: this.valSvc.notEqualsValidator('keywordsFrom', 'keywordsTo')
+    validators: this.valSvc.notSameValues('keywordsFrom', 'keywordsTo')
   });
 
   get changeKeywordsParams(): ChangeKeywordsParams {
@@ -43,15 +47,36 @@ export class ChangeKeywordsFormComponent {
     return actionParams;
   }
 
-  onSubmit(): void {
-    if (this.changeKeywordsForm.invalid) {
-      this.changeKeywordsForm.markAllAsTouched();
-      return;
-    }
+  ngOnInit(): void {
+    this.changeKeywordsForm.reset();
+  } 
 
-    this.batchSvc.changeKeywords(this.changeKeywordsParams).subscribe(actionResponse => {
-      this.batchSvc.startProcess(actionResponse.batchLogHeaderId);
-      this.router.navigate(['/batch/logs']);
-    });
+  onSubmit(): void {
+    if (this.changeKeywordsForm.valid) {
+      this.batchSvc.changeKeywords(this.changeKeywordsParams).subscribe(actionResponse => {
+        this.batchSvc.startProcess(actionResponse.batchLogHeaderId);
+        this.router.navigate(['/batch/logs']);
+      });
+    }
+  }
+
+  checkIfAllRequired() {
+    if (!this.changeKeywordsForm.valid) {
+      Object.keys(this.changeKeywordsForm.controls).forEach(key => {
+        const field = this.changeKeywordsForm.get(key);
+        if (field!.hasValidator(Validators.required) && (field!.pristine)) {
+          field!.markAsPending();
+        }
+      });
+    }
+  }
+
+  // TODO: This is a workaround to reset the form when clicking outside the form area
+  //       A better approach would be to implement a more robust click outside detection mechanism
+  @HostListener('document:click', ['$event'])
+  clickOutside(event: Event) {
+    if (this.elRef.nativeElement.parentElement.contains(event.target) && !this.elRef.nativeElement.contains(event.target)) {
+      this.changeKeywordsForm.reset();
+    }
   }
 }

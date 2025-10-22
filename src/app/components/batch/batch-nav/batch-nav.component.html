@@ -1,13 +1,43 @@
-<ul>
-    @for(option of navList(); track option) {
-    <li [routerLink]="[ option.route ]" 
-        routerLinkActive="current" 
-        isActive="false"
-        [ngClass]="{'disabled' : option.disabled}" 
-        (click)="warning(option.route)" 
-        data-bs-toggle="button"
-        class="nav-link nav-label ps-5">
-        {{ 'common.' + option.label | translate }}
-    </li>
-    }
-</ul>
+<div class="batch">
+    <div class="batch border-bottom nav-toggler pb-2">
+        <a class="nav-link pt-2 pt-xl-3" (click)="showMore()" data-test="sidenav-batch">
+            <span class="material-symbols-outlined">web_stories</span>
+            <span class="nav-label ms-3 text-nowrap">{{'batch.name'| translate }}
+                @if (!isMoreShown) {
+                <span class="material-symbols-outlined">arrow_drop_down</span>
+                } @else {
+                <span class="material-symbols-outlined">arrow_drop_up</span>
+                }
+            </span>
+            @if ( batchSvc.areItemsSelected() ) {
+            <div class="matBadge" matBadge='{{ batchSvc.getItemsCount() }}' data-test="batch-badge"></div>
+            }
+
+        </a>
+        
+        <ul [ngClass]="isMoreShown ? 'd-block' : 'd-none'" id="batch-options">
+            <li class="pt-0 pb-0 mx-0">
+                <a class="nav-link nav-label" [routerLink]="[ '/batch/datasets' ]"
+                    (click)="whenReady('/batch/datasets')"
+                    [ngClass]="{'disabled pb-2' : !batchSvc.areItemsSelected()}" data-test="sidenav-batch-datasets">
+                    <span> {{'common.datasets' | translate}}</span>
+                </a>
+            </li>
+            <li class="pt-0 pb-0">
+                <a class="nav-link nav-label" [routerLink]="[ '/batch/actions' ]"
+                    (click)="whenReady('/batch/actions')"
+                    [ngClass]="{'disabled pb-2' : !batchSvc.areItemsSelected() || this.batchSvc.isProcessRunning()}" data-test="sidenav-batch-actions">
+                    <span> {{'common.actions' | translate}}</span>
+                </a>
+            </li>
+            <li class="pt-0 pb-0">
+                <a class="nav-link nav-label" [routerLink]="[ '/batch/logs' ]" 
+                    (click)="whenReady('/batch/logs')"
+                    [ngClass]="{'disabled pb-2' : !batchSvc.hasLogs()}" data-test="sidenav-batch-logs">
+                    <span> {{'common.logs' | translate}}</span>
+                </a>
+            </li>
+        </ul>
+
+    </div>
+</div>

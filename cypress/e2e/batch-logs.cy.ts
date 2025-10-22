@@ -1,12 +1,12 @@
 describe('Check Batch Logs', () => {
-  const userName = Cypress.env('testUser').userName
+  const loginName = Cypress.env('testUser').loginName
   const password = Cypress.env('testUser').password
   let itemId: string;
   let itemTitle: string;
 
   beforeEach(() => {
     cy.setLanguage('en')
-    cy.loginViaAPI(userName, password)
+    cy.loginViaAPI(loginName, password)
     cy.fixture('itemMetadataMinimal').then((itemMetadata) => {
       cy.createItemViaAPI(itemMetadata).then((response) => {
         itemId = response.body['objectId']
@@ -30,10 +30,7 @@ describe('Check Batch Logs', () => {
       cy.addLocalTagsViaAPI(localTags).as('addLocalTags')
     })
 
-    //cy.visit('/batch/logs')
-    //TODO: Remove this workaround (Navigating to the logs via buttons). Use cy.visit('/batch/logs') as soon as it works.
-    cy.visit('/batch/datasets')
-    cy.get('pure-batch-nav li').eq(2).click({force: true})
+    cy.visit('/batch/logs')
 
     //When
     cy.get('@addLocalTags').then(response => {

@@ -16,18 +16,11 @@ export class ConeService {
 
   private getResources(method: string, path: string, body?: any, headers?: HttpHeaders, params?: HttpParams): Observable<any> {
     const requestUrl = this.rest_uri + path;
-    console.log('rest_uri: ' + this.rest_uri); // DEBUG
-    console.log('path: ' + path); // DEBUG
-    console.log('requestUrl: ' + requestUrl); // DEBUG
     return this.http.request(method, requestUrl, {
       body,
       headers,
       params,
-    }).pipe(
-      map((response: any) => response),
-      catchError((error) => {
-        return throwError(() => new Error(JSON.stringify(error) || 'UNKNOWN ERROR!'));
-      })
+    }
     );
   }
 
@@ -35,15 +28,16 @@ export class ConeService {
     return this.getResources('GET', resource_type, undefined, undefined, params);
   }
 
-  getPersonResource(uri: string) {
+  getPersonResource(path: string) {
+    const requestUrl = this.rest_uri + path;
     const params = new HttpParams().set('format', 'json');
-    console.log('uri: ' + uri); // DEBUG
-    return this.http.get<PersonResource>(uri, { params }).pipe(
-      map((response: any) => response),
-      catchError((error) => {
-        return throwError(() => new Error(JSON.stringify(error) || 'UNKNOWN ERROR!'));
-      })
-    );
+    return this.http.get<PersonResource>(requestUrl, { params })
+  }
+
+  getConeResource(path: string, format="json") {
+    const requestUrl = this.rest_uri + path;
+    const params = new HttpParams().set('format', format);
+    return this.http.get<any>(requestUrl, { params })
   }
 }
 

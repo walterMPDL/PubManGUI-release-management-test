@@ -13,8 +13,6 @@ import { RouterLink } from '@angular/router';
 import { AaService } from "../../../services/aa.service";
 
 import { MatBadgeModule } from '@angular/material/badge';
-import { BatchService } from 'src/app/components/batch/services/batch.service';
-import { ImportsService } from 'src/app/components/imports/services/imports.service';
 import { BatchNavComponent } from 'src/app/components/batch/batch-nav/batch-nav.component';
 import { ImportsNavComponent } from 'src/app/components/imports/imports-nav/imports-nav.component';
 import { CartService } from "../../../services/cart.service";
@@ -24,12 +22,26 @@ import { TranslatePipe } from "@ngx-translate/core";
 import { AaComponent } from 'src/app/components/aa/aa.component';
 import { SearchComponent } from 'src/app/components/shared/search/search.component';
 import { LangSwitchComponent } from 'src/app/components/shared/lang-switch/lang-switch.component';
-
+import { ToolsnavComponent } from 'src/app/components/shared/toolsnav/toolsnav.component';
+import { NgbPopover, NgbTooltip } from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: 'pure-sidenav',
   standalone: true,
-  imports: [RouterLink, MatBadgeModule, CommonModule, BatchNavComponent, ImportsNavComponent, TranslatePipe, AaComponent, SearchComponent, LangSwitchComponent],
+  imports: [
+    RouterLink, 
+    MatBadgeModule, 
+    CommonModule, 
+    BatchNavComponent, 
+    ImportsNavComponent, 
+    TranslatePipe, 
+    AaComponent, 
+    SearchComponent, 
+    LangSwitchComponent, 
+    ToolsnavComponent,
+    NgbPopover,
+    NgbTooltip,
+  ],
   templateUrl: './sidenav.component.html'
 })
 export class SidenavComponent implements AfterViewInit {
@@ -38,8 +50,6 @@ export class SidenavComponent implements AfterViewInit {
   renderer = inject(Renderer2);
 
   aaService = inject(AaService);
-  batchSvc = inject(BatchService);
-  importsSvc = inject(ImportsService);
   cartService = inject(CartService);
   private document = inject(DOCUMENT);
 
@@ -48,12 +58,11 @@ export class SidenavComponent implements AfterViewInit {
 
   ngOnInit() {
     const viewWidth = document.documentElement.offsetWidth || 0;
-    this.mobile = viewWidth < 1400 ? true : false;
+    this.mobile = viewWidth < 1200 ? true : false;
   }
 
   ngAfterViewInit(): void {
     this.collapse();
-    this.batchSvc.items;
   }
 
   /*
@@ -64,9 +73,6 @@ export class SidenavComponent implements AfterViewInit {
   */
 
   expand() {
-    if (this.aaService.principal.getValue().isDepositor || this.aaService.principal.getValue().isModerator) {
-      if (!this.importsSvc.hasImports()) this.importsSvc.checkImports();
-    }
     if (!this.mobile) {
       this.renderer.removeClass(this.nav.nativeElement, 'collapsed');
     }
@@ -85,7 +91,10 @@ export class SidenavComponent implements AfterViewInit {
   @HostListener('window:resize', ['$event'])
   onWindowResize() {
     const viewWidth = document.documentElement.offsetWidth || 0;
-    this.mobile = viewWidth < 1400 ? true : false;
+    this.mobile = viewWidth < 1200 ? true : false;
+    if (!this.mobile) {
+      this.collapse();
+    } 
   }
 
 }

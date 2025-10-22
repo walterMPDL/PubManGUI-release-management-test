@@ -2,31 +2,29 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { AccountUserDbVO, ContextDbVO } from "../../model/inge";
 import { PubmanSearchableGenericRestClientService } from "./pubman-searchable-generic-rest-client.service";
+import { HttpOptions } from "./pubman-generic-rest-client.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ContextsService extends PubmanSearchableGenericRestClientService<ContextDbVO>{
 
-  static instance: ContextsService;
-
   constructor() {
     super('/contexts');
-    ContextsService.instance = this;
   }
 
 
-  openContext(context: ContextDbVO, authenticate?: boolean): Observable<ContextDbVO> {
+  openContext(context: ContextDbVO, opts?: HttpOptions): Observable<ContextDbVO> {
     const path = this.subPath + '/' + context.objectId + '/open';
     const body = context.lastModificationDate;
-    return this.httpPut(path, context, authenticate);
+    return this.httpPut(path, context, opts);
 
   }
 
-  closeContext(context: ContextDbVO, authenticate?: boolean): Observable<ContextDbVO> {
+  closeContext(context: ContextDbVO, opts?: HttpOptions): Observable<ContextDbVO> {
     const path = this.subPath + '/' + context.objectId + '/close';
     const body = context.lastModificationDate;
-    return this.httpPut(path, context, authenticate);
+    return this.httpPut(path, context, opts);
   }
 
   getContextsForCurrentUser(role:string, user:AccountUserDbVO) {
@@ -41,7 +39,7 @@ export class ContextsService extends PubmanSearchableGenericRestClientService<Co
       }
     };
     var termCounter = 0;
-    for (var i = 0; i < user.grantList.length; i++) {
+    for (var i = 0; i < user.grantList?.length; i++) {
       var grant = user.grantList[i];
       /*
       console.log("userGrantType: " + grant.grantType

@@ -1,16 +1,21 @@
 import { Component, Input } from '@angular/core';
 import { citationTypes, exportTypes } from "../../../model/inge";
-import { FormsModule } from "@angular/forms";
+import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { ItemsService } from "../../../services/pubman-rest-client/items.service";
-import { CslAutosuggestComponent } from "../csl-autosuggest/csl-autosuggest.component";
 import { environment } from 'src/environments/environment';
 import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 import { ItemSelectionService } from "../../../services/item-selection.service";
-import { Subscription } from "rxjs";
+import { catchError, EMPTY, Subscription, tap } from "rxjs";
 import { LoadingComponent } from "../loading/loading.component";
 import { contentDispositionParser } from "../../../utils/utils";
 import { TranslatePipe } from "@ngx-translate/core";
 import { JsonPipe } from "@angular/common";
+import { PubManHttpErrorResponse } from "../../../services/interceptors/http-error.interceptor";
+import { ConeAutosuggestComponent } from "../cone-autosuggest/cone-autosuggest.component";
+import { NotificationComponent } from "../notification/notification.component";
+import { Message, MessageService } from "../../../services/message.service";
+import { BootstrapValidationDirective } from "../../../directives/bootstrap-validation.directive";
+import { ValidationErrorComponent } from "../validation-error/validation-error.component";
 
 
 @Component({
@@ -18,10 +23,14 @@ import { JsonPipe } from "@angular/common";
   standalone: true,
   imports: [
     FormsModule,
-    CslAutosuggestComponent,
     LoadingComponent,
     TranslatePipe,
-    JsonPipe
+    JsonPipe,
+    ConeAutosuggestComponent,
+    ReactiveFormsModule,
+    NotificationComponent,
+    BootstrapValidationDirective,
+    ValidationErrorComponent
   ],
   templateUrl: './export-items.component.html',
   styleUrl: './export-items.component.scss'
@@ -43,23 +52,28 @@ export class ExportItemsComponent {
 
   itemIds: string[] = [];
 
-  selectedExportType: string = exportTypes.ENDNOTE;
-  selectedCitationType: string = citationTypes.APA;
-  selectedCslId = "";
-  selectedCslName = "";
+  selectedExportType: FormControl<string>;
+  selectedCitationType: FormControl<string>;
+  selectedCslId: FormControl<string>;
+  selectedCslName: FormControl<string>;
   selectedSize = 500;
   selectedFrom = 0;
 
+  maxSize = 5000;
   currentCitation: string = '';
 
   protected loading = false;
-  protected errorMessage: string = "";
+  protected errorMessage?: Message;
   private exportSubscription?: Subscription;
 
   protected atomFeedUrl = "";
 
-  constructor(private itemService: ItemsService, protected activeModal: NgbActiveModal, private selectionService: ItemSelectionService) {
+  constructor(private itemService: ItemsService, protected activeModal: NgbActiveModal, private selectionService: ItemSelectionService, formBuilder: FormBuilder, private messageService: MessageService) {
 
+    this.selectedExportType = formBuilder.nonNullable.control(exportTypes.ENDNOTE);
+    this.selectedCitationType  = formBuilder.nonNullable.control(citationTypes.APA);
+    this.selectedCslId = formBuilder.nonNullable.control("");
+    this.selectedCslName = formBuilder.nonNullable.control("");
   }
 
   ngOnInit() {
@@ -67,11 +81,11 @@ export class ExportItemsComponent {
     const exportType = localStorage.getItem("exportType");
     if (exportType) {
       const expType: ExportType = JSON.parse(exportType);
-      this.selectedExportType = expType.exportType;
-      this.selectedCitationType = expType.citationType;
-      this.selectedCslId = expType.cslId;
-      this.selectedCslId = expType.cslId;
-      this.selectedCslName = expType.cslName;
+      this.selectedExportType.setValue(expType.exportType);
+      this.selectedCitationType.setValue(expType.citationType);
+      this.selectedCslId.setValue(expType.cslId);
+      this.selectedCslId.setValue(expType.cslId);
+      this.selectedCslName.setValue(expType.cslName);
     }
 
     if(this.type === 'exportSelected') {
@@ -83,12 +97,12 @@ export class ExportItemsComponent {
   }
 
   updateStoredExportInfo() {
-    this.errorMessage = "";
+    this.errorMessage = undefined;
     const exportType: ExportType = {
-      exportType: this.selectedExportType,
-      citationType: this.selectedCitationType,
-      cslId: this.selectedCslId,
-      cslName: this.selectedCslName,
+      exportType: this.selectedExportType.value,
+      citationType: this.selectedCitationType.value,
+      cslId: this.selectedCslId.value,
+      cslName: this.selectedCslName.value,
     }
     localStorage.setItem("exportType", JSON.stringify(exportType));
   }
@@ -97,13 +111,13 @@ export class ExportItemsComponent {
     if (!this.isFormat && this.isValid()) {
 
 
-      this.itemService.retrieveSingleCitation(this.itemIds[0], this.selectedCitationType, this.selectedCslId).subscribe({
+      this.itemService.retrieveSingleCitation(this.itemIds[0], this.selectedCitationType.value, this.selectedCslId.value, {globalErrorDisplay: false}).subscribe({
         next: (cit) => {
           //console.log('Citation: ' +cit)
           this.currentCitation = cit;
         },
         error: e => {
-          this.errorMessage = e;
+          this.errorMessage = this.messageService.httpErrorToMessage(e);
           this.loading = false;
         },
       })
@@ -113,7 +127,7 @@ export class ExportItemsComponent {
 
   isValid(): boolean {
     return this.itemIds.length > 0 &&
-      (this.selectedCitationType !== citationTypes.CSL || (this.selectedCslId?.length > 0));
+      (this.selectedCitationType.value !== citationTypes.CSL || (this.selectedCslId?.value?.length > 0)) && this.selectedSize <= this.maxSize;
   }
 
   handleFormatChange($event: Event) {
@@ -138,23 +152,30 @@ export class ExportItemsComponent {
   }
 
   selectCsl(event: any) {
-    this.selectedCslId = event.id;
-    this.selectedCslName = event.value;
-    if (this.selectedCslId)
-      this.loadCitation();
+    if(event) {
+      this.selectedCslId.setValue(event.id);
+      this.selectedCslName.setValue(event.value);
+      if (this.selectedCslId.value)
+        this.loadCitation();
+      else {
+        this.currentCitation = '';
+      }
+
+      this.updateStoredExportInfo();
+    }
     else {
+      this.selectedCslId.setValue('');
       this.currentCitation = '';
     }
+    }
 
-    this.updateStoredExportInfo();
-  }
 
   get isFormat() {
-    return this.selectedExportType === exportTypes.ENDNOTE ||
-      this.selectedExportType === exportTypes.BIBTEX ||
-      this.selectedExportType === exportTypes.JSON ||
-      this.selectedExportType === exportTypes.ESCIDOC_ITEMLIST_XML ||
-      this.selectedExportType === exportTypes.MARC_XML;
+    return this.selectedExportType.value === exportTypes.ENDNOTE ||
+      this.selectedExportType.value === exportTypes.BIBTEX ||
+      this.selectedExportType.value === exportTypes.JSON ||
+      this.selectedExportType.value === exportTypes.ESCIDOC_ITEMLIST_XML ||
+      this.selectedExportType.value === exportTypes.MARC_XML;
 
   }
 
@@ -167,9 +188,9 @@ export class ExportItemsComponent {
 
   get downloadLink() {
     return this.restUri + '/items/' + this.itemIds[0]
-      + '/export?format=' + this.selectedExportType
-      + (this.selectedCitationType ? '&citation=' + this.selectedCitationType : '')
-      + (this.selectedCslId ? '&cslConeId=' + this.selectedCslId : '')
+      + '/export?format=' + this.selectedExportType.value
+      + (this.selectedCitationType.value ? '&citation=' + this.selectedCitationType.value : '')
+      + (this.selectedCslId.value ? '&cslConeId=' + this.selectedCslId.value : '')
   }
 
   download() {
@@ -191,37 +212,40 @@ export class ExportItemsComponent {
       searchQuery.from = this.selectedFrom;
     }
 
-    this.exportSubscription = this.itemService.searchAndExport(searchQuery, this.selectedExportType, this.selectedCitationType, this.selectedCitationType === citationTypes.CSL ? this.selectedCslId : undefined, true).subscribe({
-      next: result => {
-        if (result.body) {
-          const blob: Blob = result.body;
-          console.log("Blob type: " + blob.type);
-          const data = window.URL.createObjectURL(blob);
-          let filename = "download"
+    this.exportSubscription = this.itemService.searchAndExport(searchQuery, this.selectedExportType.value, this.selectedCitationType.value, this.selectedCitationType.value === citationTypes.CSL ? this.selectedCslId.value : undefined, {globalErrorDisplay: false})
+      .pipe(
+        tap(result => {
+          if (result.body) {
+            const blob: Blob = result.body;
+            console.log("Blob type: " + blob.type);
+            const data = window.URL.createObjectURL(blob);
+            let filename = "download"
 
 
-          const contentDispositionHeader = result.headers.get("Content-disposition");
-          const parsedContentDisposition = contentDispositionParser(contentDispositionHeader)
-          if (parsedContentDisposition) {
-            const parsedFileName = parsedContentDisposition['filename']
-            if(parsedFileName) {
-              filename = parsedFileName;
+            const contentDispositionHeader = result.headers.get("Content-disposition");
+            const parsedContentDisposition = contentDispositionParser(contentDispositionHeader)
+            if (parsedContentDisposition) {
+              const parsedFileName = parsedContentDisposition['filename']
+              if(parsedFileName) {
+                filename = parsedFileName;
+              }
             }
+            const link = document.createElement('a');
+            link.href = data;
+            link.download = filename;
+            link.click();
+            window.URL.revokeObjectURL(data);
+            link.remove();
+            this.loading = false;
           }
-          const link = document.createElement('a');
-          link.href = data;
-          link.download = filename;
-          link.click();
-          window.URL.revokeObjectURL(data);
-          link.remove();
+        }),
+        catchError((err:PubManHttpErrorResponse) => {
+          this.errorMessage = this.messageService.httpErrorToMessage(err);
           this.loading = false;
-        }
-      },
-      error: e => {
-        this.errorMessage = e;
-        this.loading = false;
-      },
-    })
+          return EMPTY;
+         })
+      )
+      .subscribe()
   }
 }
 

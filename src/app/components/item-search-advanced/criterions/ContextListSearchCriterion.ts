@@ -4,36 +4,43 @@ import { FormControl, FormGroup } from "@angular/forms";
 import { ContextDbVO } from "../../../model/inge";
 import { ContextsService } from "../../../services/pubman-rest-client/contexts.service";
 import { AaService } from "../../../services/aa.service";
+import { baseElasticSearchQueryBuilder } from "../../../utils/search-utils";
 
 export class ContextListSearchCriterion extends SearchCriterion {
 
 
-  contextService = ContextsService.instance;
-  aaService = AaService.instance;
+
   contextOptions: {[key:string]: ContextDbVO} = {};
 
 
-  constructor() {
-    super("contextList");
+  constructor(opts?:any) {
+    super("contextList", opts);
 
     this.content.addControl("contexts", new FormGroup({}));
 
-    this.aaService.principal.subscribe(p => {
+    const aaService: AaService = opts.aaService;
+    aaService.principal.subscribe(p => {
       const moderatorContexts = p.moderatorContexts ? p.moderatorContexts : [];
       const depositorContexts  = p.depositorContexts ? p.depositorContexts : [];
       //Merge both arrays and de-duplicate
       moderatorContexts.concat(depositorContexts)
         .filter((val, pos, arr) => arr.indexOf(val)===pos)
         .forEach(c => {
-          this.contextOptions[c.objectId] = c;
+          this.contextOptions[c.objectId!] = c;
         })
 
-      Object.keys(this.contextOptions).forEach(itemState => this.contextListFormGroup.addControl(itemState, new FormControl(false)));
+      Object.keys(this.contextOptions).forEach(itemState => this.contextListFormGroup.addControl(itemState, new FormControl(true)));
     })
 
 
 
 
+  }
+
+  selectAll(event: Event) {
+    const target = event.target as HTMLInputElement;
+    Object.keys(this.contextListFormGroup.controls)
+      .forEach(genre => this.contextListFormGroup.get(genre)?.setValue(target.checked));
   }
 
   override isEmpty(): boolean {
@@ -43,8 +50,13 @@ export class ContextListSearchCriterion extends SearchCriterion {
 
   override toElasticSearchQuery(): Observable<Object | undefined> {
 
-    return of({
-    })
+    const contexts: string[] = Object.keys(this.contextListFormGroup.controls)
+      .filter(context => this.contextListFormGroup.get(context)?.value);
+
+    if (contexts.length > 0) {
+      return of(baseElasticSearchQueryBuilder("context.objectId", contexts));
+    }
+    return of(undefined)
 
 
   }

@@ -1,0 +1,69 @@
+<div class="modal-header">
+  <h4 class="modal-title" id="modal-basic-title">
+      {{principal.user?.name}}
+  </h4>
+  <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.close();"></button>
+</div>
+
+<div class="modal-body">
+
+
+  <div class="row">
+    <div class="col-3">Login Name</div>
+    <div class="col-9">{{principal.user?.loginname}}</div>
+  </div>
+  <div class="row">
+    <div class="col-3">Email</div>
+    <div class="col-9">{{principal.user?.email}}</div>
+  </div>
+  <div class="row">
+    <div class="col-3">Affiliation</div>
+    <div class="col-9">{{principal.user?.affiliation?.name}}</div>
+  </div>
+
+  <hr/>
+  <h5>Moderator & Depositor Roles</h5>
+  <div class="row">
+    <div class="col-3">Depositor</div>
+    <div class="col-9">
+      <ul>
+      @for(context of principal.depositorContexts; track context.objectId) {
+          <li>{{context.name}} ({{context.objectId}})</li>
+      }
+      </ul>
+    </div>
+  </div>
+
+  <div class="row mt-3">
+    <div class="col-3">Moderator</div>
+    <div class="col-9">
+      <ul class="item-list">
+        @for(context of principal.moderatorContexts; track context.objectId) {
+          <li>{{context.name}} ({{context.objectId}})</li>
+        }
+      </ul>
+    </div>
+  </div>
+
+  <hr/>
+  <h5>Other Roles</h5>
+  @for(grant of principal.user?.grantList; track grant) {
+    @if(grant.role !== 'MODERATOR' && grant.role !== 'DEPOSITOR') {
+      <div class="row">
+        <div class="col text-break">{{grant.role}} {{grant.objectRef ? '(' + grant.objectRef + ')' : ''}}</div>
+      </div>
+    }
+
+  }
+  <hr/>
+  <h5>Change password</h5>
+ <pure-change-password [principal]="principal"/>
+
+</div>
+
+<div class="modal-footer">
+
+
+
+  <!--<button type="button" class="btn btn-outline-secondary" (click)="modal.close('Save click')">Download</button>-->
+</div>

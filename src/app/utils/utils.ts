@@ -1,4 +1,4 @@
-import { ItemVersionRO } from "../model/inge";
+import { IdType, ItemVersionRO } from "../model/inge";
 
 const reParamSplit = /\s*;\s*/
 const reHeaderSplit = /\s*:\s*/
@@ -6,6 +6,9 @@ const rePropertySplit = /\s*=\s*(.+)/
 const reEncodingSplit = /\s*'[^']*'\s*(.*)/
 const reQuotesTrim = /(?:^["'\s]*)|(?:["'\s]*$)/g
 
+const isFormValueEmpty = (value: any) => {
+  return value === null || value === undefined || value === '' || value === '0: null' || ((typeof value === 'string') && value.trim().length === 0)
+}
 
 const versionIdToObjectId = (id: string): string => {
     return id.substring(0, id.lastIndexOf('_'));
@@ -52,8 +55,31 @@ const contentDispositionParser = (data: string | null) => {
     }, { type })
 }
 
+export const humanFileSize = (bytes: number): `${number} ${'B' | 'KB' | 'MB' | 'GB' | 'TB'}` => {
+  if(!bytes || bytes === 0) return '0 B';
+  const index = Math.floor(Math.log(bytes) / Math.log(1024));
+  return `${Number((bytes / Math.pow(1024, index)).toFixed(2)) * 1} ${(['B', 'KB', 'MB', 'GB', 'TB'] as const)[index]}`;
+};
+
+export const identifierUriToEnum = (idUri: string): IdType | undefined => {
+  if(idUri) {
+    const val = idUri.substring(idUri.lastIndexOf('/')+1, idUri.length);
+
+    return (<any>IdType)[val];
+  }
+  return undefined;
+}
+
+export const removeDuplicates = (array: any[], key: any) => {
+  return array.reduce((arr, item) => {
+    const removed = arr.filter((i:any) => i[key] !== item[key]);
+    return [...removed, item];
+  }, []);
+};
+
 export {
   contentDispositionParser,
   versionIdToObjectId,
-  itemToVersionId
+  itemToVersionId,
+  isFormValueEmpty
 }

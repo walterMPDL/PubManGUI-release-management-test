@@ -1,5 +1,4 @@
 @if (aaService.principal.getValue().isDepositor || aaService.principal.getValue().isModerator) {
-<div class="navbar-nav">
     <button class="btn btn-link nav-link px-2" (click)="addToBatchDatasets()" [disabled]="!isAdd"
         data-test="add-to-batch" ngbTooltip="{{ 'batch.datasets.add' | translate }}" placement="bottom-left">
         <svg fill="currentColor" height="24px" width="24px">
@@ -12,5 +11,4 @@
             <use href="assets/icons/icons.svg#batch-remove"></use>
         </svg>
     </button>
-</div>
 }

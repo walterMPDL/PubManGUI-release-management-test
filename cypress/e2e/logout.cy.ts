@@ -1,10 +1,10 @@
 describe('Logout', () => {
 
-  const userName = Cypress.env('testUser').userName
+  const loginName = Cypress.env('testUser').loginName
   const password = Cypress.env('testUser').password
 
   beforeEach(() => {
-    cy.loginViaAPI(userName, password)
+    cy.loginViaAPI(loginName, password)
   })
 
   it('Logout', () => {

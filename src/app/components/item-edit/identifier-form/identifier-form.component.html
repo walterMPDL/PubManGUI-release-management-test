@@ -1,0 +1,35 @@
+<ng-container [formGroup]="identifier_form">
+    <div class="d-sm-flex flex-sm-row gap-1 align-items-start" [ngClass]="{'mb-1': index !== index_length -1 && multi}">
+        <div class="col-sm">
+            <label for="identifier_type" class="visually-hidden">type</label>
+            <select id="identifier_type" class="form-select" formControlName="type">
+                <option [ngValue]="null" selected>-</option>
+                @for (t of identifier_display_types; track t) {
+                <option [ngValue]="t">{{'SourceIdType.' + t | translate}}</option>
+                }
+            </select>
+          <!--
+            @if(identifier_form.errors?.[error_types.ID_TYPE_NOT_PROVIDED]) {
+            <div class="d-sm-flex flex-sm-row gap-1 mb-1">
+                <div class="pure-invalid">{{ 'validation.required' | translate}}</div>
+            </div>
+            }
+            -->
+        </div>
+        <div class="col-sm-8">
+            <input type="text" class="form-control" id="identifier_value" formControlName="id">
+            <!--
+          @if(identifier_form.errors?.[error_types.INCORRECT_ID_DOI_FORMAT]) {
+            <div class="d-sm-flex flex-sm-row gap-1 mb-1">
+                <div class="pure-invalid">Incorrect ID format. Enter DOIs without leading http(s)://doi.org</div>
+            </div>
+            }
+            -->
+        </div>
+        @if (multi) {
+        <div class="col-sm-1">
+            <pure-add-remove-buttons [index]="index" (notice)="add_remove_identifier($event)"></pure-add-remove-buttons>
+        </div>
+        }
+    </div>
+</ng-container>

@@ -16,8 +16,11 @@ import {
 } from "rxjs";
 import { ConeService, PersonResource } from "../../../services/cone.service";
 import { HttpParams } from "@angular/common/http";
-import { FormBuilderService } from 'src/app/components/item-edit/services/form-builder.service';
+import { FormBuilderService } from 'src/app/services/form-builder.service';
 import { IdType, OrganizationVO } from 'src/app/model/inge';
+import { TranslatePipe } from "@ngx-translate/core";
+import { BootstrapValidationDirective } from "../../../directives/bootstrap-validation.directive";
+import { ValidationErrorMessageDirective } from "../../../directives/validation-error-message.directive";
 
 @Component({
   selector: 'pure-person-autosuggest',
@@ -27,9 +30,10 @@ import { IdType, OrganizationVO } from 'src/app/model/inge';
     ReactiveFormsModule,
     NgbHighlight,
     CommonModule,
+    TranslatePipe,
+    BootstrapValidationDirective, ValidationErrorMessageDirective
   ],
-  templateUrl: './person-autosuggest.component.html',
-  styleUrl: './person-autosuggest.component.scss'
+  templateUrl: './person-autosuggest.component.html'
 })
 export class PersonAutosuggestComponent {
 
@@ -44,6 +48,8 @@ export class PersonAutosuggestComponent {
   @Input() formForPersonsOrcid?: FormControl;
 
   @Input() validationError!: boolean;
+
+  @Input() showConeAndOrcid =  false;
 
 
   searching: boolean = false;
@@ -67,7 +73,7 @@ export class PersonAutosuggestComponent {
           catchError(() => {
             //this.searchFailed = true;
             console.log('search failed');
-            return of([]);
+            return [];
           }),
         )
       }),
@@ -110,11 +116,8 @@ export class PersonAutosuggestComponent {
   }
 
   updatePerson(coneId: string, ouName: string) {
-    const selected_person = ouName;
-    const selected_ou = selected_person.substring(selected_person.indexOf('(') + 1, selected_person.lastIndexOf(','));
-    console.log("Selected:", selected_person, selected_ou)
-    console.log("ConeId", coneId)
-    this.coneService.getPersonResource("cone" + coneId).subscribe(
+    const selected_ou = ouName.substring(ouName.indexOf('(') + 1, ouName.lastIndexOf(','));
+    this.coneService.getPersonResource(coneId).subscribe(
       (person: PersonResource) => {
         if (this.formForPersonsGivenName) {
           this.formForPersonsGivenName.setValue(person.http_xmlns_com_foaf_0_1_givenname);
@@ -122,9 +125,24 @@ export class PersonAutosuggestComponent {
         if (this.formForPersonsFamilyName) {
           this.formForPersonsFamilyName.setValue(person.http_xmlns_com_foaf_0_1_family_name);
         }
-        if (this.formForPersonsOrcid && person.http_xmlns_com_foaf_0_1_family_name) {
-          this.formForPersonsOrcid.setValue(person.http_xmlns_com_foaf_0_1_family_name);
+        if (Array.isArray(person.http_purl_org_dc_elements_1_1_identifier)) {
+          let orcid = person.http_purl_org_dc_elements_1_1_identifier.filter(identifier => identifier.http_www_w3_org_2001_XMLSchema_instance_type.includes('ORCID'));
+          if (this.formForPersonsOrcid) {
+            this.formForPersonsOrcid.setValue(orcid[0].http_www_w3_org_1999_02_22_rdf_syntax_ns_value);
+          }
+          else {
+            this.formForPersonsOrcid = this.fb.nonNullable.control(orcid[0].http_www_w3_org_1999_02_22_rdf_syntax_ns_value);
+          }
+        } else if (person.http_purl_org_dc_elements_1_1_identifier && person.http_purl_org_dc_elements_1_1_identifier.http_www_w3_org_2001_XMLSchema_instance_type === 'ORCID') {
+          let orcid = person.http_purl_org_dc_elements_1_1_identifier.http_www_w3_org_1999_02_22_rdf_syntax_ns_value;
+          if (this.formForPersonsOrcid) {
+            this.formForPersonsOrcid.setValue(orcid);
+          }
+          else {
+            this.formForPersonsOrcid = this.fb.nonNullable.control(orcid);
+          }
         }
+
         let ou_id = '', ou_name = '';
         if (Array.isArray(person.http_purl_org_escidoc_metadata_terms_0_1_position)) {
           const ou_2_display = person.http_purl_org_escidoc_metadata_terms_0_1_position.filter(ou => ou.http_purl_org_eprint_terms_affiliatedInstitution.includes(selected_ou));
