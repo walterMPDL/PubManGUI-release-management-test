@@ -289,19 +289,22 @@
     </ul>
 
     <div class="form-check">
-        <input class="form-check-input" type="checkbox" name="trackVisits" id="trackVisits" [ngModel]="matomoOptInSelected"
-        (ngModelChange)="matomoOptInChange($event)" />
+        <input class="form-check-input" type="checkbox" name="trackVisits" id="trackVisits"
+               pureMatomoOptOut
+               #matomoDirective=pureMatomoOptOutDirective
+               [ngModel]="matomoDirective.matomoOptInSelected"
+               (ngModelChange)="matomoDirective.matomoOptInChange($event)"/>
         <label class="form-check-label" for="trackVisits">
             <strong>
+              @if(matomoDirective.matomoOptInSelected) {
                 <span id="labelOptOut">
-                    Ihr Besuch dieser Webseite wird aktuell von der Matomo Webanalyse erfasst. Diese Checkbox abwählen
-                    für Opt-Out.
+                    Your visit to this website is currently being tracked by Matomo web analytics. Uncheck this box to opt out.
                 </span>
-
-                <span id="labelOptIn" style="display:none;">
-                    Ihr Besuch dieser Webseite wird aktuell von der Matomo Webanalyse nicht erfasst. Diese Checkbox
-                    aktivieren für Opt-In.
+              } @else {
+                <span id="labelOptIn">
+                   Your visit to this website is currently not being tracked by Matomo web analytics. Please check this box to opt in.
                 </span>
+              }
             </strong>
         </label>
     </div>

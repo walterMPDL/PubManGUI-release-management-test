@@ -277,21 +277,26 @@
     </p>
 
     <div class="form-check">
-        <input class="form-check-input" type="checkbox" name="trackVisits" id="trackVisits" checked
-            onclick="if (this.checked != true) alert('Opt-Out!');" />
-        <label class="form-check-label" for="trackVisits">
-            <strong>
-                <span id="labelOptOut">
-                    Ihr Besuch dieser Webseite wird aktuell von der Matomo Webanalyse erfasst. Diese Checkbox abwählen
-                    für Opt-Out.
-                </span>
-
-                <span id="labelOptIn" style="display:none;">
-                    Ihr Besuch dieser Webseite wird aktuell von der Matomo Webanalyse nicht erfasst. Diese Checkbox
-                    aktivieren für Opt-In.
-                </span>
-            </strong>
-        </label>
+      <input class="form-check-input" type="checkbox" name="trackVisits" id="trackVisits"
+             pureMatomoOptOut
+             #matomoDirective=pureMatomoOptOutDirective
+             [ngModel]="matomoDirective.matomoOptInSelected"
+             (ngModelChange)="matomoDirective.matomoOptInChange($event)"/>
+      <label class="form-check-label" for="trackVisits">
+        <strong>
+          @if(matomoDirective.matomoOptInSelected) {
+            <span id="labelOptOut">
+                      Ihr Besuch dieser Webseite wird aktuell von der Matomo Webanalyse erfasst. Diese Checkbox abwählen
+                      für Opt-Out.
+                  </span>
+          } @else {
+            <span id="labelOptIn">
+                      Ihr Besuch dieser Webseite wird aktuell von der Matomo Webanalyse nicht erfasst. Diese Checkbox
+                      aktivieren für Opt-In.
+                  </span>
+          }
+        </strong>
+      </label>
     </div>
 
     <p>

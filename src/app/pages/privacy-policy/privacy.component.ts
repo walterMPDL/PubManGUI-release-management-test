@@ -1,40 +1,28 @@
 import { ChangeDetectionStrategy, Component, inject, ViewContainerRef } from '@angular/core';
 import { LangChangeEvent, TranslateService } from "@ngx-translate/core";
 import { MatomoTracker } from "ngx-matomo-client";
-import { FormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { MatomoOptOutDirective } from "./matomo-opt-out.directive";
 
 @Component({
   selector: 'en-content',
   imports: [
-    FormsModule
+    FormsModule,
+    MatomoOptOutDirective,
+    ReactiveFormsModule
   ],
-  templateUrl: './en/privacy.component.html'
+  templateUrl: './en/privacy.en.component.html'
 })
 export class en {
-
-  matomoOptInSelected = true;
-  private matomoTracker = inject(MatomoTracker);
-
-  constructor() {
-    //if(!this.matomoTracker.isDisabled())
-    this.matomoTracker.isUserOptedOut().then(val => this.matomoOptInSelected = !val);
-  }
-
-  matomoOptInChange(val: boolean) {
-    if(val) {
-      this.matomoOptInSelected = true;
-      this.matomoTracker.forgetUserOptOut();
-    }
-    else {
-      this.matomoOptInSelected = false;
-      this.matomoTracker.optUserOut();
-    }
-  }
 }
 
 @Component({
   selector: 'de-content',
-  templateUrl: './de/privacy.component.html'
+  imports: [
+    MatomoOptOutDirective,
+    FormsModule
+  ],
+  templateUrl: './de/privacy.de.component.html'
 })
 export class de {
 

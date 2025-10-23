@@ -114,7 +114,7 @@ export const appConfig: ApplicationConfig = {
         trackerUrl: environment.matomo_site_url,
         siteId: environment.matomo_site_id,
         //use cookieless tracking
-        requireConsent: 'cookie'
+        requireConsent: 'cookie',
       },
       withRouter()
     ),
