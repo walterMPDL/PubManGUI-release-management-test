@@ -28,6 +28,8 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { registerLocaleData } from "@angular/common";
 import { lastValueFrom } from "rxjs";
 import { AaService } from "./services/aa.service";
+import { provideMatomo, withRouter } from 'ngx-matomo-client';
+import { environment } from "../environments/environment";
 
 const httpLoaderFactory: (http: HttpClient) => TranslateHttpLoader = (http: HttpClient) =>
   new TranslateHttpLoader(http, 'assets/i18n/', '.json');
@@ -105,6 +107,17 @@ export const appConfig: ApplicationConfig = {
       const aaService = inject(AaService);
       await lastValueFrom(aaService.checkLogin())
     }),
+
+    provideMatomo(
+      {
+        disabled: !environment.matomo_enabled,
+        trackerUrl: environment.matomo_site_url,
+        siteId: environment.matomo_site_id,
+        //use cookieless tracking
+        requireConsent: 'cookie'
+      },
+      withRouter()
+    ),
   ],
 
 };

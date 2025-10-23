@@ -289,8 +289,8 @@
     </ul>
 
     <div class="form-check">
-        <input class="form-check-input" type="checkbox" name="trackVisits" id="trackVisits" checked
-            onclick="if (this.checked != true) alert('Opt-Out!');" />
+        <input class="form-check-input" type="checkbox" name="trackVisits" id="trackVisits" [ngModel]="matomoOptInSelected"
+        (ngModelChange)="matomoOptInChange($event)" />
         <label class="form-check-label" for="trackVisits">
             <strong>
                 <span id="labelOptOut">

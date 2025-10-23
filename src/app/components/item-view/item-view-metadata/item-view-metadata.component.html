@@ -11,18 +11,13 @@
 
       @for (sub of item.metadata?.alternativeTitles; track sub; let i = $index) {
         <pure-item-view-metadata-element [sub]="true">
-          <span
-            label> {{ sub.type ? ('AlternativeTitleType.' + sub.type | translate) : ('MetadataFields.alternativeTitle' | translate) }}</span>
+          <span label> {{ sub.type ? ('AlternativeTitleType.' + sub.type | translate) : ('MetadataFields.alternativeTitle' | translate) }}</span>
           <span content>{{ sub.value }}</span>
         </pure-item-view-metadata-element>
       }
-
-
   </span>
 </pure-item-view-metadata-element>
 
-
-<!-- Alternative Titles -->
 
 
 
@@ -325,7 +320,7 @@
 
       @for (altTitle of source.alternativeTitles; track altTitle) {
         <pure-item-view-metadata-element [sub]="true">
-              <span label>{{ 'AlternativeTitleType.' + altTitle.type | translate }}</span>
+              <span label>{{ altTitle.type ? ('AlternativeTitleType.' + altTitle.type | translate) : ('MetadataFields.alternativeTitle' | translate) }}</span>
               <span content>
                 {{ altTitle.value }}
               </span>
@@ -335,7 +330,7 @@
       <pure-item-view-metadata-element [sub]="true" [condition]="(source.genre | empty)">
       <span label>{{ 'MetadataFields.genre' | translate }}</span>
       <span content>
-        {{ 'MdsPublicationGenre.' + source.genre | translate }}
+        {{ 'SourceGenre.' + source.genre | translate }}
       </span>
     </pure-item-view-metadata-element>
 
