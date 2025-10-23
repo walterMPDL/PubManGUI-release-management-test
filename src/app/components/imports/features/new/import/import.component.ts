@@ -15,7 +15,6 @@ import { _, TranslatePipe } from "@ngx-translate/core";
 
 import { ValidationErrorComponent } from "src/app/components/shared/validation-error/validation-error.component";
 import { NgbTooltip } from "@ng-bootstrap/ng-bootstrap";
-import { AddRemoveButtonsComponent } from 'src/app/components/shared/add-remove-buttons/add-remove-buttons.component';
 
 @Component({
   selector: 'pure-imports-new-import',
@@ -24,7 +23,6 @@ import { AddRemoveButtonsComponent } from 'src/app/components/shared/add-remove-
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    AddRemoveButtonsComponent,
     SeparateFilterPipe,
     TranslatePipe,
     ValidationErrorComponent,

@@ -41,9 +41,11 @@
           data-test="file-name">
       </div>
       <div class="col-sm-1">
-        <pure-add-remove-buttons [index]="0" [del_val]="(!importForm.get('fileName')?.value) ? 'hidden' : ''"
-          [hiddenAddButton]="true" [disableAdd]="true" (click)="onFileRemove()">
-        </pure-add-remove-buttons>
+        @if(importForm.get('fileName')?.value) {    
+        <button class="btn btn-outline-dark btn-sm" type="button" (click)="onFileRemove()">
+          <span class="bi bi-x"></span>
+        </button>
+        }
       </div>
     </div>
     <div class="mb-2 row validation-error">
