@@ -15,6 +15,7 @@ import { _, TranslatePipe } from "@ngx-translate/core";
 
 import { ValidationErrorComponent } from "src/app/components/shared/validation-error/validation-error.component";
 import { NgbTooltip } from "@ng-bootstrap/ng-bootstrap";
+import { AddRemoveButtonsComponent } from 'src/app/components/shared/add-remove-buttons/add-remove-buttons.component';
 
 @Component({
   selector: 'pure-imports-new-import',
@@ -23,6 +24,7 @@ import { NgbTooltip } from "@ng-bootstrap/ng-bootstrap";
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    AddRemoveButtonsComponent,
     SeparateFilterPipe,
     TranslatePipe,
     ValidationErrorComponent,
@@ -37,6 +39,7 @@ export default class ImportComponent implements OnInit {
   router = inject(Router);
   fb = inject(FormBuilder);
   aaSvc = inject(AaService);
+  //translateService = inject(TranslateService);
   elRef: ElementRef = inject(ElementRef);
 
   formatObject: any = null;
@@ -153,6 +156,16 @@ export default class ImportComponent implements OnInit {
 
     this.importForm.get('fileName')?.clearAsyncValidators();
     this.importForm.get('fileName')?.updateValueAndValidity();
+  }
+
+  onFileRemove():void {
+// TODO clear the file input value
+    this.importForm.controls['fileName'].setValue(null);
+    this.importForm.controls['fileName'].markAsUntouched();
+    this.importForm.get('fileName')?.clearAsyncValidators();
+    this.importForm.get('fileName')?.updateValueAndValidity();
+    this.data = null; 
+    this.elRef.nativeElement.querySelector('#fileChoose').value = null;
   }
 
   getData(file: File) {

@@ -5,16 +5,25 @@
     <label class="col-sm-3 col-form-text">{{ 'imports.fileImport.upload' | translate }}</label>
     <div class="col-sm-4">
       <div class="d-sm-flex flex-sm-row gap-1 mb-1">
-        <div class="dropzone col-sm" pureFileImport (drop)="onFileDrop($event)" (dragover)="onDragOver($event)">
+        <div class="dropzone col-sm" pureFileImport (drop)="onFileDrop($event)" (dragover)="onDragOver($event)"
+          [ngClass]="{'border-danger': importForm.get('fileName')?.invalid && importForm.get('fileName')?.touched || importForm.get('fileName')?.pending}">
           <i class="bi bi-cloud-upload" style="font-size: 3rem"></i>
           <p class="mb-1">{{ 'common.dragAndDrop' | translate }}</p>
           <p class="mb-2">{{ 'common.or' | translate }}</p>
-          <div class="mb-3">
-            <label for="fileChoose" class="btn btn-outline-secondary px-4" data-test="file-upload-label">
+          <div>
+            <label for="fileChoose" class="btn btn-outline-secondary px-4" 
+              data-test="file-upload-label">
               {{ 'common.choose.file' | translate }}
             </label>
-            <input type="file" id="fileChoose" class="form-control d-none" (change)="onFileChange($event)"
-              data-test="file-upload-input">
+            <input type="file" id="fileChoose" class="form-control d-none" (change)="onFileChange($event)"  
+              data-test="file-upload-input">      
+          </div>
+          <div>
+            @if (importForm.get('fileName')?.invalid && importForm.get('fileName')?.touched || importForm.get('fileName')?.pending){
+            <i class="float-end bi bi-exclamation-circle text-danger text-end fs-6 mt-3"></i>   
+            } @else {
+              <p>&nbsp;</p>
+            }
           </div>
         </div>
       </div>
@@ -26,11 +35,15 @@
       <div class="col-sm-3">
         <label class="col-form-label">{{ 'common.file' | translate }}</label>
       </div>
-      <div class="col-sm-9">
+      <div class="col-sm-8">
         <input id="fileName" formControlName="fileName" readonly placeholder="{{ 'common.choose.noFileChosen' | translate }}"
           class="form-control disabled placeholder-glow" 
-          [class.is-invalid]="importForm.get('fileName')?.invalid &&importForm.get('fileName')?.touched || importForm.get('fileName')?.pending"  
           data-test="file-name">
+      </div>
+      <div class="col-sm-1">
+        <pure-add-remove-buttons [index]="0" [del_val]="(!importForm.get('fileName')?.value) ? 'hidden' : ''"
+          [hiddenAddButton]="true" [disableAdd]="true" (click)="onFileRemove()">
+        </pure-add-remove-buttons>
       </div>
     </div>
     <div class="mb-2 row validation-error">
