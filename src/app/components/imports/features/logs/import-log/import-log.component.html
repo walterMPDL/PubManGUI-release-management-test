@@ -60,8 +60,8 @@
     {{ 'ImportFormat.' + log.format | translate }}
   </td>
 
-  <td class="d-flex flex-column flex-xl-row col-2 col-xl-3 justify-content-lg-between">
-    <span>{{ log.startDate | localizeDate }}</span>
+  <td class="d-flex flex-column flex-xl-row col-2 col-xl-3">
+    <span class="col-7">{{ log.startDate | localizeDate }}</span>
     <div class="ps-lg-1 pe-lg-5 d-flex flex-nowrap">
       <span class="material-symbols-outlined text-secondary pt-1" style="cursor: auto">schedule</span>&nbsp;
       <span>{{ log.startDate | date: 'HH:mm'}}</span>

@@ -17,8 +17,8 @@
     }
   </td>
 
-  <td class="d-flex flex-column flex-xl-row col-2 col-lg-3 justify-content-lg-between">
-    <span>{{ item.endDate | localizeDate }}</span>
+  <td class="d-flex flex-column flex-xl-row col-2 col-lg-3">
+    <span class="col-7">{{ item.endDate | localizeDate }}</span>
     <div class="ps-lg-1 pe-lg-5 d-flex flex-nowrap">
       <span class="material-symbols-outlined text-secondary pt-1" style="cursor: auto">schedule</span>&nbsp;
       <span>{{ item.endDate | date: "HH:mm" }}</span>
