@@ -663,6 +663,7 @@ export class ItemSearchAdvancedComponent {
 
     this.scListToElasticSearchQuery(this.prepareQuery())
       .subscribe(query => {
+        this.searchStateService.type="advanced";
         this.searchStateService.$currentQuery.next(query);
         this.router.navigateByUrl('/search')
       });

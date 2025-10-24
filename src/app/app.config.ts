@@ -115,8 +115,13 @@ export const appConfig: ApplicationConfig = {
         siteId: environment.matomo_site_id,
         //use cookieless tracking
         requireConsent: 'cookie',
+        acceptDoNotTrack: true,
+
       },
-      withRouter()
+      withRouter( {
+        exclude: ['/view/']
+        }
+      )
     ),
   ],
 
