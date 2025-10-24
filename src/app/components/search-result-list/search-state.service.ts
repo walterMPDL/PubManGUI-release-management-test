@@ -8,6 +8,8 @@ export class SearchStateService {
 
   $currentQuery = new BehaviorSubject<object | undefined>(undefined)
 
+  type: 'simple' | 'advanced' = 'simple';
+
   constructor() {
     const lastQuery = localStorage.getItem("last_search_query");
     if(lastQuery)

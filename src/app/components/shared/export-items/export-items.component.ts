@@ -16,6 +16,7 @@ import { NotificationComponent } from "../notification/notification.component";
 import { Message, MessageService } from "../../../services/message.service";
 import { BootstrapValidationDirective } from "../../../directives/bootstrap-validation.directive";
 import { ValidationErrorComponent } from "../validation-error/validation-error.component";
+import { MatomoTracker } from "ngx-matomo-client";
 
 
 @Component({
@@ -68,7 +69,7 @@ export class ExportItemsComponent {
 
   protected atomFeedUrl = "";
 
-  constructor(private itemService: ItemsService, protected activeModal: NgbActiveModal, private selectionService: ItemSelectionService, formBuilder: FormBuilder, private messageService: MessageService) {
+  constructor(private itemService: ItemsService, protected activeModal: NgbActiveModal, private selectionService: ItemSelectionService, formBuilder: FormBuilder, private messageService: MessageService, private matomoTracker: MatomoTracker) {
 
     this.selectedExportType = formBuilder.nonNullable.control(exportTypes.ENDNOTE);
     this.selectedCitationType  = formBuilder.nonNullable.control(citationTypes.APA);
@@ -193,7 +194,19 @@ export class ExportItemsComponent {
       + (this.selectedCslId.value ? '&cslConeId=' + this.selectedCslId.value : '')
   }
 
+  track(size: number) {
+    //this.matomoTracker.trackLink(this.downloadLink, 'download', size);
+    let name = this.selectedExportType.value;
+    name += this.selectedCitationType.value ? '/' + this.selectedCitationType.value : '';
+    name += this.selectedCslId.value ? '/' + this.selectedCslId.value.substring(this.selectedCslId.value.lastIndexOf('/')+1) : '';
+    name += '/' + size.toString();
+
+    this.matomoTracker.trackEvent(this.type, name);
+  }
+
   download() {
+    const size = this.type === 'exportSelected' ? this.itemIds.length : this.selectedSize;
+    this.track(size);
     this.loading = true;
     let searchQuery: any = {};
 

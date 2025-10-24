@@ -31,7 +31,9 @@ export class SortSelectorComponent {
   currentSortQuery: any;
 
 
-  constructor(private route: ActivatedRoute, private router: Router) {
+  constructor(private route: ActivatedRoute, private router: Router) {}
+
+  ngOnInit() {
     this.sortEntries.push({sort: this.defaultSort, sortOrder: sortOptions[this.defaultSort].order})
     this.currentSortQuery = this.getCurrentSortQuery();
   }

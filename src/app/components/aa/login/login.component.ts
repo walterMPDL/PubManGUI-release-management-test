@@ -11,6 +11,7 @@ import { Message, MessageService } from "../../../services/message.service";
 import { TranslateService } from "@ngx-translate/core";
 import { BootstrapValidationDirective } from "../../../directives/bootstrap-validation.directive";
 import { NotificationComponent } from "../../shared/notification/notification.component";
+import { MatomoTracker } from "ngx-matomo-client";
 
 @Component({
     selector: 'pure-login',
@@ -35,6 +36,7 @@ export class LoginComponent implements OnInit {
     private aa: AaService,
     private messageService: MessageService,
     private translateService: TranslateService,
+    private matomoTracker: MatomoTracker,
   ) {
 
   }
@@ -52,6 +54,8 @@ export class LoginComponent implements OnInit {
         .pipe(
           tap( p=> {
             this.activeModal.dismiss("login_success");
+            this.matomoTracker.trackEvent("auth", "login")
+
           }),
           catchError ((err: PubManHttpErrorResponse) => {
             this.errorMessage = this.messageService.httpErrorToMessage(err);

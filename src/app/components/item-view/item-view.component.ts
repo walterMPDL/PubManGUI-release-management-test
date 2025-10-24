@@ -44,6 +44,7 @@ import { PubManHttpErrorResponse } from "../../services/interceptors/http-error.
 import { ChangeContextModalComponent } from "../shared/change-context-modal/change-context-modal.component";
 import { UpdateLocaltagsModalComponent } from "../shared/update-localtags-modal/update-localtags-modal.component";
 import { getThumbnailUrlForFile, getUrlForFile } from "../../utils/item-utils";
+import { MatomoTracker } from "ngx-matomo-client";
 
 @Component({
   selector: 'pure-item-view',
@@ -101,7 +102,7 @@ export class ItemViewComponent {
 
   constructor(private itemsService: ItemsService, private usersService: UsersService, protected aaService: AaService, private route: ActivatedRoute, private router: Router,
   private scroller: ViewportScroller, private messageService: MessageService, private modalService: NgbModal, protected listStateService: ItemListStateService, private itemSelectionService: ItemSelectionService,
-              private title: Title, private meta: Meta, private domSanitizer: DomSanitizer) {
+              private title: Title, private matomoTracker: MatomoTracker) {
 
   }
 
@@ -147,6 +148,7 @@ export class ItemViewComponent {
                 const sanitizedTitle = sanitizeHtml(i.metadata.title, {allowedTags: []}) + ' | ' + this.title.getTitle();
                 this.title.setTitle(sanitizedTitle);
               }
+              this.matomoTracker.trackPageView(i.metadata?.title);
 
               //init item in selection and state (for export, basket, batch, pagination etc)
               this.listStateService.initItemId(i.objectId);
