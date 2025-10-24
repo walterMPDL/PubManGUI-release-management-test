@@ -26,7 +26,9 @@
   </td>
 
   <td class="d-flex d-none d-lg-table-cell col-0 col-lg-2 ext-nowrap text-truncate">
+    @if(item.status !== importStatus.SUSPENDED) {
     <span>{{ 'ImportErrorLevel.' + getAssorted(item.errorLevel) | translate }}</span>
+    }
   </td>
 
   <td class="d-flex d-none d-lg-table-cell col-0 col-lg-1">
