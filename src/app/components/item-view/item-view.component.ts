@@ -148,7 +148,7 @@ export class ItemViewComponent {
                 const sanitizedTitle = sanitizeHtml(i.metadata.title, {allowedTags: []}) + ' | ' + this.title.getTitle();
                 this.title.setTitle(sanitizedTitle);
               }
-              this.matomoTracker.trackPageView(i.metadata?.title);
+              //this.matomoTracker.trackPageView(i.metadata?.title);
 
               //init item in selection and state (for export, basket, batch, pagination etc)
               this.listStateService.initItemId(i.objectId);

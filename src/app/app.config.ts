@@ -118,10 +118,7 @@ export const appConfig: ApplicationConfig = {
         acceptDoNotTrack: true,
 
       },
-      withRouter( {
-        exclude: ['/view/']
-        }
-      )
+      withRouter()
     ),
   ],
 
