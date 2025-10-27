@@ -149,6 +149,8 @@ export class MetadataFormComponent implements OnInit {
       else {
         if (this.genreSpecificResource.value()?.properties.sources.optional === false && this.sources.value.length === 0) {
           this.sources.push(this.fbs.source_FG(null));
+        } else if (this.genreSpecificResource.value()?.properties.sources.optional === true && this.sources.value.length > 0) {
+          this.removeEmptySources();
         }
       }
     });
@@ -436,7 +438,12 @@ export class MetadataFormComponent implements OnInit {
       this.sources.push(this.fbs.source_FG(null));
     } else if (this.sources.length > 0 && element.getAttribute("aria-expanded") === "false") {
       // Check if sources have no values and remove them
-      for (let i = this.sources.length - 1; i >= 0; i--) {
+      this.removeEmptySources();
+    }
+  }
+
+  removeEmptySources() {
+    for (let i = this.sources.length - 1; i >= 0; i--) {
         const sourceFormGroup = this.sources.at(i) as FormGroup;
         console.log(sourceFormGroup.value);
         console.log("sourceFormGroup EMPTY Check", isControlValueEmpty(sourceFormGroup))
@@ -444,7 +451,6 @@ export class MetadataFormComponent implements OnInit {
           this.sources.removeAt(i);
         }
       }
-    }
   }
 
   dropCreator(event: CdkDragDrop<string[]>) {
