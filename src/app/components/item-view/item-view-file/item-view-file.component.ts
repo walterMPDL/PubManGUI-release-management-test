@@ -10,6 +10,7 @@ import { TranslatePipe } from "@ngx-translate/core";
 import { CopyButtonDirective } from "../../../directives/copy-button.directive";
 import { humanFileSize } from "../../../utils/utils";
 import { FileSizePipe } from "../../../pipes/file-size.pipe";
+import { MatomoTracker, MatomoTrackerDirective } from "ngx-matomo-client";
 
 @Component({
   selector: 'pure-item-view-file',
@@ -20,7 +21,8 @@ import { FileSizePipe } from "../../../pipes/file-size.pipe";
     NgbPopover,
     TranslatePipe,
     CopyButtonDirective,
-    FileSizePipe
+    FileSizePipe,
+    MatomoTrackerDirective
   ],
   templateUrl: './item-view-file.component.html',
   styleUrl: './item-view-file.component.scss'
@@ -33,7 +35,8 @@ export class ItemViewFileComponent {
 
   audienceInfos: Map<string, any> = new Map;
 
-  constructor(private aaService: AaService, private itemsService: ItemsService) {
+  constructor(private aaService: AaService, private itemsService: ItemsService, private matomoTracker: MatomoTracker) {
+
   }
 
   ngOnInit() {
@@ -76,6 +79,10 @@ export class ItemViewFileComponent {
       }
     }
     return undefined;
+  }
+
+  trackDownload(url: string, title: string) {
+    this.matomoTracker.trackLink(url, 'download', title)
   }
 
 

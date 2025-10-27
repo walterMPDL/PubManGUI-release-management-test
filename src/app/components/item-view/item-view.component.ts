@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ItemsService } from "../../services/pubman-rest-client/items.service";
 import { AaService } from "../../services/aa.service";
 import {
-  AccountUserDbVO,
+  AccountUserDbVO, AlternativeTitleType,
   AuditDbVO,
   FileDbVO,
   ItemVersionState,
@@ -44,6 +44,7 @@ import { PubManHttpErrorResponse } from "../../services/interceptors/http-error.
 import { ChangeContextModalComponent } from "../shared/change-context-modal/change-context-modal.component";
 import { UpdateLocaltagsModalComponent } from "../shared/update-localtags-modal/update-localtags-modal.component";
 import { getThumbnailUrlForFile, getUrlForFile } from "../../utils/item-utils";
+import { MatomoTracker } from "ngx-matomo-client";
 
 @Component({
   selector: 'pure-item-view',
@@ -66,8 +67,7 @@ import { getThumbnailUrlForFile, getUrlForFile } from "../../utils/item-utils";
     LoadingComponent,
     TranslatePipe,
     DatePipe,
-    CopyButtonDirective,
-    NgOptimizedImage
+    CopyButtonDirective
   ],
   templateUrl: './item-view.component.html'
 })
@@ -102,7 +102,7 @@ export class ItemViewComponent {
 
   constructor(private itemsService: ItemsService, private usersService: UsersService, protected aaService: AaService, private route: ActivatedRoute, private router: Router,
   private scroller: ViewportScroller, private messageService: MessageService, private modalService: NgbModal, protected listStateService: ItemListStateService, private itemSelectionService: ItemSelectionService,
-              private title: Title, private meta: Meta, private domSanitizer: DomSanitizer) {
+              private title: Title, private matomoTracker: MatomoTracker) {
 
   }
 
@@ -148,6 +148,7 @@ export class ItemViewComponent {
                 const sanitizedTitle = sanitizeHtml(i.metadata.title, {allowedTags: []}) + ' | ' + this.title.getTitle();
                 this.title.setTitle(sanitizedTitle);
               }
+              //this.matomoTracker.trackPageView(i.metadata?.title);
 
               //init item in selection and state (for export, basket, batch, pagination etc)
               this.listStateService.initItemId(i.objectId);
@@ -283,6 +284,12 @@ export class ItemViewComponent {
 
   get externalReferences() {
     return this.item?.files?.filter(f => f.storage === Storage.EXTERNAL_URL);
+  }
+
+  get firstSubtitle() {
+    return this.item?.metadata?.alternativeTitles?.find(at => at.type === AlternativeTitleType.SUBTITLE) ||
+    this.item?.metadata?.alternativeTitles?.find(at => at.type === AlternativeTitleType.OTHER) ||
+      this.item?.metadata?.alternativeTitles?.at(0);
   }
 
   get isModeratorOrDepositor() {

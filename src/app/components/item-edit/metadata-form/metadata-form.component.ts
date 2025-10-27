@@ -46,7 +46,7 @@ import {
 import { TranslatePipe, TranslateService } from "@ngx-translate/core";
 import { BootstrapValidationDirective } from "../../../directives/bootstrap-validation.directive";
 import { ValidationErrorComponent } from "../../shared/validation-error/validation-error.component";
-import { remove_null_empty } from "../../../utils/utils_final";
+import { remove_null_empty, remove_objects } from "../../../utils/utils_final";
 import { AccordionGroupValidationDirective } from "../../../directives/accordion-group-validation.directive";
 import { catchError, finalize, Subject, takeUntil, tap, throwError } from "rxjs";
 import { isEmptyCreator } from "../../../utils/item-utils";
@@ -84,6 +84,7 @@ import { ValidationErrorMessageDirective } from "../../../directives/validation-
   styleUrls: ['./metadata-form.component.scss']
 })
 export class MetadataFormComponent implements OnInit {
+
 
   @Input() meta_form!: FormGroup;
   @Input() context!: FormGroup<ControlType<ContextDbVO>>;
@@ -125,20 +126,20 @@ export class MetadataFormComponent implements OnInit {
   ) {
     effect(() => {
       // Events
-      if (this.genreSpecificResource.value()?.properties.events.display === false){
-          this.event.reset(this.fbs.event_FG(null).value);
+      if (this.genreSpecificResource.value()?.properties.events.display === false) {
+        this.event.reset(this.fbs.event_FG(null).value);
       }
       // LegalCase
-      if (this.genreSpecificResource.value()?.properties.legal_case.display === false){
-          this.legalCase.reset(this.fbs.legal_case_FG(null).value);
+      if (this.genreSpecificResource.value()?.properties.legal_case.display === false) {
+        this.legalCase.reset(this.fbs.legal_case_FG(null).value);
       }
       // PublishingInfo
-      if (this.genreSpecificResource.value()?.properties.details_publishing_info.display === false){
-          this.publishingInfo.reset(this.fbs.publishing_info_FG(null).value);
+      if (this.genreSpecificResource.value()?.properties.details_publishing_info.display === false) {
+        this.publishingInfo.reset(this.fbs.publishing_info_FG(null).value);
       }
       // ProjectInfo
-      if (this.genreSpecificResource.value()?.properties.project_info.display === false){
-          this.projectInfo.reset([this.fbs.project_info_FG(null).value]);
+      if (this.genreSpecificResource.value()?.properties.project_info.display === false) {
+        this.projectInfo.reset([this.fbs.project_info_FG(null).value]);
       }
       // Sources
       if (this.genreSpecificResource.value()?.properties.sources.display === false) {
@@ -161,12 +162,12 @@ export class MetadataFormComponent implements OnInit {
     this.context.valueChanges
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
-      this.updateAllowedGenresAndSubjects();
-    });
+        this.updateAllowedGenresAndSubjects();
+      });
 
     this.translateService.onLangChange
       .pipe(takeUntil(this.destroy$))
-      .subscribe(lang => {this.updateAllowedGenresAndSubjects()})
+      .subscribe(lang => { this.updateAllowedGenresAndSubjects() })
   }
 
   ngOnDestroy() {
@@ -261,35 +262,35 @@ export class MetadataFormComponent implements OnInit {
   addMultipleCreators(creatorsString: string) {
     this.loading = true;
     if (creatorsString !== null && creatorsString != '') {
-        this.miscellaneousService.getDecodedMultiplePersons(creatorsString).pipe(
-           tap((decodedCreators) => {
-              if(decodedCreators?.length > 0 && this.creators.length > 0) {
-                const firstCreator = this.creators.at(0).value as CreatorVO;
-                if(isEmptyCreator(firstCreator)) {
-                  this.creators.removeAt(0);
-                }
-              }
-              for (let creator of decodedCreators) {
-                let personVO: PersonVO = { completeName: undefined, familyName: creator.family, givenName: creator.given, alternativeNames: undefined, titles: undefined, pseudonyms: undefined, organizations: undefined, identifier: undefined, orcid: undefined };
-                let creatorVO: CreatorVO = { person: personVO, role: CreatorRole.AUTHOR, type: CreatorType.PERSON, organization: undefined };
-                this.creators.push(this.fbs.creator_FG(creatorVO));
+      this.miscellaneousService.getDecodedMultiplePersons(creatorsString).pipe(
+        tap((decodedCreators) => {
+          if (decodedCreators?.length > 0 && this.creators.length > 0) {
+            const firstCreator = this.creators.at(0).value as CreatorVO;
+            if (isEmptyCreator(firstCreator)) {
+              this.creators.removeAt(0);
+            }
+          }
+          for (let creator of decodedCreators) {
+            let personVO: PersonVO = { completeName: undefined, familyName: creator.family, givenName: creator.given, alternativeNames: undefined, titles: undefined, pseudonyms: undefined, organizations: undefined, identifier: undefined, orcid: undefined };
+            let creatorVO: CreatorVO = { person: personVO, role: CreatorRole.AUTHOR, type: CreatorType.PERSON, organization: undefined };
+            this.creators.push(this.fbs.creator_FG(creatorVO));
 
-              }
-              this.messageService.success('Adding multiple creators successful. Please review the list of creators.');
-              this.multipleCreators.setValue('');
-            }
-          ),
-          catchError((error: any) => {
-            return throwError(error)
-            //this.messageService.error('Error decoding multiple creators. Please check the format and try again. ' + error.message);
-            //return [];
-          }),
-          finalize(() => {
-            this.loading = false;
-            }
-          )
+          }
+          this.messageService.success('Adding multiple creators successful. Please review the list of creators.');
+          this.multipleCreators.setValue('');
+        }
+        ),
+        catchError((error: any) => {
+          return throwError(error)
+          //this.messageService.error('Error decoding multiple creators. Please check the format and try again. ' + error.message);
+          //return [];
+        }),
+        finalize(() => {
+          this.loading = false;
+        }
         )
-          .subscribe();
+      )
+        .subscribe();
     } else {
       this.messageService.error('Please enter multiple creators in the textfield.');
       this.loading = false;
@@ -428,6 +429,20 @@ export class MetadataFormComponent implements OnInit {
 
   removeProjectInfo(index: number) {
     this.projectInfo.removeAt(index);
+  }
+
+  addSourceOnExpand(event: Event) {
+    const element: HTMLElement = event.currentTarget as HTMLElement;
+    if(this.sources.length === 0 && element.getAttribute("aria-expanded") === "true") {
+      this.sources.push(this.fbs.source_FG(null));
+    } else if (this.sources.length > 0 && element.getAttribute("aria-expanded") === "false") {
+      for (let i = this.sources.length - 1; i >= 0; i--) {
+      const source = this.sources.at(i).value;
+      if (remove_null_empty(source)) {
+        this.sources.removeAt(i);
+      }
+    }
+    }
   }
 
   dropCreator(event: CdkDragDrop<string[]>) {

@@ -1,17 +1,33 @@
 import { ChangeDetectionStrategy, Component, inject, ViewContainerRef } from '@angular/core';
 import { LangChangeEvent, TranslateService } from "@ngx-translate/core";
+import { MatomoTracker } from "ngx-matomo-client";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { MatomoOptOutDirective } from "./matomo-opt-out.directive";
 
 @Component({
   selector: 'en-content',
-  templateUrl: './en/privacy.component.html'
+  imports: [
+    FormsModule,
+    MatomoOptOutDirective,
+    ReactiveFormsModule
+  ],
+  templateUrl: './en/privacy.en.component.html'
 })
-export class en { }
+export class en {
+}
 
 @Component({
   selector: 'de-content',
-  templateUrl: './de/privacy.component.html'
+  imports: [
+    MatomoOptOutDirective,
+    FormsModule
+  ],
+  templateUrl: './de/privacy.de.component.html'
 })
-export class de { }
+export class de {
+
+
+}
 
 @Component({
   selector: 'pure-privacy',
@@ -23,6 +39,7 @@ export class PrivacyComponent {
   translateSvc = inject(TranslateService);
 
   private viewContainer = inject(ViewContainerRef);
+
 
   ngOnInit() {
     this.loadContent(this.translateSvc.currentLang);

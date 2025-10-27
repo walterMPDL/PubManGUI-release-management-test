@@ -11,10 +11,10 @@ import type { PostImportParams } from 'src/app/components/imports/interfaces/imp
 import { SeparateFilterPipe } from 'src/app/components/imports/pipes/separateFilter.pipe';
 
 import { AaService } from 'src/app/services/aa.service';
-import { _, TranslatePipe, TranslateService } from "@ngx-translate/core";
+import { _, TranslatePipe } from "@ngx-translate/core";
 
 import { ValidationErrorComponent } from "src/app/components/shared/validation-error/validation-error.component";
-
+import { NgbTooltip } from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: 'pure-imports-new-import',
@@ -25,7 +25,8 @@ import { ValidationErrorComponent } from "src/app/components/shared/validation-e
     ReactiveFormsModule,
     SeparateFilterPipe,
     TranslatePipe,
-    ValidationErrorComponent
+    ValidationErrorComponent,
+    NgbTooltip
   ],
   templateUrl: './import.component.html',
   styles: [".dropzone { width: 100%; padding: 0.5rem 1.5rem 0.5rem 1.5rem; text-align: center; border: dashed 2px; }"], // TO-DO move to scss
@@ -36,7 +37,7 @@ export default class ImportComponent implements OnInit {
   router = inject(Router);
   fb = inject(FormBuilder);
   aaSvc = inject(AaService);
-  translateService = inject(TranslateService);
+  //translateService = inject(TranslateService);
   elRef: ElementRef = inject(ElementRef);
 
   formatObject: any = null;
@@ -153,6 +154,16 @@ export default class ImportComponent implements OnInit {
 
     this.importForm.get('fileName')?.clearAsyncValidators();
     this.importForm.get('fileName')?.updateValueAndValidity();
+  }
+
+  onFileRemove():void {
+// TODO clear the file input value
+    this.importForm.controls['fileName'].setValue(null);
+    this.importForm.controls['fileName'].markAsUntouched();
+    this.importForm.get('fileName')?.clearAsyncValidators();
+    this.importForm.get('fileName')?.updateValueAndValidity();
+    this.data = null; 
+    this.elRef.nativeElement.querySelector('#fileChoose').value = null;
   }
 
   getData(file: File) {

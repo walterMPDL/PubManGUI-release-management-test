@@ -25,10 +25,6 @@
 
   .actions {
     .accordion {
-      .accordion-button {
-        box-shadow: none !important;
-      }
-
       .header_second_color {
         .accordion-button {
           opacity: 0.75;
@@ -103,5 +99,9 @@
   
   .validation-error {
     min-height: 1.5em;
+  }
+
+  .mat-badge-content {
+    background-color: $body-bg;
   }
 }

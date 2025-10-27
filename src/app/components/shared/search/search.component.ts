@@ -15,6 +15,7 @@ import { filter } from "rxjs/operators";
 
 import { AaService } from "../../../services/aa.service";
 import { ItemVersionState } from "../../../model/inge";
+import { MatomoTracker } from "ngx-matomo-client";
 
 @Component({
   selector: 'pure-search',
@@ -39,7 +40,8 @@ export class SearchComponent implements OnInit{
     private router: Router,
     private searchState: SearchStateService,
     private itemsService: ItemsService,
-    private aaService: AaService
+    private aaService: AaService,
+    private matomoTracker: MatomoTracker
   ) {
   }
 
@@ -67,6 +69,8 @@ export class SearchComponent implements OnInit{
           ]
         }
       };
+      this.matomoTracker.trackSiteSearch(search_term, "simple");
+
       this.searchState.$currentQuery.next(query);
       //sessionStorage.setItem('currentQuery', JSON.stringify(query));
       this.router.navigateByUrl('/search');
@@ -187,6 +191,7 @@ export class SearchComponent implements OnInit{
         //TODO filter out duplicates
       }
     };
+    this.searchState.type = "simple";
     this.searchState.$currentQuery.next(query);
 
     this.router.navigateByUrl('/search');

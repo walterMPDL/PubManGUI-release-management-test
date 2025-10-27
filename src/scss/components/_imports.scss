@@ -74,7 +74,7 @@
 
   #fileName {
     border-color: var(--bs-body-bg);
-    color: var(--bs-success);
+    color: var(--bs-accordion-color);
     font-weight: bold;
 
     &:focus {
@@ -96,4 +96,9 @@
   .validation-error {
     min-height: 1.5em;
   }
+
+  .mat-badge-content {
+    background-color: $body-bg;
+  }
+
 }
