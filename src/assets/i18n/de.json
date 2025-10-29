@@ -83,7 +83,7 @@
     "datasets.removed": "Datensatz/Datensätze wird/wurden entfernt",
     "clearAll": "Leeren",
     "showMore" : "Mehr zeigen",
-    "showAll" : "Alle zeigen"
+    "showAll" : "Alle anzeigen"
   },
   "chips.localTags.placeholder": "Lokalen Tag hinzufügen",
   "validation": {
@@ -822,7 +822,6 @@
   "ItemList": {
     "files": "Datei(en)",
     "links": "Link(s)",
-    "showAll": "alle anzeigen",
     "moreCreators": "weitere Urheber",
     "publishedIn": "Veröffentlicht in"
   },

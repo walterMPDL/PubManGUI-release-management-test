@@ -79,7 +79,7 @@
         </div>
       }
         @if(files.length > 2 || (publicFiles.length < files.length)) {
-          <i><small><a class="nav-link" routerLink="/view/{{item?.objectId + '_' + item?.versionNumber}}">{{ 'ItemList.showAll' | translate }}...</a></small></i>
+          <i><small><a class="nav-link" routerLink="/view/{{item?.objectId + '_' + item?.versionNumber}}">{{ 'common.showAll' | translate }}...</a></small></i>
         }
       }
 
@@ -96,7 +96,7 @@
 
       }
         @if(locators.length > 2) {
-          <i><small><a class="nav-link" routerLink="/view/{{item?.objectId + '_' + item?.versionNumber}}">{{ 'ItemList.showAll' | translate }}...</a></small></i>
+          <i><small><a class="nav-link" routerLink="/view/{{item?.objectId + '_' + item?.versionNumber}}">{{ 'common.showAll' | translate }}...</a></small></i>
         }
       }
 
