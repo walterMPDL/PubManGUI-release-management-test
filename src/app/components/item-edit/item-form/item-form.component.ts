@@ -504,7 +504,7 @@ export class ItemFormComponent implements OnInit {
         //console.log("TAP" + result);
         this.itemUpdated(result);
 
-        this.messageService.success('Item saved successfully!');
+        this.messageService.success('Item saved successfully!', true);
         console.log('Saved Item', JSON.stringify(result));
 
         if(saveType !== "save" && saveType !=="save_to_view") {
