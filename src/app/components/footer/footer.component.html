@@ -7,28 +7,27 @@
         </div>
         <div class="subfooter">
             <div class="container d-flex flex-wrap-reverse p-0">
-                <div class="d-flex justify-content-center flex-column flex-sm-row">
+                <div class="d-flex align-items-center justify-content-center flex-wrap">
+                  <a class="" target="_blank" [href]="linkMpdl">
                     <img class="mpdl-logo" src="assets/footer/logo-mpdl-singlecolor-white.svg" alt="MPDL"
-                        aria-hidden="true" (click)="openLink(linkHome)" height="100">
+                         aria-hidden="true">
+                  </a>
 
-                    <img class="pubman-logo" src="assets/footer/logo-pubman.svg" alt="PubMan" aria-hidden="true"
-                        (click)="openLink(linkPubman)">
+                  <a class="" target="_blank" [href]="linkPubman">
+                    <img class="pubman-logo" src="assets/footer/PUBMAN_weiss.png" alt="PubMan" aria-hidden="true">
+                  </a>
+
                 </div>
 
                 <div class="d-flex flex-sm-grow-1"></div>
 
                 <div class="d-flex align-items-start align-items-sm-center flex-column flex-sm-row me-5 mt-5 mt-sm-1">
-                    <div (click)="openLink(linkDisclaimer)">
-                        <span class="align-middle">{{'footer.disclaimer' | translate}}</span>
-                    </div>
-
-                    <div (click)="openLink(linkPrivacy)">
-                        <span class="align-middle">{{'footer.privacy' | translate}}</span>
-                    </div>
-
-                    <div (click)="openLink(linkCookies)">
-                        <span class="align-middle">{{'footer.cookies' | translate}}</span>
-                    </div>
+                    <a class="footer-link align-middle" target="_blank" [href]="linkDisclaimer">
+                      {{'footer.disclaimer' | translate}}
+                    </a>
+                    <a class="footer-link align-middle" target="_blank" [href]="linkPrivacy">
+                      {{'footer.privacy' | translate}}
+                    </a>
                 </div>
             </div>
         </div>

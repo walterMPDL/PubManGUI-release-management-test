@@ -11,8 +11,8 @@ export class FooterComponent {
   protected linkDisclaimer: string = 'disclaimer';
   protected linkPrivacy: string = 'privacy-policy';
   protected linkCookies: string = "";
-  protected linkPubman: string = 'https://pure.mpg.de/';
-  protected linkHome: string = 'home';
+  protected linkPubman: string = 'https://github.com/MPDL/InGe';
+  protected linkMpdl: string = 'https://mpdl.mpg.de';
 
   openLink(url: string) {
     window.open(url, '_blank');

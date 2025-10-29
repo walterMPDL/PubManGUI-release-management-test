@@ -36,17 +36,29 @@
   .subfooter {
     background-color: var(--subfooter-bg-color);
 
+    /*
     img {
       margin: 24px 64px 24px 24px;
 
       cursor: pointer;
     }
 
+     */
+    img {
+      margin:20px;
+    }
+
+
     .mpdl-logo {
       height: 90px;
     }
+    .pubman-logo {
+      height: 70px;
+      margin-left: 40px;
 
-    span {
+    }
+
+    .footer-link {
       display: inline;
       margin: 0 2em;
 
