@@ -81,7 +81,9 @@
     "datasets.filled": "item/items added",
     "datasets.missing": "was/were ignored",
     "datasets.removed": "item/items removed",
-    "clearAll": "Clear"
+    "clearAll": "Clear",
+    "showMore" : "Show more",
+    "showAll" : "Show all"
   },
   "chips.localTags.placeholder": "Add local tag",
   "validation": {
