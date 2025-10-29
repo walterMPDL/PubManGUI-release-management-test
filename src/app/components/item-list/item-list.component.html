@@ -52,9 +52,9 @@
                 </div>
             </div>
             <div class="list-group list-group-flush">
-                @for (item of list; track item; let last = $last) {
+                @for (item of list; track item; let last = $last; let index=$index) {
                 <div class="list-group-item list-group-item-action py-0">
-                    <pure-item-list-element [item]="item" [last_item]="last"
+                    <pure-item-list-element [item]="item" [last_item]="last" [highlight]="highlight_list[index]"
                         [authenticated]="aa.isLoggedIn"></pure-item-list-element>
                 </div>
                 }

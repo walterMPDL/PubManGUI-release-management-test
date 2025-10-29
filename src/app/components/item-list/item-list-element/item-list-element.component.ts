@@ -1,6 +1,6 @@
 import { Component, inject, Input } from '@angular/core';
 import { FileDbVO, ItemVersionVO, Storage, Visibility } from 'src/app/model/inge';
-import { NgClass } from '@angular/common';
+import { KeyValuePipe, NgClass } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
@@ -15,13 +15,14 @@ import { itemToVersionId } from "../../../utils/utils";
 @Component({
   selector: 'pure-item-list-element',
   standalone: true,
-  imports: [NgClass, FormsModule, ReactiveFormsModule, NgbTooltip, RouterLink, SanitizeHtmlPipe, ItemBadgesComponent, TranslatePipe, NgbPopover],
+  imports: [NgClass, FormsModule, ReactiveFormsModule, NgbTooltip, RouterLink, SanitizeHtmlPipe, ItemBadgesComponent, TranslatePipe, NgbPopover, KeyValuePipe],
   templateUrl: './item-list-element.component.html',
   styleUrl: './item-list-element.component.scss'
 })
 export class ItemListElementComponent {
 
   @Input() item: ItemVersionVO | undefined;
+  @Input() highlight?: any;
   @Input() last_item!: boolean;
   @Input()
   authenticated = false;
@@ -38,6 +39,9 @@ export class ItemListElementComponent {
   files: FileDbVO[] = [];
   publicFiles: FileDbVO[] = [];
   locators: FileDbVO[] = [];
+
+
+  highlightHits: {file: FileDbVO, highlights: string[]}[] = [];
 
   protected ingeUri = environment.inge_uri;
 
@@ -68,6 +72,18 @@ export class ItemListElementComponent {
       this.publicFiles = this.files.filter(f => f.visibility === Visibility.PUBLIC);
       this.locators = this.item.files?.filter(f => f.storage === Storage.EXTERNAL_URL) || [];
 
+      if(this.highlight && this.highlight.hits) {
+        this.highlight.hits.forEach((hit: any) => {
+          const fileId = hit._source.fileData.fileId;
+          const file = this.files.find(f => f.objectId === fileId);
+          if(file) {
+            const highlights = hit?.highlight['fileData.attachment.content']
+            //console.log(highlights)
+            this.highlightHits.push({file: file, highlights: highlights});
+          }
+
+        })
+      }
     }
   }
 
@@ -138,4 +154,5 @@ export class ItemListElementComponent {
 
 
   protected readonly Visibility = Visibility;
+
 }

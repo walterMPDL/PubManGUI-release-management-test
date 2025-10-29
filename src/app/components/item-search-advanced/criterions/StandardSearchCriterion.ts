@@ -210,7 +210,7 @@ export class FulltextSearchCriterion extends StandardSearchCriterion {
         inner_hits: {
           highlight: {
             fields: {"fileData.attachment.content": {}},
-            pre_tags: ["<span class=\"searchHit\">"],
+            pre_tags: ["<span class=\"bg-success-subtle\">"],
             post_tags: ["</span>"]
           },
           _source: {

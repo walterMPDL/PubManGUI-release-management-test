@@ -106,6 +106,22 @@
 
   </div>
 
+    <!-- Preparation for highlighting fulltexts
+    @if(highlightHits.length>0) {
+      <b>Hits in files:</b>
+      <div class="small">
+          @for(hlh of (highlightHits); track $index) {
+            <div class="mb-2">
+            File: <a href="{{hlh.file.content}}" target="_blank">{{hlh.file.name}}</a>
+            @for(hl of hlh.highlights; track $index) {
+              <p class="m-1" [innerHTML]="hl"></p>
+            }
+            </div>
+          }
+      </div>
+    }
+    -->
+
   <div class="row flex-grow-1 align-content-end">
     <div class="d-inline-flex">
 

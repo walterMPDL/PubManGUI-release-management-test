@@ -59,6 +59,7 @@ export class ItemListComponent implements AfterViewInit{
 
   searchQuerySubscription!: Subscription;
   result_list: Observable<ItemVersionVO[]> | undefined;
+  highlight_list: any[] = [];
   number_of_results: number = 0;
 
   //filterEvents: Map<string, FilterEvent> = new Map();
@@ -216,6 +217,9 @@ export class ItemListComponent implements AfterViewInit{
           this.applyAggregationResults(result.aggregations);
         }
 
+        this.highlight_list = result.hits.hits.map((record:any) => record.inner_hits?.file?.hits);
+        console.log(this.highlight_list);
+
       }),
       map(result => result.hits.hits.map((record:any) => record._source as ItemVersionVO)),
       tap(result => {
@@ -224,6 +228,7 @@ export class ItemListComponent implements AfterViewInit{
         this.listStateService.currentResultList = result;
         this.listStateService.currentPageOfList = this.currentPage;
         this.listStateService.currentSizeOfList = this.size;
+
 
       }),
       catchError(err => {
