@@ -42,7 +42,7 @@
             @if(author.person) {
               {{ author?.person?.familyName || 'n/a' }} {{author?.person?.givenName ? ', ' + author?.person?.givenName : '' }}
               <sup>
-                <pure-cone-icon [orcid]="author?.person?.orcid" [coneId]="author?.person?.identifier?.id"/>
+                <pure-cone-icon [orcid]="author?.person?.orcid"/>
               </sup>
             } @else if (author.organization) {
               {{ (author?.organization?.name || 'n/a') }}
