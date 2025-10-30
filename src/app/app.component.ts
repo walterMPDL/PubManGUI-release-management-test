@@ -51,6 +51,7 @@ export class AppComponent {
     })
 
     tooltipConfig.container = 'body';
+    tooltipConfig.triggers = 'hover'
 
   }
 

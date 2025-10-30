@@ -106,12 +106,21 @@
 
     </div>
 
-    <div>
+    <div class="mb-3">
       <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="collapse"
               [attr.data-bs-target]="'#collapseSearchQuery'" aria-expanded="true" aria-controls="collapseOne"><i class="bi bi-chevron-down"></i> Show query</button>
 
       <div id="collapseSearchQuery" class="accordion-collapse collapse bg-light" aria-labelledby="headingOne">
         <textarea class="form-control form-control-sm" [value]="completeQuery | json" rows="25" readonly="true"></textarea>
+      </div>
+    </div>
+
+    <div>
+      <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="collapse"
+              [attr.data-bs-target]="'#collapseCurl'" aria-expanded="true" aria-controls="collapseOne"><i class="bi bi-chevron-down"></i> Show cURL</button>
+
+      <div id="collapseCurl" class="accordion-collapse collapse bg-light" aria-labelledby="headingOne">
+        <textarea class="form-control form-control-sm" [value]="curlUrl" rows="25" readonly="true"></textarea>
       </div>
     </div>
 

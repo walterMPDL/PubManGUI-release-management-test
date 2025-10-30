@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, SimpleChanges } from '@angular/core';
 import { citationTypes, exportTypes } from "../../../model/inge";
 import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { ItemsService } from "../../../services/pubman-rest-client/items.service";
@@ -17,6 +17,7 @@ import { Message, MessageService } from "../../../services/message.service";
 import { BootstrapValidationDirective } from "../../../directives/bootstrap-validation.directive";
 import { ValidationErrorComponent } from "../validation-error/validation-error.component";
 import { MatomoTracker } from "ngx-matomo-client";
+import { HttpParams } from "@angular/common/http";
 
 
 @Component({
@@ -91,6 +92,24 @@ export class ExportItemsComponent {
 
     if(this.type === 'exportSelected') {
       this.itemIds = this.selectionService.selectedIds$.value;
+    }
+    else {
+       if (this.completeQuery.size)
+       {
+         this.selectedSize = this.completeQuery.size;
+       }
+       else {
+         this.selectedSize = 25;
+         this.completeQuery.size = 25;
+       }
+      if (this.completeQuery.from)
+      {
+        this.selectedFrom = this.completeQuery.from;
+      }
+      else {
+        this.selectedFrom = 0;
+        this.completeQuery.from = 0;
+      }
     }
 
 
@@ -259,6 +278,25 @@ export class ExportItemsComponent {
          })
       )
       .subscribe()
+  }
+
+  get curlUrl() {
+    const url = new URL(environment.inge_rest_uri + "/items/search");
+
+    if(this.selectedExportType.value) url.searchParams.append("format", this.selectedExportType.value);
+    if(!this.isFormat) {
+      if(this.selectedCitationType.value) url.searchParams.append('citation', this.selectedCitationType.value);
+      if(this.selectedCitationType.value === citationTypes.CSL && this.selectedCslId.value) url.searchParams.append('cslConeId', this.selectedCslId.value);
+    }
+    console.log(url.toString());
+    const curl =
+`curl '${url}' \\
+-X POST \\
+-H 'Content-Type: application/json' \\
+-d '${JSON.stringify(this.completeQuery)}'
+`;
+    return curl;
+
   }
 }
 
