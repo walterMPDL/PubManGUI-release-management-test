@@ -245,7 +245,8 @@
                                 </div>
                             </div>
                             <div class="d-sm-flex flex-sm-row gap-1 mb-1 align-items-start">
-                                <div class="col-sm-2">
+                                <div class="col-sm-2"
+                                     [ngClass]="{'d-none' : !genreSpecificResource.value().properties.details_item_details_dates_item_date_created.display}">
                                     <label class="col-form-label">{{ 'MetadataFields.dateCreated' | translate }}</label>
                                     <!--
                                   @if(meta_form.get('dateCreated')?.hasError('pattern')) {
@@ -255,7 +256,8 @@
                                     <input type="text" class="form-control" formControlName="dateCreated"
                                         [placeholder]="'common.dateFormat' | translate" data-test="date-created">
                                 </div>
-                                <div class="col-sm-2">
+                                <div class="col-sm-2"
+                                     [ngClass]="{'d-none' : !genreSpecificResource.value().properties.details_item_details_dates_item_date_modified.display}">
                                     <label class="col-form-label">{{ 'MetadataFields.dateModified' | translate
                                         }}</label>
                                     <!--
