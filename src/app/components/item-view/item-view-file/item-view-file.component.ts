@@ -12,7 +12,7 @@ import { FileSizePipe } from "../../../pipes/file-size.pipe";
 import { MatomoTracker } from "ngx-matomo-client";
 import { EMPTY } from "rxjs";
 import { UpperCasePipe } from "@angular/common";
-import mime from "mime/lite";
+import mime from "mime";
 
 @Component({
   selector: 'pure-item-view-file',
