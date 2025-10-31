@@ -11,8 +11,8 @@ import { CopyButtonDirective } from "../../../directives/copy-button.directive";
 import { FileSizePipe } from "../../../pipes/file-size.pipe";
 import { MatomoTracker } from "ngx-matomo-client";
 import { EMPTY } from "rxjs";
-import { extension } from "mime-types";
 import { UpperCasePipe } from "@angular/common";
+import mime from "mime/lite";
 
 @Component({
   selector: 'pure-item-view-file',
@@ -39,7 +39,7 @@ export class ItemViewFileComponent {
   fileAccessGranted = false;
   oaStatusIcon?: string;
 
-  fileType?:string | boolean;
+  fileType?:string | null;
 
   constructor(private aaService: AaService, private itemsService: ItemsService, private matomoTracker: MatomoTracker) {
   }
@@ -53,8 +53,7 @@ export class ItemViewFileComponent {
 
       this.fileAccessGranted = this.getFileAccessGranted(this.file);
 
-
-      this.fileType = extension(this.file.mimeType);
+      this.fileType = mime.getExtension(this.file.mimeType);
 
     }
     this.oaStatusIcon = this.getOaStatusIcon(this.file!);
