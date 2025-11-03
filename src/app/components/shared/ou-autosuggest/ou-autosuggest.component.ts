@@ -29,9 +29,9 @@ import { BootstrapValidationDirective } from "../../../directives/bootstrap-vali
 })
 export class OuAutosuggestComponent {
 
-  @Input() formForOuName! : FormControl;
-  @Input() formForOuId! : FormControl | undefined;
-  @Input() formForOuAddress! : FormControl | undefined;
+  @Input() formForOuName!: FormControl;
+  @Input() formForOuId!: FormControl | undefined;
+  @Input() formForOuAddress!: FormControl | undefined;
 
   @Input() validationEnabled: boolean = false;
   @Input() validationError: boolean = false;
@@ -40,7 +40,7 @@ export class OuAutosuggestComponent {
 
   searching: boolean = false;
 
-  constructor(private organizationsService: OrganizationsService, private modalService:NgbModal) {
+  constructor(private organizationsService: OrganizationsService, private modalService: NgbModal) {
   }
 
   suggestOus: OperatorFunction<string, readonly string[]> = (text$: Observable<string>) =>
@@ -51,8 +51,8 @@ export class OuAutosuggestComponent {
       switchMap((term) =>
         this.organizationsService.elasticSearch(this.ouAutoSuggestElasticQuery(term)).pipe(
           map(response => {
-              return response.hits.hits.map((hit: any) => hit._source);
-            }
+            return response.hits.hits.map((hit: any) => hit._source);
+          }
           ),
           //tap(() => (this.searchFailed = false)),
           catchError(() => {
@@ -67,20 +67,20 @@ export class OuAutosuggestComponent {
       })
     );
 
-  suggestOusFormatter= (ou: any) => {
+  suggestOusFormatter = (ou: any) => {
     //console.log("setOU" + JSON.stringify(ou));
     if (typeof ou === 'object')
       return ou.namePath.join(', ');
     return ou;
   }
 
-  suggestOusSelector= (event: any) => {
+  suggestOusSelector = (event: any) => {
     //console.log("setOU" + JSON.stringify(event));
-    if(this.formForOuId) {
+    if (this.formForOuId) {
       this.formForOuId.setValue(event.item.objectId);
     }
-    if(this.formForOuAddress) {
-      this.formForOuAddress.setValue(event.item.metadata?.city);
+    if (this.formForOuAddress) {
+      this.formForOuAddress.setValue(event.item.metadata?.city + (event.item.metadata.countryCode ? ', ' + event.item.metadata.countryCode : ''));
     }
     this.formForOuName.setValue(event.item.namePath.join(', '));
 
@@ -92,22 +92,22 @@ export class OuAutosuggestComponent {
   ouAutoSuggestElasticQuery(searchString: string) {
     return {
       "query":
+      {
+        "multi_match":
         {
-          "multi_match":
-            {
-              "query": searchString,
-              "type": "bool_prefix",
-              "fields":
-                [
-                  "metadata.name.autosuggest",
-                  "metadata.name.autosuggest._2gram",
-                  "metadata.name.autosuggest._3gram",
-                  "metadata.alternativeNames.autosuggest",
-                  "metadata.alternativeNames.autosuggest._2gram",
-                  "metadata.alternativeNames.autosuggest._3gram"
-                ]
-            }
+          "query": searchString,
+          "type": "bool_prefix",
+          "fields":
+            [
+              "metadata.name.autosuggest",
+              "metadata.name.autosuggest._2gram",
+              "metadata.name.autosuggest._3gram",
+              "metadata.alternativeNames.autosuggest",
+              "metadata.alternativeNames.autosuggest._2gram",
+              "metadata.alternativeNames.autosuggest._3gram"
+            ]
         }
+      }
     }
   }
 
@@ -117,7 +117,7 @@ export class OuAutosuggestComponent {
   }
 
   toggleAffPopover(ouId: string) {
-    const componentInstance = this.modalService.open(OuModalComponent, {size: 'lg'}).componentInstance;
+    const componentInstance = this.modalService.open(OuModalComponent, { size: 'lg' }).componentInstance;
     componentInstance.ouId = ouId;
 
   }
