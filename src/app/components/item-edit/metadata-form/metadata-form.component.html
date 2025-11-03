@@ -490,7 +490,8 @@
                     {{ 'MetadataFields.event' | translate }}
                 </button>
             </h2>
-            <div id="accordionBodyEventGroup" class="accordion-collapse">
+            <div id="accordionBodyEventGroup" class="accordion-collapse collapse"
+            [ngClass]="{'show' : !genreSpecificResource.value().properties.events.optional}">
                 <div class="accordion-body my-3">
                     <pure-event-form [event_form]="event"></pure-event-form>
                 </div>
