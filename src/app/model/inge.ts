@@ -171,6 +171,7 @@ export interface MdsFileVO extends MetadataSetVO {
 }
 
 export interface MdsPublicationVO extends MetadataSetVO, Cloneable {
+    abstracts?: AbstractVO[];
     alternativeTitles?: AlternativeTitleVO[];
     creators?: CreatorVO[];
     dateAccepted?: string;
@@ -180,22 +181,21 @@ export interface MdsPublicationVO extends MetadataSetVO, Cloneable {
     datePublishedOnline?: string;
     dateSubmitted?: string;
     degree?: DegreeType;
+    duration?: string;
+    freeKeywords?: string;
     event?: EventVO;
-    legalCase?: LegalCaseVO;
     genre?: MdsPublicationGenre;
     identifiers?: IdentifierVO[];
     languages?: string[];
+    legalCase?: LegalCaseVO;
     location?: string;
+    projectInfo?: ProjectInfoVO[];
     publishingInfo?: PublishingInfoVO;
     reviewMethod?: ReviewMethod;
     sources?: SourceVO[];
-    freeKeywords?: string;
     subjects?: SubjectVO[];
     tableOfContents?: string;
     totalNumberOfPages?: string;
-    duration?: string;
-    abstracts?: AbstractVO[];
-    projectInfo?: ProjectInfoVO[];
 }
 
 export interface ValueObject extends Serializable {

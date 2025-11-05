@@ -212,6 +212,7 @@ export class FormBuilderService {
       datePublishedOnline: this.fb.nonNullable.control(metadata?.datePublishedOnline ? metadata.datePublishedOnline : undefined, { validators: [Validators.pattern(DATE_PATTERN)], updateOn: VALIDATION_UPDATE_ON }),
       dateSubmitted: this.fb.nonNullable.control(metadata?.dateSubmitted ? metadata.dateSubmitted : undefined, { validators: [Validators.pattern(DATE_PATTERN)], updateOn: VALIDATION_UPDATE_ON }),
       degree: this.fb.nonNullable.control(metadata?.degree ? metadata.degree : undefined, { validators: [DegreeRequiredValidator], updateOn: VALIDATION_UPDATE_ON }),
+      duration: this.fb.nonNullable.control(metadata?.duration ? metadata.duration : undefined),
       event: metadata?.event ? this.event_FG(metadata.event) : this.event_FG(null),
       legalCase: metadata?.legalCase ? this.legal_case_FG(metadata.legalCase) : this.legal_case_FG(null),
       genre: this.fb.nonNullable.control(metadata?.genre ? metadata.genre : MdsPublicationGenre.ARTICLE),

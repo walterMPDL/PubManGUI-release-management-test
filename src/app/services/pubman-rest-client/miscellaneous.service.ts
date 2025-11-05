@@ -101,6 +101,8 @@ export interface GenrePresentationObjectProperties {
   creator_person_organization_creator_select_roles: GenrePresentationObjectProperty;
   creator_person_organization_creator_select_roles_creator_type: GenrePresentationObjectProperty;
   details: GenrePresentationObjectProperty;
+  details_duration: GenrePresentationObjectProperty;
+  details_duration_item_duration: GenrePresentationObjectProperty;
   details_identifiers: GenrePresentationObjectProperty;
   details_identifiers_item_identifier_type: GenrePresentationObjectProperty;
   details_identifiers_item_identifier_value: GenrePresentationObjectProperty;
