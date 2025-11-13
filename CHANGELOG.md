@@ -1,5 +1,11 @@
 # pure
 
+## 1.0.1
+
+### Patch Changes
+
+- a8a1c18: test one more thing
+
 ## 1.0.0
 
 ### Major Changes
