@@ -1,10 +1,14 @@
 # pure
 
-## 1.1.0
+## 1.1.1
 
 ### Minor Changes
 
 - Manual Release Test
+
+### Patch Changes
+
+- Another try with just version as Commit Comment 'v1.1.1'
 
 ## 1.0.1
 
